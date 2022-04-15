@@ -1,0 +1,28 @@
+<ng-container *ngIf="currentLinks">
+    <li class="nav-item dropdown">
+        <a 
+          class="nav-link dropdown-toggle" 
+          href="#" 
+          id="offcanvasNavbarDropdown" 
+          role="button" 
+          data-bs-toggle="dropdown" 
+          aria-expanded="false">
+          {{title}}
+        </a>
+        <ul 
+          class="dropdown-menu ddm-bc ddm-s" 
+          aria-labelledby="offcanvasNavbarDropdown">
+          <ng-container *ngIf="currentLinks">
+            <li>
+              <app-links 
+                [currentLinks]="currentLinks"
+                
+                [isSideBar]="isSideBar"
+                [isDropDown]="isDropDown"
+              ></app-links>
+            </li>
+          </ng-container>
+          
+        </ul>
+      </li>
+</ng-container>

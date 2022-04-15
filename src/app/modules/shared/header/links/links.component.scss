@@ -1,0 +1,101 @@
+$font-size: 13px;
+$font-family-links: Arial, Helvetica, sans-serif;
+$font-family-h1: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+:host{
+
+   .all-links{
+       display: grid;
+       grid-template-columns: repeat(8, 1fr);
+       grid-template-rows: 1fr;
+       column-gap: 5px;
+       height: 4.5vh;
+    a{
+        background-color: rgba($color: gray, $alpha: 0.9);
+        color: white;
+        font-size: $font-size;
+        font-family: $font-family-links;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 10px;
+        height: 3.7vh;
+        &:hover{
+            background-color: rgba($color: rgb(95, 94, 94), $alpha: 0.9);
+            color: lightblue;
+        }
+    }
+       
+    }
+
+    .side-bar-links{
+            a{
+                color: white;
+                &:hover{
+                    color: red;
+                }
+            }
+
+        
+        
+    }
+
+    // li.nav-item{ 
+    //     a.header-links{
+    //         color: white;
+    //         &:hover{
+    //             color: red;
+    //         }
+                
+    //     }
+
+    // }
+
+    // li.nav-item{ 
+    //     div.dropdown-links{
+    //         a.nav-links{
+    //             color: red;
+    //             &:hover{
+    //                 color: white;
+    //             }
+    //         }
+    //     }
+
+    // }
+
+        
+
+    
+    
+    // .nav-item.dropdown{
+    //     .nav-link.dropdown-toggle{
+
+    //     }
+    //     .dropdown-menu.ddm-bc.ddm-s{
+    //         background-color: black;
+    //         border: 2px outset white;
+    //         border-radius: 5px;
+    //         margin-bottom: 20px;
+    //     }
+    // }
+    
+    // // .ddm-bc{
+    // //     background-color: black;
+    // // }
+    // // .ddm-s{
+    // //     border: 2px outset white;
+    // //         border-radius: 5px;
+    // //         margin-bottom: 20px;
+    // // }
+    // .header-links{
+    //     color: white;
+    // }
+    // .header-links:hover{
+    //     color: red;
+    // }
+    // .dropdown-divider{
+    //     background-color: gold;
+    //     opacity: 0.9;
+    //     width: 80%;
+    //     margin: 10px auto;
+    // }
+
+}

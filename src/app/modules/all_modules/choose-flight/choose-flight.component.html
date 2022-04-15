@@ -1,0 +1,9 @@
+<div>hello</div>
+<div class="choose-flights" *ngIf="AllFlights">
+   <ng-container *ngFor="let flight of AllFlights">
+       <app-flight 
+            class=""
+            [flight]="flight">
+       </app-flight>
+   </ng-container>
+</div>

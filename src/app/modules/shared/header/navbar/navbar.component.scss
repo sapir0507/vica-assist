@@ -1,0 +1,45 @@
+$font-size: 15px;
+$font-family-links: Arial, Helvetica, sans-serif;
+$font-family-h1: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+:host{
+    .container-fluid{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+        height: 5vh;
+        column-gap: normal;
+        padding-right: 20px;
+        background-color: black;
+        color: white;
+        .logo{
+            display: grid;
+            grid-template-columns: 
+            repeat(2, 1fr);
+            align-content: center;
+            height: 4.5vh;
+            img{ 
+                display: grid;
+                grid-template-columns: 
+                repeat(1, 1fr);
+                margin: auto auto;
+                padding: 10px;
+                height: 4.5vh;
+                width: 4.5vh; 
+            }
+            h1{
+                font-family: $font-family-h1;
+                font-size: 20px;
+                margin: auto auto;
+            }
+        }
+        .links{
+            display: grid;
+            grid-template-columns: 
+            repeat(1, 1fr);
+            height: 4.5vh;
+            column-gap: 5px;
+            row-gap: 5px;
+            align-content: center;
+            padding-left: 20px; 
+        }
+    }
+}

@@ -1,0 +1,59 @@
+<div class="add-new-flight">
+    <h1>add new flight</h1>
+    <!-- form start -->
+    <form [formGroup]="newFlightForm" class="newFlightForm" (ngSubmit)="addFlight()">
+       
+        <div class="group">
+            <label for="flight-pass">Number of Passangers: </label>
+            <input id="flight-pass" type="text" formControlName="flightPassangers">
+        </div>
+
+        <div class="group">
+            <label for="flight-Airway">Flight Airway: </label>
+            <input id="flight-Airway" type="text" formControlName="flightAirways">
+        </div>   
+
+        <div class="group">
+            <label for="flight-Airport">Flight Airport (landing): </label>
+            <input id="flight-Airport" type="text" formControlName="flightAirport">
+        </div> 
+
+        <div class="group">
+            <label for="flight-origin">Flight Origin: </label>
+            <input id="flight-origin" type="text" formControlName="flightOrg">
+        </div>
+        
+        <div class="group">
+            <label for="flight-Destination">Flight Destination: </label>
+            <input id="flight-Destination" type="text" formControlName="flightDest">
+        </div> 
+        
+        <div class="group"> 
+            <label for="flightDeparture">Flight Departure: </label>
+            <input id="flightDeparture" type="date" formControlName="flightDeparture">     
+        </div>      
+        <div class="group"> 
+            <label for="flightReturn">Flight Return: </label>
+
+            <input id="flightReturn" type="date" formControlName="flightReturn">     
+        </div>      
+       
+        <div class="group">
+            <label for="flightInfo">Flight Information: </label>
+            <!-- <input id="flightInfo" type="text"  formControlName="flightInfo"> -->
+            <textarea id="flightInfo-textarea"  formControlName="flightInfo"></textarea>
+
+        </div>
+       
+        <div class="group">
+             <label for="flightPrice">Flight Price: </label>
+             <input id="flightPrice" type="text" formControlName="flightPrice">
+        </div>
+        
+            
+        <input type="submit" value="submit">
+       
+
+      </form>
+    <!-- form end -->
+</div>

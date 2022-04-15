@@ -1,0 +1,13 @@
+<ng-container *ngIf="navbarComponentIs == 2 && currentLinks">
+    <app-navbar 
+        [currentLinks]="currentLinks">
+    </app-navbar>
+</ng-container>
+
+<ng-container *ngIf="navbarComponentIs == 1">
+    <app-dropdown-sidebar 
+        [currentLinks] = "currentLinks"
+    >
+        
+    </app-dropdown-sidebar>
+</ng-container>

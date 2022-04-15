@@ -1,0 +1,21 @@
+
+<div class="hotel" *ngIf="hotel">
+    
+    <div>
+        <img 
+            src="assets/images/icon/hotel.png" 
+            
+            alt="hotel"
+        > 
+           <span> {{hotel.hotelName}}</span> 
+    </div>
+    <div>
+        <img [src]="getStarPath(hotel.hotelStarNum)" alt="stars">
+        <span> starsb</span>
+    </div>
+    <div *ngIf="hotel.hotelBreakfast === 'included'">breakfast included</div>
+    <div>Hotel Beds: {{hotel.hotelBeds}}</div>
+    <div class="price">Price: {{ hotel.hotelPrice | currency:'ILS' }} </div>
+  
+ </div>
+

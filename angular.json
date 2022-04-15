@@ -11,6 +11,9 @@
         },
         "@schematics/angular:application": {
           "strict": true
+        },
+        "i18n": {
+          "sourceLocal": "en-US"
         }
       },
       "root": "",

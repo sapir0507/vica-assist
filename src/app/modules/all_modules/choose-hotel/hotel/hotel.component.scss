@@ -1,0 +1,32 @@
+:host{
+    .hotel{
+        display: block;
+        background-color: white;
+        border: 2px solid gray;
+        border-radius: 10px;
+        width: 90%;
+        height: auto;
+        margin: 0 auto;
+        padding: 20px;
+        text-transform: capitalize;
+        font-size: 20px;
+        div{
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            align-content: center;
+            height: 4vh;
+            width: max-content;
+
+            img{
+                margin: auto auto;
+                height: auto; 
+                width: 3.5vh;
+            }
+            span{
+                margin: auto auto;
+                height: 3vh;
+            }
+        }
+        
+    }
+}
