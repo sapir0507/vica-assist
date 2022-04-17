@@ -1,28 +1,17 @@
 {
-    "orders": [
+  "orders": [
+    {
+      "deal": [
         {
-            "user": [
-                {
-                    "user name": "",
-                    "flights": [],
-                    "hotels": []
-                }
-            ]
+          "user name": "",
+          "flights": [],
+          "hotels": []
         }
-    ],
-    "2": "",
-    "flights": [
-        {
-            "flightID": 0,
-            "flightPassangers": 0,
-            "flightDest": "",
-            "flightOrg": "",
-            "flightReturn": "",
-            "flightDeparture": "",
-            "flightAirport": "",
-            "flightAirways": "",
-            "flightInfo": "",
-            "flightPrice": 0
-        }
-    ]
+      ]
+    }
+  ],
+  "name": {},
+  "flights": [
+    
+  ]
 }

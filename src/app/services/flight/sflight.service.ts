@@ -1,53 +1,86 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Iflight } from './iflight';
+import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
+import { Iflight, IflightRequest } from './iflight';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SflightService {
-  FLIGHTS: Iflight[] | null = null;
-  constructor() { }
 
-  getAreThereFlights(): boolean{
-    return this.FLIGHTS? true: false;
+  private FLIGHTS: Iflight[] = [];
+  flightsArray: Iflight[] = [];
+  private _flight$: BehaviorSubject<Iflight[]> = new BehaviorSubject(this.flightsArray);
+  public flight$: Observable<Iflight[]> = this._flight$.asObservable();
+  private readonly FlightsServiceUrl = 'http://localhost:3000/flights';
+
+  constructor(private http: HttpClient) { }
+
+  private postFlight(flight :IflightRequest){
+    return this.http.post<Iflight>(this.FlightsServiceUrl, flight)
+    .pipe(
+      catchError(err => this.handleError(err, 'postFlight', flight))
+    );
   }
 
-  addFlight(newFlight: Iflight): void {
+  private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
+  }
+
+
+  // getAreThereFlights(): boolean{
+
+  //   return this.FLIGHTS? true: false;
+  // }
+
+  addFlight(newFlight: IflightRequest): void {
       console.log("adding flight -> service")
       console.log("value to add is:", newFlight)
       console.log("Adding...")
-      this.FLIGHTS? this.FLIGHTS.push(newFlight): this.FLIGHTS = [newFlight];
-      console.log("FLIGHTS:", this.FLIGHTS)
+      // this._flight$.next([...this._flight$.getValue(), newFlight])
+      this.postFlight(newFlight).subscribe(data => console.log(data))
+      // this.FLIGHTS? this.FLIGHTS.push(newFlight): this.FLIGHTS = [newFlight];
+      console.log("FLIGHTS:", this.flightsArray)
   }
 
-  getNewID(): number{
-    return this.FLIGHTS? this.FLIGHTS.length : 0;
-  }
+  // getNewID(): number{
+  //   return this.FLIGHTS? this.FLIGHTS.length : 0;
+  // }
 
   removeFlight(RFlightID: number):void{
     console.log("remove flight -> service")
     console.log("Removing flight...")
-    if(this.FLIGHTS){
-       this.FLIGHTS = this.FLIGHTS?.filter(flight => flight.flightID != RFlightID)
+    if(this.flightsArray){
+       this.flightsArray = this.flightsArray?.filter(flight => flight.id != RFlightID)
     }
     console.log("FLIGHTS:", this.FLIGHTS)
   }
 
   getFlight(FlightID: number){
-    const result = this.FLIGHTS?.filter(flight => flight.flightID === FlightID)
+    const result = this.FLIGHTS?.filter(flight => flight.id === FlightID)
     console.log("flight with id:", FlightID, "is:", result)
     return result; 
   }
 
-  getCities(){
-    //get list of 10 cities
-  }
-  getCountries(){
-    //get list of 10 countries
-  }
-  getAirways(){
-    //get list of 10 airways
-  }
-  getAirport_landing(){}
+  // getCities(){
+  //   //get list of 10 cities
+  // }
+  // getCountries(){
+  //   //get list of 10 countries
+  // }
+  // getAirways(){
+  //   //get list of 10 airways
+  // }
+  // getAirport_landing(){}
 
 }

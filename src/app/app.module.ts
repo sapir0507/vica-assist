@@ -14,6 +14,21 @@ import { PreviewModule } from './modules/all_modules/preview/preview.module';
 
 import { FooterModule } from './modules/shared/footer/footer.module';
 import { HeaderModule } from './modules/shared/header/header.module';
+import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
+import { environment } from '../environments/environment';
+import { JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
+import { SessionQuery } from './services/session/session.query';
+import { SessionStore } from './services/session/session.store';
+import { SflightService } from './services/flight/sflight.service';
+import { HttpClientModule } from '@angular/common/http';
+
+const JWT_Module_Options: JwtModuleOptions = {
+  config: {
+      tokenGetter: undefined
+  }
+};
 
 
 @NgModule({
@@ -34,8 +49,22 @@ import { HeaderModule } from './modules/shared/header/header.module';
     PreviewModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    environment.production ? [] : AkitaNgDevtools.forRoot(),
+    AkitaNgRouterStoreModule,
+    HttpClientModule,
+    JwtModule.forRoot(JWT_Module_Options)
   ],
-  providers: [],
+  providers: [
+    { provide: 
+      NG_ENTITY_SERVICE_CONFIG, 
+      useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' }
+
+    },
+    SessionQuery,
+    SessionStore,
+    SflightService,
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,12 +1,24 @@
 export interface Iflight {
-    flightID: number,
-    flightPassangers: number | null,
-    flightDest: string | null,
-    flightOrg: string | null,
-    flightReturn: string | null,
-    flightDeparture: string | null,
-    flightAirport: string | null,
-    flightAirways: string | null,
-    flightInfo: string | null,
-    flightPrice: number | null
+    id: number,
+    flightPassangers?: number ,
+    flightDest?: string ,
+    flightOrg?: string ,
+    flightReturn?: string ,
+    flightDeparture?: string ,
+    flightAirport?: string ,
+    flightAirways?: string ,
+    flightInfo?: string ,
+    flightPrice?: number 
+}
+
+export interface IflightRequest {
+    flightPassangers?: number ,
+    flightDest?: string ,
+    flightOrg?: string ,
+    flightReturn?: string ,
+    flightDeparture?: string ,
+    flightAirport?: string ,
+    flightAirways?: string ,
+    flightInfo?: string ,
+    flightPrice?: number 
 }

@@ -1,0 +1,28 @@
+$width: 120vh;
+$hight: 40vw;
+:host{
+    
+    .login{
+        background-color: rgba($color: #000000, $alpha: 0.5);
+        .max-login-width{
+            width: 100%;
+            height: max(45.25vw, 89vh) ;
+          
+            background: #6a11cb;
+            background: webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+            .BK-1{
+               
+               
+                 margin: 20px auto;
+            }
+            .gradient-custom{
+                // background: #6a11cb;
+                // background: webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+                // background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+                // padding: 0 40vh;
+                height: max(45.25vw, 100%);
+            }
+        }
+    }
+}

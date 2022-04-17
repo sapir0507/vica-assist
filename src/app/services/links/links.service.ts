@@ -33,14 +33,6 @@ export class LinksService {
   {
     link: '/register',
     name: 'Register'
-  },
-  {
-    link: '/add-flight',
-    name: 'Add Flight'
-  },
-  {
-    link: '/choose-flight',
-    name: 'Choose Flight'
   }];
 
 

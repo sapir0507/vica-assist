@@ -8,9 +8,9 @@ import { SflightService } from 'src/app/services/flight/sflight.service';
   styleUrls: ['./choose-flight.component.scss']
 })
 export class ChooseFlightComponent implements OnInit {
-  AllFlights: Iflight[] | null = this.SFlight.FLIGHTS;
+   AllFlights: Iflight[] | null = this.SFlight.flightsArray;
   constructor(private SFlight: SflightService) {
-    console.log(this.SFlight.FLIGHTS)
+    // console.log(this.SFlight.FLIGHTS)
   }
 
   ngOnInit(): void {

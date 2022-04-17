@@ -5,19 +5,20 @@ $font-family-h1: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 
    .all-links{
        display: grid;
-       grid-template-columns: repeat(8, 1fr);
+       grid-template-columns: repeat(3, 1fr);
        grid-template-rows: 1fr;
        column-gap: 5px;
        height: 4.5vh;
     a{
-        background-color: rgba($color: gray, $alpha: 0.9);
+       
         color: white;
         font-size: $font-size;
         font-family: $font-family-links;
         text-decoration: none;
         text-align: center;
         border-radius: 10px;
-        height: 3.7vh;
+        margin: 6px;
+        // height: 3.7vh;
         &:hover{
             background-color: rgba($color: rgb(95, 94, 94), $alpha: 0.9);
             color: lightblue;
