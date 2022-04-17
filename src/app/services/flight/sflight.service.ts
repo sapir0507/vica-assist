@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
 import { Iflight, IflightRequest } from './iflight';
@@ -20,6 +20,16 @@ export class SflightService {
     return this.http.post<Iflight>(this.FlightsServiceUrl, flight)
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', flight))
+    );
+  }
+
+  private _getFlights(){
+    return this.http.get<Iflight>(this.FlightsServiceUrl, {
+      
+
+    })
+    .pipe(
+      catchError(err => this.handleError(err, 'postFlight', ""))
     );
   }
 
@@ -53,6 +63,10 @@ export class SflightService {
       console.log("FLIGHTS:", this.flightsArray)
   }
 
+  getFlights(): Observable<Iflight>{
+    console.log("getting all flights -> service")
+    return this._getFlights()
+  }
   // getNewID(): number{
   //   return this.FLIGHTS? this.FLIGHTS.length : 0;
   // }

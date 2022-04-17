@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { Iflight } from 'src/app/services/flight/iflight';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
@@ -8,9 +9,15 @@ import { SflightService } from 'src/app/services/flight/sflight.service';
   styleUrls: ['./choose-flight.component.scss']
 })
 export class ChooseFlightComponent implements OnInit {
-   AllFlights: Iflight[] | null = this.SFlight.flightsArray;
+  
+   AllFlights: Iflight[] = []
+   private _ALLFlights$: Observable<Iflight> = this.SFlight.getFlights();
+
   constructor(private SFlight: SflightService) {
-    // console.log(this.SFlight.FLIGHTS)
+    const allFlights = this._ALLFlights$.subscribe(flight => {
+      this.AllFlights = [...this.AllFlights, flight]
+    })
+   
   }
 
   ngOnInit(): void {

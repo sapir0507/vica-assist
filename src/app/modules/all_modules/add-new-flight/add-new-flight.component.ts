@@ -34,15 +34,15 @@ export class AddNewFlightComponent implements OnInit {
   addFlight(){
     console.log('addFlight -> component')
     this.NewFlight = {
-      flightDest:this.newFlightForm.get('flightDest')?.value,
-      flightPassangers: this.newFlightForm.get('flightPassangers')?.value,
-      flightOrg: this.newFlightForm.get('flightOrg')?.value,
-      flightReturn: this.newFlightForm.get('flightReturn')?.value,
-      flightDeparture: this.newFlightForm.get('flightDeparture')?.value,
-      flightAirport: this.newFlightForm.get('flightAirport')?.value,
-      flightAirways: this.newFlightForm.get('flightAirways')?.value,
-      flightInfo: this.newFlightForm.get('flightInfo')?.value,
-      flightPrice: this.newFlightForm.get('flightPrice')?.value,
+      Dest:this.newFlightForm.get('flightDest')?.value,
+      Passangers: this.newFlightForm.get('flightPassangers')?.value,
+      Org: this.newFlightForm.get('flightOrg')?.value,
+      Return: this.newFlightForm.get('flightReturn')?.value,
+      Departure: this.newFlightForm.get('flightDeparture')?.value,
+      Airport: this.newFlightForm.get('flightAirport')?.value,
+      Airways: this.newFlightForm.get('flightAirways')?.value,
+      Info: this.newFlightForm.get('flightInfo')?.value,
+      Price: this.newFlightForm.get('flightPrice')?.value,
     }
     this.SFlight.addFlight(this.NewFlight)
   }

@@ -12,6 +12,17 @@
   ],
   "name": {},
   "flights": [
-    
+    {
+      "Dest": "",
+      "Passangers": "",
+      "Org": "",
+      "Return": "",
+      "Departure": "",
+      "Airport": "",
+      "Airways": "",
+      "Info": "",
+      "Price": "",
+      "id": 1
+    }
   ]
 }
