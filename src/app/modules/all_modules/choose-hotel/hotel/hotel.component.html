@@ -7,15 +7,15 @@
             
             alt="hotel"
         > 
-           <span> {{hotel.hotelName}}</span> 
+           <span> {{hotel.Name}}</span> 
     </div>
     <div>
-        <img [src]="getStarPath(hotel.hotelStarNum)" alt="stars">
+        <img [src]="getStarPath(hotel.stars)" alt="stars">
         <span> starsb</span>
     </div>
-    <div *ngIf="hotel.hotelBreakfast === 'included'">breakfast included</div>
-    <div>Hotel Beds: {{hotel.hotelBeds}}</div>
-    <div class="price">Price: {{ hotel.hotelPrice | currency:'ILS' }} </div>
+    <div *ngIf="hotel.breakfast">breakfast included</div>
+    <div>Hotel Beds: {{hotel.bedsIncluded}}</div>
+    <div class="price">Price: {{ hotel.price | currency:'ILS' }} </div>
   
  </div>
 

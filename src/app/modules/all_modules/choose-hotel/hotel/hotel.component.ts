@@ -15,7 +15,7 @@ export class HotelComponent implements OnInit {
     
   }
 
-  getStarPath(stars: number | null){
+  getStarPath(stars?: number ){
     console.log("stars", stars)
     if(stars != null){
      switch (stars) {

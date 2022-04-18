@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Ihotel } from 'src/app/services/hotel/ihotel';
+import { Ihotel, IhotelRequest } from 'src/app/services/hotel/ihotel';
 import { ShotelService } from 'src/app/services/hotel/shotel.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class AddNewHotelComponent implements OnInit {
     hotelPrice: new FormControl('')
   });
 
-  NewHotel: Ihotel | null = null;
+  NewHotel: IhotelRequest | null = null;
 
   constructor(private SHotel: ShotelService) { }
 
@@ -27,13 +27,13 @@ export class AddNewHotelComponent implements OnInit {
 
   addHotel(){
     console.log('addHotel -> component')
+    const isBreakfast = this.newHotelForm.get('hotelBreakfast')?.value === 'included'? true: false
     this.NewHotel = {
-      hotelID: this.SHotel.getNewID(),
-      hotelName:this.newHotelForm.get('hotelName')?.value,
-      hotelStarNum: this.newHotelForm.get('hotelStarNum')?.value,
-      hotelBreakfast: this.newHotelForm.get('hotelBreakfast')?.value,
-      hotelBeds: this.newHotelForm.get('hotelBeds')?.value,
-      hotelPrice: this.newHotelForm.get('hotelPrice')?.value
+      Name:this.newHotelForm.get('hotelName')?.value,
+      stars: this.newHotelForm.get('hotelStarNum')?.value,
+      breakfast: isBreakfast,
+      bedsIncluded: this.newHotelForm.get('hotelBeds')?.value,
+      price: this.newHotelForm.get('hotelPrice')?.value
     }
     this.SHotel.addHotel(this.NewHotel)
   }

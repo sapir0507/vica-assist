@@ -1,4 +1,4 @@
-export interface Iflight {
+export interface IFlight {
     id: number,
     Passangers?: number ,
     Dest?: string ,
@@ -11,7 +11,7 @@ export interface Iflight {
     Price?: number 
 }
 
-export interface IflightRequest {
+export interface IFlightRequest {
     Passangers?: number ,
     Dest?: string ,
     Org?: string ,

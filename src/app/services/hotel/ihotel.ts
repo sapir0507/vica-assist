@@ -1,8 +1,16 @@
 export interface Ihotel {
-      hotelID: null | number,
-      hotelName: null | string,
-      hotelStarNum: null | number,
-      hotelBreakfast: null | string,
-      hotelBeds: null | string,
-      hotelPrice: null | number
+      id: number,
+      Name?:  string,
+      stars?: number,
+      breakfast?: boolean,
+      bedsIncluded?: string,
+      price?: number
+}
+
+export interface IhotelRequest {
+      Name?:  string,
+      stars?: number,
+      breakfast?: boolean,
+      bedsIncluded?: string,
+      price?: number
 }

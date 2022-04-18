@@ -19,12 +19,12 @@ export class ChooseHotelComponent implements OnInit {
 
   ngOnInit(): void {
     this.AllHotels? this.AllHotels = this.SHotel.HOTELS : this.AllHotels = [{
-      hotelID: 0,
-      hotelName: "heavens high",
-      hotelStarNum: 5,
-      hotelBreakfast: "included",
-      hotelBeds: "Queen Bed",
-      hotelPrice: 360
+      id: 0,
+      Name: "heavens high",
+      stars: 5,
+      breakfast: true,
+      bedsIncluded: "Queen Bed",
+      price: 360
    }]
   }
 

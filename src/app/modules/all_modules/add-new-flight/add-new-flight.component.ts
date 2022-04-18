@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Iflight, IflightRequest } from 'src/app/services/flight/iflight';
+import { IFlight, IFlightRequest } from 'src/app/services/flight/iflight';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class AddNewFlightComponent implements OnInit {
     flightPrice: new FormControl('')
   });
 
-  NewFlight: IflightRequest | null = null;
+  NewFlight: IFlightRequest | null = null;
   
   constructor(private SFlight: SflightService) {
     

@@ -10,7 +10,6 @@
       ]
     }
   ],
-  "name": {},
   "flights": [
     {
       "Dest": "",
@@ -22,6 +21,16 @@
       "Airways": "",
       "Info": "",
       "Price": "",
+      "id": 1
+    }
+  ],
+  "hotels": [
+    {
+      "Name": "asdf",
+      "stars": "asdf",
+      "breakfast": true,
+      "bedsIncluded": "asdf",
+      "price": "asdf",
       "id": 1
     }
   ]

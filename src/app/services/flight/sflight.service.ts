@@ -1,30 +1,31 @@
 import { HttpClient, HttpErrorResponse, JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
-import { Iflight, IflightRequest } from './iflight';
+import { environment } from 'src/environments/environment';
+import { IFlight, IFlightRequest } from './iflight';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SflightService {
 
-  private FLIGHTS: Iflight[] = [];
-  flightsArray: Iflight[] = [];
-  private _flight$: BehaviorSubject<Iflight[]> = new BehaviorSubject(this.flightsArray);
-  public flight$: Observable<Iflight[]> = this._flight$.asObservable();
-  private readonly FlightsServiceUrl = 'http://localhost:3000/flights';
+  private FLIGHTS: IFlight[] = [];
+  flightsArray: IFlight[] = [];
+  private _flight$: BehaviorSubject<IFlight[]> = new BehaviorSubject(this.flightsArray);
+  public flight$: Observable<IFlight[]> = this._flight$.asObservable();
+  private readonly FlightsServiceUrl = environment.api + 'flights';
 
   constructor(private http: HttpClient) { }
 
-  private postFlight(flight :IflightRequest){
-    return this.http.post<Iflight>(this.FlightsServiceUrl, flight)
+  private postFlight(flight :IFlightRequest){
+    return this.http.post<IFlight>(this.FlightsServiceUrl, flight)
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', flight))
     );
   }
 
   private _getFlights(){
-    return this.http.get<Iflight>(this.FlightsServiceUrl, {
+    return this.http.get<IFlight>(this.FlightsServiceUrl, {
       
 
     })
@@ -32,7 +33,6 @@ export class SflightService {
       catchError(err => this.handleError(err, 'postFlight', ""))
     );
   }
-
   private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -53,7 +53,7 @@ export class SflightService {
   //   return this.FLIGHTS? true: false;
   // }
 
-  addFlight(newFlight: IflightRequest): void {
+  addFlight(newFlight: IFlightRequest): void {
       console.log("adding flight -> service")
       console.log("value to add is:", newFlight)
       console.log("Adding...")
@@ -63,7 +63,8 @@ export class SflightService {
       console.log("FLIGHTS:", this.flightsArray)
   }
 
-  getFlights(): Observable<Iflight>{
+
+  getFlights(): Observable<IFlight>{
     console.log("getting all flights -> service")
     return this._getFlights()
   }
