@@ -37,6 +37,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -105,9 +106,41 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        }
+      }
+    },
+    "myFlights": {
+      "projectType": "library",
+      "root": "projects/my-flights",
+      "sourceRoot": "projects/my-flights/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/my-flights/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-flights/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-flights/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/my-flights/src/test.ts",
+            "tsConfig": "projects/my-flights/tsconfig.spec.json",
+            "karmaConfig": "projects/my-flights/karma.conf.js"
           }
         }
       }

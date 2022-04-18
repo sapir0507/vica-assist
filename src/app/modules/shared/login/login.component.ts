@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { IUser } from 'src/app/services/IUser/iuser';
 import { SessionQuery } from 'src/app/services/session/session.query';
+import { SessionService } from 'src/app/services/session/session.service';
+import { SessionState, SessionStore } from 'src/app/services/session/session.store'
 
 @Component({
   selector: 'app-login',
@@ -39,7 +41,9 @@ export class LoginComponent implements OnInit {
   
   constructor(
     private auth: AuthService,
-    private sessionQuery: SessionQuery
+    private sessionQuery: SessionQuery,
+    private sessionService: SessionService,
+    private loginStore: SessionStore
     ) { }
   
   ngOnInit(): void {
@@ -47,6 +51,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit(){
     console.log(this.formGroup.value)
+    const isLoggedIn = this.sessionService.login(
+      this.formGroup.value['username'].value, 
+      this.formGroup.value['password'].value)
+    if(isLoggedIn.role === 'agent'){
+      console.log('agent')
+    }
+    else console.log('customer')
   }
 
   onGoogleAuthenticator($event: Event) {

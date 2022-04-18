@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
+import { tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,24 @@ export class SessionService {
     private sessionStore: SessionStore,
     private http: HttpClient
     ) { }
+
+  // login(username: string, password: string){
+  //   return this.http(environment.api + 'login').pipe(
+  //     tap(name => this.sessionStore.update(name))
+  //   )
+  // } 
+
+  login(username: string, password: string){
+    if(username === 'livetotell' && password === '1234')
+      return {
+        status: true,
+        role: 'agent'
+      }
+    else return {
+        status: true,
+        role: 'customer'
+    }
+  }
 
   updateUsername(newName: string){
     try 

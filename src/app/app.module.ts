@@ -23,6 +23,7 @@ import { SessionQuery } from './services/session/session.query';
 import { SessionStore } from './services/session/session.store';
 import { SflightService } from './services/flight/sflight.service';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const JWT_Module_Options: JwtModuleOptions = {
   config: {
@@ -52,7 +53,10 @@ const JWT_Module_Options: JwtModuleOptions = {
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule,
     HttpClientModule,
-    JwtModule.forRoot(JWT_Module_Options)
+    
+    JwtModule.forRoot(JWT_Module_Options),
+    
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: 
