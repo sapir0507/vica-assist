@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { IUser } from 'src/app/services/IUser/iuser';
+import { User } from 'src/app/services/IUser/iuser';
 import { SessionQuery } from 'src/app/services/session/session.query';
 import { SessionService } from 'src/app/services/session/session.service';
 import { SessionState, SessionStore } from 'src/app/services/session/session.store'
@@ -30,10 +30,10 @@ export class LoginComponent implements OnInit {
     googleAuthenticator: new FormControl(undefined, Validators.required)
   });
 
-  user: IUser = {
-    Username: 'sapir.s@gmail.com',
-    Password: '123321',
-    Role: 'admin'
+  user: User = {
+    username: 'sapir.s@gmail.com',
+    password: '123321',
+    role: 'admin'
   };
 
   isLoading$ = this.sessionQuery.selectLoading();
@@ -44,20 +44,36 @@ export class LoginComponent implements OnInit {
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
     private loginStore: SessionStore
-    ) { }
+    ) {
+
+      this.loginStore.update(store => {
+        return {
+          ...store, 
+          role: '' ,
+          username: '',
+        }
+      })
+
+     }
   
   ngOnInit(): void {
   }
 
   onSubmit(){
     console.log(this.formGroup.value)
-    const isLoggedIn = this.sessionService.login(
-      this.formGroup.value['username'].value, 
-      this.formGroup.value['password'].value)
-    if(isLoggedIn.role === 'agent'){
-      console.log('agent')
+    const isLoggedIn = this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
+
+    this.loginStore.update(store => {
+      return {
+        ...store, 
+        role: isLoggedIn.role ,
+        username: isLoggedIn.username,
+      }
+    })
+
+    if(isLoggedIn.isLoggedIn){
+      window.location.href = ""
     }
-    else console.log('customer')
   }
 
   onGoogleAuthenticator($event: Event) {

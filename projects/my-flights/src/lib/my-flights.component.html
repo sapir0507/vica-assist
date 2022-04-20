@@ -1,3 +1,121 @@
-<p>
-    my-flights works!
-</p>
+<div class="add-new-flight">
+    <h1>add new flight</h1>
+    <!-- form start -->
+    <form [formGroup]="newFlightForm" class="newFlightForm" (ngSubmit)="addFlight()">
+       
+        <mat-accordion class="example-headers-align">
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Personal Data
+                </mat-panel-title>
+                <mat-panel-description>
+                  type your name and age
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Destination</mat-label>
+                <input matInput formControlName="dest">
+              </mat-form-field>
+              
+              <mat-form-field appearance="fill">
+                <mat-label>Origin</mat-label>
+                <input matInput formControlName="org">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Select an option</mat-label>
+                <mat-select formControlName="passangers">
+                  <mat-option value="1">1</mat-option>
+                  <mat-option value="2">2</mat-option>
+                  <mat-option value="3">3</mat-option>
+                  <mat-option value="4">4</mat-option>
+                  <mat-option value="5">5</mat-option>
+                </mat-select>
+              </mat-form-field>
+             
+
+              <mat-action-row>
+                <button mat-button color="primary" (click)="nextStep()">Next</button>
+              </mat-action-row>
+
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Personal Data
+                </mat-panel-title>
+                <mat-panel-description>
+                  Flight Details
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Choose A Date</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="start date">
+                  <input matEndDate placeholder="end date">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYY - MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+
+   
+              <mat-form-field appearance="fill">
+                <mat-label>Airway</mat-label>
+                <input matInput>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Airport</mat-label>
+                <input matInput>
+              </mat-form-field>
+
+              <mat-action-row>
+                <button mat-button color="primary" (click)="nextStep()">Next</button>
+              </mat-action-row>
+
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Total
+                </mat-panel-title>
+                <mat-panel-description>
+                  type your name and age
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+             
+
+              <mat-form-field appearance="fill">
+                <mat-label>More Information</mat-label>
+                <input matInput type="text">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" floatLabel="always">
+                <mat-label>price</mat-label>
+                <input matInput type="number" class="" placeholder="0">
+                <span matPrefix>$&nbsp;</span> <!-- $ -->
+              </mat-form-field>
+
+              <mat-action-row>
+                <button mat-button color="primary" (click)="nextStep()">Next</button>
+              </mat-action-row>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+          
+        
+            
+        <input type="submit" value="submit">
+       
+
+      </form>
+    <!-- form end -->
+</div>

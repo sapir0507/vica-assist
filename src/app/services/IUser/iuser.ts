@@ -1,5 +1,5 @@
-export interface IUser {
-    Username: string,
-    Password: string,
-    Role: string
+export interface User {
+    username?: string,
+    password?: string,
+    role?: string
 }

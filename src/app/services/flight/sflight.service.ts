@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, JsonpClientBackend } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -26,8 +26,6 @@ export class SflightService {
 
   private _getFlights(){
     return this.http.get<IFlight>(this.FlightsServiceUrl, {
-      
-
     })
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', ""))

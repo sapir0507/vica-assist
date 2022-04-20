@@ -1,36 +1,55 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
-import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Hotel } from '../hotel/ihotel';
+import { catchError } from 'rxjs';
+
+
+interface currentUser{
+  username?: string,
+  role?: string,
+  isLoggedIn?: boolean
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
+  HotelServiceUrl: string = environment.api + 'login'
+  currentUser: currentUser = {}
+
   constructor(
     private sessionStore: SessionStore,
     private http: HttpClient
     ) { }
 
-  // login(username: string, password: string){
-  //   return this.http(environment.api + 'login').pipe(
-  //     tap(name => this.sessionStore.update(name))
-  //   )
-  // } 
+  private _login(username: string, password: string){
+    return this.http.get<currentUser>(this.HotelServiceUrl + `?username=${username}&password=${password}`, {})
+  } 
 
   login(username: string, password: string){
-    if(username === 'livetotell' && password === '1234')
-      return {
-        status: true,
-        role: 'agent'
+    //only enters the subscribe after clicked the second time. 
+    const AllUsers = this._login(username, password).pipe(catchError(err => err))
+    .subscribe((data: any) => {
+      console.log(data)
+      this.currentUser.username = username
+      if(data){
+        this.currentUser.role = data[0].role 
+        this.currentUser.isLoggedIn = true
+      } 
+      else{
+        this.currentUser.role = ""
+        this.currentUser.isLoggedIn = false
       }
-    else return {
-        status: true,
-        role: 'customer'
-    }
+    })
+    // console.log(AllUsers)
+    return this.currentUser
+   
   }
+  
 
   updateUsername(newName: string){
     try 

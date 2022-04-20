@@ -2,7 +2,7 @@
     <div class="container-fluid max-login-width">
         <div class="">
             <div class="my-login-form">
-                <form (ngSubmit)="onSubmit()" class="BK-1 container-md container-sm ">
+                <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="BK-1 container-md container-sm ">
                 
                     <section class="gradient-custom">
                         <div class="container py-5 h-99">
@@ -17,12 +17,12 @@
                                     <p class="text-white-50 mb-5">Please enter your login and password!</p>
                       
                                     <div class="form-outline form-white mb-4"> <label class="form-label" for="typeUsernameX">Username</label>
-                                      <input type="text" id="typeUsernameX" class="form-control form-control-lg" name/>
+                                      <input type="text" id="typeUsernameX" class="form-control form-control-lg" formControlName="username"/>
                                      
                                     </div>
                       
                                     <div class="form-outline form-white mb-4"><label class="form-label" for="typePasswordX">Password</label>
-                                      <input type="password" id="typePasswordX" class="form-control form-control-lg" />
+                                      <input type="password" id="typePasswordX" class="form-control form-control-lg" formControlName="password"/>
                                       
                                     </div>
                       

@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.resize = onResize.monitor_resizing(this.navbarComponentIs)
     console.log(this.resize)
     this.currentLinks = SLinks.getLinks('shared');
-    console.log('current Links: ',this.currentLinks)
+    // console.log('current Links: ',this.currentLinks)
   }
 
   OnLogin(){

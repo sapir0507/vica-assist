@@ -1,4 +1,4 @@
-export interface Ihotel {
+export interface Hotel {
       id: number,
       Name?:  string,
       stars?: number,
@@ -7,7 +7,7 @@ export interface Ihotel {
       price?: number
 }
 
-export interface IhotelRequest {
+export interface HotelRequest {
       Name?:  string,
       stars?: number,
       breakfast?: boolean,

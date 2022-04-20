@@ -1,17 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
-import { Ihotel, IhotelRequest } from './ihotel';
+import { Hotel, HotelRequest } from './ihotel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShotelService {
 
-  HOTELS: Ihotel[] | null = null;
-  private hotelArray: Ihotel[] = [];
-  private _hotel$: BehaviorSubject<Ihotel[]> = new BehaviorSubject(this.hotelArray);
-  public hotel$: Observable<Ihotel[]> = this._hotel$.asObservable();
+  HOTELS: Hotel[] | null = null;
+  private hotelArray: Hotel[] = [];
+  private _hotel$: BehaviorSubject<Hotel[]> = new BehaviorSubject(this.hotelArray);
+  public hotel$: Observable<Hotel[]> = this._hotel$.asObservable();
   private readonly HotelsServiceUrl = 'http://localhost:3000/hotels';
 
 
@@ -21,14 +21,14 @@ export class ShotelService {
   //   return this.HOTELS? true: false;
   // }
 
-  private postHotel(hotel: IhotelRequest){
-    return this.http.post<Ihotel>(this.HotelsServiceUrl, hotel).pipe(
+  private postHotel(hotel: HotelRequest){
+    return this.http.post<Hotel>(this.HotelsServiceUrl, hotel).pipe(
       catchError(err => this.handleError(err, 'postHotel', hotel))
     );
   }
 
   private _getHotel(){
-    return this.http.get<Ihotel>(this.HotelsServiceUrl, {}).pipe(
+    return this.http.get<Hotel>(this.HotelsServiceUrl, {}).pipe(
       catchError(err => this.handleError(err, 'postHotel', ""))
     );
   }
@@ -47,7 +47,7 @@ export class ShotelService {
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
 
-  addHotel(newHotel: IhotelRequest): void {
+  addHotel(newHotel: HotelRequest): void {
       console.log("adding hotel -> service")
       console.log("value to add is:", newHotel)
       console.log("Adding...")
@@ -56,7 +56,7 @@ export class ShotelService {
       console.log("HOTELS:", this.HOTELS)
   }
 
-  getFlights(): Observable<Ihotel>{
+  getFlights(): Observable<Hotel>{
     console.log("getting all hotels -> service")
     return this._getHotel()
   }

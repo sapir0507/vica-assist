@@ -1,6 +1,6 @@
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Ihotel } from 'src/app/services/hotel/ihotel';
+import { Hotel } from 'src/app/services/hotel/ihotel';
 
 @Component({
   selector: 'app-hotel',
@@ -8,7 +8,7 @@ import { Ihotel } from 'src/app/services/hotel/ihotel';
   styleUrls: ['./hotel.component.scss']
 })
 export class HotelComponent implements OnInit {
-  @Input() hotel: Ihotel | null = null;
+  @Input() hotel: Hotel | null = null;
   constructor() { }
 
   ngOnInit(): void {

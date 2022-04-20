@@ -7,7 +7,10 @@ import { SessionState, SessionStore } from './session.store';
 export class SessionQuery extends Query<SessionState> {  
 
     allState$ = this.select();
-    isLoggedIn$ = this.select(state => !!state.token);
+    isLoggedIn$ = this.select(state => {
+      console.log(state.role)
+      state.role
+    });
     selectName$ = this.select('username');
     selectPass$ = this.select('password');
     selectRole$ = this.select('role');
@@ -29,7 +32,7 @@ export class SessionQuery extends Query<SessionState> {
   }
 
   get isLoggedIn() {
-    return !!this.getValue().token;
+    return this.getValue().role;
   }
 
 }

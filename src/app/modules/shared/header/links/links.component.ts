@@ -25,10 +25,10 @@ export class LinksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("links component")
-    console.log("current links: ", this.currentLinks)
-    console.log("isSideBar: ", this.isSideBar)
-    console.log("isDropDown", this.isDropDown)
+    // console.log("links component")
+    // console.log("current links: ", this.currentLinks)
+    // console.log("isSideBar: ", this.isSideBar)
+    // console.log("isDropDown", this.isDropDown)
   }
 
 }

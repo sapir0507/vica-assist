@@ -14,10 +14,10 @@ export class DropdownComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log("dropdown component")
-    console.log("current links", this.currentLinks)
-    console.log("isSideBar", this.isSideBar)
-    console.log("isDropDown", this.isDropDown)
+    // console.log("dropdown component")
+    // console.log("current links", this.currentLinks)
+    // console.log("isSideBar", this.isSideBar)
+    // console.log("isDropDown", this.isDropDown)
   }
 
 }

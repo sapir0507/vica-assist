@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Ihotel } from 'src/app/services/hotel/ihotel';
+import { Hotel } from 'src/app/services/hotel/ihotel';
 import { ShotelService } from 'src/app/services/hotel/shotel.service';
 
 @Component({
@@ -11,7 +11,7 @@ export class ChooseHotelComponent implements OnInit {
   stars: boolean[] = [true, false, false, false, false]
   urlWhite: string = "https://thecolor.blog/wp-content/uploads/2021/02/Amarillo-Canario.png"
   urlYellow: string = "https://www.macmillandictionary.com/external/slideshow/full/White_full.png"
-  AllHotels: Ihotel[] | null = this.SHotel.HOTELS;
+  AllHotels: Hotel[] | null = this.SHotel.HOTELS;
 
   constructor(private SHotel: ShotelService) {
 

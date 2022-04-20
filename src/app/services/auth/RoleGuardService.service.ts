@@ -6,11 +6,14 @@ import { Router,
 import { AuthService } from './auth.service';
 import decode from 'jwt-decode';
 import { globalAgent } from 'http';
+import { SessionQuery } from '../session/session.query';
 
 @Injectable()
 export class RoleGuardService implements CanActivate {
+
   constructor(
-    public auth: AuthService, 
+    public auth: AuthService,
+    private sessionQuery: SessionQuery, 
     public router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
@@ -19,15 +22,13 @@ export class RoleGuardService implements CanActivate {
     const expectedRole = route.data['expectedRole'];
     const token: string = localStorage.getItem('token') || '';
     console.log('token', token, ' -- decode --', decode(token))
+    const role = this.sessionQuery.isLoggedIn;
     // // decode the token to get its payload
-    // const tokenPayload = decode(token);
-    // if (
-    //   !this.auth.isAuthenticated() || 
-      // tokenPayload.role !== expectedRole
-    // ) {
-    //   this.router.navigate(['login']); 
-    //   return false;
-    // }
+    const isLoggedIn = role === 'agent' || role === 'customer'? true : false;
+    if (!this.auth.isAuthenticated() || role !== expectedRole) {
+      this.router.navigate(['login']); 
+      return false;
+    }
     return true;
   }
 }

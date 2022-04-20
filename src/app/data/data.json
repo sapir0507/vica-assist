@@ -11,18 +11,6 @@
     }
   ],
   "flights": [
-    {
-      "Dest": "",
-      "Passangers": "",
-      "Org": "",
-      "Return": "",
-      "Departure": "",
-      "Airport": "",
-      "Airways": "",
-      "Info": "",
-      "Price": "",
-      "id": 1
-    }
   ],
   "hotels": [
     {
@@ -32,6 +20,18 @@
       "bedsIncluded": "asdf",
       "price": "asdf",
       "id": 1
+    }
+  ],
+  "login": [
+    {
+      "username": "livetotell",
+      "password": "1234",
+      "role": "agent"
+    },
+    {
+      "username": "sapir0507",
+      "password": "1234",
+      "role": "customer"
     }
   ]
 }

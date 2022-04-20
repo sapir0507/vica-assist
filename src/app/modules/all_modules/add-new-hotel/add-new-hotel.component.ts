@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Ihotel, IhotelRequest } from 'src/app/services/hotel/ihotel';
+import { Hotel, HotelRequest } from 'src/app/services/hotel/ihotel';
 import { ShotelService } from 'src/app/services/hotel/shotel.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class AddNewHotelComponent implements OnInit {
     hotelPrice: new FormControl('')
   });
 
-  NewHotel: IhotelRequest | null = null;
+  NewHotel: HotelRequest | null = null;
 
   constructor(private SHotel: ShotelService) { }
 
