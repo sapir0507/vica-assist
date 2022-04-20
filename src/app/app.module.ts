@@ -27,7 +27,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const JWT_Module_Options: JwtModuleOptions = {
   config: {
-      tokenGetter: undefined
+      // tokenGetter: undefined,
+      throwNoTokenError: true,
+      tokenGetter: (request) => {
+        if(request?.url.includes('flight')) return localStorage.getItem("access_token_flight");
+        if(request?.url.includes('hotel')) return localStorage.getItem("access_token_hotel");
+        return localStorage.getItem("access_token");
+      }
   }
 };
 

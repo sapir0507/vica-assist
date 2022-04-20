@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import { SessionStore } from './session.store';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
+import { Token } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +24,20 @@ export class SessionService {
 
   login(username: string, password: string){
     if(username === 'livetotell' && password === '1234')
+    {
+      this.updateLoginDetails(username, password, 'agent')
+      console.log(Token.bind(username)) 
       return {
         status: true,
         role: 'agent'
       }
-    else return {
-        status: true,
-        role: 'customer'
+    }
+    else {
+      this.updateLoginDetails(username, password, 'custumer')
+        return {
+          status: true,
+          role: 'customer'
+      }
     }
   }
 

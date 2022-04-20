@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { observable, Observable, of } from 'rxjs';
+
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { IUser } from 'src/app/services/IUser/iuser';
 import { SessionQuery } from 'src/app/services/session/session.query';
@@ -50,14 +52,9 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.formGroup.value)
-    const isLoggedIn = this.sessionService.login(
-      this.formGroup.value['username'].value, 
-      this.formGroup.value['password'].value)
-    if(isLoggedIn.role === 'agent'){
-      console.log('agent')
-    }
-    else console.log('customer')
+    const isLoggedIn = this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
+    console.log(this.sessionQuery.getValue())
+   
   }
 
   onGoogleAuthenticator($event: Event) {

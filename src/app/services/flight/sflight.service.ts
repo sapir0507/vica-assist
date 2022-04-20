@@ -33,6 +33,7 @@ export class SflightService {
       catchError(err => this.handleError(err, 'postFlight', ""))
     );
   }
+  
   private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
