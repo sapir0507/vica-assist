@@ -19,8 +19,8 @@ export class MyFlightsComponent implements OnInit {
     org: new FormControl(''),
     departureDate: new FormControl(''),
     returnDate: new FormControl(''),
-    airport: new FormControl(''),
-    airways: new FormControl(''),
+    stops: new FormControl(''),
+    bagage: new FormControl(''),
     moreInfo: new FormControl(''),
     price: new FormControl('')
   });
@@ -62,8 +62,8 @@ export class MyFlightsComponent implements OnInit {
       org: this.newFlightForm.get('org')?.value,
       returnDate: this.newFlightForm.get('returnDate')?.value,
       departureDate: this.newFlightForm.get('departureDate')?.value,
-      airport: this.newFlightForm.get('airport')?.value,
-      airways: this.newFlightForm.get('airways')?.value,
+      stops: this.newFlightForm.get('stops')?.value,
+      bagage: this.newFlightForm.get('bagage')?.value,
       moreInfo: this.newFlightForm.get('moreInfo')?.value,
       price: this.newFlightForm.get('price')?.value,
     }

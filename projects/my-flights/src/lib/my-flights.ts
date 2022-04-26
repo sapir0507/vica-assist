@@ -5,8 +5,8 @@ export interface Flights {
     org?: string ,
     returnDate?: string ,
     departureDate?: string ,
-    airport?: string ,
-    airways?: string ,
+    stops?: string ,
+    bagage?: string ,
     moreInfo?: string ,
     price?: number 
 }
@@ -17,8 +17,8 @@ export interface FlightsRequest {
     org?: string ,
     returnDate?: string ,
     departureDate?: string ,
-    airport?: string ,
-    airways?: string ,
+    stops?: string ,
+    bagage?: string ,
     moreInfo?: string ,
     price?: number 
     

@@ -56,8 +56,8 @@
               <mat-form-field appearance="fill">
                 <mat-label>Choose A Date</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
-                  <input matStartDate placeholder="start date">
-                  <input matEndDate placeholder="end date">
+                  <input matStartDate placeholder="start date" formControlName="departureDate">
+                  <input matEndDate placeholder="end date" formControlName="returnDate">
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYY - MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -67,7 +67,7 @@
    
               <mat-form-field appearance="fill">
                 <mat-label>Stops</mat-label>
-                <mat-select formControlName="passangers">
+                <mat-select formControlName="stops">
                   <mat-option value="0">No Stops</mat-option>
                   <mat-option value="1">One Stop</mat-option>
                   <mat-option value="2">Two Stops</mat-option>
@@ -76,7 +76,7 @@
 
               <mat-form-field appearance="fill">
                 <mat-label>Bagage</mat-label>
-                <mat-select formControlName="passangers">
+                <mat-select formControlName="bagage">
                   <mat-option value=true>Included</mat-option>
                   <mat-option value=false>Not Included</mat-option>
                 </mat-select>
@@ -102,12 +102,12 @@
 
               <mat-form-field appearance="fill">
                 <mat-label>More Information</mat-label>
-                <input matInput type="text">
+                <input matInput type="text" formControlName="moreInfo">
               </mat-form-field>
 
               <mat-form-field appearance="fill" floatLabel="always">
                 <mat-label>price</mat-label>
-                <input matInput type="number" class="" placeholder="0">
+                <input matInput type="number" class="" placeholder="0" formControlName="price">
                 <span matPrefix>$&nbsp;</span> <!-- $ -->
               </mat-form-field>
 

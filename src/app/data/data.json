@@ -12,8 +12,20 @@
     }
   ],
   "flights": [
+   
   ],
   "hotels": [
+    {
+      "name": "new eves hotel",
+      "stars": "5",
+      "guests": "2",
+      "breakfast": "true",
+      "bedType": "King Bed",
+      "images": "blabla",
+      "moreInfo": "cancle is on may 5th",
+      "price": 100,
+      "id": 1
+    }
   ],
   "login": [
     {
