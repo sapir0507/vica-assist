@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { Flights, FlightsRequest } from './my-flights';
 
 
@@ -14,7 +13,7 @@ export class MyFlightsService {
   flightsArray: Flights[] = [];
   private _flight$: BehaviorSubject<Flights[]> = new BehaviorSubject(this.flightsArray);
   public flight$: Observable<Flights[]> = this._flight$.asObservable();
-  private readonly FlightsServiceUrl = environment.api + 'flights';
+  private readonly FlightsServiceUrl = 'http://localhost:3000/' + 'flights';
  
   
   constructor(private http: HttpClient) {

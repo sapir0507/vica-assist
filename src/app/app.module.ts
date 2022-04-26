@@ -26,6 +26,8 @@ import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { MatSliderModule } from '@angular/material/slider';
+import { ShotelService } from './services/hotel/shotel.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -44,6 +46,7 @@ const JWT_Module_Options: JwtModuleOptions = {
   ],
   imports: [
     BrowserModule,
+    NgbModule,
     HomepageModule,
     HeaderModule,
     FinalOrderModule,
@@ -61,7 +64,8 @@ const JWT_Module_Options: JwtModuleOptions = {
     MatSliderModule,
     JwtModule.forRoot(JWT_Module_Options),
     
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgbModule
   ],
   providers: [
     { provide: 
@@ -72,6 +76,7 @@ const JWT_Module_Options: JwtModuleOptions = {
     SessionQuery,
     SessionStore,
     SflightService,
+    ShotelService
     
     
   ],

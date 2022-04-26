@@ -1,11 +1,114 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "defaultCollection": "@datorama/akita"
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "mat-input": {
+      "projectType": "library",
+      "root": "projects/mat-input",
+      "sourceRoot": "projects/mat-input/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/mat-input/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mat-input/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mat-input/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/mat-input/src/test.ts",
+            "tsConfig": "projects/mat-input/tsconfig.spec.json",
+            "karmaConfig": "projects/mat-input/karma.conf.js"
+          }
+        }
+      }
+    },
+    "my-hotels": {
+      "projectType": "library",
+      "root": "projects/my-hotels",
+      "sourceRoot": "projects/my-hotels/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/my-hotels/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-hotels/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-hotels/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "projects/my-hotels/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/projects/my-hotels"
+          ],
+          "options": {
+            "jestConfig": "projects/my-hotels/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "myFlights": {
+      "projectType": "library",
+      "root": "projects/my-flights",
+      "sourceRoot": "projects/my-flights/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/my-flights/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-flights/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-flights/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/my-flights/src/test.ts",
+            "tsConfig": "projects/my-flights/tsconfig.spec.json",
+            "karmaConfig": "projects/my-flights/karma.conf.js"
+          }
+        }
+      }
+    },
     "vica-assist": {
       "projectType": "application",
       "schematics": {
@@ -38,9 +141,13 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -48,12 +155,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "200kb",
+                  "maximumError": "250kb"
                 }
               ],
               "fileReplacements": [
@@ -114,23 +221,23 @@
         }
       }
     },
-    "myFlights": {
+    "item": {
       "projectType": "library",
-      "root": "projects/my-flights",
-      "sourceRoot": "projects/my-flights/src",
+      "root": "projects/item",
+      "sourceRoot": "projects/item/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/my-flights/ng-package.json"
+            "project": "projects/item/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/my-flights/tsconfig.lib.prod.json"
+              "tsConfig": "projects/item/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/my-flights/tsconfig.lib.json"
+              "tsConfig": "projects/item/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -138,13 +245,12 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/my-flights/src/test.ts",
-            "tsConfig": "projects/my-flights/tsconfig.spec.json",
-            "karmaConfig": "projects/my-flights/karma.conf.js"
+            "main": "projects/item/src/test.ts",
+            "tsConfig": "projects/item/tsconfig.spec.json",
+            "karmaConfig": "projects/item/karma.conf.js"
           }
         }
       }
     }
-  },
-  "defaultProject": "vica-assist"
+  }
 }

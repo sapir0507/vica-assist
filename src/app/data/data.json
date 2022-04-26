@@ -3,6 +3,7 @@
     {
       "deal": [
         {
+          "agent name": "",
           "user name": "",
           "flights": [],
           "hotels": []
@@ -13,14 +14,6 @@
   "flights": [
   ],
   "hotels": [
-    {
-      "Name": "asdf",
-      "stars": "asdf",
-      "breakfast": true,
-      "bedsIncluded": "asdf",
-      "price": "asdf",
-      "id": 1
-    }
   ],
   "login": [
     {

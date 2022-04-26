@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'add-hotel',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/add-new-hotel/add-new-hotel.module').then(m => m.AddNewHotelModule)
   },
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'add-flight',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/add-new-flight/add-new-flight.module').then(m => m.AddNewFlightModule)
   },
   {

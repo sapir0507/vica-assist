@@ -6,7 +6,7 @@
     </div>
     <div class="my-flex-2">
       <div class="">
-        <ng-container *ngIf="currentLinks">
+        <ng-container *ngIf="sharedLinks">
           <app-links [currentLinks]="sharedLinks" [isDropDown]="false" [isSideBar]="false"></app-links>
         </ng-container>
       </div>
@@ -27,7 +27,7 @@
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <!-- links -->
           <!-- shared links -->
-          <ng-container *ngIf="currentLinks">
+          <ng-container *ngIf="sharedLinks">
             <app-links [currentLinks]="sharedLinks" [isDropDown]="false" [isSideBar]="true"></app-links>
           </ng-container>
 

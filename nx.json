@@ -47,5 +47,9 @@
     "@nrwl/js": {
       "analyzeSourceFiles": false
     }
-  }
+  },
+  "cli": {
+    "defaultCollection": "@datorama/akita"
+  },
+  "defaultProject": "vica-assist"
 }

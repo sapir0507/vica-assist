@@ -16,7 +16,7 @@ export class MyFlightsComponent implements OnInit {
   newFlightForm = new FormGroup({
     dest: new FormControl(''),
     passangers: new FormControl(''),
-    origin: new FormControl(''),
+    org: new FormControl(''),
     departureDate: new FormControl(''),
     returnDate: new FormControl(''),
     airport: new FormControl(''),
@@ -30,7 +30,7 @@ export class MyFlightsComponent implements OnInit {
     end: new FormControl(),
   });
 
-  NewFlight: FlightsRequest | null = null;
+  NewFlight?: FlightsRequest;
 
   step: number = 0;
   hide = true;
@@ -59,7 +59,7 @@ export class MyFlightsComponent implements OnInit {
     this.NewFlight = {
       dest:this.newFlightForm.get('dest')?.value,
       passangers: this.newFlightForm.get('passangers')?.value,
-      org: this.newFlightForm.get('origin')?.value,
+      org: this.newFlightForm.get('org')?.value,
       returnDate: this.newFlightForm.get('returnDate')?.value,
       departureDate: this.newFlightForm.get('departureDate')?.value,
       airport: this.newFlightForm.get('airport')?.value,
@@ -68,6 +68,7 @@ export class MyFlightsComponent implements OnInit {
       price: this.newFlightForm.get('price')?.value,
     }
     this.SFlight.addFlight(this.NewFlight)
+    console.log('addFlight -> flight added')
   }
 
 

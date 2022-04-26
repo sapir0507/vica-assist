@@ -5,13 +5,14 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule, MatDateSelectionModel, MatSingleDateSelectionModel, MatRangeDateSelectionModel } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -20,6 +21,7 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
     MyFlightsComponent
   ],
   imports: [
+    CommonModule,
     MatNativeDateModule,
     MatRippleModule,
     ReactiveFormsModule,
@@ -31,11 +33,9 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
     MatButtonModule,
     MatButtonToggleModule,
     MatDatepickerModule,
-    BrowserAnimationsModule,
+    // BrowserAnimationsModule,
     MatSelectModule,
-    //  MatDateSelectionModel,
-    // MatRangeDateSelectionModel,
-    // MatSingleDateSelectionModel,
+    
     FormsModule
   ],
   exports: [

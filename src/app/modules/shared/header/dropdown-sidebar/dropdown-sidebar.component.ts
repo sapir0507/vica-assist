@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ILinks } from 'src/app/services/links/links';
 import { LinksService } from 'src/app/services/links/links.service';
 
@@ -8,10 +8,10 @@ import { LinksService } from 'src/app/services/links/links.service';
   styleUrls: ['./dropdown-sidebar.component.scss']
 })
 export class DropdownSidebarComponent implements OnInit {
-  @Input() currentLinks: Array<ILinks> | null = null;
-  @Input() customersLinks: Array<ILinks> | null = null;
-  @Input() agentsLinks: Array<ILinks> | null = null;
-  @Input() sharedLinks: Array<ILinks> | null = null;
+  customersLinks: Array<ILinks> | null = null;
+  agentsLinks: Array<ILinks> | null = null;
+  sharedLinks: Array<ILinks> | null = null;
+
   constructor(private SLinks: LinksService) {
     this.sharedLinks = SLinks.getLinks('shared');
     this.customersLinks = SLinks.getLinks('customer');
@@ -19,7 +19,7 @@ export class DropdownSidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+    
   }
 
 }

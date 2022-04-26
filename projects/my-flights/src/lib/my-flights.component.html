@@ -7,18 +7,13 @@
             <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Personal Data
+                  countries
                 </mat-panel-title>
                 <mat-panel-description>
-                  type your name and age
-                  <mat-icon>account_circle</mat-icon>
+                  type where you want to travel and from where
+                  <mat-icon>flight_takeoff</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
-
-              <mat-form-field appearance="fill">
-                <mat-label>Destination</mat-label>
-                <input matInput formControlName="dest">
-              </mat-form-field>
               
               <mat-form-field appearance="fill">
                 <mat-label>Origin</mat-label>
@@ -26,7 +21,12 @@
               </mat-form-field>
 
               <mat-form-field appearance="fill">
-                <mat-label>Select an option</mat-label>
+                <mat-label>Destination</mat-label>
+                <input matInput formControlName="dest">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Number of Passangers</mat-label>
                 <mat-select formControlName="passangers">
                   <mat-option value="1">1</mat-option>
                   <mat-option value="2">2</mat-option>
@@ -38,18 +38,18 @@
              
 
               <mat-action-row>
-                <button mat-button color="primary" (click)="nextStep()">Next</button>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
               </mat-action-row>
 
             </mat-expansion-panel>
             <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Personal Data
+                  Flight Data
                 </mat-panel-title>
                 <mat-panel-description>
                   Flight Details
-                  <mat-icon>account_circle</mat-icon>
+                  <mat-icon>date_range</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
@@ -66,17 +66,24 @@
 
    
               <mat-form-field appearance="fill">
-                <mat-label>Airway</mat-label>
-                <input matInput>
+                <mat-label>Stops</mat-label>
+                <mat-select formControlName="passangers">
+                  <mat-option value="0">No Stops</mat-option>
+                  <mat-option value="1">One Stop</mat-option>
+                  <mat-option value="2">Two Stops</mat-option>
+                </mat-select>
               </mat-form-field>
 
               <mat-form-field appearance="fill">
-                <mat-label>Airport</mat-label>
-                <input matInput>
+                <mat-label>Bagage</mat-label>
+                <mat-select formControlName="passangers">
+                  <mat-option value=true>Included</mat-option>
+                  <mat-option value=false>Not Included</mat-option>
+                </mat-select>
               </mat-form-field>
-
               <mat-action-row>
-                <button mat-button color="primary" (click)="nextStep()">Next</button>
+                <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
               </mat-action-row>
 
             </mat-expansion-panel>
@@ -87,7 +94,7 @@
                 </mat-panel-title>
                 <mat-panel-description>
                   type your name and age
-                  <mat-icon>account_circle</mat-icon>
+                  <mat-icon>attach_money</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
@@ -105,7 +112,8 @@
               </mat-form-field>
 
               <mat-action-row>
-                <button mat-button color="primary" (click)="nextStep()">Next</button>
+                <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
+                <button mat-button color="primary" type="submit">Sumbit</button>
               </mat-action-row>
 
             </mat-expansion-panel>
@@ -113,7 +121,6 @@
           
         
             
-        <input type="submit" value="submit">
        
 
       </form>
