@@ -1,6 +1,9 @@
 export interface Flights {
     id: number,
-    passangers?: number ,
+    passangers?: number,
+    fullName?: string,
+    passID?: number,
+    passArray?: passArray[],
     dest?: string ,
     org?: string ,
     returnDate?: string ,
@@ -12,7 +15,10 @@ export interface Flights {
 }
 
 export interface FlightsRequest {
-    passangers?: number ,
+    passangers?: number,
+    fullName?: string,
+    passID?: number,
+    passArray?: passArray[],
     dest?: string ,
     org?: string ,
     returnDate?: string ,
@@ -22,4 +28,15 @@ export interface FlightsRequest {
     moreInfo?: string ,
     price?: number 
     
+}
+
+export interface passArray{
+    fullName:string,
+    passID: number,
+    id: number
+}
+
+export interface passArrayRequest{
+    fullName:string,
+    passID: number,
 }

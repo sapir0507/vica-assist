@@ -3,109 +3,167 @@
     <!-- form start -->
     <form [formGroup]="newFlightForm" class="newFlightForm" (ngSubmit)="addFlight()">
        
-        <mat-accordion class="example-headers-align">
+        <mat-accordion color="primary"  class="example-headers-align">
             <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
+              <mat-expansion-panel-header>
+                <mat-panel-title > 
+                  Personal Details
+                </mat-panel-title>
+                <mat-panel-description>
+                  Passengers Personal Details
+                  <mat-icon color="primary">personal_details</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <mat-form-field color="primary" appearance="fill" class="cas">
+                <mat-label>Full Name</mat-label>
+                <input matInput placeholder="Full Name" formControlName="fullName">
+                <mat-hint>Like in your passport</mat-hint>
+              </mat-form-field>
+              <mat-form-field color="primary" appearance="fill">
+                <mat-label>Identification Card</mat-label>
+                <input matInput placeholder="ID" formControlName="myID">
+              </mat-form-field>
+              <button mat-button color="primary" type="button" (click)="AddNewCustomer()">add customer</button>
+                    
+              <mat-divider *ngIf="addDivider" class="cas"></mat-divider>
+              <mat-hint *ngIf="showHint">To add a new passanger first fill your full name and ID</mat-hint>
+
+              <ng-container formArrayName="passangersFullName">
+                <ng-container *ngFor="let newPass of passangersFullName.controls; let index=index">
+                  <div [formGroupName]="index">
+                    <mat-form-field color="primary" appearance="fill">
+                      <input matInput placeholder="Full Name" formControlName="fullName">
+                    </mat-form-field>
+                    <mat-form-field color="primary" appearance="fill">
+                      <input matInput placeholder="ID" formControlName="myID">
+                    </mat-form-field>
+                    <button mat-button color="primary" type="button" (click)="DeleteAddedCustomer(index)">delete customer</button>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <mat-action-row>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
+              </mat-action-row>
+              
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   countries
                 </mat-panel-title>
                 <mat-panel-description>
                   type where you want to travel and from where
-                  <mat-icon>flight_takeoff</mat-icon>
+                  <mat-icon color="primary">flight_takeoff</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
               
-              <mat-form-field appearance="fill">
+              <mat-form-field color="primary" appearance="fill">
                 <mat-label>Origin</mat-label>
                 <input matInput formControlName="org">
               </mat-form-field>
 
-              <mat-form-field appearance="fill">
+              <mat-form-field color="primary" appearance="fill">
                 <mat-label>Destination</mat-label>
                 <input matInput formControlName="dest">
               </mat-form-field>
 
-              <mat-form-field appearance="fill">
-                <mat-label>Number of Passangers</mat-label>
-                <mat-select formControlName="passangers">
-                  <mat-option value="1">1</mat-option>
-                  <mat-option value="2">2</mat-option>
-                  <mat-option value="3">3</mat-option>
-                  <mat-option value="4">4</mat-option>
-                  <mat-option value="5">5</mat-option>
-                </mat-select>
-              </mat-form-field>
-             
+              <mat-divider></mat-divider>
 
-              <mat-action-row>
-                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
-              </mat-action-row>
-
-            </mat-expansion-panel>
-            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  Flight Data
-                </mat-panel-title>
-                <mat-panel-description>
-                  Flight Details
-                  <mat-icon>date_range</mat-icon>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-
-              <mat-form-field appearance="fill">
-                <mat-label>Choose A Date</mat-label>
-                <mat-date-range-input [rangePicker]="picker">
-                  <input matStartDate placeholder="start date" formControlName="departureDate">
-                  <input matEndDate placeholder="end date" formControlName="returnDate">
-                </mat-date-range-input>
-                <mat-hint>MM/DD/YYY - MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-              </mat-form-field>
-
-   
-              <mat-form-field appearance="fill">
-                <mat-label>Stops</mat-label>
-                <mat-select formControlName="stops">
-                  <mat-option value="0">No Stops</mat-option>
-                  <mat-option value="1">One Stop</mat-option>
-                  <mat-option value="2">Two Stops</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field appearance="fill">
+              <mat-form-field color="primary" appearance="fill">
                 <mat-label>Bagage</mat-label>
                 <mat-select formControlName="bagage">
                   <mat-option value=true>Included</mat-option>
                   <mat-option value=false>Not Included</mat-option>
                 </mat-select>
               </mat-form-field>
+
+              <mat-action-row>
+                <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
+              </mat-action-row>
+              
+            </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Flight Data
+                </mat-panel-title>
+                <mat-panel-description>
+                  Flight Details
+                  <mat-icon color="primary">date_range</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div>
+                <mat-form-field color="primary" appearance="fill">
+                  <mat-label>Choose A Date</mat-label>
+                  <mat-date-range-input [rangePicker]="picker" >
+                    <input matStartDate placeholder="start date" formControlName="departureDate">
+                    <input matEndDate placeholder="end date" formControlName="returnDate">
+                  </mat-date-range-input>
+                  <mat-hint>MM/DD/YYY - MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+              </div>
+
+   
+              <mat-form-field color="primary" appearance="fill">
+                <mat-label>Stops</mat-label>
+                <mat-select formControlName="stops" (selectionChange)="onSelectionChange()">
+                  <mat-option value="0">No Stops</mat-option>
+                  <mat-option value="1">One Stop</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <ng-container *ngIf="hasStop()">
+               
+                <mat-form-field color="primary" appearance="fill"> 
+                  <mat-label>Stop Duration</mat-label>
+                  <input matInput placeholder="02:13" formControlName="stopDuration">
+                </mat-form-field>
+              </ng-container>
+              
+              <mat-divider></mat-divider>
+
+              <mat-form-field color="primary" appearance="fill">
+                <mat-label>departureTime</mat-label>
+                <input matInput  placeholder="02:13" formControlName="departureHour">
+              </mat-form-field>
+
+              <mat-form-field color="primary" appearance="fill">
+                <mat-label>ReturnTime</mat-label>
+                <input matInput  placeholder="02:13" formControlName="returnHour">
+              </mat-form-field>
+
+             
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
                 <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
               </mat-action-row>
 
             </mat-expansion-panel>
-            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="">
+            <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle="">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Total
                 </mat-panel-title>
                 <mat-panel-description>
-                  type your name and age
-                  <mat-icon>attach_money</mat-icon>
+                  Money
+                  <mat-icon color="primary">attach_money</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
              
 
-              <mat-form-field appearance="fill">
+              <mat-form-field color="primary" appearance="fill">
                 <mat-label>More Information</mat-label>
                 <input matInput type="text" formControlName="moreInfo">
               </mat-form-field>
 
-              <mat-form-field appearance="fill" floatLabel="always">
+              <mat-form-field color="primary" appearance="fill" floatLabel="always">
                 <mat-label>price</mat-label>
                 <input matInput type="number" class="" placeholder="0" formControlName="price">
                 <span matPrefix>$&nbsp;</span> <!-- $ -->
@@ -113,7 +171,7 @@
 
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
-                <button mat-button color="primary" type="submit">Sumbit</button>
+                <button mat-stroked-button color="primary" type="submit">Sumbit</button>
               </mat-action-row>
 
             </mat-expansion-panel>

@@ -1,45 +1,81 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FlightsRequest } from './my-flights';
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'lib-myFlights',
   templateUrl: './my-flights.component.html',
-  styleUrls: ['./my-flights.component.scss']
+  styleUrls: ['./my-flights.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MyFlightsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
-  
-  newFlightForm = new FormGroup({
-    dest: new FormControl(''),
-    passangers: new FormControl(''),
-    org: new FormControl(''),
-    departureDate: new FormControl(''),
-    returnDate: new FormControl(''),
-    stops: new FormControl(''),
-    bagage: new FormControl(''),
-    moreInfo: new FormControl(''),
-    price: new FormControl('')
-  });
-
-  range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl(),
-  });
-
+  private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*'
+  private IDValidator = '[1-9]+[0-9]*'
+  private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
+  private _hasStop: boolean = false;
   NewFlight?: FlightsRequest;
+  showHint: boolean = false;
+  addDivider: boolean = false;
 
   step: number = 0;
   hide = true;
 
-  constructor(private SFlight: MyFlightsService) { 
+  newFlightForm: FormGroup = this.fb.group({
+    dest: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9,]*')]],
+    fullName: ['', [Validators.required, Validators.pattern(this.NameValidator)]],
+    myID: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(9), Validators.pattern('[0-9]*')]],
+    passangersFullName: this.fb.array([]),
+    org: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9,\s]*')]],
+    departureDate: ['', [Validators.required]],
+    returnDate: ['', [Validators.required]],
+    departureHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
+    returnHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
+    stops: ['', Validators.required],
+    stopDuration: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
+    bagage: ['', Validators.required],
+    moreInfo: [''],
+    price: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(4), Validators.pattern('[1-9][0-9]*')]]
+  })
+
+  get passangersFullName() {
+    return (this.newFlightForm.controls['passangersFullName']) as FormArray;
+  }
+
+  constructor(
+    private SFlight: MyFlightsService,
+    private fb: FormBuilder,
+    private _snackBar: MatSnackBar
+  ) {
     console.log('library');
   }
 
   ngOnInit(): void {
+  }
+
+
+  newFormVal(str: string) {
+    return this.newFlightForm.get(str)?.value;
+  }
+
+  AddNewCustomer() {
+    const v = this.newFormVal('myID') && this.newFormVal('fullName') ? true : false;
+    if(v){
+      this.showHint = false;
+      this.SFlight.createNewPassangerInput(this.fb, this.passangersFullName);
+    } else {
+      this.showHint = true;
+      this.addDivider = true;
+    }
+  }
+
+  DeleteAddedCustomer(i: number) {
+    this.passangersFullName.removeAt(i)
+    this.passangersFullName.length === 0 ? this.addDivider = false : ""
   }
 
   setStep(index: number) {
@@ -49,26 +85,51 @@ export class MyFlightsComponent implements OnInit {
   nextStep() {
     this.step++;
   }
-  
+
   prevStep() {
     this.step--;
   }
 
-  addFlight(){
+  openSnackBar(message: string) {
+    this._snackBar.open(message);
+  }
+
+  onPassNumChange() {
+    const newNum = this.newFlightForm.get('passangers')?.value;
+    console.log(newNum)
+
+  }
+
+  onSelectionChange() : void {
+    this.newFlightForm.get('stops')?.value === '1' ? this._hasStop = true : this._hasStop = false;
+  }
+
+  hasStop() {
+    return this._hasStop;
+  }
+
+  addFlight() {
     console.log('addFlight -> component')
-    this.NewFlight = {
-      dest:this.newFlightForm.get('dest')?.value,
-      passangers: this.newFlightForm.get('passangers')?.value,
-      org: this.newFlightForm.get('org')?.value,
-      returnDate: this.newFlightForm.get('returnDate')?.value,
-      departureDate: this.newFlightForm.get('departureDate')?.value,
-      stops: this.newFlightForm.get('stops')?.value,
-      bagage: this.newFlightForm.get('bagage')?.value,
-      moreInfo: this.newFlightForm.get('moreInfo')?.value,
-      price: this.newFlightForm.get('price')?.value,
+
+    if (this.newFlightForm.valid) {
+      const passNum = this.passangersFullName.length + 1;
+      this.NewFlight = {
+        dest: this.newFlightForm.get('dest')?.value,
+        passangers: passNum,
+        org: this.newFlightForm.get('org')?.value,
+        returnDate: this.newFlightForm.get('returnDate')?.value,
+        departureDate: this.newFlightForm.get('departureDate')?.value,
+        stops: this.newFlightForm.get('stops')?.value,
+        bagage: this.newFlightForm.get('bagage')?.value,
+        moreInfo: this.newFlightForm.get('moreInfo')?.value,
+        price: this.newFlightForm.get('price')?.value,
+      }
+      this.SFlight.addFlight(this.NewFlight)
+      this.openSnackBar("Flight Added!")
     }
-    this.SFlight.addFlight(this.NewFlight)
-    console.log('addFlight -> flight added')
+    else {
+      this.openSnackBar("Form is invalid! Please fill all the required filds to submit the form.")
+    }
   }
 
 

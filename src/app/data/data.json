@@ -12,7 +12,18 @@
     }
   ],
   "flights": [
-   
+    {
+      "dest": "Rome",
+      "passangers": 2,
+      "org": "Italy",
+      "returnDate": "2022-05-06T21:00:00.000Z",
+      "departureDate": "2022-05-02T21:00:00.000Z",
+      "stops": "1",
+      "bagage": "true",
+      "moreInfo": "ela",
+      "price": 100,
+      "id": 1
+    }
   ],
   "hotels": [
     {

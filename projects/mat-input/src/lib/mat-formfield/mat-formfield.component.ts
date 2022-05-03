@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Form, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -18,7 +18,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class MatFormfieldComponent implements OnInit {
   @Input() label?: string;
   @Input() formControlName?: string;
-  @Input() type?: string = 'text';
+  @Input() type: string = 'text';
   @Input() hint?: string;
   @Input() IconName?: string;
 
@@ -27,11 +27,12 @@ export class MatFormfieldComponent implements OnInit {
   @Input() isChanged?: boolean = false;
   @Input() isIcon?: boolean = false;
 
-  FormControl?: FormControl;
+  form?: FormGroup;
+  formControl?: FormControl;
   matcher = new MyErrorStateMatcher();
 
 
-  constructor() { 
+  constructor(private fb: FormBuilder) { 
     const ValidatorsArray = []
     const TypesList = ['color', 'date', 'datetime-local', 'email', 'month', 'number', 'password', 'text', 'search', 'tel', 'time', 'url', 'week']
 
@@ -44,14 +45,17 @@ export class MatFormfieldComponent implements OnInit {
       ValidatorsArray.push(Validators.required) 
     
 
-    this.FormControl = new FormControl('', ValidatorsArray);
-        
-    
-    
+    this.formControl = new FormControl('', ValidatorsArray);
 
    }
 
   ngOnInit(): void {
+    if(typeof(this.formControlName)==="string"){
+      this.form = this.fb.group({
+        
+      })
+     
+    }
   }
 
 }

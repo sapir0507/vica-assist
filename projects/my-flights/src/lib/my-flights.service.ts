@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { Flights, FlightsRequest } from './my-flights';
 
@@ -62,6 +63,15 @@ export class MyFlightsService {
     return this._getFlights()
   }
   
+  createNewPassangerInput(fb: FormBuilder, newPassDetails: FormArray): void{
+    const newPass: FormGroup = fb.group({
+      fullName: ['', Validators.required],
+      myID: ['', Validators.required]
+    });
+
+    newPassDetails.push(newPass); 
+  }
    
+
 
 }

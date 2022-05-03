@@ -25,6 +25,9 @@
             border-radius: 10px;
             background-color: whitesmoke;
             padding: 50px;
+            .cas{
+              margin-bottom: 15px;
+            }
             .group{
                 display: grid;
                 position: relative;
@@ -103,6 +106,7 @@
     
     .example-headers-align .mat-form-field + .mat-form-field {
       margin-left: 8px;
+    
     }
 
     .example-container .mat-form-field + .mat-form-field {
@@ -120,5 +124,9 @@
       
       input.example-right-align {
         -moz-appearance: textfield;
+      }
+
+      .mat-divider{
+        margin-bottom: 15px;
       }
 }

@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MyHotelsService } from './my-hotels.service';
-// import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -35,6 +35,7 @@ import { MyHotelsService } from './my-hotels.service';
     MatDatepickerModule,
     MatSelectModule,
     FormsModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     MyHotelsRoutingModule
   ],

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HotelRequest } from '../my-hotels';
 import { MyHotelsService } from './my-hotels.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
 
 
 @Component({
@@ -37,7 +39,8 @@ export class MyHotelsComponent {
   
 
   constructor(
-    private Shotel: MyHotelsService
+    private Shotel: MyHotelsService,
+    private _snackBar: MatSnackBar
     ) { 
     console.log('library')
   }
@@ -54,6 +57,10 @@ export class MyHotelsComponent {
     this.step--;
   }
 
+  openSnackBar(message: string) {
+    this._snackBar.open(message);
+  }
+
   addHotel(){
     console.log('addHotel -> component')
     this.NewHotel = {
@@ -67,6 +74,7 @@ export class MyHotelsComponent {
       price: this.newHotelForm.get('price')?.value
     }
     this.Shotel.addHotel(this.NewHotel)
+    this.openSnackBar("Hotel Added!")
 
   }
 }
