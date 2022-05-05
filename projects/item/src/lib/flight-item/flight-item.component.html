@@ -1,0 +1,42 @@
+<div class="flight-item">
+    <mat-card class="item">
+        <mat-card-header>
+            <mat-card-title>Flight</mat-card-title>
+        </mat-card-header>
+    </mat-card>
+    <mat-card-content class="item">
+        <ng-container *ngIf="destination&&origin">
+            <div class="orgtodest">
+                <span class="org">{{origin}}</span>
+                <mat-icon class="icon">flight_takeoff</mat-icon>
+                <span class="dest">{{destination}}</span>
+            </div>
+        </ng-container>
+        <ng-container>
+            <div class="grid">
+                <ng-container *ngIf="stops" class="stops">{{stops}}</ng-container>
+                <ng-container *ngIf="bagage; else bagageFalse">
+                    <div class="bagage">
+                        <mat-icon>luggage</mat-icon> included
+                   </div>
+                </ng-container>
+                <ng-template #bagageFalse>
+                    <div class="bagage">
+                         <mat-icon>no_luggage</mat-icon> not included
+                    </div>
+                </ng-template>
+                <ng-container class="pass">
+                    {{passangers}} passangers
+                </ng-container> 
+                    
+                    
+            </div>
+        </ng-container>
+        
+        
+    </mat-card-content>
+    <mat-card-footer>
+        
+    </mat-card-footer>
+</div>
+

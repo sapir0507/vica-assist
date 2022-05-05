@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -17,7 +18,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class MatFormfieldComponent implements OnInit {
   @Input() label?: string;
-  @Input() formControlName?: string;
+  @Input() formControlName: string = 'name';
   @Input() type: string = 'text';
   @Input() hint?: string;
   @Input() IconName?: string;
@@ -27,10 +28,8 @@ export class MatFormfieldComponent implements OnInit {
   @Input() isChanged?: boolean = false;
   @Input() isIcon?: boolean = false;
 
-  form?: FormGroup;
   formControl?: FormControl;
   matcher = new MyErrorStateMatcher();
-
 
   constructor(private fb: FormBuilder) { 
     const ValidatorsArray = []
@@ -50,12 +49,8 @@ export class MatFormfieldComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    if(typeof(this.formControlName)==="string"){
-      this.form = this.fb.group({
-        
-      })
-     
-    }
   }
+
+  onSubmit(){}
 
 }

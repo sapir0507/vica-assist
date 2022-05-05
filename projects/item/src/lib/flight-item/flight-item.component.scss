@@ -1,0 +1,70 @@
+$card-width: 80vh;
+$card-content-width: 75vh;
+$card-price: 74vh;
+$font-size: 20px;
+
+:host{
+    .flight-item{
+        display: grid;
+        width: 100%;
+        margin: 0 auto;
+        font-size: $font-size;
+        grid-template-columns: repeat(1, 1fr);
+        place-content: center;
+       
+        padding: 10px;
+        .item{
+            width: $card-width;
+            margin: 0 auto;
+            
+            // .image{}
+            .date{
+                text-align: left;
+            }
+            img{
+                text-align: center;
+                width: $card-content-width;
+                margin: 20px auto;
+                border: 2px black outset;
+            }
+            .orgtodest{
+                display: grid;
+                width: $card-content-width;
+                grid-template-columns: repeat(3, 1fr);
+                padding: 20px;
+                font-size: $font-size;
+                place-content: center;
+                .org{
+                    text-align: center;
+                }
+                .icon{   
+                    margin: 0 auto;                    
+                }
+                .dest{
+                    text-align: center;
+                }
+            }
+            .grid{
+             display: grid;
+             width: $card-content-width;
+             font-size: $font-size;
+             grid-template-columns: repeat(3, 1fr);    
+             place-content: center space-around;
+             margin: 15px auto;
+             padding: 25px;
+             text-align: center;
+             gap: 20px;
+             border-top: dotted;
+
+             .stops, .pass{
+                 padding: 10px;
+             }
+            }
+            .price{
+                width: $card-price;
+                text-align: right;
+            }
+         }
+    }
+   
+}

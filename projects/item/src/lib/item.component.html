@@ -1,7 +1,7 @@
 <p>item works!</p>
-<div class="my-item">
-  <mat-card class="item">
-    <mat-card-header>
+ <!-- <div class="my-item"> -->
+ <!-- <mat-card class="item"> -->
+    <!-- <mat-card-header>
       <mat-card-title>
           <span *ngIf=" item_type == 'flight' " class="date">
             Flight
@@ -15,10 +15,23 @@
           {{departureDate}} - {{returnDate}}
         </div>
       </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
+    </mat-card-header> -->
+    <!-- <mat-card-content> -->
 
-      <picture *ngIf="item_type == 'hotel'">
+      <ng-container *ngIf="item_type == 'flight'">
+        <flight-item
+          [origin]="origin"
+          [destination]="destination"
+          [passangers]="passangers"
+          [stops]="stops"
+          [bagage]="bagage"
+          [departureDate]="departureDate"
+          [returnDate]="returnDate"
+        ></flight-item>
+      </ng-container>
+      
+
+      <!-- <picture *ngIf="item_type == 'hotel'">
         <source media='(min-width:0px)' srcset="/src/assets/images/img/placeholder.png">
         <img mat-card-image src="" alt="hotel image">
       </picture>
@@ -47,12 +60,12 @@
           <div class="pass">
             {{passangers}} passangers
           </div>
-        </div>
-        <div class="price" *ngIf="price">
+        </div> -->
+        <!-- <div class="price" *ngIf="price">
           Cost: {{ price | currency }}
-       </div>
-        
-    </mat-card-content>
-    <mat-card-footer></mat-card-footer>
-  </mat-card>
-</div>
+       </div> -->
+<!--         
+    </mat-card-content> -->
+    <!-- <mat-card-footer></mat-card-footer>
+  </mat-card> -->
+<!-- </div> -->
