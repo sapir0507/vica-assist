@@ -26,8 +26,7 @@
         "projects/all-the-interfaces/src/index.ts"
       ],
       "@vica-assist/my-flights": [
-        "projects/my-flights/src/index.ts",
-        "projects/my-flights/src/public-api.ts",
+        "projects/my-flights/src/index.ts"
       ],
       "@vica-assist/my-hotels": [
         "projects/my-hotels/src/index.ts"

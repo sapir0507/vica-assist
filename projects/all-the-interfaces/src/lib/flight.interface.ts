@@ -13,7 +13,7 @@ export interface Flights {
     departureDate?: string ,
     departureHour?: string,
     stops?: string ,
-    stopDuration: string,
+    stopDuration?: string,
     bagage?: string ,
     moreInfo?: string ,
     price?: number
@@ -31,7 +31,7 @@ export interface Flights {
     departureDate?: string,
     departureHour?: string,
     stops?: string ,
-    stopDuration: string,
+    stopDuration?: string,
     bagage?: string ,
     moreInfo?: string ,
     price?: number 

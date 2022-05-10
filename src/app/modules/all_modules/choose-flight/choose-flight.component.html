@@ -1,4 +1,4 @@
-<div class="choose-flights" *ngIf="AllFlights">
+<div class="choose-flights" *ngIf="AllFlights && AllFlights.length > 0">
    <ng-container *ngFor="let flight of AllFlights">
        <item [item_type]="'flight'" [flight]="flight"></item>
    </ng-container>

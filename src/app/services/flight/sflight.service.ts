@@ -28,9 +28,10 @@ export class SflightService {
     return this.http.get<Flights>(this.FlightsServiceUrl, {
     })
     .pipe(
-      catchError(err => this.handleError(err, 'postFlight', ""))
+      catchError(err => this.handleError(err, 'getFlight', ""))
     );
   }
+
   private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -44,12 +45,6 @@ export class SflightService {
     // Return an observable with a user-facing error message.
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
-
-
-  // getAreThereFlights(): boolean{
-
-  //   return this.FLIGHTS? true: false;
-  // }
 
   addFlight(newFlight: FlightsRequest): void {
       console.log("adding flight -> service")
