@@ -1,5 +1,5 @@
 // @import "../../../../../src/assets/styles/media.scss";
-    $card-width: 80vh;
+    $card-width: 90vh;
     $card-content-width: 75vh;
     $card-content-item-width: 25vh;
     $card-price: 74vh;
@@ -10,7 +10,7 @@
         background-image: linear-gradient(rgb(234, 193, 238), rgb(202, 157, 225));
         border: 3px inset purple;
         border-radius: 20px;
-
+        width: $card-width;
     }
     .flight-item{
         

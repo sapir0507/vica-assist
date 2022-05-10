@@ -37,7 +37,7 @@ export class MyFlightsComponent implements OnInit {
     departureHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
     returnHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
     stops: ['', Validators.required],
-    stopDuration: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
+    stopDuration: ['', [Validators.pattern(this.HourValidator)]],
     bagage: ['', Validators.required],
     moreInfo: [''],
     price: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(4), Validators.pattern('[1-9][0-9]*')]]
@@ -103,6 +103,7 @@ export class MyFlightsComponent implements OnInit {
 
   onSelectionChange() : void {
     this.newFlightForm.get('stops')?.value === '1' ? this._hasStop = true : this._hasStop = false;
+    this._hasStop? this.newFlightForm.get('stopsDuration')?.addValidators(Validators.required):this.newFlightForm.get('stopsDuration')?.removeValidators(Validators.required)
   }
 
   hasStop() {

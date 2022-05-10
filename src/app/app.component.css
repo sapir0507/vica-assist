@@ -1,1 +1,1 @@
-:host ::after,:host ::before,:host *{box-sizing:border-box;margin:0;padding:0;background-color:#000}
+@import"../../node_modules/bootstrap/dist/css/bootstrap.min.css";:host ::after,:host ::before,:host *{box-sizing:border-box;margin:0;padding:0;background-color:#000}

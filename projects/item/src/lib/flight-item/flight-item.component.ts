@@ -8,7 +8,6 @@ import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
   styleUrls: ['./flight-item.component.scss']
 })
 export class FlightItemComponent implements OnInit {
-  private _flight?: Flights;
   @Input() label?: string;
 
   @Input() flight: Flights = {id: 1};
@@ -18,8 +17,7 @@ export class FlightItemComponent implements OnInit {
 
   ngOnInit(): void {
     // this.stops='one stop';
-    const a = [...[this.flight]]
-    console.log(a[0])
+    
   }
 
 }

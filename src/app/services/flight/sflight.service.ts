@@ -25,8 +25,7 @@ export class SflightService {
   }
 
   private _getFlights(){
-    return this.http.get<Flights>(this.FlightsServiceUrl, {
-    })
+    return this.http.get<Flights[]>(this.FlightsServiceUrl)
     .pipe(
       catchError(err => this.handleError(err, 'getFlight', ""))
     );
@@ -57,7 +56,7 @@ export class SflightService {
   }
 
 
-  getFlights(): Observable<Flights>{
+  getFlights(): Observable<Flights[]>{
     console.log("getting all flights -> service")
     return this._getFlights()
   }

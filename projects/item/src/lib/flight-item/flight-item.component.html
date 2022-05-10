@@ -1,5 +1,5 @@
 
- <div class="container-fluid" *ngIf="flight!==undefined">
+ <div class="row-cols-md-auto" *ngIf="flight!==undefined">
      <div class="container-md container-lg container-sm container-xl container-xxl flight-item">
         <mat-card>
             <mat-card-header>
@@ -25,13 +25,13 @@
                         <div class="my-mat-content-item row"> 
                             <div class="container row row-cols-3 ">
                                 <div class="takeoff">
-                                    <p>Takeoff - {{flight.departureDate}}</p>
+                                    <p>Takeoff - {{flight.departureDate | date}}</p>
                                 </div>
                                 <div class="stop">
                                     <p>Stop Duration - {{flight.stopDuration}}</p>
                                 </div>
                                 <div class="land">
-                                    <p>Landing - {{flight.returnDate}}</p>
+                                    <p>Landing - {{flight.returnDate | date}}</p>
                                 </div>
                             </div>
                         </div>
@@ -44,11 +44,11 @@
                         <div class="my-mat-content-item row"> 
                             <div class="container row row-cols-2">
                                 <div class="takeoff">
-                                    <p>Takeoff - {{flight.departureDate}}</p>
+                                    <p>Takeoff - {{flight.departureDate | date}}</p>
                                 </div>
                                
                                 <div class="land">
-                                    <p>Landing - {{flight.returnDate}}</p>
+                                    <p>Landing - {{flight.returnDate | date}}</p>
                                 </div>
                             </div>
                         </div>
