@@ -9,7 +9,7 @@
         "coverage/projects/all-the-interfaces"
       ],
       "options": {
-        "jestConfig": "projects/all-the-interfaces/jest.config.js",
+        "jestConfig": "projects/all-the-interfaces/jest.config.ts",
         "passWithNoTests": true
       }
     },
