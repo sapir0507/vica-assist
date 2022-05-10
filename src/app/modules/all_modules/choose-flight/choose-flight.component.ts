@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
-import { Observable, Subscription } from 'rxjs';
-import { IFlight } from 'src/app/services/flight/iflight';
+import { Observable } from 'rxjs';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
 @Component({
@@ -18,7 +17,6 @@ export class ChooseFlightComponent implements OnInit {
     const allFlights = this._ALLFlights$.subscribe(flight => {
       this.AllFlights = [...this.AllFlights, flight]
     })
-   
   }
 
   ngOnInit(): void {

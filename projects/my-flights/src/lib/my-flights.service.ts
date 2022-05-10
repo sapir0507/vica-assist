@@ -17,7 +17,6 @@ export class MyFlightsService {
   public flight$: Observable<Flights[]> = this._flight$.asObservable();
   private readonly FlightsServiceUrl = 'http://localhost:3000/' + 'flights';
  
-  
   constructor(private http: HttpClient) {
     
    }
