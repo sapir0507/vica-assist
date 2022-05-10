@@ -13,28 +13,26 @@
   ],
   "flights": [
     {
-      "dest": "Rome",
+      "dest": "Britain",
       "passangers": 2,
-      "org": "Italy",
-      "returnDate": "2022-05-06T21:00:00.000Z",
-      "departureDate": "2022-05-02T21:00:00.000Z",
+      "fullName": "Sapir Shahar",
+      "passID": "205668064",
+      "passArray": [
+        {
+          "fullName": "Tom Riddle",
+          "myID": "666666666"
+        }
+      ],
+      "org": "Israel",
+      "returnDate": "2022-05-13T21:00:00.000Z",
+      "departureDate": "2022-05-08T21:00:00.000Z",
+      "returnHour": "19:30",
+      "departureHour": "06:20",
       "stops": "1",
+      "stopDuration": "2:30",
       "bagage": "true",
-      "moreInfo": "ela",
-      "price": 100,
-      "id": 1
-    }
-  ],
-  "hotels": [
-    {
-      "name": "new eves hotel",
-      "stars": "5",
-      "guests": "2",
-      "breakfast": "true",
-      "bedType": "King Bed",
-      "images": "blabla",
-      "moreInfo": "cancle is on may 5th",
-      "price": 100,
+      "moreInfo": "magic flight",
+      "price": 200,
       "id": 1
     }
   ],

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IFlight } from 'src/app/services/flight/iflight';
+import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
 
 @Component({
   selector: 'app-flight',
@@ -7,7 +7,7 @@ import { IFlight } from 'src/app/services/flight/iflight';
   styleUrls: ['./flight.component.scss']
 })
 export class FlightComponent implements OnInit {
-  @Input() flight: IFlight | null = null;
+  @Input() flight: Flights | null = null;
   constructor() { }
 
   ngOnInit(): void {

@@ -1,31 +1,31 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Flights, FlightsRequest } from 'projects/all-the-interfaces/src/lib/flight.interface';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IFlight, IFlightRequest } from './iflight';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SflightService {
 
-  private FLIGHTS: IFlight[] = [];
-  flightsArray: IFlight[] = [];
-  private _flight$: BehaviorSubject<IFlight[]> = new BehaviorSubject(this.flightsArray);
-  public flight$: Observable<IFlight[]> = this._flight$.asObservable();
+  private FLIGHTS: Flights[] = [];
+  flightsArray: Flights[] = [];
+  private _flight$: BehaviorSubject<Flights[]> = new BehaviorSubject(this.flightsArray);
+  public flight$: Observable<Flights[]> = this._flight$.asObservable();
   private readonly FlightsServiceUrl = environment.api + 'flights';
 
   constructor(private http: HttpClient) { }
 
-  private postFlight(flight :IFlightRequest){
-    return this.http.post<IFlight>(this.FlightsServiceUrl, flight)
+  private postFlight(flight :FlightsRequest){
+    return this.http.post<Flights>(this.FlightsServiceUrl, flight)
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', flight))
     );
   }
 
   private _getFlights(){
-    return this.http.get<IFlight>(this.FlightsServiceUrl, {
+    return this.http.get<Flights>(this.FlightsServiceUrl, {
     })
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', ""))
@@ -51,24 +51,21 @@ export class SflightService {
   //   return this.FLIGHTS? true: false;
   // }
 
-  addFlight(newFlight: IFlightRequest): void {
+  addFlight(newFlight: FlightsRequest): void {
       console.log("adding flight -> service")
       console.log("value to add is:", newFlight)
       console.log("Adding...")
-      // this._flight$.next([...this._flight$.getValue(), newFlight])
+     
       this.postFlight(newFlight).subscribe(data => console.log(data))
-      // this.FLIGHTS? this.FLIGHTS.push(newFlight): this.FLIGHTS = [newFlight];
+     
       console.log("FLIGHTS:", this.flightsArray)
   }
 
 
-  getFlights(): Observable<IFlight>{
+  getFlights(): Observable<Flights>{
     console.log("getting all flights -> service")
     return this._getFlights()
   }
-  // getNewID(): number{
-  //   return this.FLIGHTS? this.FLIGHTS.length : 0;
-  // }
 
   removeFlight(RFlightID: number):void{
     console.log("remove flight -> service")
@@ -84,16 +81,5 @@ export class SflightService {
     console.log("flight with id:", FlightID, "is:", result)
     return result; 
   }
-
-  // getCities(){
-  //   //get list of 10 cities
-  // }
-  // getCountries(){
-  //   //get list of 10 countries
-  // }
-  // getAirways(){
-  //   //get list of 10 airways
-  // }
-  // getAirport_landing(){}
 
 }

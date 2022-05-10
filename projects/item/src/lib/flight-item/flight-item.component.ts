@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MyFlightsComponent } from 'myFlights';
+import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
 
 @Component({
   selector: 'flight-item',
@@ -6,20 +8,15 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./flight-item.component.scss']
 })
 export class FlightItemComponent implements OnInit {
-  @Input() origin?: string = 'Israel';
-  @Input() destination?: string = 'Hungry';
-  @Input() passangers?: string = '2';
-  @Input() fullName?: string;
-  @Input() myID?: number;
-  @Input() allFullName?: string[];
-  @Input() allMyID?: number;
-  @Input() stops?: string = 'no stops';
-  @Input() departureDate?: string = '17/7/22';
-  @Input() returnDate?: string = '22/8/22';
-  @Input() bagage?: boolean = true;
+  @Input() label?: string;
+
+  @Input() flight?: Flights;
+
   constructor() { }
 
   ngOnInit(): void {
+    // this.stops='one stop';
+    console.log("flight --> ", this.flight)
   }
 
 }

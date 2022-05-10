@@ -1,0 +1,30 @@
+{
+  "projectType": "library",
+  "sourceRoot": "projects/mat-input/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "project": "projects/mat-input/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/mat-input/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "projects/mat-input/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "projects/mat-input/src/test.ts",
+        "tsConfig": "projects/mat-input/tsconfig.spec.json",
+        "karmaConfig": "projects/mat-input/karma.conf.js"
+      }
+    }
+  }
+}

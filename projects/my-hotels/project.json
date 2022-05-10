@@ -1,0 +1,43 @@
+{
+  "projectType": "library",
+  "sourceRoot": "projects/my-hotels/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "project": "projects/my-hotels/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/my-hotels/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "projects/my-hotels/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "projects/my-hotels/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/projects/my-hotels"
+      ],
+      "options": {
+        "jestConfig": "projects/my-hotels/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

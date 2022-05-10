@@ -16,6 +16,8 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDividerModule} from '@angular/material/divider';
+import { ItemModule } from 'projects/item/src/item';
+import { AllTheInterfacesModule } from 'projects/all-the-interfaces/src';
 
 
 @NgModule({
@@ -24,9 +26,13 @@ import {MatDividerModule} from '@angular/material/divider';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule, 
+    FormsModule,
+    ItemModule,
+    AllTheInterfacesModule,
+
     MatNativeDateModule,
     MatRippleModule,
-    ReactiveFormsModule,
     MatSliderModule,
     MatIconModule,
     MatFormFieldModule,
@@ -36,12 +42,9 @@ import {MatDividerModule} from '@angular/material/divider';
     MatButtonToggleModule,
     MatDatepickerModule,
     MatDividerModule,
-    // BrowserAnimationsModule,
     MatSelectModule,
     MatSnackBarModule,
     
-    FormsModule,
-    ReactiveFormsModule
   ],
   exports: [
     MyFlightsComponent
