@@ -17,24 +17,6 @@ export class ItemComponent implements OnInit {
   @Input() flight?: Flights;
   @Input() hotel?: Hotel;
 
-  // @Input() origin?: string = 'Israel';
-  // @Input() destination?: string = 'Hungry';
-  // @Input() passangers?: string = '2';
-  // @Input() stops?: string = 'no stops';
-  // @Input() departureDate?: string = '17/7/22';
-  // @Input() returnDate?: string = '22/8/22';
-  // @Input() bagage?: boolean = true;
-
-  //hotel
-  // @Input() name?: string;
-  // @Input() stars?: number;
-  // @Input() guests?: string;
-  // @Input() bedType?: string;
-  // @Input() breakfast?: boolean;
-
-  // @Input() moreInfo?: string;
-  // @Input() price?: string = "220";
-
   constructor() { 
     console.log("library -> item")
   }
