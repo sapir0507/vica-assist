@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FlightsRequest } from './my-flights';
+
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FlightsRequest } from 'projects/all-the-interfaces/src/lib/flight.interface';
 
 @Component({
   selector: 'lib-myFlights',
@@ -116,10 +117,16 @@ export class MyFlightsComponent implements OnInit {
       this.NewFlight = {
         dest: this.newFlightForm.get('dest')?.value,
         passangers: passNum,
+        fullName: this.newFlightForm.get('fullName')?.value,
+        passID: this.newFlightForm.get('myID')?.value,
+        passArray: this.newFlightForm.get('passangersFullName')?.value,
         org: this.newFlightForm.get('org')?.value,
         returnDate: this.newFlightForm.get('returnDate')?.value,
         departureDate: this.newFlightForm.get('departureDate')?.value,
+        returnHour: this.newFlightForm.get('returnHour')?.value,
+        departureHour: this.newFlightForm.get('departureHour')?.value,
         stops: this.newFlightForm.get('stops')?.value,
+        stopDuration: this.newFlightForm.get('stopDuration')?.value,
         bagage: this.newFlightForm.get('bagage')?.value,
         moreInfo: this.newFlightForm.get('moreInfo')?.value,
         price: this.newFlightForm.get('price')?.value,

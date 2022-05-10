@@ -11,15 +11,34 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@vica-assist/my-flights": ["projects/my-flights/src/index.ts"],
-      "@vica-assist/my-hotels": ["projects/my-hotels/src/index.ts"]
+      "@vica-assist/all-the-interfaces": [
+        "projects/all-the-interfaces/src/index.ts"
+      ],
+      "@vica-assist/my-flights": [
+        "projects/my-flights/src/index.ts",
+        "projects/my-flights/src/public-api.ts",
+      ],
+      "@vica-assist/my-hotels": [
+        "projects/my-hotels/src/index.ts"
+      ],
+      "@vica-assist/my-pipes": [
+        "projects/my-pipes/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

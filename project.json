@@ -1,0 +1,111 @@
+{
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    },
+    "@schematics/angular:application": {
+      "strict": true
+    },
+    "i18n": {
+      "sourceLocal": "en-US"
+    }
+  },
+  "sourceRoot": "src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "options": {
+        "outputPath": "dist/vica-assist",
+        "index": "src/index.html",
+        "main": "src/main.ts",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "src/favicon.ico",
+          "src/assets"
+        ],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "node_modules/bootstrap/dist/css/bootstrap.min.css",
+          "src/styles.scss"
+        ],
+        "scripts": [
+          "node_modules/jquery/dist/jquery.min.js",
+          "node_modules/bootstrap/dist/js/bootstrap.min.js"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "200kb",
+              "maximumError": "250kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "vica-assist:build:production"
+        },
+        "development": {
+          "browserTarget": "vica-assist:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "vica-assist:build"
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "src/test.ts",
+        "polyfills": "src/polyfills.ts",
+        "tsConfig": "tsconfig.spec.json",
+        "karmaConfig": "karma.conf.js",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "src/favicon.ico",
+          "src/assets"
+        ],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "src/styles.scss"
+        ],
+        "scripts": []
+      }
+    }
+  }
+}

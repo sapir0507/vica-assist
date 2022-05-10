@@ -1,70 +1,85 @@
-$card-width: 80vh;
-$card-content-width: 75vh;
-$card-price: 74vh;
-$font-size: 20px;
-
+// @import "../../../../../src/assets/styles/media.scss";
+    $card-width: 80vh;
+    $card-content-width: 75vh;
+    $card-content-item-width: 25vh;
+    $card-price: 74vh;
+    $font-size: 1.5em;
 :host{
-    .flight-item{
-        display: grid;
-        width: 100%;
-        margin: 0 auto;
-        font-size: $font-size;
-        grid-template-columns: repeat(1, 1fr);
-        place-content: center;
-       
-        padding: 10px;
-        .item{
-            width: $card-width;
-            margin: 0 auto;
-            
-            // .image{}
-            .date{
-                text-align: left;
-            }
-            img{
-                text-align: center;
-                width: $card-content-width;
-                margin: 20px auto;
-                border: 2px black outset;
-            }
-            .orgtodest{
-                display: grid;
-                width: $card-content-width;
-                grid-template-columns: repeat(3, 1fr);
-                padding: 20px;
-                font-size: $font-size;
-                place-content: center;
-                .org{
-                    text-align: center;
-                }
-                .icon{   
-                    margin: 0 auto;                    
-                }
-                .dest{
-                    text-align: center;
-                }
-            }
-            .grid{
-             display: grid;
-             width: $card-content-width;
-             font-size: $font-size;
-             grid-template-columns: repeat(3, 1fr);    
-             place-content: center space-around;
-             margin: 15px auto;
-             padding: 25px;
-             text-align: center;
-             gap: 20px;
-             border-top: dotted;
+    font-size: $font-size;
+    .mat-card{
+        background-image: linear-gradient(rgb(234, 193, 238), rgb(202, 157, 225));
+        border: 3px inset purple;
+        border-radius: 20px;
 
-             .stops, .pass{
-                 padding: 10px;
-             }
-            }
-            .price{
-                width: $card-price;
-                text-align: right;
-            }
-         }
     }
+    .flight-item{
+        
+        max-width: $card-width;
+        .orgtodest{
+            display: grid;
+            position: relative;
+            grid-template-columns: repeat(3, 1fr);
+            padding-top: 10px;
+            border: 2px outset rgba(128, 0, 128, 0.726);
+            
+            border-radius: 10px;
+            margin: auto auto;
+            
+        .org, .icon, .dest {
+            padding: 10px;
+            font-size: $font-size;
+            text-align: center;
+            p{
+                  font-size: $font-size;
+            }
+          
+        }
+
+        .icon{
+            animation-name: fly; 
+            animation-duration: 2s;
+            animation-iteration-count: 1;
+            position: relative;
+            left: 43%;
+            top: 0px;
+
+            @keyframes fly {
+                0%   {left: 10%; top: 0px;} 
+                50%  {left: 90%; top: 0px;}
+                52%  {display: none;}
+                53%  {display: block; left: 10%; top: 0px;} 
+                55%  {left: 10%; top: 0px;} 
+                100% {left: 43%; top: 0px;} 
+                
+            }
+        }
+        }
+        .my-mat-content-item{
+            // display: grid;
+            font-size: $font-size;
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            place-content: center;
+        }
+        .bagage{
+         margin-top: 5px;   
+        }
+        .mat-card-subtitle{
+            margin-top: 7px;
+            margin-bottom: 3px;
+            padding-bottom: 0px;
+        }
+        // .stops,.bagage,.pass{
+           
+        // }
+        
+    
+    }
+
+    
    
 }
+
+
+

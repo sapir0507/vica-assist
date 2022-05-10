@@ -1,0 +1,30 @@
+{
+  "projectType": "library",
+  "sourceRoot": "projects/my-flights/src",
+  "prefix": "lib",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "options": {
+        "project": "projects/my-flights/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/my-flights/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "projects/my-flights/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "projects/my-flights/src/test.ts",
+        "tsConfig": "projects/my-flights/tsconfig.spec.json",
+        "karmaConfig": "projects/my-flights/karma.conf.js"
+      }
+    }
+  }
+}
