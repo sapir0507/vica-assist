@@ -1,7 +1,9 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { HotelRequest, Hotel } from 'projects/all-the-interfaces/src/lib/hotel.interface';
+// import { Hotel, HotelRequest } from '../my-hotels';
+import { HotelRequest, Hotel } from '@vica-assist/all-the-interfaces';
 
 
 @Injectable({
@@ -12,7 +14,7 @@ export class HotelsService {
   private hotelArray?: Hotel[] = [];
   private _hotel$: BehaviorSubject<Hotel[] | undefined> = new BehaviorSubject(this.hotelArray);
   public hotel$: Observable<Hotel[] | undefined> = (this._hotel$.asObservable());
-  private readonly HotelsServiceUrl = 'http://localhost:3000/hotels';
+  private readonly HotelsServiceUrl = 'http://localhost:3000'+'/hotels';
   
   constructor(private http: HttpClient) { }
 
@@ -24,7 +26,7 @@ export class HotelsService {
   }
 
   private _getHotel(){
-    return this.http.get<Hotel>(this.HotelsServiceUrl, {}).pipe(
+    return this.http.get<Hotel[]>(this.HotelsServiceUrl, {}).pipe(
       catchError(err => this.handleError(err, 'postHotel', ""))
     );
   }
@@ -52,7 +54,7 @@ export class HotelsService {
       console.log("HOTELS:", this.HOTELS)
   }
 
-  getFlights(): Observable<Hotel>{
+  getHotels(): Observable<Hotel[]>{
     console.log("getting all hotels -> service")
     return this._getHotel()
   }

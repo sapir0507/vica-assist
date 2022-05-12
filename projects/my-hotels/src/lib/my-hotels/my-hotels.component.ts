@@ -1,7 +1,8 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { HotelRequest } from '../my-hotels';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HotelRequest } from '@vica-assist/all-the-interfaces';
 import { HotelsService } from './hotels.service';
 
 
@@ -57,8 +58,15 @@ export class MyHotelsComponent {
     this.step--;
   }
 
+  // onUpload(event: Event): void{
+  //   console.log("event", event)
+  //   if(event && event.target as HTMLInputElement)
+  //     console.log((event.target as HTMLInputElement).files)
+  // }
+
   openSnackBar(message: string) {
     this._snackBar.open(message);
+    
   }
 
   addHotel(){

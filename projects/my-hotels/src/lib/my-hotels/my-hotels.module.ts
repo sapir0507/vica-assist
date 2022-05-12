@@ -1,9 +1,11 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MyHotelsRoutingModule } from './my-hotels-routing.module';
 import { MyHotelsComponent } from './my-hotels.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -15,9 +17,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import { HotelsService } from './hotels.service';
-// import { HotelsService } from '@vica-assist/all-services';
-// import { AllServicesModule } from '@vica-assist/all-services';
+import { AllTheInterfacesModule } from '@vica-assist/all-the-interfaces';
 
 @NgModule({
   declarations: [
@@ -38,10 +40,10 @@ import { HotelsService } from './hotels.service';
     MatDatepickerModule,
     MatSelectModule,
     MatSnackBarModule,
-
+    
     FormsModule,
     ReactiveFormsModule,
-    // AllServicesModule,
+    AllTheInterfacesModule,
     MyHotelsRoutingModule
   ],
   exports:[
