@@ -22,6 +22,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@vica-assist/all-services": [
+        "projects/all-services/src/index.ts"
+      ],
       "@vica-assist/all-the-interfaces": [
         "projects/all-the-interfaces/src/index.ts"
       ],

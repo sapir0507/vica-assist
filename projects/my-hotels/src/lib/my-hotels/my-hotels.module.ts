@@ -14,8 +14,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
-import { MyHotelsService } from './my-hotels.service';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HotelsService } from './hotels.service';
+// import { HotelsService } from '@vica-assist/all-services';
+// import { AllServicesModule } from '@vica-assist/all-services';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
   ],
   imports: [
     CommonModule,
+
     MatNativeDateModule,
     MatRippleModule,
     MatSliderModule,
@@ -34,16 +37,18 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatButtonToggleModule,
     MatDatepickerModule,
     MatSelectModule,
-    FormsModule,
     MatSnackBarModule,
+
+    FormsModule,
     ReactiveFormsModule,
+    // AllServicesModule,
     MyHotelsRoutingModule
   ],
   exports:[
     MyHotelsComponent
   ],
   providers:[
-    MyHotelsService
+    HotelsService
   ]
 })
 export class MyHotelsModule { }

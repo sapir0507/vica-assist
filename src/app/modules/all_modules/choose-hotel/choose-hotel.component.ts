@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Hotel } from 'src/app/services/hotel/ihotel';
-import { ShotelService } from 'src/app/services/hotel/shotel.service';
+import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
+import { Hotel } from 'projects/all-the-interfaces/src/lib/hotel.interface';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-choose-hotel',
@@ -8,34 +10,22 @@ import { ShotelService } from 'src/app/services/hotel/shotel.service';
   styleUrls: ['./choose-hotel.component.scss']
 })
 export class ChooseHotelComponent implements OnInit {
-  stars: boolean[] = [true, false, false, false, false]
-  urlWhite: string = "https://thecolor.blog/wp-content/uploads/2021/02/Amarillo-Canario.png"
-  urlYellow: string = "https://www.macmillandictionary.com/external/slideshow/full/White_full.png"
-  AllHotels: Hotel[] | null = this.SHotel.HOTELS;
 
-  constructor(private SHotel: ShotelService) {
+  AllHotels: Hotel[] = [];
+  private _AllHotels$: Observable<Hotel[]> = this.SHotel.getHotels();
 
+  constructor(private SHotel: HotelsService) {
+    const allHotels = this._AllHotels$.subscribe(
+      hotel => {
+        hotel.forEach(item => {
+          console.log(item)
+          this.AllHotels = [...this.AllHotels, item]
+        })
+      }
+    )
    }
 
   ngOnInit(): void {
-    this.AllHotels? this.AllHotels = this.SHotel.HOTELS : this.AllHotels = [{
-      id: 0,
-      Name: "heavens high",
-      stars: 5,
-      breakfast: true,
-      bedsIncluded: "Queen Bed",
-      price: 360
-   }]
-  }
-
-  getColorForImg(id: number){
-    return this.stars[id] === true? this.urlWhite :this.urlYellow 
-  }
-
-  toggleColor(num: number){
-    for(let i = 0; i< 5; i++){
-      i <= num? this.stars[i] = true : this.stars[i] = false;
-    }
   }
 
 }

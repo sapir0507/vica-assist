@@ -1,12 +1,12 @@
-<div class="choose-flights" *ngIf="AllFlights && AllFlights.length > 0">
-   <ng-container *ngFor="let flight of AllFlights">
-       <div class="row align-items-center flight-item">  
+<div class="container-fluid" *ngIf="AllFlights && AllFlights.length > 0">
+   <div *ngFor="let flight of AllFlights">
+       <div class="choose-flights container-fluid">  
          <item 
-            class="col-xl-11 col-md-11 col-sm-11" 
+            class="container-fluid flight-item" 
             [item_type]="'flight'" [flight]="flight">
         </item>
-         <button class="col-xl-1 col-md-1 col-sm-1">Final Choice</button>
+         <button class="">Final Choice</button>
         </div>
      
-   </ng-container>
+   </div>
 </div>

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-import { Hotel, HotelRequest } from '../my-hotels';
+import { HotelRequest, Hotel } from 'projects/all-the-interfaces/src/lib/hotel.interface';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class MyHotelsService {
-  HOTELS?: Hotel[];
+export class HotelsService {
+  HOTELS?: HotelRequest[];
   private hotelArray?: Hotel[] = [];
   private _hotel$: BehaviorSubject<Hotel[] | undefined> = new BehaviorSubject(this.hotelArray);
   public hotel$: Observable<Hotel[] | undefined> = (this._hotel$.asObservable());
@@ -56,22 +57,4 @@ export class MyHotelsService {
     return this._getHotel()
   }
 
-  getNewID(): number{
-    return this.HOTELS? this.HOTELS.length : 0;
-  }
-
-  removeHotel(RHotelID: number):void{
-    console.log("remove flight -> service")
-    console.log("Removing flight...")
-    if(this.HOTELS){
-       this.HOTELS = this.HOTELS?.filter(hotel => hotel.id != RHotelID)
-    }
-    console.log("HOTELS:", this.HOTELS)
-  }
-
-  getFlight(HotelID: number){
-    const result = this.HOTELS?.filter(hotel => hotel.id === HotelID)
-    console.log("flight with id:", HotelID, "is:", result)
-    return result; 
-  }
 }

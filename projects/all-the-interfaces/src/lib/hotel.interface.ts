@@ -4,10 +4,10 @@ export interface Hotel {
     stars?: number,
     guests?: number,
     breakfast?: boolean,
-    bedType: string,
-    images: string,
-    moreInfo: string,
-    price: number
+    bedType?: string,
+    images?: string,
+    moreInfo?: string,
+    price?: number
   }
   
   export interface HotelRequest {
@@ -15,9 +15,9 @@ export interface Hotel {
     stars?: number,
     guests?: number,
     breakfast?: boolean,
-    bedType: string,
-    images: string,
-    moreInfo: string,
-    price: number
+    bedType?: string,
+    images?: string,
+    moreInfo?: string,
+    price?: number
   }
   
