@@ -37,6 +37,10 @@
                         <img width="25" height="25" src="assets/images/img/bed (1).png" alt="bed">
                         {{hotel.bedType}}
                     </div>
+                    <div class="price icon">
+                        <img width="25" height="25" src="assets/images/img/price.png" alt="Price: ">
+                        {{hotel.price | currency}}
+                    </div>
                     <div class="more-info icon" *ngIf="hotel.moreInfo">{{hotel.moreInfo}}</div>
                 </div>
                 <div class="images" style="background-color: black;">
