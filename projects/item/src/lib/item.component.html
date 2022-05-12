@@ -2,3 +2,7 @@
       <div *ngIf="item_type == 'flight' && flight">
         <flight-item [flight]="flight"></flight-item>
       </div>
+
+      <div *ngIf="item_type == 'hotel' && hotel">
+        <hotel-item [hotel]="hotel"></hotel-item>
+      </div>

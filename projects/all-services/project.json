@@ -1,0 +1,45 @@
+{
+  "projectType": "library",
+  "sourceRoot": "projects/all-services/src",
+  "prefix": "vica-assist",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": [
+        "dist/projects/all-services"
+      ],
+      "options": {
+        "project": "projects/all-services/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "projects/all-services/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "projects/all-services/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/projects/all-services"
+      ],
+      "options": {
+        "jestConfig": "projects/all-services/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "projects/all-services/src/**/*.ts",
+          "projects/all-services/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

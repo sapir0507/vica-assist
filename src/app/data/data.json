@@ -11,6 +11,30 @@
       ]
     }
   ],
+  "hotels": [
+    {
+      "name": "Hotel Grande",
+      "stars": "4",
+      "guests": "2",
+      "breakfast": "true",
+      "bedType": "Queen Bed",
+      "images": "images",
+      "moreInfo": "info",
+      "price": 100,
+      "id": 1
+    },
+    {
+      "name": "Hotel Everesense",
+      "stars": "5",
+      "guests": "2",
+      "breakfast": "false",
+      "bedType": "King Bed",
+      "images": "",
+      "moreInfo": "",
+      "price": 120,
+      "id": 2
+    }
+  ],
   "flights": [
     {
       "dest": "Britain",

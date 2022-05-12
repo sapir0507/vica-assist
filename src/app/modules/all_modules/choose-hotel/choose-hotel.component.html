@@ -1,19 +1,10 @@
-<p>choose-hotel works!</p>
-<!-- <div class="stars">
-    <img [src]="getColorForImg(0)" (click)="toggleColor(0)" alt="one star" class="clip-star">
-    <img [src]="getColorForImg(1)" (click)="toggleColor(1)" alt="two stars" class="clip-star" >
-    <img [src]="getColorForImg(2)" (click)="toggleColor(2)" alt="three stars" class="clip-star">
-    <img [src]="getColorForImg(3)" (click)="toggleColor(3)" alt="four stars" class="clip-star" >
-    <img [src]="getColorForImg(4)" (click)="toggleColor(4)" alt="five stars" class="clip-star" >
-</div> -->
-
 <div class="choose-hotels" *ngIf="AllHotels">
+    <h1>Hotels</h1>
     <ng-container *ngFor="let hotel of AllHotels">
-        <app-hotel 
-             class=""
-             [hotel]="hotel">
- 
-        </app-hotel>
+        <item
+            [item_type]="'hotel'"
+            [hotel]="hotel"
+        ></item>
     </ng-container>
  </div>
 

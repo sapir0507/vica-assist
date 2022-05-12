@@ -1,6 +1,6 @@
-// @import "../../../../../src/assets/styles/media.scss";
-    $card-width: 90vh;
-    $card-content-width: 75vh;
+@import "../../../../../src/assets/styles/media.scss";
+    $card-width: 150vh;
+    // $card-content-width: 75vh;
     $card-content-item-width: 25vh;
     $card-price: 74vh;
     $font-size: 1.5em;
@@ -10,11 +10,11 @@
         background-image: linear-gradient(rgb(234, 193, 238), rgb(202, 157, 225));
         border: 3px inset purple;
         border-radius: 20px;
-        width: $card-width;
     }
     .flight-item{
-        
+        margin: 0 auto;
         max-width: $card-width;
+        // width: fit-content;
         .orgtodest{
             display: grid;
             position: relative;
@@ -55,7 +55,7 @@
         }
         }
         .my-mat-content-item{
-            // display: grid;
+          
             font-size: $font-size;
             margin-top: 20px;
             padding: 10px;
@@ -70,9 +70,7 @@
             margin-bottom: 3px;
             padding-bottom: 0px;
         }
-        // .stops,.bagage,.pass{
-           
-        // }
+        
         
     
     }

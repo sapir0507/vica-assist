@@ -1,1 +1,65 @@
-<p>hotel-item works!</p>
+<div *ngIf="hotel">
+    <mat-card class="example-card">
+        <mat-card-header>
+            <mat-card-title>{{hotel.name}}</mat-card-title>
+            <ngb-rating [(rate)]="currentRate" [max]="5">
+                <ng-template let-fill="fill" let-index="index">
+                    <span class="star" [class.filled]="fill === 100" [class.bad]="index < getBad()">&#9733;</span>
+                  </ng-template>
+            </ngb-rating> 
+        </mat-card-header>
+        <mat-card-content>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="grid">
+                <div class="content">
+                    <div class="guests icon">
+                          <img src="assets/images/img/guests.PNG" width="35" height="35" alt="guests">
+                          <span>{{hotel.guests}} guests</span>
+                        
+                    </div>
+                    <div class="cancle icon">
+                        <img src="assets/images/img/freeCancle.PNG" width="25" height="25" alt="free cancle">
+                        <span> Free Cancellation</span>
+                    </div>
+                    <div class="breakfast icon">
+                        <img src="assets/images/img/food.png" width="25" height="25" alt="food">
+                        <ng-container *ngIf="hotel.breakfast; else noBreakfast">
+                            Breakfast included
+                        </ng-container>
+                        <ng-template #noBreakfast>
+                            Breakfast not included
+                        </ng-template>
+                        
+                    </div>
+                    <div class="bed-type icon">
+                        <img width="25" height="25" src="assets/images/img/bed (1).png" alt="bed">
+                        {{hotel.bedType}}
+                    </div>
+                    <div class="more-info icon" *ngIf="hotel.moreInfo">{{hotel.moreInfo}}</div>
+                </div>
+                <div class="images" style="background-color: black;">
+                    <ngb-carousel *ngIf="images.length > 0" [wrap]="true">
+    
+                        <ng-container *ngFor="let image of images; let i = index;">
+                            <ng-template ngbSlide>
+                                <div class="picsum-img-wrapper">
+                                    <img [src]='images[i]' width="50%" height="600vh" style="margin-left: 25%;" alt="random slide">
+                                </div>
+                                <div class="carousel-caption">
+                                    <h3></h3>
+                                    <p></p>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                        
+                      </ngb-carousel>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-button color="primary">Select Hotel</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

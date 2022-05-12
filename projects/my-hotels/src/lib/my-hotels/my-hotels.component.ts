@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HotelRequest } from '../my-hotels';
-import { MyHotelsService } from './my-hotels.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HotelsService } from './hotels.service';
 
 
 
@@ -39,7 +39,7 @@ export class MyHotelsComponent {
   
 
   constructor(
-    private Shotel: MyHotelsService,
+    private Shotel: HotelsService,
     private _snackBar: MatSnackBar
     ) { 
     console.log('library')
