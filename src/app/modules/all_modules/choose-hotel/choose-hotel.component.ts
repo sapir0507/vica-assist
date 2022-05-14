@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
-import { Hotel } from 'projects/all-the-interfaces/src/lib/hotel.interface';
+import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
+// import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
 import { Observable } from 'rxjs';
+import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 
 @Component({

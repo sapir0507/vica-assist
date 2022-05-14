@@ -22,12 +22,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@vica-assist/all-services": [
-        "projects/all-services/src/index.ts"
-      ],
-      "@vica-assist/all-the-interfaces": [
-        "projects/all-the-interfaces/src/index.ts"
-      ],
       "@vica-assist/my-flights": [
         "projects/my-flights/src/index.ts"
       ],
@@ -36,6 +30,9 @@
       ],
       "@vica-assist/my-pipes": [
         "projects/my-pipes/src/index.ts"
+      ],
+      "@vica-assist/item": [
+        "projects/item/src/index.ts"
       ]
     }
   },

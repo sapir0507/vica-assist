@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Flights, FlightsRequest } from 'projects/all-the-interfaces/src/lib/flight.interface';
+import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 

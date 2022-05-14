@@ -11,13 +11,11 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDividerModule} from '@angular/material/divider';
 import { ItemModule } from 'projects/item/src/item';
-import { AllTheInterfacesModule } from 'projects/all-the-interfaces/src';
 
 
 @NgModule({
@@ -29,8 +27,6 @@ import { AllTheInterfacesModule } from 'projects/all-the-interfaces/src';
     ReactiveFormsModule, 
     FormsModule,
     ItemModule,
-    AllTheInterfacesModule,
-
     MatNativeDateModule,
     MatRippleModule,
     MatSliderModule,

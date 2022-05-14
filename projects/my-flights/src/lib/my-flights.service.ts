@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Flights, FlightsRequest } from 'projects/all-the-interfaces/src/lib/flight.interface';
+import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 
 

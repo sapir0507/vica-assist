@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
+import { Flights } from 'src/app/interfaces/flight.interface';
 
 @Component({
   selector: 'app-flight',

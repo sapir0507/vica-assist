@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Hotel } from 'projects/all-the-interfaces/src/lib/hotel.interface';
+import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 @Component({
   selector: 'hotel-item',

@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FlightsRequest } from 'projects/all-the-interfaces/src/lib/flight.interface';
+import { FlightsRequest } from 'src/app/interfaces/flight.interface';
 
 @Component({
   selector: 'lib-myFlights',

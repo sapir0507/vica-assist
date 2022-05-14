@@ -1,3 +1,5 @@
+import { passArray } from "./pass-array.interface"
+
 export interface Flights {
     id: number,
     passangers?: number,
@@ -7,17 +9,17 @@ export interface Flights {
     dest?: string ,
     org?: string ,
     returnDate?: string ,
-    departureDate?: string ,
     returnHour?: string,
+    departureDate?: string ,
     departureHour?: string,
     stops?: string ,
     stopDuration?: string,
     bagage?: string ,
     moreInfo?: string ,
-    price?: number 
-}
+    price?: number
+  }
 
-export interface FlightsRequest {
+  export interface FlightsRequest {
     passangers?: number,
     fullName?: string,
     passID?: number,
@@ -25,8 +27,8 @@ export interface FlightsRequest {
     dest?: string ,
     org?: string ,
     returnDate?: string ,
-    departureDate?: string ,
     returnHour?: string,
+    departureDate?: string,
     departureHour?: string,
     stops?: string ,
     stopDuration?: string,
@@ -34,15 +36,4 @@ export interface FlightsRequest {
     moreInfo?: string ,
     price?: number 
     
-}
-
-export interface passArray{
-    fullName:string,
-    passID: number,
-    id: number
-}
-
-export interface passArrayRequest{
-    fullName:string,
-    passID: number,
 }

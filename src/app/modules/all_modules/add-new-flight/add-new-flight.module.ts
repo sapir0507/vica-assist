@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { AddNewFlightRoutingModule } from './add-new-flight-routing.module';
 import { AddNewFlightComponent } from './add-new-flight.component';
 import { MyFlightsModule } from 'projects/my-flights/src/public-api';
-import { AllTheInterfacesModule } from 'projects/all-the-interfaces/src';
 // import { MyFlightsModule } from 'projects/my-flights/src/public-api';
 
 
@@ -15,7 +14,6 @@ import { AllTheInterfacesModule } from 'projects/all-the-interfaces/src';
   imports: [
     CommonModule,
     AddNewFlightRoutingModule,
-    AllTheInterfacesModule,
     MyFlightsModule
   ],
   exports:[
