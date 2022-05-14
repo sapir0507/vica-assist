@@ -32,7 +32,7 @@
         "projects/my-pipes/src/index.ts"
       ],
       "@vica-assist/item": [
-        "projects/item/src/index.ts"
+        "projects/item/src/item.ts"
       ]
     }
   },
