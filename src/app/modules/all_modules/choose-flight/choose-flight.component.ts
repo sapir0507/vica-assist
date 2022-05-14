@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
 import { Observable } from 'rxjs';
+import { Flights } from 'src/app/interfaces/flight.interface';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
 @Component({

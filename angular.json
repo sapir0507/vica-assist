@@ -3,8 +3,6 @@
   "version": 2,
   "newProjectRoot": "projects",
   "projects": {
-    "all-the-interfaces": "projects/all-the-interfaces",
-    "all-services": "projects/all-services",
     "item": "projects/item",
     "mat-input": "projects/mat-input",
     "my-hotels": "projects/my-hotels",

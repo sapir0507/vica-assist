@@ -1,4 +1,3 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +18,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { HotelsService } from './hotels.service';
-import { AllTheInterfacesModule } from '@vica-assist/all-the-interfaces';
 
 @NgModule({
   declarations: [
@@ -43,7 +41,6 @@ import { AllTheInterfacesModule } from '@vica-assist/all-the-interfaces';
     
     FormsModule,
     ReactiveFormsModule,
-    AllTheInterfacesModule,
     MyHotelsRoutingModule
   ],
   exports:[

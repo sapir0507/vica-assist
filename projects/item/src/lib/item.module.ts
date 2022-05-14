@@ -11,7 +11,6 @@ import { NgbCarouselModule, NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlightItemComponent } from './flight-item/flight-item.component';
 import { HotelItemComponent } from './hotel-item/hotel-item.component';
 import { MyPipesModule } from 'projects/my-pipes/src';
-import { AllTheInterfacesModule } from 'projects/all-the-interfaces/src';
 import { MatButtonModule } from '@angular/material/button';
 
 
@@ -35,8 +34,7 @@ import { MatButtonModule } from '@angular/material/button';
     NgbRatingModule,
     NgbCarouselModule,
 
-    MyPipesModule,
-    AllTheInterfacesModule
+    MyPipesModule
   ],
   exports: [
     ItemComponent

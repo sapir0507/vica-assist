@@ -1,9 +1,8 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HotelRequest } from '@vica-assist/all-the-interfaces';
 import { HotelsService } from './hotels.service';
+import { HotelRequest } from 'src/app/interfaces/hotel.interface'
 
 
 

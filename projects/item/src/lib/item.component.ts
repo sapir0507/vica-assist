@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Flights } from 'projects/all-the-interfaces/src/lib/flight.interface';
-import { Hotel } from 'projects/all-the-interfaces/src/lib/hotel.interface';
+import { Flights } from 'src/app/interfaces/flight.interface';
+import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 @Component({
   selector: 'item',

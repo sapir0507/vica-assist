@@ -1,7 +1,0 @@
-
-Unable to resolve @nrwl/nx-cloud:init.
-Cannot find module '@nrwl/nx-cloud/package.json'
-Require stack:
-- C:\Users\sapir\OneDrive\word\Documents\angular\esqure\projects\vica-assist\node_modules\@nrwl\tao\src\shared\workspace.js
-- C:\Users\sapir\OneDrive\word\Documents\angular\esqure\projects\vica-assist\node_modules\@nrwl\cli\lib\init-local.js
-- C:\Users\sapir\OneDrive\word\Documents\angular\esqure\projects\vica-assist\node_modules\@nrwl\cli\bin\nx.js
