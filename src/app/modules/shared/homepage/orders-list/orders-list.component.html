@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div *ngFor="let item of _orders$ | async as list">
+                <mat-card>
+                    <mat-card-header>
+                        <div class="container">
+                            Order ID: {{item.id}}
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="container">
+                            {{item.passDetails[0].fullName}} vication. Hotel or Flight: {{item.choice}}
+                        </div>
+                    </mat-card-content>
+                    <mat-card-footer>
+                        <mat-card-actions align="end">
+                            <button mat-button class="mat-mini-fab" color="primary"><span class="fa fa-arrow-down"></span></button>
+                        </mat-card-actions>
+                    </mat-card-footer>
+                </mat-card>
+
+            </div>
+        </div>
+    </div>
+</div>

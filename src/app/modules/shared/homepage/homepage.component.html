@@ -1,32 +1,43 @@
-<div class="container p-5">
-    <div class="container-fluid px-4">
-        <div class="row gx-4">
-          <div class="col">
-           <div class="p-3 border bg-light">
-               <h2>Pending Orders</h2>
-               <div class="p-3 border bg-black text-white">
-                    order list
-
-               </div>
-           </div>
-          </div>
-          <div class="col">
-            <div class="p-3 border bg-light">
-                <h2>ORDER</h2>
-                <div class="p-3 border-1 bg-black text-white">
-                 order name: _______ <br>
-                 (order_id) <br>
-                 details: __________ <br>
-                    <br>
-                 create a new order <br>
-               </div>
+<div class="container p-2">
+  <div class="container-fluid px-xxl-1">
+    <div class="row">
+      <div class="col">
+        <div class="p-3 border bg-light">
+            <h2>Pending Orders</h2>
+            <div class="p-3 border bg-black text-white">
+                 <ordersList></ordersList>
             </div>
-          </div>
         </div>
-        <div class="container-fluid border bg-light mt-3">
-            <div class="col p-3">
-                hello
+       </div>
+    </div>
+  </div>
+    <div class="container-fluid px-xxl-1 mt-4">
+        <div class="row gx-3">
+          <div class="col">
+            <div class="userRequest p-3 border bg-light">
+              <!-- <userRequests></userRequests> -->
+              <userRequest-preview></userRequest-preview>
             </div>
+          </div>
+          <div class="col">
+            <div class="RightTile p-3 border bg-light">
+              <ng-container *ngIf="step==='flight'; else elseTemplate">
+                <lib-myFlights></lib-myFlights>
+                <div class="toTheLeft">
+                  <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="onClick()">Next</button>
+                </div>
+              </ng-container>
+              <ng-template #elseTemplate>
+                <div *ngIf="step==='hotel'">
+                  <my-hotels></my-hotels>
+                  <div class="toTheLeft">
+                    <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="onClick()">Back</button>
+                  </div>
+                </div>
+              </ng-template>
+              
+            </div>
+          </div>
         </div>
       </div>
 </div>

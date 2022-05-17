@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subscription, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
 
@@ -44,13 +44,8 @@ export class HotelsService {
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
 
-  addHotel(newHotel: HotelRequest): void {
-      console.log("adding hotel -> service")
-      console.log("value to add is:", newHotel)
-      console.log("Adding...")
-      // this.HOTELS? this.HOTELS.push(newHotel): this.HOTELS = [newHotel];
-      this.postHotel(newHotel).subscribe(data=> console.log(data))
-      console.log("HOTELS:", this.HOTELS)
+  addHotel(newHotel: HotelRequest): Subscription {
+      return this.postHotel(newHotel).subscribe(data=> console.log(data))
   }
 
   getHotels(): Observable<Hotel[]>{

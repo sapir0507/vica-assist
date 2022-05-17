@@ -11,7 +11,6 @@ import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 })
 export class MyFlightsService {
 
-  private FLIGHTS: Flights[] = [];
   flightsArray: Flights[] = [];
   private _flight$: BehaviorSubject<Flights[]> = new BehaviorSubject(this.flightsArray);
   public flight$: Observable<Flights[]> = this._flight$.asObservable();
