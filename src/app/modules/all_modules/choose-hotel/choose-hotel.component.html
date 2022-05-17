@@ -1,6 +1,6 @@
-<div class="choose-hotels" *ngIf="AllHotels">
+<div class="choose-hotels" *ngIf="_allHotels$ | async">
     <h1>Hotels</h1>
-    <ng-container *ngFor="let hotel of AllHotels">
+    <ng-container *ngFor="let hotel of _allHotels$ | async as list">
         <item
             [item_type]="'hotel'"
             [hotel]="hotel"

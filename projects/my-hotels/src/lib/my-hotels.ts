@@ -1,6 +1,6 @@
-export function myHotels(): string {
-  return 'my-hotels';
-}
+// export function myHotels(): string {
+//   return 'my-hotels';
+// }
 
 export interface Hotel {
   id: number,

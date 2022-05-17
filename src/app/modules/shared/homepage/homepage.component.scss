@@ -1,0 +1,19 @@
+:host{
+    .userRequest, .RightTile{
+        height: 72vh;
+        overflow: auto;
+    }  
+    .RightTile{
+        max-width: 80vh;
+        width: 80vh;
+    }
+    .toTheLeft{
+       display: flex;
+       justify-content: end;
+       margin: 9px auto;
+       width: 90%;
+       button:hover{
+           color: rgb(0, 0, 0);
+       }
+   } 
+}

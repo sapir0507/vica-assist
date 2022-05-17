@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MyHotelsRoutingModule } from './my-hotels-routing.module';
 import { MyHotelsComponent } from './my-hotels.component';
 
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
@@ -18,10 +17,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { HotelsService } from './hotels.service';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
-    MyHotelsComponent
+    MyHotelsComponent,
+    FileUploadComponent
   ],
   imports: [
     CommonModule,
@@ -40,8 +41,7 @@ import { HotelsService } from './hotels.service';
     MatSnackBarModule,
     
     FormsModule,
-    ReactiveFormsModule,
-    MyHotelsRoutingModule
+    ReactiveFormsModule
   ],
   exports:[
     MyHotelsComponent

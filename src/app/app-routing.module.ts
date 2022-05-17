@@ -30,11 +30,6 @@ const routes: Routes = [
     loadChildren: () => import('./modules/all_modules/choose-flight/choose-flight.module').then(m => m.ChooseFlightModule)
   },
   {
-    path: 'preview',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./modules/all_modules/preview/preview.module').then(m => m.PreviewModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./modules/shared/login/login.module').then(m => m.LoginModule)
   },

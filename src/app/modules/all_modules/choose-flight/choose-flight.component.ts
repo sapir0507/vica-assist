@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Flights } from 'src/app/interfaces/flight.interface';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
@@ -7,25 +7,24 @@ import { SflightService } from 'src/app/services/flight/sflight.service';
   selector: 'app-choose-flight',
   templateUrl: './choose-flight.component.html',
   styleUrls: ['./choose-flight.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChooseFlightComponent implements OnInit {
+export class ChooseFlightComponent implements OnDestroy{
   
-   AllFlights: Flights[] = []
-   private _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlights();
+    notifier: Subject<boolean> = new Subject();
+    _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlights();
 
   constructor(private SFlight: SflightService) {
-    const allFlights = this._ALLFlights$.subscribe(flight => {
-      flight.forEach(item => {
-        console.log("item", item)
-        // this.AllFlights.push(item)
-        this.AllFlights = [...this.AllFlights, item]
-      });
-      
-    })
+    const allFlights = this._ALLFlights$
+    .pipe(
+      takeUntil(this.notifier)
+    )
+    .subscribe()
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+      this.notifier.next(true)
+      this.notifier.complete()
   }
 
 }

@@ -1,0 +1,22 @@
+<input 
+type="file" 
+class="file-input" 
+(change)="onUpload($event)" 
+accept=".jpg,.svg,.png,.jpeg"
+multiple
+#imageUpload
+>
+
+<div class="file-upload">
+
+{{fileName || "no file uploaded yet"}}
+
+<button mat-mini-fab
+  color="primary" 
+  class="upload-btn" 
+  type="button" 
+  (click)="imageUpload.click()"
+> 
+  <mat-icon>attach_file</mat-icon> 
+</button>
+</div>

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotelsService } from './hotels.service';
 import { HotelRequest } from 'src/app/interfaces/hotel.interface'
+import { observable, Observable, Subscription } from 'rxjs';
+import { Hotel } from '../my-hotels';
 
 
 
@@ -11,9 +13,11 @@ import { HotelRequest } from 'src/app/interfaces/hotel.interface'
   templateUrl: './my-hotels.component.html',
   styleUrls: ['./my-hotels.component.scss']
 })
-export class MyHotelsComponent {
+export class MyHotelsComponent implements OnDestroy {
 
-
+  fileName?: string;
+  myObservable?: Subscription;
+  files: FormData = new FormData();
   newHotelForm: FormGroup = new FormGroup({
     name: new FormControl(''),
     stars: new FormControl(''),
@@ -57,15 +61,28 @@ export class MyHotelsComponent {
     this.step--;
   }
 
-  // onUpload(event: Event): void{
-  //   console.log("event", event)
-  //   if(event && event.target as HTMLInputElement)
-  //     console.log((event.target as HTMLInputElement).files)
-  // }
+  onUpload(event: any): void{
+
+    const file:File = event.target.files[0];
+
+    console.log("event", this.files)
+    this.fileName = file.name;
+  
+  }
+
+  onImagesChosen(images: File[] ){
+    console.log(images)
+    if(images){
+      images.forEach(image => {
+        console.log(image.name, image)
+        this.files.append("image", image, image.name)
+      })
+    }
+    
+  }
 
   openSnackBar(message: string) {
     this._snackBar.open(message);
-    
   }
 
   addHotel(){
@@ -76,12 +93,18 @@ export class MyHotelsComponent {
       guests:this.newHotelForm.get('guests')?.value,
       breakfast: this.newHotelForm.get('breakfast')?.value,
       bedType: this.newHotelForm.get('bedType')?.value,
-      images: this.newHotelForm.get('images')?.value,
+      image: this.newHotelForm.get('images')?.value,
+      images: this.files,
       moreInfo: this.newHotelForm.get('moreInfo')?.value,
       price: this.newHotelForm.get('price')?.value
     }
-    this.Shotel.addHotel(this.NewHotel)
+    this.myObservable = this.Shotel.addHotel(this.NewHotel)
+    
     this.openSnackBar("Hotel Added!")
 
+  }
+
+  ngOnDestroy():void {
+    this.myObservable?.unsubscribe()
   }
 }

@@ -1,14 +1,24 @@
 {
   "orders": [
     {
-      "deal": [
+      "choice": "both",
+      "departureDate": "2022-05-15T21:00:00.000Z",
+      "returnDate": "2022-05-23T21:00:00.000Z",
+      "origin": "Deep Blue",
+      "destination": "parise",
+      "passDetails": [
         {
-          "agent name": "",
-          "user name": "",
-          "flights": [],
-          "hotels": []
+          "fullName": "ela shahar",
+          "passID": "123456789"
+        },
+        {
+          "fullName": "topaz shahar",
+          "passID": "987654321"
         }
-      ]
+      ],
+      "stars": 3,
+      "priceRange": "2000",
+      "id": 1
     }
   ],
   "hotels": [
@@ -33,6 +43,30 @@
       "moreInfo": "",
       "price": 120,
       "id": 2
+    },
+    {
+      "name": "Grand Line Hotel",
+      "stars": "5",
+      "guests": "3",
+      "breakfast": "false",
+      "bedType": "Queen Bed",
+      "image": "",
+      "images": {},
+      "moreInfo": "this is a hotel on the grand line. The weather is a little wookie",
+      "price": 100,
+      "id": 3
+    },
+    {
+      "name": "Blablabla",
+      "stars": 3,
+      "guests": 3,
+      "breakfast": "true",
+      "bedType": "Twin Beds",
+      "image": "",
+      "images": {},
+      "moreInfo": "",
+      "price": 100,
+      "id": 4
     }
   ],
   "flights": [
@@ -135,6 +169,52 @@
       "moreInfo": "ela",
       "price": 100,
       "id": 5
+    },
+    {
+      "dest": "Zargreb",
+      "passangers": 2,
+      "fullName": "Ela ",
+      "passID": "123456789",
+      "passArray": [
+        {
+          "fullName": "Topaz ",
+          "myID": "asfda"
+        }
+      ],
+      "org": "Israel",
+      "returnDate": "2022-05-27T21:00:00.000Z",
+      "departureDate": "2022-05-16T21:00:00.000Z",
+      "returnHour": "19:00",
+      "departureHour": "6:30",
+      "stops": "0",
+      "stopDuration": "",
+      "bagage": "true",
+      "moreInfo": "",
+      "price": 100,
+      "id": 6
+    },
+    {
+      "dest": "Zargreb",
+      "passangers": 2,
+      "fullName": "Ela ",
+      "passID": "123456789",
+      "passArray": [
+        {
+          "fullName": "Topaz ",
+          "myID": "asfda"
+        }
+      ],
+      "org": "Israel",
+      "returnDate": "2022-05-27T21:00:00.000Z",
+      "departureDate": "2022-05-16T21:00:00.000Z",
+      "returnHour": "19:00",
+      "departureHour": "6:30",
+      "stops": "1",
+      "stopDuration": "2:13",
+      "bagage": "false",
+      "moreInfo": "",
+      "price": 50,
+      "id": 7
     }
   ],
   "login": [

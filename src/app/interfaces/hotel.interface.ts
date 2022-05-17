@@ -5,7 +5,8 @@ export interface Hotel {
     guests?: number,
     breakfast?: boolean,
     bedType?: string,
-    images?: string,
+    image?: string,
+    images?: FormData,
     moreInfo?: string,
     price?: number
   }
@@ -16,7 +17,8 @@ export interface Hotel {
     guests?: number,
     breakfast?: boolean,
     bedType?: string,
-    images?: string,
+    image?: string,
+    images?: FormData,
     moreInfo?: string,
     price?: number
   }

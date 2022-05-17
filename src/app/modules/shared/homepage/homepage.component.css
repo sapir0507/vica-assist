@@ -1,0 +1,1 @@
+:host .userRequest,:host .RightTile{height:72vh;overflow:auto}:host .RightTile{max-width:80vh;width:80vh}:host .toTheLeft{display:flex;justify-content:end;margin:9px auto;width:90%}:host .toTheLeft button:hover{color:#000}

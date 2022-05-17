@@ -1,9 +1,10 @@
-<div class="container-fluid" *ngIf="AllFlights && AllFlights.length > 0">
-   <div *ngFor="let flight of AllFlights">
+<div class="container-fluid" *ngIf="_ALLFlights$ | async">
+   <div *ngFor="let flight of _ALLFlights$ | async as list">
        <div class="choose-flights container-fluid">  
          <item 
             class="container-fluid flight-item" 
-            [item_type]="'flight'" [flight]="flight">
+            [item_type]="'flight'" 
+            [flight]="flight">
         </item>
          <button class="">Final Choice</button>
         </div>

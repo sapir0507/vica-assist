@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div>
+        <div *ngFor="let order of _allOrders$ | async as list ">
+            <mat-card class="container">
+              <mat-card-header>
+                  <mat-card-title>title</mat-card-title>
+                  <mat-card-subtitle>subtitle</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="row-md-10">
+                      <span class="fa fa-calendar"></span>
+                      Dates: {{order.departureDate | date}} - {{order.returnDate | date}}
+                    </div>
+                    <div class="row-md-4" *ngIf="order.choice==='both' || order.choice === 'hotel'">
+                      <span class="fa fa-star"></span>
+                      Minimum stars: {{order.stars}}
+                    </div>
+                  </div>
+                  <div class="row align-items-center">
+                    <div class="col-md-6 p-2 m-2 align-self-start">
+                      <div class="title">
+                        <h3><b>General details</b></h3>
+                      </div>
+                      <div class="order-details">
+                        <span class="fa fa-globe-americas"> Hotel or Flight:</span>
+                        {{order.choice | Capitalize}}
+                      </div>
+                      <div class="order-details">
+                        <span class="fa fa-map-marker-alt"> origin:</span>
+                        {{order.origin | Capitalize}}
+                      </div>
+                      <div class="order-details">
+                        <span class="fa fa-map-marker-alt"> destination:</span>
+                        {{order.destination| Capitalize}}
+                      </div>
+                      <div class="order-details">
+                        <span class="fa fa-money-bill"> maximum - price:</span>
+                        {{order.priceRange}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 border-1 p-2 m-2 align-self-start">
+                        <div class="passangers">
+                          <div class="title">
+                            <h3><b>Names and IDs</b></h3>
+                          </div>
+                          <ng-container *ngFor="let item of order.passDetails; let i=index">
+                            <div>
+                                Passanger {{i+1}}: 
+                            </div>
+                            <div class="item border mb-2 p-1">
+                              <div>
+                                Full Name: <span class="text-center">
+                                  {{item.fullName | Capitalize}}
+                                </span>
+                              </div>
+                              <div>
+                                ID:
+                                <span class="text-center">
+                                  {{item.passID}}
+                                </span>
+                              </div>
+          
+          
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+    </div>
+</div>

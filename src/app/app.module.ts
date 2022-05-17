@@ -10,9 +10,6 @@ import { ChooseFlightModule } from './modules/all_modules/choose-flight/choose-f
 import { ChooseHotelModule } from './modules/all_modules/choose-hotel/choose-hotel.module';
 import { FinalOrderModule } from './modules/all_modules/final-order/final-order.module';
 import { HomepageModule } from './modules/shared/homepage/homepage.module';
-import { PreviewModule } from './modules/all_modules/preview/preview.module';
-
-import { FooterModule } from './modules/shared/footer/footer.module';
 import { HeaderModule } from './modules/shared/header/header.module';
 
 import { environment } from '../environments/environment';
@@ -50,12 +47,10 @@ const JWT_Module_Options: JwtModuleOptions = {
     HomepageModule,
     HeaderModule,
     FinalOrderModule,
-    FooterModule,
     ChooseFlightModule,
     ChooseHotelModule,
     AddNewFlightModule,
     AddNewHotelModule,
-    PreviewModule,
     AppRoutingModule,
     ReactiveFormsModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
