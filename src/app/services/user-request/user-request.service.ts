@@ -48,7 +48,6 @@ export class userRequestService {
   }
 
   getOrders(): Observable<Order[]>{
-    console.log("getting all orders as an [] -> service")
     return this._getOrder()
   }
 }

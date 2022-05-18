@@ -17,10 +17,6 @@ export class ShotelService {
 
   constructor(private http: HttpClient) { }
 
-  // getAreThereHotels(): boolean{
-  //   return this.HOTELS? true: false;
-  // }
-
   private postHotel(hotel: HotelRequest){
     return this.http.post<Hotel>(this.HotelsServiceUrl, hotel).pipe(
       catchError(err => this.handleError(err, 'postHotel', hotel))
@@ -48,16 +44,10 @@ export class ShotelService {
   }
 
   addHotel(newHotel: HotelRequest): void {
-      console.log("adding hotel -> service")
-      console.log("value to add is:", newHotel)
-      console.log("Adding...")
-      // this.HOTELS? this.HOTELS.push(newHotel): this.HOTELS = [newHotel];
       this.postHotel(newHotel).subscribe(data=> console.log(data))
-      console.log("HOTELS:", this.HOTELS)
   }
 
-  getFlights(): Observable<Hotel>{
-    console.log("getting all hotels -> service")
+  getHotels(): Observable<Hotel>{
     return this._getHotel()
   }
 
@@ -65,18 +55,8 @@ export class ShotelService {
     return this.HOTELS? this.HOTELS.length : 0;
   }
 
-  removeHotel(RHotelID: number):void{
-    console.log("remove flight -> service")
-    console.log("Removing flight...")
-    if(this.HOTELS){
-       this.HOTELS = this.HOTELS?.filter(hotel => hotel.id != RHotelID)
-    }
-    console.log("HOTELS:", this.HOTELS)
-  }
-
-  getFlight(HotelID: number){
-    const result = this.HOTELS?.filter(hotel => hotel.id === HotelID)
-    console.log("flight with id:", HotelID, "is:", result)
+  getFlight(FlightID: number){
+    const result = this.HOTELS?.filter(hotel => hotel.id === FlightID)
     return result; 
   }
 }

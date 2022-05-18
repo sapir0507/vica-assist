@@ -16,7 +16,6 @@ export class MyFlightsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
   private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*'
-  private IDValidator = '[1-9]+[0-9]*'
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
   private _hasStop: boolean = false;
   NewFlight?: FlightsRequest;
@@ -51,9 +50,7 @@ export class MyFlightsComponent implements OnInit {
     private SFlight: MyFlightsService,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar
-  ) {
-    console.log('library');
-  }
+) {}
 
   ngOnInit(): void {
   }

@@ -1,23 +1,37 @@
-<div class="container-fluid">
+<div class="orderList container-fluid">
     <div class="row">
         <div class="col">
             <div *ngFor="let item of _orders$ | async as list">
-                <mat-card>
+                <mat-card class="mt-3 mb-4" *ngIf="requestID === item.id">
                     <mat-card-header>
-                        <div class="container">
+                        <mat-card-title>
                             Order ID: {{item.id}}
-                        </div>
+                        </mat-card-title>
                     </mat-card-header>
                     <mat-card-content>
-                        <div class="container">
-                            {{item.passDetails[0].fullName}} vication. Hotel or Flight: {{item.choice}}
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <span><b>Order Made By:</b></span> {{item.passDetails[0].fullName | Capitalize}}.
+                                </div>
+                                <div class="col-md-1">
+                                    <button 
+                                        mat-raised-button 
+                                        class="mr-2 mt-1" 
+                                        color="primary"
+                                        (click)="openOrder(item.id)"
+                                    >
+                                        <span class="fa fab fa-openid"></span> order
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                   <span><b>Hotel or Flight:</b></span> {{item.choice | Capitalize}} 
+                                </div>
+                            </div>
                         </div>
                     </mat-card-content>
-                    <mat-card-footer>
-                        <mat-card-actions align="end">
-                            <button mat-button class="mat-mini-fab" color="primary"><span class="fa fa-arrow-down"></span></button>
-                        </mat-card-actions>
-                    </mat-card-footer>
                 </mat-card>
 
             </div>

@@ -3,8 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotelsService } from './hotels.service';
 import { HotelRequest } from 'src/app/interfaces/hotel.interface'
-import { observable, Observable, Subscription } from 'rxjs';
-import { Hotel } from '../my-hotels';
+import { Subscription } from 'rxjs';
 
 
 

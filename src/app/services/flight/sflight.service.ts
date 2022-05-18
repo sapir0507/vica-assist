@@ -46,28 +46,16 @@ export class SflightService {
   }
 
   addFlight(newFlight: FlightsRequest): void {
-      console.log("adding flight -> service")
-      console.log("value to add is:", newFlight)
-      console.log("Adding...")
+
      
       this.postFlight(newFlight).subscribe(data => console.log(data))
      
-      console.log("FLIGHTS:", this.flightsArray)
+     
   }
 
 
   getFlights(): Observable<Flights[]>{
-    console.log("getting all flights -> service")
     return this._getFlights()
-  }
-
-  removeFlight(RFlightID: number):void{
-    console.log("remove flight -> service")
-    console.log("Removing flight...")
-    if(this.flightsArray){
-       this.flightsArray = this.flightsArray?.filter(flight => flight.id != RFlightID)
-    }
-    console.log("FLIGHTS:", this.FLIGHTS)
   }
 
   getFlight(FlightID: number){

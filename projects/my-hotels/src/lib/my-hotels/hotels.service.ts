@@ -49,7 +49,6 @@ export class HotelsService {
   }
 
   getHotels(): Observable<Hotel[]>{
-    console.log("getting all hotels -> service")
     return this._getHotel()
   }
 
