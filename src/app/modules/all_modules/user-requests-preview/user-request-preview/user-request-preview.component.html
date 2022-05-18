@@ -1,10 +1,10 @@
-<div class="container-fluid">
-    <div>
+<div class="preview">
+    <div *ngIf="_allOrders$ | async">
         <div *ngFor="let order of _allOrders$ | async as list ">
-            <mat-card class="container">
+            <mat-card class="container" *ngIf="order && order.id === orderid">
               <mat-card-header>
-                  <mat-card-title>title</mat-card-title>
-                  <mat-card-subtitle>subtitle</mat-card-subtitle>
+                  <mat-card-title>Order Details</mat-card-title>
+                  <mat-card-subtitle>ID: {{order.id}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <div class="container-fluid">
@@ -37,7 +37,7 @@
                       </div>
                       <div class="order-details">
                         <span class="fa fa-money-bill"> maximum - price:</span>
-                        {{order.priceRange}}
+                        {{order.priceRange | currency}}
                       </div>
                     </div>
                   </div>
@@ -73,6 +73,6 @@
                 </div>
               </mat-card-content>
             </mat-card>
-          </div>
-    </div>
+          <!-- </div> -->
+    <!-- </div> -->
 </div>

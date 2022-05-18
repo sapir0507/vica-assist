@@ -10,6 +10,7 @@ import { MyHotelsModule } from 'projects/my-hotels/src';
 import { MatButtonModule } from '@angular/material/button';
 import { OrdersListComponent } from './orders-list/orders-list.component';
 import { MatCardModule } from '@angular/material/card';
+import { MyPipesModule } from 'projects/my-pipes/src';
 
 
 
@@ -24,6 +25,7 @@ import { MatCardModule } from '@angular/material/card';
 
     MyFlightsModule,
     MyHotelsModule,
+    MyPipesModule,
 
     MatButtonModule,
     MatCardModule,

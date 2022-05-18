@@ -19,6 +19,38 @@
       "stars": 3,
       "priceRange": "2000",
       "id": 1
+    },
+    {
+      "choice": "both",
+      "departureDate": "2022-05-17T21:00:00.000Z",
+      "returnDate": "2022-05-24T21:00:00.000Z",
+      "origin": "Israel",
+      "destination": "Hungry",
+      "passDetails": [
+        {
+          "fullName": "sapir shahar",
+          "passID": "205668064"
+        }
+      ],
+      "stars": 4,
+      "priceRange": "500",
+      "id": 2
+    },
+    {
+      "choice": "hotel",
+      "departureDate": "2022-05-17T21:00:00.000Z",
+      "returnDate": "2022-05-24T21:00:00.000Z",
+      "origin": "East Blue",
+      "destination": "Grand Line",
+      "passDetails": [
+        {
+          "fullName": "Monkey D Luffy",
+          "passID": "123456789"
+        }
+      ],
+      "stars": 5,
+      "priceRange": "1000",
+      "id": 3
     }
   ],
   "hotels": [

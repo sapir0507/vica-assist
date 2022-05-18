@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ChooseHotelRoutingModule } from './choose-hotel-routing.module';
 import { ChooseHotelComponent } from './choose-hotel.component';
 import { ItemModule } from 'projects/item/src/item';
+import { UserRequestsModule } from '../user-requests/user-requests.module';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { ItemModule } from 'projects/item/src/item';
   imports: [
     CommonModule,
     ItemModule,
+    UserRequestsModule,
     ChooseHotelRoutingModule
   ],
   exports:[
