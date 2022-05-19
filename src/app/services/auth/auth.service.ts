@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { delay, Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  isLoggedIn = false;
+  redirectUrl: string | null = null;
 
-  constructor(public jwtHelper: JwtHelperService) { }
+  constructor() { }
 
   public isAuthenticated(): boolean {
     
@@ -15,5 +17,18 @@ export class AuthService {
 
   getAuthStatus(){
     return this.isAuthenticated()
+  }
+
+  login(): Observable<boolean>{
+    return of(true)
+    .pipe(
+      delay(1000),
+      tap(()=> this.isLoggedIn = true)
+    );
+    
+  }
+
+  logout(){
+    this.isLoggedIn = false;
   }
 }
