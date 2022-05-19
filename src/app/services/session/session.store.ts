@@ -1,22 +1,23 @@
 import { Store, StoreConfig, enableAkitaProdMode } from '@datorama/akita';
 import { environment } from 'src/environments/environment';
 
+const date: Date = new Date();
 
 export interface SessionState {
-   token: string;
-   //name: string;
+   token?: string;
    username: string;
    password: string;
    role: string;
-   //role: string;
+   experationDate?: Date;
 }
 
 export function createInitialState(): SessionState {
   return {
     token: '',
+    experationDate: date,
     username: '',
     password: '',
-    role: ''
+    role: 'customer'
   };
 }
 

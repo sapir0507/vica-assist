@@ -1,0 +1,43 @@
+:host{
+    .userRequest, .RightTile{
+        display: grid;
+        place-content: center;
+        padding: 10px;
+        height: 65vh;
+        width: 100%;
+        overflow: auto;
+    }  
+    .orderList{
+        display: grid;
+        grid-template-columns: 1fr 5fr 1fr;
+       
+        height: 19vh;
+        
+        .arrows{
+            place-self: center;
+            &:hover{
+                color: #673ab7;
+            }
+        }
+    }
+    .oList{
+        max-width: 120vh;
+        max-height: 18vh;
+        width: 100%;
+        margin: 0 auto;
+    }
+    
+    .RightTile{
+        max-width: 80vh;
+        // width: 80vh;
+    }
+    .toTheLeft{
+       display: flex;
+       justify-content: end;
+       margin: 9px auto;
+       width: 90%;
+       button:hover{
+           color: rgb(0, 0, 0);
+       }
+   } 
+}

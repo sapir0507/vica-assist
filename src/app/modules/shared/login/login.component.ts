@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from 'src/app/services/IUser/iuser';
 import { SessionQuery } from 'src/app/services/session/session.query';
 import { SessionService } from 'src/app/services/session/session.service';
-import { SessionState, SessionStore } from 'src/app/services/session/session.store'
+import { SessionStore } from 'src/app/services/session/session.store'
+
+const navigationExtras: NavigationExtras = {
+  queryParamsHandling: 'preserve',
+  preserveFragment: true
+};
+
 
 @Component({
   selector: 'app-login',
@@ -12,18 +19,7 @@ import { SessionState, SessionStore } from 'src/app/services/session/session.sto
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  // userNameConfig: AcademyInputConfig = {
-  //   label: 'user name',
-  //   type: 'text',
-  //   placeholder: 'the best user name!'
-  // }
-  // passwordConfig: AcademyInputConfig = {
-  //   label: 'Password',
-  //   type: 'password',
-  //   placeholder: 'I\'m not looking!🤫'
-  // }
-
+  
   formGroup = new FormGroup({
     username: new FormControl(undefined, [Validators.required]),
     password: new FormControl(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
@@ -41,6 +37,7 @@ export class LoginComponent implements OnInit {
   
   constructor(
     private auth: AuthService,
+    private router: Router,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
     private loginStore: SessionStore
@@ -71,9 +68,12 @@ export class LoginComponent implements OnInit {
       }
     })
 
-    if(isLoggedIn.isLoggedIn){
-      window.location.href = ""
-    }
+    // Redirect the user
+    this.router.navigate([''], navigationExtras);
+
+    // if(isLoggedIn.isLoggedIn){
+    //   window.location.href = ""
+    // }
   }
 
   onGoogleAuthenticator($event: Event) {

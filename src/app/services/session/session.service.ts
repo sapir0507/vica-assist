@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
 import { environment } from 'src/environments/environment';
-import { Hotel } from '../hotel/ihotel';
-import { catchError } from 'rxjs';
+import { catchError, delay } from 'rxjs';
 
 
 interface currentUser{
   username?: string,
+  password?: string,
   role?: string,
   isLoggedIn?: boolean
 }
@@ -32,22 +32,26 @@ export class SessionService {
 
   login(username: string, password: string){
     //only enters the subscribe after clicked the second time. 
-    const AllUsers = this._login(username, password).pipe(catchError(err => err))
+    const AllUsers = this._login(username, password)
+    .pipe(
+      catchError(err => err)
+    )
     .subscribe((data: any) => {
-      console.log(data)
+      // console.log(data)
       this.currentUser.username = username
       if(data){
         this.currentUser.role = data[0].role 
         this.currentUser.isLoggedIn = true
+        this.updateCurrentUser(this.currentUser)
+        this.updatePassword(password)
+        console.log("session store value", this.sessionStore.getValue())
       } 
       else{
         this.currentUser.role = ""
         this.currentUser.isLoggedIn = false
       }
     })
-    // console.log(AllUsers)
     return this.currentUser
-   
   }
   
 
@@ -93,14 +97,19 @@ export class SessionService {
     this.updateRole(newRole)
   }
 
-  // async updateUserName(newName: string) { // since we don't use a server we don't need this, right?
-  //   this.sessionStore.setLoading(true);
+  updateCurrentUser(currentUser: currentUser){
+    this.sessionStore.update(store=>{
+      return{
+        ...store,
+        username: currentUser.username,
+        password: currentUser.password,
+        role: currentUser.role,
+        
+      }
+    })
+  }
 
-    // await this.http(...).toPromise();
-    // this.sessionStore.update({ name: newName});
-    
-  //   this.sessionStore.setLoading(false);
-  // }  
+  
 
   destroy(){
     this.sessionStore.destroy();

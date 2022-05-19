@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { OrdersListComponent } from './orders-list/orders-list.component';
 import { MatCardModule } from '@angular/material/card';
 import { MyPipesModule } from 'projects/my-pipes/src';
+import { AgentHomepageComponent } from './agent-homepage/agent-homepage.component';
+import { UserHomepageComponent } from './user-homepage/user-homepage.component';
 
 
 
@@ -18,7 +20,9 @@ import { MyPipesModule } from 'projects/my-pipes/src';
 @NgModule({
   declarations: [
     HomepageComponent,
-    OrdersListComponent
+    OrdersListComponent,
+    AgentHomepageComponent,
+    UserHomepageComponent
   ],
   imports: [
     CommonModule,
