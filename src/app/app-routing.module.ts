@@ -17,7 +17,6 @@ const routes: Routes = [
   },
   {
     path: 'choose-hotel',
-    canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/choose-hotel/choose-hotel.module').then(m => m.ChooseHotelModule)
   },
   {
@@ -27,7 +26,6 @@ const routes: Routes = [
   },
   {
     path: 'choose-flight',
-    canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/choose-flight/choose-flight.module').then(m => m.ChooseFlightModule)
   },
   {

@@ -15,10 +15,10 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field appearance="fill">
+                  <td> -->
+                    <mat-form-field appearance="fill" class="mx-2">
                       <mat-label>Number of Guests</mat-label>
                       <mat-select formControlName="guests">
                         <ng-container *ngFor="let item of [1,2,3,4,5]">
@@ -26,8 +26,8 @@
                         </ng-container>
                       </mat-select>
                     </mat-form-field>     
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <mat-form-field appearance="fill">
                       <mat-label>Stars</mat-label>
                       <mat-select formControlName="stars">
@@ -36,9 +36,9 @@
                         </ng-container>
                         </mat-select>
                     </mat-form-field>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
 
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
@@ -56,15 +56,15 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field appearance="fill">
+                  <td> -->
+                    <mat-form-field appearance="fill" class="mx-2">
                       <mat-label>Name</mat-label>
                       <input matInput type="text" formControlName="name">
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <mat-form-field appearance="fill">
                       <mat-label>breakfast</mat-label>
                       <mat-select formControlName="breakfast">
@@ -72,10 +72,10 @@
                         <mat-option value="false">Not Included</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </td>
+                  <!-- </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td> -->
                     <mat-form-field appearance="fill">
                       <mat-label>Bed Type</mat-label>
                       <mat-select formControlName="bedType">
@@ -84,8 +84,8 @@
                         <mat-option value="Twin Beds">Twin Beds</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <mat-form-field appearance="fill">
                       <mat-label>Cancelation</mat-label>
                       <mat-select formControlName="cancelation">
@@ -93,9 +93,9 @@
                         <mat-option value="not included">Not Included</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
 
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
@@ -114,33 +114,33 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-             <table>
+             <!-- <table>
                <tr>
-                 <td>
-                  <mat-form-field appearance="fill">
+                 <td> -->
+                  <mat-form-field appearance="fill" class="mx-2">
                     <mat-label>More Information</mat-label>
                     <input matInput type="text" formControlName="moreInfo">
                   </mat-form-field>
-                 </td>
-                 <td>
+                 <!-- </td>
+                 <td> -->
                   <mat-form-field appearance="fill" floatLabel="always">
                     <mat-label>price</mat-label>
                     <input matInput type="number" class="" placeholder="0" formControlName="price">
                     <span matPrefix>$&nbsp;</span>
                   </mat-form-field>
-                 </td>
+                 <!-- </td>
                </tr>
                <tr>
-                <td>
+                <td> -->
                   <div class="mb-2">
                    <fileUploader
                    (files)="onImagesChosen($event)"  
                  ></fileUploader>
                   </div>
-                </td>
+                <!-- </td>
               </tr>
              </table>
-              
+               -->
 
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>

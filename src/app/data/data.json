@@ -99,6 +99,18 @@
       "moreInfo": "",
       "price": 100,
       "id": 4
+    },
+    {
+      "name": "Blabla hotel",
+      "stars": 4,
+      "guests": 3,
+      "breakfast": "true",
+      "bedType": "King Bed",
+      "image": "",
+      "images": {},
+      "moreInfo": "this is a hotel",
+      "price": 50,
+      "id": 5
     }
   ],
   "flights": [
@@ -247,6 +259,29 @@
       "moreInfo": "",
       "price": 50,
       "id": 7
+    },
+    {
+      "dest": "Parise",
+      "passangers": 2,
+      "fullName": "Ela shahar",
+      "passID": "123456789",
+      "passArray": [
+        {
+          "fullName": "Topaz shahar",
+          "myID": "987654321"
+        }
+      ],
+      "org": "Rome",
+      "returnDate": "2022-05-25T21:00:00.000Z",
+      "departureDate": "2022-05-18T21:00:00.000Z",
+      "returnHour": "19:50",
+      "departureHour": "6:30",
+      "stops": "1",
+      "stopDuration": "2:20",
+      "bagage": "true",
+      "moreInfo": "",
+      "price": 100,
+      "id": 8
     }
   ],
   "login": [

@@ -9,6 +9,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 export class AgentHomepageComponent implements OnInit {
   step: string = 'flight';
   chosenID: number = 1;
+  nextID: number = 1;
   maxID: number = 1;
   constructor() { }
 
@@ -24,11 +25,11 @@ export class AgentHomepageComponent implements OnInit {
   }
 
   chosenIDNext(){
-    if(this.maxID >= this.chosenID + 1) this.chosenID++;
+    if(this.maxID >= this.nextID + 1) this.nextID++;
   }
 
   chosenIDPrev(){
-    if((this.chosenID - 1) > 0) this.chosenID--;
+    if((this.nextID - 1) > 0 ) this.nextID--;
   }
 
   onChosen(id: number){

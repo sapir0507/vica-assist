@@ -1,5 +1,5 @@
-<div class="container p-2">
-    <div class="container-fluid px-xxl-1">
+<!-- <div class="container-fluid p-2"> -->
+    <div class="container px-xxl-1 justify-content-center">
       <div class="row">
         <div class="col">
           <h2 class="text-center">Pending Orders</h2>
@@ -7,7 +7,7 @@
               <span class="fa fa-arrow-alt-circle-left fa-2xl arrows" (click)="chosenIDPrev()"></span>
               <div class="oList">
                    <ordersList 
-                      [requestID]="chosenID"
+                      [requestID]="nextID"
                       (chosen)="onChosen($event)"
                       (maxIDs)="onGetMaxIDs($event)"
                    ></ordersList>
@@ -17,32 +17,35 @@
          </div>
       </div>
     </div>
-      <div class="container-fluid px-xxl-1 mt-2">
-          <div class="row gx-5">
-            <div class="col">
-              <div class="userRequest mt-2">
-                <userRequest-preview [orderid]="chosenID"></userRequest-preview>
-              </div>
-            </div>
-            <div class="col">
-              <div class="RightTile">
-                <ng-container *ngIf="step==='flight'; else elseTemplate">
-                  <lib-myFlights></lib-myFlights>
-                  <div class="toTheLeft">
-                    <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="onClick()">Next</button>
-                  </div>
-                </ng-container>
-                <ng-template #elseTemplate>
-                  <div *ngIf="step==='hotel'">
-                    <my-hotels></my-hotels>
-                    <div class="toTheLeft">
-                      <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="onClick()">Back</button>
-                    </div>
-                  </div>
-                </ng-template>
-                
-              </div>
-            </div>
+
+    <div class="container">
+      <div class="myGrid mt-4">
+        <!-- <div class="col"> -->
+          <div class="userRequest container mt-2">
+            <userRequest-preview 
+              [orderid]="chosenID"
+            ></userRequest-preview>
           </div>
-        </div>
-  </div>
+        <!-- </div> -->
+        <!-- <div class="col"> -->
+          <div class="RightTile container">
+            <ng-container *ngIf="step==='flight'; else elseTemplate">
+              <lib-myFlights></lib-myFlights>
+              <div class="toTheLeft">
+                <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="onClick()">Next</button>
+              </div>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <div *ngIf="step==='hotel'">
+                <my-hotels></my-hotels>
+                <div class="toTheLeft">
+                  <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="onClick()">Back</button>
+                </div>
+              </div>
+            </ng-template>
+            
+          </div>
+        <!-- </div> -->
+      </div>
+    </div>
+  <!-- </div> -->

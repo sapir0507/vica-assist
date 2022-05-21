@@ -1,1 +1,43 @@
-<p>user-homepage works!</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <h2 class="text-center mat-headline m-2">Homepage</h2>
+    </div>
+  </div>
+  <div class="row mt-3 justify-content-center">
+    <div class="col-md-4 bg-light m-2 center border">
+      <div class="container">
+        <h2 class="text-center m-2">My Orders</h2>
+        Pending Orders
+        <ng-container *ngFor="let pendingItem of [1,2]">
+         
+              <ordersList 
+                [requestID]="pendingItem">
+              </ordersList>
+         
+        </ng-container>
+        </div>
+        <div class="container">
+        Finished Orders
+
+        <ng-container *ngFor="let Finisheditem of [3]">
+         
+          <ordersList 
+              [requestID]="Finisheditem">
+          </ordersList>
+       
+        <div class="status mx-4" *ngIf="status">
+          <span class="mat-card bg-dark text-white">
+            Status: {{status | Capitalize}}
+          </span>
+        </div>
+     
+        </ng-container>
+
+      </div>
+    </div>
+    <div class="container col-md-5 bg-light m-2 justify-content-center border">
+      <userRequests></userRequests>
+    </div>
+  </div>
+</div>
