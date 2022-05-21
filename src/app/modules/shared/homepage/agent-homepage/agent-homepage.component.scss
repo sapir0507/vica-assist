@@ -1,17 +1,9 @@
 :host{
-    .userRequest, .RightTile{
-        display: grid;
-        place-content: center;
-        padding: 10px;
-        height: 65vh;
-        width: 100%;
-        overflow: auto;
-    }  
     .orderList{
         display: grid;
         grid-template-columns: 1fr 5fr 1fr;
-       
-        height: 19vh;
+        place-content: center;
+        height: 20vh;
         
         .arrows{
             place-self: center;
@@ -22,14 +14,14 @@
     }
     .oList{
         max-width: 120vh;
-        max-height: 18vh;
+        max-height: 19vh;
         width: 100%;
         margin: 0 auto;
+        margin-bottom: 15px;
     }
     
     .RightTile{
-        max-width: 80vh;
-        // width: 80vh;
+        padding: 10px;
     }
     .toTheLeft{
        display: flex;
@@ -40,4 +32,19 @@
            color: rgb(0, 0, 0);
        }
    } 
+
+   .myGrid{
+       display: grid;
+       grid-template-columns: repeat(2, 1fr);
+       gap: 10px;
+       place-content: center;
+   }
+
+   .myFlex{
+       display: flex;
+       flex-wrap: wrap;
+       justify-content: center;
+       align-items: center;
+       width: 100%;
+   }
 }

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { User } from 'src/app/services/IUser/iuser';
+import { Subject, takeUntil } from 'rxjs';
 import { SessionQuery } from 'src/app/services/session/session.query';
 import { SessionService } from 'src/app/services/session/session.service';
-import { SessionStore } from 'src/app/services/session/session.store'
 
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'preserve',
@@ -26,60 +24,55 @@ export class LoginComponent implements OnInit {
     googleAuthenticator: new FormControl(undefined, Validators.required)
   });
 
-  user: User = {
-    username: 'sapir.s@gmail.com',
-    password: '123321',
-    role: 'admin'
-  };
-
   isLoading$ = this.sessionQuery.selectLoading();
   error$ = this.sessionQuery.selectError();
+  private reminder: Subject<boolean> = new Subject();
+  private _status: boolean = false;
+  myError: boolean = false;
   
   constructor(
-    private auth: AuthService,
     private router: Router,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
-    private loginStore: SessionStore
     ) {
-
-      this.loginStore.update(store => {
-        return {
-          ...store, 
-          role: '' ,
-          username: '',
-        }
+      sessionQuery.selectIsLoggedIn$
+      .pipe(
+        takeUntil(this.reminder)
+      )
+      .subscribe(_status => {
+        this._status = _status;
       })
-
      }
   
   ngOnInit(): void {
   }
 
   onSubmit(){
-    console.log(this.formGroup.value)
-    const isLoggedIn = this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
+    //login
+    this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
 
-    this.loginStore.update(store => {
-      return {
-        ...store, 
-        role: isLoggedIn.role ,
-        username: isLoggedIn.username,
-      }
-    })
-
-    // Redirect the user
-    this.router.navigate([''], navigationExtras);
-
-    // if(isLoggedIn.isLoggedIn){
-    //   window.location.href = ""
+     //if logged in
+    // if(this._status) {
+      this.router.navigate([''], navigationExtras);
     // }
+    // else{
+      this.myError = true;
+    // }
+   
+    //else
+
   }
 
   onGoogleAuthenticator($event: Event) {
     console.log($event);
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.reminder.next(true)
+    this.reminder.complete()
+  }
   
 
 }

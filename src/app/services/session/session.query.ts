@@ -8,34 +8,33 @@ import { SessionState, SessionStore } from './session.store';
 export class SessionQuery extends Query<SessionState> {  
 
     allState$ = this.select();
-    isLoggedIn$ = this.select(state => {
-      console.log("session query -> state.role = ", state.role)
-      state.role
-    }).pipe(
-      delay(1000)
-    );
+    isLoggedIn$ = this.select();
     selectName$ = this.select('username');
     selectPass$ = this.select('password');
     selectRole$ = this.select('role');
+    selectIsLoggedIn$ = this.select('isLoggedIn');
+    selectExperationDate$ = this.select('experationDate');
 
 
     // Returns { username, password, role, token }
-    multiProps$ = this.select(['username', 'password', 'role', 'token']);
+    multiProps$ = this.select(['username', 'password', 'role','isLoggedIn', 'experationDate', 'token']);
     
 
      // Returns [ username, password, role, token ]
     multiPropsCallback$ = this.select(
-        [state => state.username, state => state.password, state => state.role, state => state.token]
+        [state => state.username, state => state.password, state => state.role, state => state.isLoggedIn, state => state.experationDate,  state => state.token]
     )
-    
 
 
   constructor(protected override store: SessionStore) {
     super(store);
   }
 
-  get isLoggedIn() {
-    return this.getValue().role;
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    
   }
+  
 
 }

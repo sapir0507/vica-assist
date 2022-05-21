@@ -13,29 +13,29 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field color="primary" appearance="fill" class="cas">
+                  <td> -->
+                    <mat-form-field color="primary" appearance="fill" class="cas mx-2">
                       <mat-label>Full Name</mat-label>
                       <input matInput placeholder="Full Name" formControlName="fullName">
                       <mat-hint>Like in your passport</mat-hint>
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <mat-form-field color="primary" appearance="fill">
                       <mat-label>Identification Card</mat-label>
                       <input matInput placeholder="ID" formControlName="myID">
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <div class="m-2">
                       <button class="btn btn-primary mb-3" mat-raised-button mat-mini-fab color="primary" type="button" (click)="AddNewCustomer()">+</button>
                     </div>
                     
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
                     
               <mat-divider *ngIf="addDivider" class="mt-3 mb-3"></mat-divider>
               <mat-hint *ngIf="showHint">To add a new passanger first fill your full name and ID</mat-hint>
@@ -43,25 +43,25 @@
               <ng-container formArrayName="passangersFullName">
                 <ng-container *ngFor="let newPass of passangersFullName.controls; let index=index">
                   <div [formGroupName]="index">
-                    <table class="mt-3">
+                    <!-- <table class="mt-3">
                       <tr>
-                        <td>
-                          <mat-form-field color="primary" appearance="fill">
+                        <td> -->
+                          <mat-form-field color="primary" appearance="fill" class="mx-2">
                             <input matInput placeholder="Full Name" formControlName="fullName">
                           </mat-form-field>
-                        </td>
-                        <td>
+                        <!-- </td>
+                        <td> -->
                           <mat-form-field color="primary" appearance="fill">
                             <input matInput placeholder="ID" formControlName="myID">
                           </mat-form-field>
-                        </td>
-                        <td>
+                        <!-- </td>
+                        <td> -->
                           <div class="m-2">
                             <button mat-raise-button mat-mini-fab color="warn" type="button" class="btn btn-danger mb-3" (click)="DeleteAddedCustomer(index)">x</button>
                           </div>
-                        </td>
+                        <!-- </td>
                       </tr>
-                    </table>
+                    </table> -->
                   </div>
                 </ng-container>
               </ng-container>
@@ -82,36 +82,36 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field color="primary" appearance="fill">
+                  <td> -->
+                    <mat-form-field color="primary" appearance="fill" class="mx-2">
                       <mat-label>Origin</mat-label>
                       <input matInput formControlName="org">
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <mat-form-field color="primary" appearance="fill">
                       <mat-label>Destination</mat-label>
                       <input matInput formControlName="dest">
                     </mat-form-field>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
               <mat-divider></mat-divider>
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field color="primary" appearance="fill">
+                  <td> -->
+                    <mat-form-field color="primary" appearance="fill" class="mx-2">
                       <mat-label>Bagage</mat-label>
                       <mat-select formControlName="bagage">
                         <mat-option value=true>Included</mat-option>
                         <mat-option value=false>Not Included</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
               
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
@@ -130,10 +130,10 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <div>
+                  <td> -->
+                    <div class="mx-2">
                       <mat-form-field color="primary" appearance="fill">
                         <mat-label>Choose A Date</mat-label>
                         <mat-date-range-input [rangePicker]="picker" >
@@ -145,49 +145,49 @@
                         <mat-date-range-picker #picker></mat-date-range-picker>
                       </mat-form-field>
                     </div>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
-              <table>
+              </table> -->
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field color="primary" appearance="fill" class="mb-sm-0">
+                  <td> -->
+                    <mat-form-field color="primary" appearance="fill" class="mb-sm-0 mx-2">
                       <mat-label>Stops</mat-label>
                       <mat-select formControlName="stops" (selectionChange)="onSelectionChange()">
                         <mat-option value="0">No Stops</mat-option>
                         <mat-option value="1">One Stop</mat-option>
                       </mat-select>
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <ng-container *ngIf="hasStop()">
                       <mat-form-field color="primary" appearance="fill"> 
                         <mat-label>Stop Duration</mat-label>
                         <input matInput placeholder="02:13" formControlName="stopDuration">
                       </mat-form-field>
                     </ng-container>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
 
               <mat-divider class="mt-2 mb-2"></mat-divider>
 
-              <table>
+              <!-- <table>
                 <tr>
-                  <td>
-                    <mat-form-field color="primary" appearance="fill">
+                  <td> -->
+                    <mat-form-field color="primary" appearance="fill" class="mx-2">
                       <mat-label>departureTime</mat-label>
                       <input matInput  placeholder="02:13" formControlName="departureHour">
                     </mat-form-field>
-                  </td>
-                  <td>
+                  <!-- </td>
+                  <td> -->
                     <mat-form-field color="primary" appearance="fill">
                       <mat-label>ReturnTime</mat-label>
                       <input matInput  placeholder="02:13" formControlName="returnHour">
                     </mat-form-field>
-                  </td>
+                  <!-- </td>
                 </tr>
-              </table>
+              </table> -->
 
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
@@ -206,23 +206,23 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-             <table>
+             <!-- <table>
                <tr>
-                 <td>
-                  <mat-form-field color="primary" appearance="fill">
+                 <td> -->
+                  <mat-form-field color="primary" appearance="fill" class="mx-2">
                     <mat-label>More Information</mat-label>
                     <input matInput type="text" formControlName="moreInfo">
                   </mat-form-field>
-                 </td>
-                 <td>
+                 <!-- </td>
+                 <td> -->
                   <mat-form-field color="primary" appearance="fill" floatLabel="always">
                     <mat-label>price</mat-label>
                     <input matInput type="number" class="" placeholder="0" formControlName="price">
                     <span matPrefix>$&nbsp;</span> <!-- $ -->
                   </mat-form-field>
-                 </td>
+                 <!-- </td>
                </tr>
-             </table>
+             </table> -->
 
               <mat-action-row>
                 <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>

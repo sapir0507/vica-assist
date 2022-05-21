@@ -1,11 +1,12 @@
 <div class="userRequests example-container">
-  <div class="container-fluid">
+  <div class="container">
     <div class="row m-3">
       <h2>Request</h2>
     </div>
     <div class="row">
-      <div class="col-md-auto">
+      <div class="col">
         <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+         <div class="container-fluid justify-content-center">
           <mat-accordion class="example-headers-align">
             <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
 
@@ -17,50 +18,55 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <div>
+             
                 <mat-label>Order Choice</mat-label>
-                <mat-radio-group formControlName="order">
-                  <div class="mt-4">
-                    <mat-radio-button class="bi-check" value="both" checked>Flight and Hotel</mat-radio-button>
-                    <mat-radio-button class="bi-check" value="hotel">Hotel Only</mat-radio-button>
-                    <mat-radio-button class="bi-check" value="flight">Flight Only</mat-radio-button>
-                  </div>
-                </mat-radio-group>
-              </div>
+                <div class="mt-4">
+                  <mat-radio-group formControlName="order" class="mat-radio-ripple">
+                      <mat-radio-button class="bi-check" value="both" checked>Flight and Hotel</mat-radio-button>
+                      <mat-radio-button class="bi-check" value="hotel">Hotel Only</mat-radio-button>
+                      <mat-radio-button class="bi-check" value="flight">Flight Only</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+              
 
               <mat-divider></mat-divider>
 
-
-              <table>
-                <tr>
-                  <td>
-                    <button mat-raised-button class="mb-md-4" color="primary" type="button" (click)="addNewPass()">add
-                      person</button>
-                  </td>
-                </tr>
-                <tr>
-                  <ng-container formArrayName="passDetails" class="m-md-2">
-                    <ng-container *ngFor="let item of passDetails.controls; let i=index">
-                      <div [formGroupName]="i">
-                        <td class="m-md-2">
-                          <mat-form-field color="primary" appearance="fill">
-                            <input matInput placeholder="Full Name" formControlName="fullName">
-                          </mat-form-field>
-                        </td>
-                        <td class="m-md-2">
-                          <mat-form-field color="primary" appearance="fill">
-                            <input matInput placeholder="ID" formControlName="passID">
-                          </mat-form-field>
-                        </td>
-                        <td>
-                          <button mat-flat-button color="warn" type="button"
-                            (click)="deleteExistingPass(i)">delete</button>
-                        </td>
-                      </div>
-                    </ng-container>
-                  </ng-container>
-                </tr>
-              </table>
+              <button 
+                mat-raised-button 
+                class="btn btn-primary mb-4" 
+                color="primary" 
+                type="button" 
+                (click)="addNewPass()"
+              >
+                add person
+              </button>
+          
+            <ng-container formArrayName="passDetails">
+              <ng-container *ngFor="let item of passDetails.controls; let i=index">
+                <div [formGroupName]="i" class="container-fluid mx-2 mb-2">
+                
+                    <mat-form-field color="primary" appearance="fill" class="mx-2">
+                      <input matInput placeholder="Full Name" formControlName="fullName">
+                    </mat-form-field>
+                
+                    <mat-form-field color="primary" appearance="fill" class="mp-2">
+                      <input matInput placeholder="ID" formControlName="passID">
+                    </mat-form-field>
+                
+                    <button 
+                      mat-flat-button 
+                      color="warn" 
+                      type="button"
+                      class="btn mx-2"
+                      (click)="deleteExistingPass(i)"
+                    >
+                      delete
+                    </button>
+                </div>
+              </ng-container>
+            </ng-container>
+        
+            
 
               <mat-action-row>
                 <button mat-button type="button" class="btn" color="primary" (click)="nextStep()">Next</button>
@@ -77,25 +83,19 @@
                   </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <table>
-                  <tr>
-                    <td>
-                      <mat-form-field appearance="fill" color="primary">
+               
+                      <mat-form-field appearance="fill" color="primary" class="mx-2">
                         <mat-label>Origin</mat-label>
                         <mat-hint>where are you traveling from</mat-hint>
                         <input matInput placeholder="origin" formControlName="origin">
                       </mat-form-field>
-                    </td>
-                    <td>
+                  
                       <mat-form-field appearance="fill" color="primary">
                         <mat-label>Destination</mat-label>
                         <mat-hint>where are you traveling to</mat-hint>
                         <input matInput placeholder="Destination" formControlName="destination">
                       </mat-form-field>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
+                  
                       <mat-form-field appearance="fill" [formGroup]="Dates">
                         <mat-label>Dates</mat-label>
                         <mat-date-range-input [rangePicker]="rangePicker">
@@ -111,8 +111,7 @@
                           </mat-datepicker-actions>
                         </mat-date-range-picker>
                       </mat-form-field>
-                    </td>
-                    <td *ngIf="order === 'hotel' || order === 'both' || false" >
+                  
                       <mat-form-field class="p-md-1" appearance="fill" color="primary" [formGroup]="hotel">
                         <mat-label>Stars</mat-label>
                         <mat-hint>Maximum number of Stars</mat-hint>
@@ -122,9 +121,7 @@
                           </div>
                         </mat-select>
                       </mat-form-field>
-                    </td>
-                  </tr>
-                </table>
+                 
 
                 <mat-action-row>
                   <button mat-button type="button" class="btn" color="primary" (click)="prevStep()">Back</button>
@@ -144,7 +141,7 @@
 
               </mat-expansion-panel-header>
 
-              <table>
+              <table class="container">
                 <tr>
                   <td>
                     <mat-form-field appearance="fill" class="m-1">
@@ -165,6 +162,7 @@
             </mat-expansion-panel>
 
           </mat-accordion>
+         </div>
         </form>
       </div>
     </div>
