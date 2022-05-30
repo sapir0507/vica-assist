@@ -24,8 +24,6 @@ export class ItemComponent implements OnInit {
   ngOnInit(): void {
     console.log("lib --> item")
     console.log("item type:", this.item_type)
-    console.log("Flight: ", this.flight)
-    console.log("Hotel: ", this.hotel)
   }
 
 }

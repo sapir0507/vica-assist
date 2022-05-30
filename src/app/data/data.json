@@ -2,288 +2,43 @@
   "orders": [
     {
       "choice": "both",
-      "departureDate": "2022-05-15T21:00:00.000Z",
-      "returnDate": "2022-05-23T21:00:00.000Z",
-      "origin": "Deep Blue",
-      "destination": "parise",
+      "orderID": "1",
+      "status": "finished",
+      "departureDate": "2022-05-27T21:00:00.000Z",
+      "returnDate": "2022-05-30T21:00:00.000Z",
+      "origin": "Grand Line",
+      "destination": "East Blue",
       "passDetails": [
         {
-          "fullName": "ela shahar",
-          "passID": "123456789"
-        },
-        {
-          "fullName": "topaz shahar",
-          "passID": "987654321"
-        }
-      ],
-      "stars": 3,
-      "priceRange": "2000",
-      "id": 1
-    },
-    {
-      "choice": "both",
-      "departureDate": "2022-05-17T21:00:00.000Z",
-      "returnDate": "2022-05-24T21:00:00.000Z",
-      "origin": "Israel",
-      "destination": "Hungry",
-      "passDetails": [
-        {
-          "fullName": "sapir shahar",
-          "passID": "205668064"
+          "fullName": "Sapir Shahar",
+          "passID": "20568064"
         }
       ],
       "stars": 4,
-      "priceRange": "500",
-      "id": 2
+      "priceRange": "200",
+      "id": 1
     },
     {
       "choice": "hotel",
-      "departureDate": "2022-05-17T21:00:00.000Z",
-      "returnDate": "2022-05-24T21:00:00.000Z",
-      "origin": "East Blue",
-      "destination": "Grand Line",
+      "orderID": "1",
+      "status": "pending",
+      "departureDate": "2022-06-04T21:00:00.000Z",
+      "returnDate": "2022-06-12T21:00:00.000Z",
+      "origin": "Italy",
+      "destination": "Rome",
       "passDetails": [
         {
-          "fullName": "Monkey D Luffy",
-          "passID": "123456789"
+          "fullName": "Sapir Shahar",
+          "passID": "20568064"
         }
       ],
-      "stars": 5,
-      "priceRange": "1000",
-      "id": 3
-    }
-  ],
-  "hotels": [
-    {
-      "name": "Hotel Grande",
-      "stars": "4",
-      "guests": "2",
-      "breakfast": "true",
-      "bedType": "Queen Bed",
-      "images": "images",
-      "moreInfo": "info",
-      "price": 100,
-      "id": 1
-    },
-    {
-      "name": "Hotel Everesense",
-      "stars": "5",
-      "guests": "2",
-      "breakfast": "false",
-      "bedType": "King Bed",
-      "images": "",
-      "moreInfo": "",
-      "price": 120,
-      "id": 2
-    },
-    {
-      "name": "Grand Line Hotel",
-      "stars": "5",
-      "guests": "3",
-      "breakfast": "false",
-      "bedType": "Queen Bed",
-      "image": "",
-      "images": {},
-      "moreInfo": "this is a hotel on the grand line. The weather is a little wookie",
-      "price": 100,
-      "id": 3
-    },
-    {
-      "name": "Blablabla",
-      "stars": 3,
-      "guests": 3,
-      "breakfast": "true",
-      "bedType": "Twin Beds",
-      "image": "",
-      "images": {},
-      "moreInfo": "",
-      "price": 100,
-      "id": 4
-    },
-    {
-      "name": "Blabla hotel",
       "stars": 4,
-      "guests": 3,
-      "breakfast": "true",
-      "bedType": "King Bed",
-      "image": "",
-      "images": {},
-      "moreInfo": "this is a hotel",
-      "price": 50,
-      "id": 5
-    }
-  ],
-  "flights": [
-    {
-      "dest": "Britain",
-      "passangers": 2,
-      "fullName": "Sapir Shahar",
-      "passID": "205668064",
-      "passArray": [
-        {
-          "fullName": "Tom Riddle",
-          "myID": "666666666"
-        }
-      ],
-      "org": "Israel",
-      "returnDate": "2022-05-13T21:00:00.000Z",
-      "departureDate": "2022-05-08T21:00:00.000Z",
-      "returnHour": "19:30",
-      "departureHour": "06:20",
-      "stops": "1",
-      "stopDuration": "2:30",
-      "bagage": "true",
-      "moreInfo": "magic flight",
-      "price": 200,
-      "id": 1
-    },
-    {
-      "dest": "Britain",
-      "passangers": 2,
-      "fullName": "Sapir Shahar",
-      "passID": "205668064",
-      "passArray": [
-        {
-          "fullName": "Rome Svan",
-          "myID": "123456789"
-        }
-      ],
-      "org": "Israel",
-      "returnDate": "2022-05-18T21:00:00.000Z",
-      "departureDate": "2022-05-09T21:00:00.000Z",
-      "returnHour": "19:30",
-      "departureHour": "06:20",
-      "stops": "1",
-      "stopDuration": "06:20",
-      "bagage": "true",
-      "moreInfo": "magic flight",
-      "price": 200,
+      "priceRange": "200",
       "id": 2
-    },
-    {
-      "dest": "Britain",
-      "passangers": 1,
-      "fullName": "Hotel Grande",
-      "passID": "11177777",
-      "passArray": [],
-      "org": "Italy",
-      "returnDate": "2022-05-23T21:00:00.000Z",
-      "departureDate": "2022-05-09T21:00:00.000Z",
-      "returnHour": "19:30",
-      "departureHour": "06:20",
-      "stops": "0",
-      "stopDuration": "",
-      "bagage": "false",
-      "moreInfo": "ela",
-      "price": 100,
-      "id": 3
-    },
-    {
-      "dest": "Britain",
-      "passangers": 1,
-      "fullName": "Hotel Grande",
-      "passID": "11177777",
-      "passArray": [],
-      "org": "Italy",
-      "returnDate": "2022-05-23T21:00:00.000Z",
-      "departureDate": "2022-05-09T21:00:00.000Z",
-      "returnHour": "19:30",
-      "departureHour": "06:20",
-      "stops": "1",
-      "stopDuration": "",
-      "bagage": "false",
-      "moreInfo": "ela",
-      "price": 100,
-      "id": 4
-    },
-    {
-      "dest": "Britain",
-      "passangers": 1,
-      "fullName": "Hotel Grande",
-      "passID": "11177777",
-      "passArray": [],
-      "org": "Italy",
-      "returnDate": "2022-05-23T21:00:00.000Z",
-      "departureDate": "2022-05-09T21:00:00.000Z",
-      "returnHour": "19:30",
-      "departureHour": "06:20",
-      "stops": "1",
-      "stopDuration": "02:13",
-      "bagage": "false",
-      "moreInfo": "ela",
-      "price": 100,
-      "id": 5
-    },
-    {
-      "dest": "Zargreb",
-      "passangers": 2,
-      "fullName": "Ela ",
-      "passID": "123456789",
-      "passArray": [
-        {
-          "fullName": "Topaz ",
-          "myID": "asfda"
-        }
-      ],
-      "org": "Israel",
-      "returnDate": "2022-05-27T21:00:00.000Z",
-      "departureDate": "2022-05-16T21:00:00.000Z",
-      "returnHour": "19:00",
-      "departureHour": "6:30",
-      "stops": "0",
-      "stopDuration": "",
-      "bagage": "true",
-      "moreInfo": "",
-      "price": 100,
-      "id": 6
-    },
-    {
-      "dest": "Zargreb",
-      "passangers": 2,
-      "fullName": "Ela ",
-      "passID": "123456789",
-      "passArray": [
-        {
-          "fullName": "Topaz ",
-          "myID": "asfda"
-        }
-      ],
-      "org": "Israel",
-      "returnDate": "2022-05-27T21:00:00.000Z",
-      "departureDate": "2022-05-16T21:00:00.000Z",
-      "returnHour": "19:00",
-      "departureHour": "6:30",
-      "stops": "1",
-      "stopDuration": "2:13",
-      "bagage": "false",
-      "moreInfo": "",
-      "price": 50,
-      "id": 7
-    },
-    {
-      "dest": "Parise",
-      "passangers": 2,
-      "fullName": "Ela shahar",
-      "passID": "123456789",
-      "passArray": [
-        {
-          "fullName": "Topaz shahar",
-          "myID": "987654321"
-        }
-      ],
-      "org": "Rome",
-      "returnDate": "2022-05-25T21:00:00.000Z",
-      "departureDate": "2022-05-18T21:00:00.000Z",
-      "returnHour": "19:50",
-      "departureHour": "6:30",
-      "stops": "1",
-      "stopDuration": "2:20",
-      "bagage": "true",
-      "moreInfo": "",
-      "price": 100,
-      "id": 8
     }
   ],
+  "hotels": [],
+  "flights": [],
   "login": [
     {
       "username": "livetotell",

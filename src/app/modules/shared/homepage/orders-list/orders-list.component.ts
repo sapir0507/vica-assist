@@ -12,9 +12,12 @@ import { Order } from 'src/interfaces/order.interface';
 export class OrdersListComponent implements OnInit {
 
   @Output() chosen: EventEmitter<number> = new EventEmitter();
+  @Output() orderID: EventEmitter<string> = new EventEmitter();
+  @Output() item: EventEmitter<Order> = new EventEmitter();
   @Output() maxIDs: EventEmitter<number> = new EventEmitter();
 
   @Input() requestID: number = 1;
+  @Input() status?: string = 'pending';
 
   reminder: Subject<boolean> = new Subject();
   _orders$: Observable<Order[]> = this.orderService.getOrders();
@@ -32,8 +35,8 @@ export class OrdersListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openOrder(id: number){
-     this.chosen.emit(id);
+  openOrder(item: Order){
+    this.item.emit(item)
   }
   
   ngOnDestroy(): void {

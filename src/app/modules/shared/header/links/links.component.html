@@ -1,14 +1,33 @@
 <div class="linksComponent">
 
-<div class="all-links" *ngIf="!isSideBar">
+<div class="row" *ngIf="!isSideBar">
      <ng-container *ngIf="!isSideBar">
-          <div *ngFor="let link of currentLinks">
-               <a 
+          <div *ngFor="let link of currentLinks" class="col">
+               <ng-container *ngIf="isLogout && link.name === 'Logout'; then thenTemplate; else elseTemplate">
+                    <a 
                     [routerLink]="link.link" 
                     class="nav-link active header-links"
                >
                     {{link.name}}
                </a>
+               </ng-container>
+               <ng-template #thenTemplate>
+                    <a 
+                    href="#"
+                    class="nav-link active header-links"
+               >
+                    Logout
+               </a>
+               </ng-template>
+               <ng-template #elseTemplate>
+                    <a 
+                    [routerLink]="link.link" 
+                    class="nav-link active header-links"
+               >
+                    {{link.name}}
+               </a>
+               </ng-template>
+               
           </div>   
       </ng-container>
 </div>

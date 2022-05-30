@@ -38,12 +38,12 @@ const routes: Routes = [
   },
   {
     path: 'final-order',
-    canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/final-order/final-order.module').then(m => m.FinalOrderModule)
   },
   {
     path: '',
-    redirectTo: 'homepage',
+    loadChildren: () => import('./modules/shared/homepage/homepage.module').then(m => m.HomepageModule),
+    // redirectTo: 'homepage',
     pathMatch: 'full'
   }
 ];

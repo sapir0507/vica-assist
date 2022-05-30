@@ -1,14 +1,18 @@
 <nav class="navbar navbar-dark bg-dark">
   <div class="container-fluid">
     <div class="logo">
-      ✈
-      <a class="navbar-brand" href="#">vica-assist</a>
+      <a class="navbar-brand" href="#">✈  vica-assist</a>
     </div>
     <div class="my-flex-2">
-      <div class="">
-        <ng-container *ngIf="sharedLinks">
-          <app-links [currentLinks]="sharedLinks" [isDropDown]="false" [isSideBar]="false"></app-links>
-        </ng-container>
+      <div class="row">
+        <div class="col">
+          <ng-container *ngIf="sharedLinks">
+            <app-links [currentLinks]="sharedLinks" [isDropDown]="false" [isSideBar]="false" [isLogout]="isLoggedIn"></app-links>
+          </ng-container>
+          <!-- <ng-container *ngIf="isLoggedIn">
+            <app-links [currentLinks]="logoutLink" [isDropDown]="false" [isSideBar]="false" [isLogout]="true"></app-links> 
+          </ng-container> -->
+        </div>
       </div>
   
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"

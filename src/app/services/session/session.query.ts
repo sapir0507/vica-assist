@@ -8,7 +8,7 @@ import { SessionState, SessionStore } from './session.store';
 export class SessionQuery extends Query<SessionState> {  
 
     allState$ = this.select();
-    isLoggedIn$ = this.select();
+    isLoggedIn$ = this.select('isLoggedIn');
     selectName$ = this.select('username');
     selectPass$ = this.select('password');
     selectRole$ = this.select('role');

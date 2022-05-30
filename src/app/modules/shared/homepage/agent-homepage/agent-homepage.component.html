@@ -9,6 +9,7 @@
                    <ordersList 
                       [requestID]="nextID"
                       (chosen)="onChosen($event)"
+                      (orderID)="onOrder($event)"
                       (maxIDs)="onGetMaxIDs($event)"
                    ></ordersList>
               </div>
@@ -30,7 +31,7 @@
         <!-- <div class="col"> -->
           <div class="RightTile container">
             <ng-container *ngIf="step==='flight'; else elseTemplate">
-              <lib-myFlights></lib-myFlights>
+              <lib-myFlights [orderID]="orderID"></lib-myFlights>
               <div class="toTheLeft">
                 <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="onClick()">Next</button>
               </div>

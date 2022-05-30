@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { Hotel, HotelRequest } from './ihotel';
@@ -22,6 +22,13 @@ export class ShotelService {
       catchError(err => this.handleError(err, 'postHotel', hotel))
     );
   }
+
+  private _hotelByOrderID(orderID: string){
+    const url = this.HotelsServiceUrl ;
+    let params: HttpParams = new HttpParams();
+    params = params.append('orderID', orderID);
+    return this.http.get<Hotel[]>(url, {params}).pipe(  )
+  } 
 
   private _getHotel(){
     return this.http.get<Hotel>(this.HotelsServiceUrl, {}).pipe(
@@ -49,6 +56,10 @@ export class ShotelService {
 
   getHotels(): Observable<Hotel>{
     return this._getHotel()
+  }
+
+  getHotelsByOrderID(orderID: string): Observable<Hotel[]>{
+    return this._hotelByOrderID(orderID)
   }
 
   getNewID(): number{

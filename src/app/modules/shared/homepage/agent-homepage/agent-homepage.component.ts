@@ -9,6 +9,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 export class AgentHomepageComponent implements OnInit {
   step: string = 'flight';
   chosenID: number = 1;
+  orderID: string | null = null;
   nextID: number = 1;
   maxID: number = 1;
   constructor() { }
@@ -35,6 +36,10 @@ export class AgentHomepageComponent implements OnInit {
   onChosen(id: number){
     console.log("homepage id:", id)
     this.chosenID = id;
+  }
+
+  onOrder(orderID: string){
+    this.orderID = orderID;
   }
 
 }

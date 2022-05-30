@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, skip, take, takeLast, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 import { SessionQuery } from 'src/app/services/session/session.query';
-import { User } from 'src/app/services/IUser/iuser';
-import { SessionState } from 'src/app/services/session/session.store';
+
 
 interface currentUser{
   username?: string,
@@ -21,8 +20,8 @@ interface currentUser{
 })
 export class HomepageComponent implements OnInit, OnDestroy {
 
-  userType: string = "customer"
-  user?: Observable<User>;
+  userType?: string;
+  isLoading: boolean = true;
   sessionId!: Observable<string>;
   token!: Observable<string>;
   private reminder: Subject<boolean> = new Subject();
@@ -31,10 +30,24 @@ export class HomepageComponent implements OnInit, OnDestroy {
   constructor( 
     private sessionQuery: SessionQuery,
     private route: ActivatedRoute
-    ) { }
+    ) {
+      this.isLoading = false;
+      this.sessionQuery.multiProps$
+    .pipe
+    (
+      take(2),
+      takeUntil(this.reminder)
+    )
+    .subscribe((item)=>{
+      this.userType = item.role
+    })
+    this.isLoading = true;
+     }
 
   ngOnInit(): void {
     // Capture the session ID if available
+    this.isLoading = false;
+    console.log("on init", this.isLoading)
     this.sessionId = this.route
       .queryParamMap
       .pipe(map(params => params.get('session_id') || 'None'));
@@ -43,23 +56,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.token = this.route
       .fragment
       .pipe(map(fragment => fragment || 'None'));
-
-    this.sessionQuery.multiProps$
-    .pipe(
-      takeUntil(this.reminder),
-      skip(1),
-      take(1)
-    )
-    .subscribe((item)=>{
-      console.log(item)
-      this.userType = item.role
-      console.log(this.userType)
-    })
+    this.isLoading = true
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     this.reminder.next(true)
     this.reminder.complete()
   }

@@ -22,13 +22,13 @@
                                    <span><b>Hotel or Flight:</b></span> {{item.choice | Capitalize}} 
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-1">
+                            <div class="row" *ngIf="item.status === 'finished'">
+                                <div class="col-md-1" *ngIf="item.orderID">
                                     <button 
                                         mat-raised-button 
                                         class="mr-2 mt-1" 
                                         color="primary"
-                                        (click)="openOrder(item.id)"
+                                        (click)="openOrder(item)"
                                     >
                                         <span class="fa fab fa-openid"></span> order
                                     </button>

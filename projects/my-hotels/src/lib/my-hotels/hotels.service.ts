@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, Subscription, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
 
 
@@ -29,6 +29,14 @@ export class HotelsService {
       catchError(err => this.handleError(err, 'postHotel', ""))
     );
   }
+  
+  private _hotelByOrderID(orderID: string){
+    const url = this.HotelsServiceUrl ;
+    let params: HttpParams = new HttpParams();
+    params = params.append('orderID', orderID);
+    return this.http.get<Hotel[]>(url, {params}).pipe(  )
+  } 
+ 
 
   private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
     if (error.status === 0) {
@@ -50,6 +58,10 @@ export class HotelsService {
 
   getHotels(): Observable<Hotel[]>{
     return this._getHotel()
+  }
+
+  getHotelsByOrderID(orderID: string): Observable<Hotel[]>{
+    return this._hotelByOrderID(orderID)
   }
 
 }

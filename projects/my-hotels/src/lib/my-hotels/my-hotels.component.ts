@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotelsService } from './hotels.service';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./my-hotels.component.scss']
 })
 export class MyHotelsComponent implements OnDestroy {
-
+  @Input() orderID: string | null = null;
   fileName?: string;
   myObservable?: Subscription;
   files: FormData = new FormData();
@@ -86,7 +86,9 @@ export class MyHotelsComponent implements OnDestroy {
 
   addHotel(){
     console.log('addHotel -> component')
+    if(this.newHotelForm.valid && this.orderID){
     this.NewHotel = {
+      orderID: this.orderID,
       name:this.newHotelForm.get('name')?.value,
       stars: this.newHotelForm.get('stars')?.value,
       guests:this.newHotelForm.get('guests')?.value,
@@ -98,8 +100,11 @@ export class MyHotelsComponent implements OnDestroy {
       price: this.newHotelForm.get('price')?.value
     }
     this.myObservable = this.Shotel.addHotel(this.NewHotel)
-    
     this.openSnackBar("Hotel Added!")
+  }
+  else{
+    this.openSnackBar("Something went wrong, please check your input and try again")
+  }
 
   }
 
