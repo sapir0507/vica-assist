@@ -9,6 +9,8 @@ $font-family-h1: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
        grid-template-rows: 1fr;
        column-gap: 5px;
        height: 4.5vh;
+    }
+
     a{
        
         color: white;
@@ -23,8 +25,6 @@ $font-family-h1: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
             background-color: rgba($color: rgb(95, 94, 94), $alpha: 0.9);
             color: lightblue;
         }
-    }
-       
     }
 
     .side-bar-links{

@@ -22,7 +22,6 @@ export class AuthService {
   login(): Observable<boolean>{
     return of(true)
     .pipe(
-      delay(1000),
       tap(()=> this.isLoggedIn = true)
     );
     

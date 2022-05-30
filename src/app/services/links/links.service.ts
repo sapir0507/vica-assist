@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { SessionQuery } from '../session/session.query';
+import { SessionService } from '../session/session.service';
 import { ILinks } from './links';
 
 @Injectable({
@@ -22,10 +24,12 @@ export class LinksService {
     link: '/choose-hotel',
     name: 'Choose Hotel'
   }];
-  private navbarLinks_all: Array<ILinks> = [{
-    link: '',
+  private navbarLinks_homepage: Array<ILinks> = [{
+    link: '/homepage',
     name: 'Homepage'
-  },
+  }];
+
+  private navbarLinks_login: Array<ILinks> = [
   {
     link: '/login',
     name: 'Login'
@@ -35,8 +39,18 @@ export class LinksService {
     name: 'Register'
   }];
 
+  private isLoggedIn: boolean = false;
 
-  constructor() { }
+  constructor(
+    private sessionQuery: SessionQuery,
+    private sessionService: SessionService
+  ) { 
+    sessionQuery.selectIsLoggedIn$.subscribe(
+      data=> {
+        this.isLoggedIn = data;
+      }
+    )
+  }
 
   getLinks(user: string){
     switch(user){
@@ -64,7 +78,12 @@ export class LinksService {
   }
 
   private getSharedLinks(){
-    return this.navbarLinks_all;
+    let link;
+    this.isLoggedIn? 
+    link = this.navbarLinks_homepage : 
+    link = this.navbarLinks_homepage.concat(this.navbarLinks_login);
+    console.log("links of shared Links", link)
+    return link;
   }
 
 }

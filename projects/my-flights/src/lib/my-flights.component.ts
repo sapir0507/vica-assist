@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MyFlightsService } from './my-flights.service';
@@ -18,6 +18,7 @@ export class MyFlightsComponent implements OnInit {
   private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*'
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
   private _hasStop: boolean = false;
+  @Input() orderID: string | null = null;
   NewFlight?: FlightsRequest;
   showHint: boolean = false;
   addDivider: boolean = false;
@@ -110,9 +111,10 @@ export class MyFlightsComponent implements OnInit {
   addFlight() {
     console.log('addFlight -> component')
 
-    if (this.newFlightForm.valid) {
+    if (this.newFlightForm.valid && this.orderID) {
       const passNum = this.passangersFullName.length + 1;
       this.NewFlight = {
+        orderID: this.orderID,
         dest: this.newFlightForm.get('dest')?.value,
         passangers: passNum,
         fullName: this.newFlightForm.get('fullName')?.value,

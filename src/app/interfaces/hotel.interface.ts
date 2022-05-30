@@ -1,5 +1,6 @@
 export interface Hotel {
     id: number,
+    orderID?: string,
     name?: string,
     stars?: number,
     guests?: number,
@@ -12,6 +13,7 @@ export interface Hotel {
   }
   
   export interface HotelRequest {
+    orderID?: string,
     name?: string,
     stars?: number,
     guests?: number,

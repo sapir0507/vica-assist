@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
@@ -14,7 +14,7 @@ export class MyFlightsService {
   flightsArray: Flights[] = [];
   private _flight$: BehaviorSubject<Flights[]> = new BehaviorSubject(this.flightsArray);
   public flight$: Observable<Flights[]> = this._flight$.asObservable();
-  private readonly FlightsServiceUrl = 'http://localhost:3000/' + 'flights';
+  private readonly FlightsServiceUrl = 'http://localhost:3000/';
  
   constructor(private http: HttpClient) {
     
@@ -36,19 +36,25 @@ export class MyFlightsService {
 
 
    private postFlight(flight :FlightsRequest){
-    return this.http.post<Flights>(this.FlightsServiceUrl, flight)
+    return this.http.post<Flights>(this.FlightsServiceUrl + 'flights', flight)
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', flight))
     );
   }
 
   private _getFlights(){
-    return this.http.get<Flights>(this.FlightsServiceUrl, {
-    })
+    return this.http.get<Flights>(this.FlightsServiceUrl + 'flights', { })
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', ""))
     );
   }
+
+  private _flightByOrderID(orderID: string){
+    const url = this.FlightsServiceUrl  + 'flights';
+    let params: HttpParams = new HttpParams();
+    params = params.append('orderID', orderID);
+    return this.http.get<Flights[]>(url, {params}).pipe(  )
+  } 
 
   ngOnInit(): void {
   }
@@ -60,6 +66,10 @@ export class MyFlightsService {
 
   getFlights(): Observable<Flights>{
     return this._getFlights()
+  }
+
+  getFlightsByOrderID(orderID: string): Observable<Flights[]>{
+    return this._flightByOrderID(orderID)
   }
   
   createNewPassangerInput(fb: FormBuilder, newPassDetails: FormArray): void{

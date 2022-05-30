@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { LinkService } from 'src/app/services/links/link.service';
 import { ILinks } from 'src/app/services/links/links';
 // import { LinksService } from 'src/app/services/links/links.service';
 
@@ -11,25 +13,29 @@ import { ILinks } from 'src/app/services/links/links';
 })
 export class LinksComponent implements OnInit {
   @Input() currentLinks?: Array<ILinks> | null = null;
-  // @Input() customersLinks?: Array<ILinks> | null = null;
-  // @Input() agentsLinks?: Array<ILinks> | null = null;
-  // @Input() sharedLinks?: Array<ILinks> | null = null;
 
   @Input() isDropDown?: boolean | null = null;
   @Input() isSideBar?: boolean | null = null;
+
+  @Input() isLogout?: boolean | null = null;
+  @Input() username?: string | null = null;
+
+
  
-  constructor() { 
-    // this.sharedLinks = SLinks.getLinks('shared');
-    // this.customersLinks = SLinks.getLinks('customer');
-    // this.agentsLinks = SLinks.getLinks('agent');
-  
+  constructor(
+    private auth: AuthService,
+    private linkService: LinkService
+    ) { 
   }
 
   ngOnInit(): void {
    
-    // console.log("links -> currentLinks", this.currentLinks)
-    // console.log("links -> isDropDown", this.isDropDown)
-    // console.log("links -> isSideBar", this.isSideBar)
+   
+  }
+
+  onLogout(){
+    this.auth.logout()
+    this.linkService.updateSharedLinks_WhenNotLoggedIn()
   }
 
 }

@@ -1,5 +1,6 @@
 export interface Flights {
     id: number,
+    orderID?: string,
     passangers?: number,
     fullName?: string,
     passID?: number,
@@ -18,6 +19,7 @@ export interface Flights {
 }
 
 export interface FlightsRequest {
+    orderID?: string,
     passangers?: number,
     fullName?: string,
     passID?: number,

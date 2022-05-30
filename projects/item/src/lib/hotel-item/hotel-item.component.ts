@@ -10,10 +10,11 @@ export class HotelItemComponent implements OnInit {
 
   constructor() { }
 
-  @Input() hotel: Hotel = {id: 1};
+  @Input() hotel: Hotel | null = null;
   currentRate = 5;
   private path: string = 'assets/images/img';
   images = ['assets/images/img/bed.png', 'assets/images/img/bedroom.png', 'assets/images/img/bg_bggenerator_com.png'];
+  
   ngOnInit(): void {
   }
 

@@ -1,8 +1,19 @@
-<ng-container *ngIf=" userType === 'agent'; else elseTemplate">
+<!-- <ng-container *ngIf=" userType === 'agent'; else elseTemplate">
   <agent-homepage></agent-homepage>
 </ng-container>
 <ng-template #elseTemplate>
   <user-homepage></user-homepage>
-</ng-template>
+</ng-template> -->
 
 
+<span [ngSwitch]="userType">
+<p *ngSwitchCase="'agent'">
+  <agent-homepage></agent-homepage>
+</p>
+<p *ngSwitchCase="'customer'">
+  <user-homepage></user-homepage>
+</p>
+<p *ngSwitchDefault>
+  <generic-homepage *ngIf="isLoading"></generic-homepage>
+</p>
+</span>

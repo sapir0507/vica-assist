@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
 import { environment } from 'src/environments/environment';
-import { catchError, concatWith, delay, Observable, switchMap, of, take, observable, map, concat, Subject, tap } from 'rxjs';
+import { catchError, concatWith, delay, Observable, switchMap, of, take, observable, map, concat, Subject, tap, skip } from 'rxjs';
 
 const date = new Date().getDate() + 30
 
@@ -24,7 +24,7 @@ export class SessionService {
   currentUser: currentUser = {
     username: '',
     password: '',
-    role: '',
+    role: 'unknown',
     experationDate: date - 30,
     isLoggedIn: false
   }
@@ -33,13 +33,15 @@ export class SessionService {
   constructor(
     private sessionStore: SessionStore,
     private http: HttpClient
-    ) { }
+    ) { 
+       this.updateCurrentUser(this.currentUser)
+    }
 
   private _login(username: string, password: string): Observable<currentUser[]>{
     const url = this.HotelServiceUrl ;
     let params: HttpParams = new HttpParams();
     params = params.append('username', username).append('password', password);
-    return this.http.get<currentUser[]>(url, {params}).pipe(    )
+    return this.http.get<currentUser[]>(url, {params}).pipe(  )
   } 
 
   login(username: string, password: string){
@@ -51,7 +53,7 @@ export class SessionService {
           this.updateCurrentUser(user[0]) //updating the store per the documents
         }
         else{
-          this.updateCurrentUser(this.currentUser)
+          //  this.updateCurrentUser(this.currentUser)
         }
       })
     ).subscribe()

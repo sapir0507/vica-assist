@@ -3,6 +3,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { SessionQuery } from 'src/app/services/session/session.query';
+import { SessionService } from 'src/app/services/session/session.service';
 import { userRequestService } from 'src/app/services/user-request/user-request.service';
 import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
 
@@ -16,6 +18,7 @@ export class UserRequestsComponent implements OnInit {
   notifier?: Subscription;
   @ViewChild(MatAccordion) accordion?: MatAccordion;
   step: number = 0;
+  orderID: string | null = null;
   requestForm: FormGroup = this.fb.group({
     //do you want a hotel only or a flight too
     order:this.fb.control('both', [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
@@ -64,9 +67,11 @@ export class UserRequestsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private orderService: userRequestService,
+    private SessionQuery: SessionQuery,
     private _snackBar: MatSnackBar
   ) {
        this.addNewPass()
+       SessionQuery.selectName$.subscribe(data=>this.orderID = data)
     }
 
   ngOnInit(): void {
@@ -98,19 +103,24 @@ export class UserRequestsComponent implements OnInit {
 
 
   onSubmit(){
-    const newOrder: OrderRequest = {
-      choice: this.order,
-      departureDate: this.Dates.get('departureDate')?.value,
-      returnDate: this.Dates.get('returnDate')?.value,
-      origin: this.requestForm.get('origin')?.value,
-      destination: this.requestForm.get('destination')?.value,
-      passDetails: this.requestForm.get('passDetails')?.value,
-      stars: this.hotel.get('stars')?.value,
-      priceRange: this.requestForm.get('price')?.value 
-    }
+    if(this.requestForm.valid) {
+      this.orderID = '1'
+      const newOrder: OrderRequest = {
+        choice: this.order,
+        orderID: this.orderID,
+        status: 'pending',
+        departureDate: this.Dates.get('departureDate')?.value,
+        returnDate: this.Dates.get('returnDate')?.value,
+        origin: this.requestForm.get('origin')?.value,
+        destination: this.requestForm.get('destination')?.value,
+        passDetails: this.requestForm.get('passDetails')?.value,
+        stars: this.hotel.get('stars')?.value,
+        priceRange: this.requestForm.get('price')?.value 
+      }
     console.log(newOrder)
     this.notifier = this.orderService.addOrder(newOrder)
     this.openSnackBar("Order added!")
+  }
   }
 
   openSnackBar(message: string) {

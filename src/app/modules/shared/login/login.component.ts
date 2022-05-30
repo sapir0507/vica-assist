@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { delay, skip, Subject, take, takeUntil } from 'rxjs';
+import { AuthGuardService } from 'src/app/services/auth-guard/auth-guard.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { LinkService } from 'src/app/services/links/link.service';
+import { LinksService } from 'src/app/services/links/links.service';
 import { SessionQuery } from 'src/app/services/session/session.query';
 import { SessionService } from 'src/app/services/session/session.service';
 
@@ -28,10 +32,12 @@ export class LoginComponent implements OnInit {
   error$ = this.sessionQuery.selectError();
   private reminder: Subject<boolean> = new Subject();
   private _status: boolean = false;
-  myError: boolean = false;
+  myError?: boolean;
   
   constructor(
     private router: Router,
+    private linksService: LinkService,
+    private auth: AuthService,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
     ) {
@@ -49,15 +55,14 @@ export class LoginComponent implements OnInit {
 
   onSubmit(){
     //login
-    this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
+    const a = this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
+     //if logged in 
 
-     //if logged in
-    // if(this._status) {
-      this.router.navigate([''], navigationExtras);
-    // }
-    // else{
-      this.myError = true;
-    // }
+    //  if(this._status){
+       this.auth.login().pipe().subscribe()
+       this.linksService.updateSharedLinks_AfterLogin()
+       this.router.navigate(['/homepage'], navigationExtras);
+    //  }
    
     //else
 

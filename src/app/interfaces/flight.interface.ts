@@ -2,6 +2,7 @@ import { passArray } from "./pass-array.interface"
 
 export interface Flights {
     id: number,
+    orderID?: string,
     passangers?: number,
     fullName?: string,
     passID?: number,
@@ -21,6 +22,7 @@ export interface Flights {
 
   export interface FlightsRequest {
     passangers?: number,
+    orderID?: string,
     fullName?: string,
     passID?: number,
     passArray?: passArray[],
