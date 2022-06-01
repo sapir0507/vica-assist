@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Flights } from 'src/app/interfaces/flight.interface';
 import { SflightService } from 'src/app/services/flight/sflight.service';
@@ -12,10 +12,11 @@ import { SflightService } from 'src/app/services/flight/sflight.service';
 export class ChooseFlightComponent implements OnDestroy{
   
     notifier: Subject<boolean> = new Subject();
-    _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlights();
+    @Input() orderID: number = 1;
+    _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlight(this.orderID);
 
   constructor(private SFlight: SflightService) {
-    const allFlights = this._ALLFlights$
+    this._ALLFlights$
     .pipe(
       takeUntil(this.notifier)
     )

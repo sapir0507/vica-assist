@@ -8,6 +8,7 @@ $carousel-caption-color: black;
 
   .example-card {
     max-width: 900px;
+    width: 110%;
     margin: 0 auto;
     margin-bottom: 40px;
     background-color: whitesmoke;
@@ -33,10 +34,18 @@ $carousel-caption-color: black;
 
   .grid {
     display: grid;
-    grid-template-areas: 'content images';
-    column-gap: 20px;
+    // max-width: 900px;
+    grid-template-columns: 1fr;
+    
+    margin: 0 auto;
+    place-content: center;
+    grid-template-areas: 'images images'
+                         'images images'
+                         'content content'
+                         'content content';
     .content {
       grid-area: content;
+      margin-left: 20px;
 
       .icon {
         font-size: $font-size;
@@ -57,12 +66,31 @@ $carousel-caption-color: black;
         border: 2px outset lightblue;
         border-radius: 10px;
         padding: 10px;
+        max-width: 50vh;
+        scroll-behavior: auto;
+        scroll-margin: 10px;
+        scroll-padding-inline-start: 10px;
+
       }
     }
-
-    .images {
+    .images-wrapper{
+      position: relative;
       grid-area: images;
-    }
+      width: 500px;
+      background-color: black;
+      padding: 10px;
+      margin: 10px;
+      object-fit: contain;
+
+        .images {
+          display: block;
+          margin: 10px auto;
+          width: 300px;
+          height: 300px;
+          object-fit: contain;
+          
+        }
+  }
   }
 
 

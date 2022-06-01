@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Order } from 'src/interfaces/order.interface';
 
 @Component({
   selector: 'agent-homepage',
@@ -33,13 +34,17 @@ export class AgentHomepageComponent implements OnInit {
     if((this.nextID - 1) > 0 ) this.nextID--;
   }
 
-  onChosen(id: number){
-    console.log("homepage id:", id)
-    this.chosenID = id;
+  onChosen2(item: Order){
+    console.log("homepage item from onChosen2:", item)
+    this.chosenID = item.id;
+    this.orderID = item.orderID;
+    console.log("this.orderID from onChosen2: ", this.orderID)
+
   }
 
   onOrder(orderID: string){
     this.orderID = orderID;
+    console.log("orderID from onOrder", this.orderID)
   }
 
 }

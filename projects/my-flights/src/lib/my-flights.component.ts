@@ -16,6 +16,8 @@ export class MyFlightsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
   private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*'
+  private CountryValidator = '[a-zA-Z ]*'
+
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
   private _hasStop: boolean = false;
   @Input() orderID: string | null = null;
@@ -27,11 +29,11 @@ export class MyFlightsComponent implements OnInit {
   hide = true;
 
   newFlightForm: FormGroup = this.fb.group({
-    dest: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9,]*')]],
     fullName: ['', [Validators.required, Validators.pattern(this.NameValidator)]],
     myID: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(9), Validators.pattern('[0-9]*')]],
+    dest: ['', [Validators.required, Validators.pattern(this.CountryValidator)]],
+    org: ['', [Validators.required, Validators.pattern(this.CountryValidator)]],
     passangersFullName: this.fb.array([]),
-    org: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9,\s]*')]],
     departureDate: ['', [Validators.required]],
     returnDate: ['', [Validators.required]],
     departureHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
@@ -109,7 +111,7 @@ export class MyFlightsComponent implements OnInit {
   }
 
   addFlight() {
-    console.log('addFlight -> component')
+    console.log('addFlight -> component', 'orderID:', this.orderID)
 
     if (this.newFlightForm.valid && this.orderID) {
       const passNum = this.passangersFullName.length + 1;

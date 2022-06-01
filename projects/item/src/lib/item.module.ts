@@ -12,6 +12,10 @@ import { FlightItemComponent } from './flight-item/flight-item.component';
 import { HotelItemComponent } from './hotel-item/hotel-item.component';
 import { MyPipesModule } from 'projects/my-pipes/src';
 import { MatButtonModule } from '@angular/material/button';
+import { MatLineModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 
 
 
@@ -30,6 +34,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
+    MatLineModule,
+    MatTooltipModule,
+    MatExpansionModule,
+    MatListModule,
 
     NgbRatingModule,
     NgbCarouselModule,

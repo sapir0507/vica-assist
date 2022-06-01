@@ -1,4 +1,5 @@
 @import "../../../../../src/assets/styles/media.scss";
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Alfa+Slab+One&family=Caveat:wght@500&family=Indie+Flower&family=Righteous&family=Volkhov&display=swap');
     $card-width: 150vh;
     // $card-content-width: 75vh;
     $card-content-item-width: 25vh;
@@ -6,10 +7,39 @@
     $font-size: 1.5em;
 :host{
     font-size: $font-size;
-    .mat-card{
-        background-image: linear-gradient(rgb(234, 193, 238), rgb(202, 157, 225));
-        border: 3px inset purple;
-        border-radius: 20px;
+    // .mat-card{
+    //     // background-image: linear-gradient(rgb(234, 193, 238), rgb(202, 157, 225));
+    //     // border: 3px inset purple;
+    //     border-radius: 20px;
+    // }
+    .mat-expansion-panel{
+        min-width: 50vh;
+    }
+    .font-title{
+        font-family: 'Alfa Slab One', cursive;
+    }
+    .font-subtitle{
+        font-size: 20px;
+        font-family: 'Acme', sans-serif;
+    }
+    .font{
+        font-size: 20px;
+        font-family: 'Indie Flower', cursive;
+        margin:10px;
+    }
+    .info{
+        max-width: 45vh;
+    }
+    .other{
+        font-family: 'Acme', sans-serif;
+        font-family: 'Alfa Slab One', cursive;
+        font-family: 'Caveat', cursive;
+        font-family: 'Indie Flower', cursive;
+        font-family: 'Righteous', cursive;
+        font-family: 'Volkhov', serif;
+    }
+    .indent{
+        text-indent: 30px;
     }
     .flight-item{
         margin: 0 auto;
@@ -20,7 +50,7 @@
             position: relative;
             grid-template-columns: repeat(3, 1fr);
             padding-top: 10px;
-            border: 2px outset rgba(128, 0, 128, 0.726);
+            // border: 2px outset rgba(128, 0, 128, 0.726);
             
             border-radius: 10px;
             margin: auto auto;
@@ -74,6 +104,24 @@
         
     
     }
+
+    .example-action-buttons {
+        padding-bottom: 20px;
+      }
+      
+      .example-headers-align .mat-expansion-panel-header-title,
+      .example-headers-align .mat-expansion-panel-header-description {
+        flex-basis: 0;
+      }
+      
+      .example-headers-align .mat-expansion-panel-header-description {
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .example-headers-align .mat-form-field + .mat-form-field {
+        margin-left: 8px;
+      }
 
     
    

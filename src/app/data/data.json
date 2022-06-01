@@ -35,10 +35,80 @@
       "stars": 4,
       "priceRange": "200",
       "id": 2
+    },
+    {
+      "choice": "both",
+      "orderID": "1",
+      "status": "pending",
+      "departureDate": "2022-06-07T21:00:00.000Z",
+      "returnDate": "2022-06-14T21:00:00.000Z",
+      "origin": "Hungry",
+      "destination": "Grand Line",
+      "passDetails": [
+        {
+          "fullName": "Monkey D Luffy",
+          "passID": "99996666333"
+        }
+      ],
+      "stars": 5,
+      "priceRange": "200",
+      "id": 3
+    },
+    {
+      "choice": "both",
+      "orderID": "1",
+      "status": "pending",
+      "departureDate": "2022-06-05T21:00:00.000Z",
+      "returnDate": "2022-06-13T21:00:00.000Z",
+      "origin": "Israel Mark",
+      "destination": "blabal",
+      "passDetails": [
+        {
+          "fullName": "Sapir Shahar",
+          "passID": "20568064"
+        }
+      ],
+      "stars": 4,
+      "priceRange": "100",
+      "id": 4
     }
   ],
-  "hotels": [],
-  "flights": [],
+  "hotels": [
+    {
+      "orderID": "1",
+      "name": "Hogwarts",
+      "stars": 4,
+      "guests": 1,
+      "breakfast": "true",
+      "bedType": "King Bed",
+      "image": "",
+      "images": {},
+      "moreInfo": "",
+      "price": 50,
+      "id": 1
+    }
+  ],
+  "flights": [
+    {
+      "orderID": "1",
+      "dest": "Rome",
+      "passangers": 1,
+      "fullName": "Sapir Shahar",
+      "passID": "20568064",
+      "passArray": [],
+      "org": "Israel",
+      "returnDate": "2022-05-30T21:00:00.000Z",
+      "departureDate": "2022-05-29T21:00:00.000Z",
+      "returnHour": "19:50",
+      "departureHour": "06:20",
+      "stops": "0",
+      "stopDuration": "",
+      "bagage": "false",
+      "moreInfo": "info",
+      "price": 50,
+      "id": 1
+    }
+  ],
   "login": [
     {
       "username": "livetotell",
