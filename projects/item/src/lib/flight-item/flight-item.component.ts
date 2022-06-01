@@ -14,6 +14,7 @@ export class FlightItemComponent implements OnInit {
 
   @Input() flight: Flights | null = null;
 
+  step = 0;
 
   constructor() { }
 
@@ -21,5 +22,19 @@ export class FlightItemComponent implements OnInit {
     // this.stops='one stop';
     
   }
+
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
+  }
+
+  selectFlight(){}
 
 }
