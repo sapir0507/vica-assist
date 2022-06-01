@@ -8,8 +8,9 @@
               <div class="oList">
                    <ordersList 
                       [requestID]="nextID"
-                      (chosen)="onChosen($event)"
+                      [status]="'agent'"
                       (orderID)="onOrder($event)"
+                      (item)="onChosen2($event)"
                       (maxIDs)="onGetMaxIDs($event)"
                    ></ordersList>
               </div>
@@ -19,7 +20,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" *ngIf="orderID">
       <div class="myGrid mt-4">
         <!-- <div class="col"> -->
           <div class="userRequest container mt-2">
@@ -38,7 +39,7 @@
             </ng-container>
             <ng-template #elseTemplate>
               <div *ngIf="step==='hotel'">
-                <my-hotels></my-hotels>
+                <my-hotels [orderID]="orderID"></my-hotels>
                 <div class="toTheLeft">
                   <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="onClick()">Back</button>
                 </div>

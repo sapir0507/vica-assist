@@ -43,13 +43,13 @@
                     </div>
                     <div class="more-info icon" *ngIf="hotel.moreInfo">{{hotel.moreInfo}}</div>
                 </div>
-                <div class="images" style="background-color: black;">
-                    <ngb-carousel *ngIf="images.length > 0" [wrap]="true">
+                <div class="images-wrapper">
+                    <ngb-carousel *ngIf="images.length > 0" [wrap]="true" [pauseOnHover]="true">
     
                         <ng-container *ngFor="let image of images; let i = index;">
                             <ng-template ngbSlide>
-                                <div class="picsum-img-wrapper">
-                                    <img [src]='images[i]' width="50%" height="600vh" style="margin-left: 25%;" alt="random slide">
+                                <div class="">
+                                    <img [src]='images[i]' class="images" alt="random slide">
                                 </div>
                                 <div class="carousel-caption">
                                     <h3></h3>

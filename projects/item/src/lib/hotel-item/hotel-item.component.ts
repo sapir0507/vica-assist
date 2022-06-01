@@ -12,8 +12,13 @@ export class HotelItemComponent implements OnInit {
 
   @Input() hotel: Hotel | null = null;
   currentRate = 5;
-  private path: string = 'assets/images/img';
-  images = ['assets/images/img/bed.png', 'assets/images/img/bedroom.png', 'assets/images/img/bg_bggenerator_com.png'];
+  private path: string = 'assets/images/img/';
+  private my_images = [
+    'bed.png', 
+    'bedroom.png', 
+    'bg_bggenerator_com.png'
+  ];
+  images = this.getImages();
   
   ngOnInit(): void {
   }
@@ -22,6 +27,10 @@ export class HotelItemComponent implements OnInit {
     let stars = 5;
     this.hotel && this.hotel.stars ? stars = this.hotel.stars : stars = 5;
     return stars;
+  }
+
+  getImages(){
+    return this.my_images.map(image=> this.path + image)
   }
 
 }

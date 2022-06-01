@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LinkService } from 'src/app/services/links/link.service';
 import { ILinks } from 'src/app/services/links/links';
+import { SessionService } from 'src/app/services/session/session.service';
 // import { LinksService } from 'src/app/services/links/links.service';
 
 
@@ -24,6 +25,7 @@ export class LinksComponent implements OnInit {
  
   constructor(
     private auth: AuthService,
+    private sessionService: SessionService,
     private linkService: LinkService
     ) { 
   }
@@ -38,4 +40,5 @@ export class LinksComponent implements OnInit {
     this.linkService.updateSharedLinks_WhenNotLoggedIn()
   }
 
+  
 }

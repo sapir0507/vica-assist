@@ -22,7 +22,7 @@
                                    <span><b>Hotel or Flight:</b></span> {{item.choice | Capitalize}} 
                                 </div>
                             </div>
-                            <div class="row" *ngIf="item.status === 'finished'">
+                            <div class="row" *ngIf="toggleButton(item)">
                                 <div class="col-md-1" *ngIf="item.orderID">
                                     <button 
                                         mat-raised-button 
@@ -30,7 +30,19 @@
                                         color="primary"
                                         (click)="openOrder(item)"
                                     >
-                                        <span class="fa fab fa-openid"></span> order
+                                        <span class="fa fab fa-openid"></span> Open
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="isAgent() && item.status === 'finished'">
+                                <div class="col-md-1" *ngIf="item.orderID">
+                                    <button 
+                                        mat-raised-button 
+                                        class="mr-2 mt-1" 
+                                        color="primary"
+                                        disabled
+                                    >
+                                        <span class="fa fab fa-openid"></span>
                                     </button>
                                 </div>
                             </div>
@@ -42,3 +54,14 @@
         </div>
     </div>
 </div>
+
+<!-- <mat-tab-group backgroundColor="primary" color="accent" dynamicHeight>
+    <mat-tab label="finished order list">
+         <finished-order-list
+            (item)="openOrder($event)"
+         ></finished-order-list>
+    </mat-tab>
+    <mat-tab label="pending order list">
+        <pending-order-list></pending-order-list>
+    </mat-tab>
+</mat-tab-group> -->

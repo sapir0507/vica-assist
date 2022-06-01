@@ -46,6 +46,7 @@ export class MyHotelsComponent implements OnDestroy {
     private _snackBar: MatSnackBar
     ) { 
     console.log('library')
+    console.log('orderID', this.orderID)
   }
 
   setStep(index: number) {
@@ -85,7 +86,7 @@ export class MyHotelsComponent implements OnDestroy {
   }
 
   addHotel(){
-    console.log('addHotel -> component')
+    console.log('addHotel -> component', this.orderID)
     if(this.newHotelForm.valid && this.orderID){
     this.NewHotel = {
       orderID: this.orderID,

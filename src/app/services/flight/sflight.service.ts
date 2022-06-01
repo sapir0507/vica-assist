@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
@@ -31,6 +31,16 @@ export class SflightService {
     );
   }
 
+  
+  private _getFlight(orderID: number){
+    let params: HttpParams = new HttpParams();
+    params = params.append("orderID", orderID)
+    return this.http.get<Flights[]>(this.FlightsServiceUrl, {params})
+    .pipe(
+      catchError(err => this.handleError(err, 'getFlight', ""))
+    );
+  }
+
   private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -45,23 +55,18 @@ export class SflightService {
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
 
-  addFlight(newFlight: FlightsRequest): void {
-
-     
-      this.postFlight(newFlight).subscribe(data => console.log(data))
-     
-     
+  addFlight(newFlight: FlightsRequest): void {  
+      this.postFlight(newFlight).subscribe(data => console.log(data))  
   }
-
 
   getFlights(): Observable<Flights[]>{
     return this._getFlights()
   }
 
   getFlight(FlightID: number){
-    const result = this.FLIGHTS?.filter(flight => flight.id === FlightID)
-    console.log("flight with id:", FlightID, "is:", result)
-    return result; 
+    // const result = this.FLIGHTS?.filter(flight => flight.id === FlightID)
+    // return result; 
+    return this._getFlight(FlightID)
   }
 
 }

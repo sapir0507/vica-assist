@@ -1,4 +1,4 @@
-
+<!-- 
  <div class="flight-item" *ngIf="flight!==undefined">
      <div class="container-md container-lg container-sm container-xl container-xxl">
         <mat-card>
@@ -61,4 +61,109 @@
             </mat-card-content>
         </mat-card>
      </div>
-    </div>
+    </div> -->
+
+   
+            <mat-accordion *ngIf="flight">
+                <mat-expansion-panel hideToggle multi>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <mat-icon color="primary">flight_takeoff</mat-icon>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <span class="font-title">
+                                {{ flight.org  }} 
+                                <span class="fa fa-arrow-right"> </span> 
+                                {{  flight.dest }}
+                            </span>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <span class="fa fa-plane-departure"> 
+                        <span class="text-capitalize font-subtitle">
+                             Takeoff:
+                        </span>
+                    </span>
+                
+                    <div class="indent font">                         
+                        {{flight.departureDate | date}}, {{flight.departureHour}}
+                    </div>        
+                       
+                    <span class="fa fa-plane-arrival"> 
+                        <span class="text-capitalize font-subtitle">
+                            landing:
+                        </span>
+                    </span>
+                
+                    <div class="indent font">
+                        {{flight.returnDate | date}}, {{flight.returnHour}}
+                    </div>
+
+                    <span class="fa fa-stopwatch"> 
+                        <span class="text-capitalize font-subtitle">
+                            stops: {{flight.stops}}
+                        </span>
+                    </span>
+                
+                    <div class="indent font" *ngIf="flight.stopDuration">
+                        Duration: {{flight.stopDuration}}
+                    </div>
+
+                </mat-expansion-panel>
+
+                <mat-expansion-panel hideToggle multi>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <mat-icon color="primary">person</mat-icon>
+                        </mat-panel-title>
+                        <mat-panel-description class="font-title">
+                            Passangers
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                      <span class="font-title">
+                        <div class="font-subtitle">Passangers:</div>
+                        <div class="font fa fa-passport">
+                            {{flight.fullName}}, {{flight.passID}}
+                        </div>
+                        <mat-list *ngIf="flight.passangers && flight.passangers > 1">
+                            <mat-list-item *ngFor="let item of flight.passArray">
+                                <div *ngIf="item" class="font fa fa-passport">
+                                    {{item.fullName}}, {{item.passID}}
+                                </div>
+                            </mat-list-item>
+                        </mat-list>
+                    </span>
+                </mat-expansion-panel>
+
+                <mat-expansion-panel hideToggle multi>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <mat-icon color="primary">details</mat-icon>
+                        </mat-panel-title>
+                        <mat-panel-description class="font-title">
+                            Details
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                      <span class="font-title">
+                        <div class="font-subtitle">Bagage:</div>
+                        <div class="font fa fa-suitcase">
+                            {{flight.bagage? "bagage included": "bagage not included"}}
+                        </div>
+                        
+                        <div class="font-subtitle fa fa-info">More information:</div>
+                        <div class="font info">
+                            {{flight.moreInfo}}
+                        </div>
+
+                        <div class="font-subtitle fa fa-money-bill">Price: </div>
+                        <div class="font">
+                            {{flight.price}}
+                        </div>
+                    </span>
+                </mat-expansion-panel>
+            </mat-accordion>
+       
+
+            

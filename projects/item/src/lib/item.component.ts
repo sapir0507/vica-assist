@@ -18,12 +18,11 @@ export class ItemComponent implements OnInit {
   @Input() hotel?: Hotel;
 
   constructor() { 
-    console.log("library -> item")
+   
   }
 
   ngOnInit(): void {
-    console.log("lib --> item")
-    console.log("item type:", this.item_type)
+   
   }
 
 }

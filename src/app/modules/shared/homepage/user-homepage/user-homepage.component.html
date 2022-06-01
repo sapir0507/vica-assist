@@ -21,7 +21,7 @@
          
               <ordersList 
                 [requestID]="pendingItem.id"
-                [status]="pendingItem.status"
+                [status]="'customer'"
                 (item)="selectedItem($event)"
               >
               </ordersList>
@@ -40,7 +40,7 @@
          
           <ordersList 
               [requestID]="Finisheditem.id"
-              [status]="Finisheditem.status"
+              [status]="'customer'"
               (item)="selectedItem($event)"
           >
           </ordersList>

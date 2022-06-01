@@ -1,0 +1,34 @@
+<ng-container *ngIf="currentItem">
+    <div class="order mat-card">
+        <div mat-card-title>Order {{currentItem.id}}</div>
+        <div mat-card-subtitle>Order ID: {{currentItem.orderID}}</div>
+        <div mat-card-content>
+            <div class="container-md">
+                <div class="row">
+                    <div class="col-md-10 text-capitalize">
+                        <span><b>order made by:</b></span> {{currentItem.passDetails[0].fullName}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 text-capitalize">
+                        <span><b>Hotel or Flight:</b></span> {{currentItem.choice | Capitalize}} 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1" *ngIf="currentItem.orderID">
+                        <button 
+                            mat-raised-button 
+                            (click)="openOrder(currentItem)"
+                            class="mr-2 mt-1" 
+                            color="primary"
+                        >
+                            <span class="fa fab fa-openid"></span> order
+                        </button>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</ng-container>
