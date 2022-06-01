@@ -65,7 +65,7 @@
 
    
             <mat-accordion *ngIf="flight">
-                <mat-expansion-panel hideToggle multi>
+                <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle multi>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             <mat-icon color="primary">flight_takeoff</mat-icon>
@@ -108,10 +108,13 @@
                     <div class="indent font" *ngIf="flight.stopDuration">
                         Duration: {{flight.stopDuration}}
                     </div>
-
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                        <button mat-button color="primary" (click)="nextStep()">Next</button>
+                      </mat-action-row>
                 </mat-expansion-panel>
 
-                <mat-expansion-panel hideToggle multi>
+                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle multi>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             <mat-icon color="primary">person</mat-icon>
@@ -134,12 +137,16 @@
                             </mat-list-item>
                         </mat-list>
                     </span>
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                        <button mat-button color="primary" (click)="nextStep()">Next</button>
+                    </mat-action-row>
                 </mat-expansion-panel>
 
-                <mat-expansion-panel hideToggle multi>
+                <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle multi>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <mat-icon color="primary">details</mat-icon>
+                            <mat-icon color="primary">info</mat-icon>
                         </mat-panel-title>
                         <mat-panel-description class="font-title">
                             Details
@@ -147,21 +154,31 @@
                     </mat-expansion-panel-header>
 
                       <span class="font-title">
-                        <div class="font-subtitle">Bagage:</div>
-                        <div class="font fa fa-suitcase">
-                            {{flight.bagage? "bagage included": "bagage not included"}}
+                        <div class="font-subtitle m-2">
+                            <span class="fa fa-suitcase"></span>
+                            Bagage: 
+                            <span class="font"> 
+                                {{flight.bagage? "bagage included": "bagage not included"}}
+                            </span>
                         </div>
                         
-                        <div class="font-subtitle fa fa-info">More information:</div>
-                        <div class="font info">
+                        
+                        <div class="font-subtitle m-2"> 
+                            <span class="fa fa-info-circle"></span>
+                            More information:
+                        </div>
+                        <div class="font info indent border p-2 text-capitalize">
                             {{flight.moreInfo}}
                         </div>
 
-                        <div class="font-subtitle fa fa-money-bill">Price: </div>
-                        <div class="font">
-                            {{flight.price}}
+                        <div class="font-subtitle m-2">
+                            <span class="fa fa-credit-card"></span> Price: {{flight.price}}
                         </div>
+                        
                     </span>
+                    <mat-action-row>
+                        <button mat-button color="primary" (click)="selectFlight()">Select Flight</button>
+                    </mat-action-row>
                 </mat-expansion-panel>
             </mat-accordion>
        
