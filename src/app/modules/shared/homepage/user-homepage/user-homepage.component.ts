@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
 import { Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { FinalOrderComponent } from 'src/app/modules/all_modules/final-order/final-order.component';
+import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
@@ -18,6 +19,7 @@ export class UserHomepageComponent implements OnInit {
   private tracker: Subject<boolean> = new Subject();
   pendingOrders$:  Observable<Order[]> =  this.OrderQuery.getPenddingOrders$
   finishedOrders$: Observable<Order[]> = this.OrderQuery.getFinishedOrders$
+  
    
   myRoute: object = {
     path: 'final-order/:id', component: FinalOrderComponent 
@@ -25,6 +27,7 @@ export class UserHomepageComponent implements OnInit {
 
   constructor(
     private router: Router,
+    // private finalOrderStore: finalOrderStore,
     private OrderQuery: OrderQuery
   ) {
 

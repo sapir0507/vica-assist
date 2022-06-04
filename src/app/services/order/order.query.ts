@@ -12,8 +12,6 @@ export class OrderQuery extends QueryEntity<OrderState> {
   getisLoading$ = this.select('isLoading')
   getPenddingOrders$ = this.service.getPendingOrders()
   getFinishedOrders$ = this.service.getFinishedOrders()
-  // getPendingOrders$= this.select('order').pipe( filter(order=>order?.status==='pending') )
-  // getFinishedOrders$= this.select('order').pipe( filter(order=>order?.status==='finished') )
 
  
   constructor(

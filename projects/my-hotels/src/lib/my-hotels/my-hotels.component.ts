@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotelsService } from './hotels.service';
 import { HotelRequest } from 'src/app/interfaces/hotel.interface'
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 
 
@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class MyHotelsComponent implements OnDestroy {
   @Input() orderID: string | null = null;
+  notifier: Subject<boolean> = new Subject();
   fileName?: string;
   myObservable?: Subscription;
   files: FormData = new FormData();
@@ -44,10 +45,7 @@ export class MyHotelsComponent implements OnDestroy {
   constructor(
     private Shotel: HotelsService,
     private _snackBar: MatSnackBar
-    ) { 
-    console.log('library')
-    console.log('orderID', this.orderID)
-  }
+    ) { }
 
   setStep(index: number) {
     this.step = index;
@@ -61,6 +59,7 @@ export class MyHotelsComponent implements OnDestroy {
     this.step--;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onUpload(event: any): void{
 
     const file:File = event.target.files[0];
@@ -86,7 +85,6 @@ export class MyHotelsComponent implements OnDestroy {
   }
 
   addHotel(){
-    console.log('addHotel -> component', this.orderID)
     if(this.newHotelForm.valid && this.orderID){
     this.NewHotel = {
       orderID: this.orderID,

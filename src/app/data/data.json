@@ -111,14 +111,36 @@
   ],
   "login": [
     {
+      "id": 1,
+      "active": 1,
       "username": "livetotell",
       "password": "1234",
+      "email": "sapir.s@info.cts.org.il",
       "role": "agent"
     },
     {
+      "id": 2,
+      "active": 1,
       "username": "sapir0507",
       "password": "1234",
+      "email": "sapir.s@info.cts.org.il",
       "role": "customer"
+    },
+    {
+      "active": 1,
+      "username": "Blabla hotel",
+      "password": "this is a hotel",
+      "email": "blabal@gmail.com",
+      "role": "customer",
+      "id": 3
+    },
+    {
+      "active": 1,
+      "username": "admin",
+      "password": "1234",
+      "email": "admin@gmail.com",
+      "role": "agent",
+      "id": 4
     }
   ]
 }

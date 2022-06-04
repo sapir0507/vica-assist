@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
+import { ItemModule } from 'projects/item/src/item';
 
 
 
@@ -32,6 +33,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
     ChooseFlightModule,
     ChooseHotelModule,
+    ItemModule, //should i really?
     FinalOrderRoutingModule,
     UserFinishedOrderModule
   ],

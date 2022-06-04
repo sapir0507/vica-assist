@@ -2,11 +2,12 @@
    <div *ngFor="let flight of _ALLFlights$ | async as list">
        <div class="choose-flights container-fluid">  
          <item 
-            class="container-fluid flight-item" 
+            class="container-fluid flight-item"
+            (chosenFlight)="onChosenFlight($event)"
             [item_type]="'flight'" 
             [flight]="flight">
         </item>
-         <button class="">Final Choice</button>
+         <!-- <button class="">Final Choice</button> -->
         </div>
      
    </div>
