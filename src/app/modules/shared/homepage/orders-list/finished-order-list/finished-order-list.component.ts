@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
+import { finalOrder } from 'src/interfaces/final-order.interface';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -20,7 +22,8 @@ export class FinishedOrderListComponent implements OnInit {
  
   constructor( 
     // private orderService: userRequestService,
-    private orderQuery: OrderQuery
+    private orderQuery: OrderQuery,
+    private finalOrderStore: finalOrderStore
     ) {
       this._orders$.pipe(
         takeUntil(this.reminder)
@@ -39,6 +42,10 @@ export class FinishedOrderListComponent implements OnInit {
   }
 
   selectedItem(item: Order){
+    this.finalOrderStore.update(state=>({
+      ...state,
+      order: item
+    }))
     this.item.emit(item)
   }
 

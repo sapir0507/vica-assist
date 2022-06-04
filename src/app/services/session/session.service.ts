@@ -37,6 +37,7 @@ export class SessionService {
     private http: HttpClient
     ) { 
        this.updateCurrentUser(this.currentUser)
+       if(gapi)
        gapi.load('auth2', ()=>{
          this.auth2 = gapi.auth2.init({
            client_id: environment.GAPI_CLIENT_ID

@@ -30,7 +30,7 @@ export class HotelsService {
     );
   }
   
-  private _hotelByOrderID(orderID: string){
+  private _hotelByOrderID(orderID: number){
     const url = this.HotelsServiceUrl ;
     let params: HttpParams = new HttpParams();
     params = params.append('orderID', orderID);
@@ -38,7 +38,7 @@ export class HotelsService {
   } 
  
 
-  private handleError(error: HttpErrorResponse, methodName? : string, obj? : any) {
+  private handleError(error: HttpErrorResponse, methodName? : string, obj? : unknown) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
@@ -60,7 +60,7 @@ export class HotelsService {
     return this._getHotel()
   }
 
-  getHotelsByOrderID(orderID: string): Observable<Hotel[]>{
+  getHotelsByOrderID(orderID: number): Observable<Hotel[]>{
     return this._hotelByOrderID(orderID)
   }
 

@@ -12,7 +12,9 @@
                             <mat-card-title>Hotel</mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-                            <app-choose-hotel></app-choose-hotel>
+                            <app-choose-hotel
+                                (chosenHotel)="onChosenHotel($event)"
+                            ></app-choose-hotel>
                         </mat-card-content>
                     </mat-card>
                 </div>
@@ -25,7 +27,10 @@
                                 Flight
                             </mat-card-title>
                         </mat-card-header>
-                        <app-choose-flight></app-choose-flight>
+                        <app-choose-flight
+                            (chosenFlight)="onChosenFlight($event)"
+                        >
+                        </app-choose-flight>
                     </mat-card>
                 </div>
             </mat-tab>

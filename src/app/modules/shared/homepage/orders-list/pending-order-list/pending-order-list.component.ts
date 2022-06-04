@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
@@ -18,7 +19,8 @@ export class PendingOrderListComponent implements OnInit {
   // _orders$: Observable<Order[]> = this.orderService.getOrders();
   _orders$: Observable<Order[]> = this.orderQuery.getPenddingOrders$;
   constructor(
-    private orderQuery: OrderQuery
+    private orderQuery: OrderQuery,
+    private finalOrderStore: finalOrderStore
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +35,10 @@ export class PendingOrderListComponent implements OnInit {
   }
 
   selectedItem(item: Order){
+    this.finalOrderStore.update(state=>({
+      ...state,
+      order: item
+    }))
     this.item.emit(item)
   }
 

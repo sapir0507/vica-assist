@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -12,12 +13,18 @@ export class OrderListItemComponent implements OnInit {
   @Input() currentItem: Order | null = null;
   @Output() item: EventEmitter<Order> = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private finalOrderStore: finalOrderStore
+  ) { }
 
   ngOnInit(): void {
   }
 
   openOrder(item: Order){
+    this.finalOrderStore.update(state=>({
+      ...state,
+      order: item
+    }))
     this.item.emit(item)
   }
 }

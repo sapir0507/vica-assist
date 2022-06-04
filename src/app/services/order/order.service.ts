@@ -49,16 +49,6 @@ export class OrderService {
     )
   }
 
-  add(order: Order) {
-    this.orderStore.add(order);
-  }
-
-  update(id: number, order: Partial<Order>) {
-    this.orderStore.update(id, order);
-  }
-
-  remove(id: number) {
-    this.orderStore.remove(id);
-  }
+           
 
 }

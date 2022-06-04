@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 @Component({
@@ -11,6 +11,7 @@ export class HotelItemComponent implements OnInit {
   constructor() { }
 
   @Input() hotel: Hotel | null = null;
+  @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter()
   currentRate = 5;
   private path: string = 'assets/images/img/';
   private my_images = [
@@ -31,6 +32,10 @@ export class HotelItemComponent implements OnInit {
 
   getImages(){
     return this.my_images.map(image=> this.path + image)
+  }
+
+  onChosen(chosenHotel: Hotel){
+    this.chosenHotel.emit(chosenHotel)
   }
 
 }

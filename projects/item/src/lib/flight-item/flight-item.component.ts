@@ -1,6 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
-import { MyFlightsComponent } from 'myFlights';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Flights } from 'src/app/interfaces/flight.interface';
 
 @Component({
@@ -13,13 +11,13 @@ export class FlightItemComponent implements OnInit {
 
 
   @Input() flight: Flights | null = null;
+  @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
 
   step = 0;
 
   constructor() { }
 
   ngOnInit(): void {
-    // this.stops='one stop';
     
   }
 
@@ -35,6 +33,8 @@ export class FlightItemComponent implements OnInit {
     this.step--;
   }
 
-  selectFlight(){}
+  selectFlight(chosenFlight: Flights){
+    this.chosenFlight.emit(chosenFlight);
+  }
 
 }

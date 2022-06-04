@@ -1,23 +1,26 @@
 export interface Hotel {
-    id: number,
-    name?: string,
-    stars?: number,
-    guests?: number,
-    breakfast?: boolean,
-    bedType?: string,
-    images?: string,
-    moreInfo?: string,
-    price?: number
-  }
-  
-  export interface HotelRequest {
-    name?: string,
-    stars?: number,
-    guests?: number,
-    breakfast?: boolean,
-    bedType?: string,
-    images?: string,
-    moreInfo?: string,
-    price?: number
-  }
-  
+  id: number,
+  orderID?: string,
+  name?: string,
+  stars?: number,
+  guests?: number,
+  breakfast?: boolean,
+  bedType?: string,
+  image?: string,
+  images?: FormData,
+  moreInfo?: string,
+  price?: number
+}
+
+export interface HotelRequest {
+  orderID?: string,
+  name?: string,
+  stars?: number,
+  guests?: number,
+  breakfast?: boolean,
+  bedType?: string,
+  image?: string,
+  images?: FormData,
+  moreInfo?: string,
+  price?: number
+}
