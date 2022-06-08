@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+// import { MyFlightsService } from 'projects/my-flights/src';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Flights } from 'src/app/interfaces/flight.interface';
 import { SflightService } from 'src/app/services/flight/sflight.service';
@@ -14,10 +15,11 @@ export class ChooseFlightComponent implements OnDestroy{
     @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
     notifier: Subject<boolean> = new Subject();
     @Input() orderID: number = 1; //to find all flights with coresponding orderIDs
-    _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlight(this.orderID);
+    _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlight(this.orderID + 1);
 
   constructor(
-    private SFlight: SflightService
+    private SFlight: SflightService,
+    // private flight: MyFlightsService
   ) {
     this._ALLFlights$
     .pipe(

@@ -16,7 +16,7 @@ export class ChooseHotelComponent implements OnInit, OnDestroy {
 
   notifier: Subject<boolean> = new Subject();
   @Input() orderID: number = 1; //to find all flights with coresponding orderIDs
-  _allHotels$: Observable<Hotel[]> = this.SHotel.getHotelsByOrderID(this.orderID);
+  _allHotels$: Observable<Hotel[]> = this.SHotel.getHotelsByOrderID(this.orderID + 1);
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();
 
   constructor(private SHotel: HotelsService) {

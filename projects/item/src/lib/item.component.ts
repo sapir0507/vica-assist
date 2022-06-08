@@ -22,7 +22,6 @@ export class ItemComponent implements OnInit {
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();
 
   constructor() { 
-   
   }
 
   ngOnInit(): void {

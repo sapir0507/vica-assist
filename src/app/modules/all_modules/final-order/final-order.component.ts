@@ -30,6 +30,7 @@ export class FinalOrderComponent implements OnInit {
     private flightService: MyFlightsService
   ) { 
     this.finalOrderQuery.allfinalOrder$.pipe().subscribe( data => {
+      console.log(data)
       if(data.flight&&data.hotel&&data.order){
         //service update finished order
         this.finalOrderService.addfinalOrder(data);
