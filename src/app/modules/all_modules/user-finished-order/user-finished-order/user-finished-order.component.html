@@ -1,1 +1,19 @@
-<p>user-finished-order works!</p>
+<div class="container">
+    <div class="text-center text-capitalize m-5">
+        <h1 class="text-primary">Order Submitted</h1>
+        <h2 class="text-secondary">one of our agents will soon order an hotel and flight per your choice</h2>
+        <button 
+        mat-raised-button 
+        color="primary" 
+        class="btnHover"
+        (click)="homepage.click()"
+        >
+            Back to Homepage &nbsp; 
+            <span class="fa fas fa-home fa-lg">
+            </span>
+        </button>
+    </div>
+
+    <a [routerLink]="['']" routerLinkActive="router-link-active" #homepage style="display: none;"></a>
+    
+</div>

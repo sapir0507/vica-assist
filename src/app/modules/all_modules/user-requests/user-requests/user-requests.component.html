@@ -46,11 +46,11 @@
                 <div [formGroupName]="i" class="container-fluid mx-2 mb-2">
                 
                     <mat-form-field color="primary" appearance="fill" class="mx-2">
-                      <input matInput placeholder="Full Name" formControlName="fullName">
+                      <input matInput type="text" placeholder="Full Name" formControlName="fullName">
                     </mat-form-field>
                 
                     <mat-form-field color="primary" appearance="fill" class="mp-2">
-                      <input matInput placeholder="ID" formControlName="passID">
+                      <input matInput type="number" placeholder="ID" formControlName="passID">
                     </mat-form-field>
                 
                     <button 
@@ -87,13 +87,13 @@
                       <mat-form-field appearance="fill" color="primary" class="mx-2">
                         <mat-label>Origin</mat-label>
                         <mat-hint>where are you traveling from</mat-hint>
-                        <input matInput placeholder="origin" formControlName="origin">
+                        <input matInput type="text" placeholder="origin" formControlName="origin">
                       </mat-form-field>
                   
                       <mat-form-field appearance="fill" color="primary">
                         <mat-label>Destination</mat-label>
                         <mat-hint>where are you traveling to</mat-hint>
-                        <input matInput placeholder="Destination" formControlName="destination">
+                        <input matInput type="text" placeholder="Destination" formControlName="destination">
                       </mat-form-field>
                   
                       <mat-form-field appearance="fill" [formGroup]="Dates">
@@ -114,7 +114,7 @@
                   
                       <mat-form-field class="p-md-1" appearance="fill" color="primary" [formGroup]="hotel">
                         <mat-label>Stars</mat-label>
-                        <mat-hint>Maximum number of Stars</mat-hint>
+                        <mat-hint>Number of Stars</mat-hint>
                         <mat-select formControlName="stars">
                           <div *ngFor="let item of [1,2,3,4,5]; let i = index">
                             <mat-option [value]="i+1">{{i+1}}</mat-option>
@@ -146,7 +146,7 @@
                   <td>
                     <mat-form-field appearance="fill" class="m-1">
                       <mat-label>Price</mat-label>
-                      <input matInput formControlName="price">
+                      <input matInput type="number" formControlName="price">
                       <span matSuffix>$&nbsp;</span>                        
                     </mat-form-field>
                   </td>

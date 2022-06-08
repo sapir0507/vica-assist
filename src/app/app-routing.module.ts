@@ -15,19 +15,19 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/add-new-hotel/add-new-hotel.module').then(m => m.AddNewHotelModule)
   },
-  {
-    path: 'choose-hotel',
-    loadChildren: () => import('./modules/all_modules/choose-hotel/choose-hotel.module').then(m => m.ChooseHotelModule)
-  },
+  // {
+  //   path: 'choose-hotel',
+  //   loadChildren: () => import('./modules/all_modules/choose-hotel/choose-hotel.module').then(m => m.ChooseHotelModule)
+  // },
   {
     path: 'add-flight',
      canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/add-new-flight/add-new-flight.module').then(m => m.AddNewFlightModule)
   },
-  {
-    path: 'choose-flight',
-    loadChildren: () => import('./modules/all_modules/choose-flight/choose-flight.module').then(m => m.ChooseFlightModule)
-  },
+  // {
+  //   path: 'choose-flight',
+  //   loadChildren: () => import('./modules/all_modules/choose-flight/choose-flight.module').then(m => m.ChooseFlightModule)
+  // },
   {
     path: 'login',
     loadChildren: () => import('./modules/shared/login/login.module').then(m => m.LoginModule)
@@ -38,7 +38,12 @@ const routes: Routes = [
   },
   {
     path: 'final-order',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./modules/all_modules/final-order/final-order.module').then(m => m.FinalOrderModule)
+  },
+  {
+    path: 'user-finished-order',
+    loadChildren: () => import('./modules/all_modules/user-finished-order/user-finished-order.module').then(m => m.UserFinishedOrderModule)
   },
   {
     path: '',

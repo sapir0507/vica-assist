@@ -17,8 +17,8 @@ export class UserHomepageComponent implements OnInit {
   @Input() status: string = 'Pending';
   
   private tracker: Subject<boolean> = new Subject();
-  pendingOrders$:  Observable<Order[]> =  this.OrderQuery.getPenddingOrders$
-  finishedOrders$: Observable<Order[]> = this.OrderQuery.getFinishedOrders$
+  pendingOrders$:  Observable<Order[] | undefined> =  this.OrderQuery.getPenddingOrders$
+  finishedOrders$: Observable<Order[] | undefined> = this.OrderQuery.getFinishedOrders$
   
    
   myRoute: object = {
@@ -27,7 +27,7 @@ export class UserHomepageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // private finalOrderStore: finalOrderStore,
+    private finalOrderStore: finalOrderStore,
     private OrderQuery: OrderQuery
   ) {
 
@@ -51,8 +51,11 @@ export class UserHomepageComponent implements OnInit {
     console.log(orderID)
   }
 
-  selectedItem(item: Order){
-    console.log(item)
+  selectedItem(item: Order){    
+    this.finalOrderStore.update(state=>({
+      ...state,
+      order: item
+    }))
     this.onChosen(item.id)
   }
 

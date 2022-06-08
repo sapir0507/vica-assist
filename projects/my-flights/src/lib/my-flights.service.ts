@@ -2,7 +2,8 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
-import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, take, throwError } from 'rxjs';
+import { ID } from '@datorama/akita';
 
 
 
@@ -42,6 +43,7 @@ export class MyFlightsService {
     );
   }
 
+
   private _getFlights(){
     return this.http.get<Flights>(this.FlightsServiceUrl + 'flights', { })
     .pipe(
@@ -79,6 +81,25 @@ export class MyFlightsService {
     });
 
     newPassDetails.push(newPass); 
+  }
+
+  deleteFlight(id: ID){
+    return this.http.delete<Flights>(this.FlightsServiceUrl + `flights/${id}`).pipe(
+      take(1),
+      catchError(err => this.handleError(err, 'deleteFlight', ""))
+    ).subscribe()
+  }
+
+  deleteFlightsByOrderID(orderID: string){
+   this.getFlightsByOrderID(orderID).pipe(
+     take(1),
+     map(flights=>{
+       flights.forEach(flight=>{
+         flight.orderID === orderID? this.deleteFlight(flight.id) : ""
+       })
+     })
+     ).subscribe()
+    
   }
    
 

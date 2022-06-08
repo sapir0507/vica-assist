@@ -18,19 +18,19 @@
                   <td> -->
                     <mat-form-field color="primary" appearance="fill" class="cas mx-2">
                       <mat-label>Full Name</mat-label>
-                      <input matInput placeholder="Full Name" formControlName="fullName">
+                      <input matInput type="text" placeholder="Full Name" formControlName="fullName">
                       <mat-hint>Like in your passport</mat-hint>
                     </mat-form-field>
                   <!-- </td>
                   <td> -->
                     <mat-form-field color="primary" appearance="fill">
                       <mat-label>Identification Card</mat-label>
-                      <input matInput placeholder="ID" formControlName="myID">
+                      <input matInput type="number" placeholder="ID" formControlName="myID">
                     </mat-form-field>
                   <!-- </td>
                   <td> -->
                     <div class="m-2">
-                      <button class="btn btn-primary mb-3" mat-raised-button mat-mini-fab color="primary" type="button" (click)="AddNewCustomer()">+</button>
+                      <button mat-raised-button class="btn btn-primary mb-3" mat-mini-fab color="primary" type="button" (click)="AddNewCustomer()">+</button>
                     </div>
                     
                   <!-- </td>
@@ -47,12 +47,12 @@
                       <tr>
                         <td> -->
                           <mat-form-field color="primary" appearance="fill" class="mx-2">
-                            <input matInput placeholder="Full Name" formControlName="fullName">
+                            <input matInput type="text" placeholder="Full Name" formControlName="fullName">
                           </mat-form-field>
                         <!-- </td>
                         <td> -->
                           <mat-form-field color="primary" appearance="fill">
-                            <input matInput placeholder="ID" formControlName="myID">
+                            <input matInput type="number" placeholder="ID" formControlName="myID">
                           </mat-form-field>
                         <!-- </td>
                         <td> -->
@@ -87,13 +87,13 @@
                   <td> -->
                     <mat-form-field color="primary" appearance="fill" class="mx-2">
                       <mat-label>Origin</mat-label>
-                      <input matInput formControlName="org">
+                      <input matInput type="text" formControlName="org">
                     </mat-form-field>
                   <!-- </td>
                   <td> -->
                     <mat-form-field color="primary" appearance="fill">
                       <mat-label>Destination</mat-label>
-                      <input matInput formControlName="dest">
+                      <input matInput type="text" formControlName="dest">
                     </mat-form-field>
                   <!-- </td>
                 </tr>
@@ -163,7 +163,7 @@
                     <ng-container *ngIf="hasStop()">
                       <mat-form-field color="primary" appearance="fill"> 
                         <mat-label>Stop Duration</mat-label>
-                        <input matInput placeholder="02:13" formControlName="stopDuration">
+                        <input matInput type="text" placeholder="02:13" formControlName="stopDuration">
                       </mat-form-field>
                     </ng-container>
                   <!-- </td>
@@ -177,13 +177,13 @@
                   <td> -->
                     <mat-form-field color="primary" appearance="fill" class="mx-2">
                       <mat-label>departureTime</mat-label>
-                      <input matInput  placeholder="02:13" formControlName="departureHour">
+                      <input matInput type="text"  placeholder="02:13" formControlName="departureHour">
                     </mat-form-field>
                   <!-- </td>
                   <td> -->
                     <mat-form-field color="primary" appearance="fill">
                       <mat-label>ReturnTime</mat-label>
-                      <input matInput  placeholder="02:13" formControlName="returnHour">
+                      <input matInput type="text"  placeholder="02:13" formControlName="returnHour">
                     </mat-form-field>
                   <!-- </td>
                 </tr>

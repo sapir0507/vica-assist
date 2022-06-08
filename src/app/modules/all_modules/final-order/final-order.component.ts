@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MyFlightsService } from 'projects/my-flights/src';
 import { Hotel as myHotel } from 'src/interfaces/hotel.interface';
 import { Hotel } from 'src/app/interfaces/hotel.interface';
-import { finalOrder } from 'src/interfaces/final-order.interface';
+import { finalOrder, finalOrderRequest } from 'src/interfaces/final-order.interface';
 import { finalOrderService } from 'src/app/services/finalOrder/finalOrder.service';
 import { finalOrderQuery } from 'src/app/services/finalOrder/finalOrder.query';
 import { Flights } from 'src/interfaces/flight.interface';
@@ -23,16 +23,20 @@ export class FinalOrderComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private finalOrderService: finalOrderService,
     private finalOrderStore: finalOrderStore,
+    private router: Router,
     private finalOrderQuery: finalOrderQuery,
+    private finalOrderService: finalOrderService,
     private flightService: MyFlightsService
   ) { 
-    finalOrderQuery.allfinalOrder$.pipe().subscribe( data => {
-      console.log("data.flight", data.flight)
-      console.log("data.hotel", data.hotel)
-      console.log("data.order", data.order)
-      
+    this.finalOrderQuery.allfinalOrder$.pipe().subscribe( data => {
+      if(data.flight&&data.hotel&&data.order){
+        //service update finished order
+        this.finalOrderService.addfinalOrder(data);
+        //routing to success page
+        this.router.navigate(['user-finished-order']);
+
+      }
     } )
   }
 
@@ -45,7 +49,7 @@ export class FinalOrderComponent implements OnInit {
 
   private getFlight(flightID: string){
     this.flightService.getFlightsByOrderID(flightID).subscribe(data=>{
-      // console.log(data)
+       console.log(data)
     })
   }
 

@@ -25,7 +25,8 @@
     }
     .toTheLeft{
        display: flex;
-       justify-content: end;
+       justify-content: space-around;
+       align-items: end;
        margin: 9px auto;
        width: 90%;
        button:hover{

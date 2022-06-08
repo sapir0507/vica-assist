@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, Subscription, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, Subscription, take, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
+import { ID } from '@datorama/akita';
 
 
 @Injectable({
@@ -15,7 +16,9 @@ export class HotelsService {
   private env = 'http://localhost:3000'; 
   private readonly HotelsServiceUrl = this.env +'/hotels';
   
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient
+    ) { }
 
 
   private postHotel(hotel: HotelRequest){
@@ -64,4 +67,23 @@ export class HotelsService {
     return this._hotelByOrderID(orderID)
   }
 
+  deleteHotel(orderID: ID){
+   this.getHotels().pipe(
+     take(1),
+     map(hotels=>{
+      hotels.forEach(hotel=>{
+        hotel.orderID === orderID? this.deleteHotelById(hotel.id) : ""
+      })
+     })
+   ).subscribe()
+  }
+
+  deleteHotelById(id: ID){
+    return this.http.delete<Hotel>(this.HotelsServiceUrl + `/${id}`)
+    .pipe(
+      take(1),
+      catchError(err => this.handleError(err, 'deleteHotel', ""))
+    ).subscribe()
+  }
+  
 }

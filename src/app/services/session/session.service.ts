@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
 import { environment } from 'src/environments/environment';
-import { catchError, concatWith, delay, Observable, switchMap, of, take, observable, map, concat, Subject, tap, skip, ReplaySubject } from 'rxjs';
+import { Observable, tap, ReplaySubject } from 'rxjs';
 
 const date = new Date().getDate() + 30
 
@@ -21,7 +21,7 @@ interface currentUser{
 export class SessionService {
 
   HotelServiceUrl: string = environment.api + 'login'
-  private auth2: gapi.auth2.GoogleAuth | null = null;
+  // private auth2: gapi.auth2.GoogleAuth | null = null;
   private subject: ReplaySubject<gapi.auth2.GoogleUser | null> = new ReplaySubject(1);
   currentUser: currentUser = {
     username: '',
@@ -37,12 +37,12 @@ export class SessionService {
     private http: HttpClient
     ) { 
        this.updateCurrentUser(this.currentUser)
-       if(gapi)
-       gapi.load('auth2', ()=>{
-         this.auth2 = gapi.auth2.init({
-           client_id: environment.GAPI_CLIENT_ID
-         })
-       })
+      //  if(gapi)
+      //  gapi.load('auth2', ()=>{
+      //    this.auth2 = gapi.auth2.init({
+      //      client_id: environment.GAPI_CLIENT_ID
+      //    })
+      //  })
   }
 
   private _login(username: string, password: string): Observable<currentUser[]>{
@@ -56,8 +56,9 @@ export class SessionService {
     if(thirdparty){
       switch (thirdparty) {
         case "GOOGLE":
-          this.GoogleSignin();
-          return this.GoogleObservable();
+          // this.GoogleSignin();
+          // return this.GoogleObservable();
+          return null
         case "TWITTER":
           return null
         case "FACEBOOK":
@@ -90,22 +91,22 @@ export class SessionService {
   }
   
   GoogleSignin(){
-    if(this.auth2)
-    this.auth2.signIn({
-      //
-      scope: 'https://www.googleapis.com/auth/gmail.readonly'
-    }).then( user => {
-      this.subject.next(user)
-    }).catch(() => {
-      this.subject.next(null)
-    })
+    // if(this.auth2)
+    // this.auth2.signIn({
+    //   //
+    //   scope: 'https://www.googleapis.com/auth/gmail.readonly'
+    // }).then( user => {
+    //   this.subject.next(user)
+    // }).catch(() => {
+    //   this.subject.next(null)
+    // })
   }
 
   GoogleSignOut(){
-    if(this.auth2)
-    this.auth2.signOut().then(() => {
-      this.subject.next(null)
-    })
+    // if(this.auth2)
+    // this.auth2.signOut().then(() => {
+    //   this.subject.next(null)
+    // })
   }
 
   GoogleObservable(): Observable<gapi.auth2.GoogleUser|null>{
@@ -115,9 +116,9 @@ export class SessionService {
   updateUsername(newName: string){
     try 
     {
-        this.sessionStore.update(state => ({
-            username: newName
-
+        this.sessionStore.update((state) => ({
+          ...state,
+          username: newName
         }));
     } catch(error) {
       this.sessionStore.setError(error);
@@ -128,8 +129,8 @@ export class SessionService {
     try 
     {
         this.sessionStore.update(state => ({
-            password: newPass
-
+          ...state,
+          password: newPass
         }));
     } catch(error) {
       this.sessionStore.setError(error);
@@ -140,8 +141,8 @@ export class SessionService {
     try 
     {
         this.sessionStore.update(state => ({
+          ...state,
            role: newRole
-
         }));
     } catch(error) {
       this.sessionStore.setError(error);
@@ -149,9 +150,9 @@ export class SessionService {
   }
 
   updateCurrentUser(currentUser: currentUser){
-    this.sessionStore.update(store=>{
+    this.sessionStore.update(state=>{
       return{
-        ...store,
+        ...state,
         username: currentUser.username,
         password: currentUser.password,
         role: currentUser.role,

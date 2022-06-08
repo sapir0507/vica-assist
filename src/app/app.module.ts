@@ -25,6 +25,7 @@ import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { MatSliderModule } from '@angular/material/slider';
 import { ShotelService } from './services/hotel/shotel.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserFinishedOrderModule } from './modules/all_modules/user-finished-order/user-finished-order.module';
 
 
 

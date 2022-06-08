@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { OrderService } from 'src/app/services/order/order.service';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -13,7 +14,9 @@ export class AgentHomepageComponent implements OnInit {
   orderID: string | null = null;
   nextID: number = 1;
   maxID: number = 1;
-  constructor() { }
+  constructor(
+    private orderService: OrderService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -35,16 +38,17 @@ export class AgentHomepageComponent implements OnInit {
   }
 
   onChosen2(item: Order){
-    console.log("homepage item from onChosen2:", item)
     this.chosenID = item.id;
-    this.orderID = item.orderID;
-    console.log("this.orderID from onChosen2: ", this.orderID)
-
+    //this.orderID = item.orderID; //search
+    this.orderID = item.id + ''; //gives all flights and hotels a common id that belongs to an order
   }
 
   onOrder(orderID: string){
-    this.orderID = orderID;
-    console.log("orderID from onOrder", this.orderID)
+    //this.orderID = orderID;  
+  }
+
+  updateState(){
+    if(this.orderID) this.orderService.updateStatusByOrderID(this.orderID, 'finished') //search
   }
 
 }
