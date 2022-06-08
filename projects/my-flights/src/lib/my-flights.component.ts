@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FlightsRequest } from 'src/app/interfaces/flight.interface';
+import { OrderQuery } from 'src/app/services/order/order.query';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
+import { Order } from 'src/app/interfaces/order.interface';
 
 @Component({
   selector: 'lib-myFlights',
@@ -15,11 +18,14 @@ import { FlightsRequest } from 'src/app/interfaces/flight.interface';
 export class MyFlightsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
-  private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*'
+  private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*[ ]+[a-zA-Z]*'
   private CountryValidator = '[a-zA-Z ]*'
 
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
   private _hasStop: boolean = false;
+  private order$: Observable< Order[] | undefined> = this.orderQuery.getorders$
+  private reminder: Subject<boolean> = new Subject()
+  private Myorder: Order | undefined;
   @Input() orderID: string | null = null; //id of order
   NewFlight?: FlightsRequest;
   showHint: boolean = false;
@@ -52,10 +58,56 @@ export class MyFlightsComponent implements OnInit {
   constructor(
     private SFlight: MyFlightsService,
     private fb: FormBuilder,
+    private orderQuery: OrderQuery,
     private _snackBar: MatSnackBar
-) {}
+) {
+}
 
   ngOnInit(): void {
+
+    this.order$
+    .pipe(takeUntil(this.reminder))
+    .subscribe( orders => {
+      orders?.forEach(order=>{
+        if(order.orderID == this.orderID){
+          this.Myorder = order;
+        }
+      })
+    })
+
+    this.newFlightForm.patchValue({
+      dest: this.Myorder?.destination,
+      org: this.Myorder?.origin,
+      departureDate: this.Myorder?.departureDate,
+      returnDate: this.Myorder?.returnDate,
+      fullName: this.Myorder?.passDetails[0].fullName,
+      myID: this.Myorder?.passDetails[0].passID
+    })
+
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+
+    this.order$
+    .pipe(take(1))
+    .subscribe( orders => {
+      orders?.forEach(order=>{
+        if(order.orderID == this.orderID){
+          this.Myorder = order;
+        }
+      })
+    })
+
+    this.newFlightForm.patchValue({
+      dest: this.Myorder?.destination,
+      org: this.Myorder?.origin,
+      departureDate: this.Myorder?.departureDate,
+      returnDate: this.Myorder?.returnDate,
+      fullName: this.Myorder?.passDetails[0].fullName,
+      myID: this.Myorder?.passDetails[0].passID
+    })
   }
 
 
@@ -141,5 +193,11 @@ export class MyFlightsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.reminder.next(true)
+    this.reminder.complete()
+  }
 
 }

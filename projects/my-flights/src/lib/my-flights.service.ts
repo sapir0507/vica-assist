@@ -71,7 +71,7 @@ export class MyFlightsService {
   }
 
   getFlightsByOrderID(orderID: string): Observable<Flights[]>{
-    return this._flightByOrderID(orderID)
+    return this._flightByOrderID(orderID )
   }
   
   createNewPassangerInput(fb: FormBuilder, newPassDetails: FormArray): void{

@@ -36,7 +36,7 @@
   "orders": [
     {
       "choice": "both",
-      "orderID": "0",
+      "orderID": "1",
       "status": "finished",
       "departureDate": "2022-06-04T21:00:00.000Z",
       "returnDate": "2022-06-14T21:00:00.000Z",
@@ -53,26 +53,8 @@
       "id": 1
     },
     {
-      "choice": "both",
-      "orderID": "1",
-      "status": "pending",
-      "departureDate": "2022-06-13T21:00:00.000Z",
-      "returnDate": "2022-06-20T21:00:00.000Z",
-      "origin": "Israel",
-      "destination": "Rome",
-      "passDetails": [
-        {
-          "fullName": "Luffy D Monkey",
-          "passID": 20568064
-        }
-      ],
-      "stars": 5,
-      "priceRange": 400,
-      "id": 2
-    },
-    {
       "choice": "hotel",
-      "orderID": "2",
+      "orderID": "3",
       "status": "pending",
       "departureDate": "2022-06-05T21:00:00.000Z",
       "returnDate": "2022-06-27T21:00:00.000Z",
@@ -90,7 +72,7 @@
     },
     {
       "choice": "both",
-      "orderID": "3",
+      "orderID": "4",
       "status": "pending",
       "departureDate": "2022-06-06T21:00:00.000Z",
       "returnDate": "2022-06-13T21:00:00.000Z",
@@ -108,7 +90,7 @@
     },
     {
       "choice": "both",
-      "orderID": "4",
+      "orderID": "5",
       "status": "pending",
       "departureDate": "2022-06-06T21:00:00.000Z",
       "returnDate": "2022-06-21T21:00:00.000Z",
@@ -125,41 +107,64 @@
       "id": 5
     }
   ],
-  "hotels": [
+  "hotels": [],
+  "flights": [],
+  "finalOrder": [
     {
-      "orderID": "1",
-      "name": "new eves hotel",
-      "stars": 3,
-      "guests": 1,
-      "breakfast": "false",
-      "bedType": "Twin Beds",
-      "image": "",
-      "images": {},
-      "moreInfo": "",
-      "price": 200,
-      "id": 1
+      "entities": {},
+      "ids": [],
+      "error": null,
+      "id": 1,
+      "order": {
+        "choice": "both",
+        "orderID": "2",
+        "status": "finished",
+        "departureDate": "2022-06-13T21:00:00.000Z",
+        "returnDate": "2022-06-20T21:00:00.000Z",
+        "origin": "Israel",
+        "destination": "Rome",
+        "passDetails": [
+          {
+            "fullName": "Luffy D Monkey",
+            "passID": 20568064
+          }
+        ],
+        "stars": 5,
+        "priceRange": 400,
+        "id": 2
+      },
+      "flight": {
+        "orderID": "2",
+        "dest": "Rome",
+        "passangers": 1,
+        "fullName": "Luffy D Monkey",
+        "passID": 20568064,
+        "passArray": [],
+        "org": "Israel",
+        "returnDate": "2022-06-20T21:00:00.000Z",
+        "departureDate": "2022-06-13T21:00:00.000Z",
+        "returnHour": "10:30",
+        "departureHour": "6:30",
+        "stops": "0",
+        "stopDuration": "",
+        "bagage": "true",
+        "moreInfo": "",
+        "price": 100,
+        "id": 2
+      },
+      "hotel": {
+        "orderID": "2",
+        "name": "Rome svan",
+        "stars": 5,
+        "guests": 1,
+        "breakfast": "true",
+        "bedType": "Twin Beds",
+        "image": "",
+        "images": {},
+        "moreInfo": "",
+        "price": 100,
+        "id": 1
+      }
     }
-  ],
-  "flights": [
-    {
-      "orderID": "1",
-      "dest": "Rome",
-      "passangers": 1,
-      "fullName": "Israel Mark",
-      "passID": 11177777,
-      "passArray": [],
-      "org": "Israel",
-      "returnDate": "2022-06-13T21:00:00.000Z",
-      "departureDate": "2022-06-05T21:00:00.000Z",
-      "returnHour": "10:30",
-      "departureHour": "06:20",
-      "stops": "0",
-      "stopDuration": "",
-      "bagage": "false",
-      "moreInfo": "",
-      "price": 50,
-      "id": 1
-    }
-  ],
-  "finalOrder": []
+  ]
 }
