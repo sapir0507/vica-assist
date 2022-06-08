@@ -2,24 +2,25 @@ import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
-import { SessionQuery } from 'src/app/services/session/session.query';
-import { SessionService } from 'src/app/services/session/session.service';
-import { userRequestService } from 'src/app/services/user-request/user-request.service';
+import { Subject, takeUntil, tap } from 'rxjs';
+import { OrderQuery } from 'src/app/services/order/order.query';
+import { OrderService } from 'src/app/services/order/order.service';
 import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
 
 @Component({
   selector: 'userRequests',
   templateUrl: './user-requests.component.html',
   styleUrls: ['./user-requests.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserRequestsComponent implements OnInit {
-  notifier?: Subscription;
+  notifier: Subject<boolean> = new Subject();
+
   @ViewChild(MatAccordion) accordion?: MatAccordion;
   step: number = 0;
   orderID: string | null = null;
   requestForm: FormGroup = this.fb.group({
+
     //do you want a hotel only or a flight too
     order:this.fb.control('both', [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     //details
@@ -66,15 +67,24 @@ export class UserRequestsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private orderService: userRequestService,
-    private SessionQuery: SessionQuery,
+    private orderService: OrderService,
+    private orderQuery: OrderQuery,
     private _snackBar: MatSnackBar
   ) {
-       this.addNewPass()
-       SessionQuery.selectName$.subscribe(data=>this.orderID = data)
+      this.addNewPass()
+      
+      this.orderQuery.getorders$
+      .pipe(
+        takeUntil(this.notifier),
+        tap(orders=>{
+          this.orderID = '' + orders?.length
+        })
+      )
+      .subscribe()
     }
 
   ngOnInit(): void {
+   
   }
 
   setStep(index: number){
@@ -104,7 +114,7 @@ export class UserRequestsComponent implements OnInit {
 
   onSubmit(){
     if(this.requestForm.valid) {
-      this.orderID = '1'
+      this.orderID = this.orderID? this.orderID : '1';
       const newOrder: OrderRequest = {
         choice: this.order,
         orderID: this.orderID,
@@ -118,7 +128,8 @@ export class UserRequestsComponent implements OnInit {
         priceRange: this.requestForm.get('price')?.value 
       }
     console.log(newOrder)
-    this.notifier = this.orderService.addOrder(newOrder)
+    // this.notifier = this.orderService.addOrder(newOrder)
+    this.orderService.addOrder(newOrder);
     this.openSnackBar("Order added!")
   }
   }
@@ -128,7 +139,8 @@ export class UserRequestsComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.notifier?.unsubscribe()
+    this.notifier.next(true);
+    this.notifier.complete()
   }
 
 }

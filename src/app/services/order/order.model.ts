@@ -4,14 +4,18 @@ import {
 
 export interface Order {
   id?: number;
-  order?: orderInt;
+  orders?: orderInt[];
+  pendingOrders?: orderInt[];
+  finishedOrders?: orderInt[];
   isLoading?: boolean;
 }
 
 export function createOrder(params: Partial<Order>) {
   return {
     id: params.id,
-    order: params.order,
+    orders: params.orders,
+    pendingOrders: params.pendingOrders,
+    finishedOrders: params.finishedOrders,
     isLoading: false
   } as Order;
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
@@ -11,17 +11,21 @@ import { Order } from 'src/interfaces/order.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PendingOrderListComponent implements OnInit {
-
+  private currentOrders: Order[] | null = null;
   reminder: Subject<boolean> = new Subject();
   step: number = 1;
   @Output() item: EventEmitter<Order> = new EventEmitter();
 
-  // _orders$: Observable<Order[]> = this.orderService.getOrders();
-  _orders$: Observable<Order[]> = this.orderQuery.getPenddingOrders$;
+  _orders$: Observable<Order[] | undefined> = this.orderQuery.getPenddingOrders$;
   constructor(
     private orderQuery: OrderQuery,
     private finalOrderStore: finalOrderStore
-  ) { }
+  ) { 
+    this._orders$.pipe(
+      takeUntil(this.reminder)
+      
+    ).subscribe()
+  }
 
   ngOnInit(): void {
   }
@@ -39,7 +43,14 @@ export class PendingOrderListComponent implements OnInit {
       ...state,
       order: item
     }))
-    this.item.emit(item)
+    this.item.emit(item);
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.reminder.next(true);
+    this.reminder.complete();
   }
 
 }

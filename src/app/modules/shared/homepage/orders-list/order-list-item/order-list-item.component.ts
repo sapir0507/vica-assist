@@ -21,10 +21,6 @@ export class OrderListItemComponent implements OnInit {
   }
 
   openOrder(item: Order){
-    this.finalOrderStore.update(state=>({
-      ...state,
-      order: item
-    }))
     this.item.emit(item)
   }
 }

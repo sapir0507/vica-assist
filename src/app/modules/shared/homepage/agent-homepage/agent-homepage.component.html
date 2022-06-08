@@ -25,7 +25,7 @@
         <!-- <div class="col"> -->
           <div class="userRequest container mt-2">
             <userRequest-preview 
-              [orderid]="chosenID"
+              [orderID]="chosenID"
             ></userRequest-preview>
           </div>
         <!-- </div> -->
@@ -34,6 +34,9 @@
             <ng-container *ngIf="step==='flight'; else elseTemplate">
               <lib-myFlights [orderID]="orderID"></lib-myFlights>
               <div class="toTheLeft">
+                <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="updateState()">
+                  SET ORDER AS FINISHED
+                </button>
                 <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="onClick()">Next</button>
               </div>
             </ng-container>
@@ -41,11 +44,17 @@
               <div *ngIf="step==='hotel'">
                 <my-hotels [orderID]="orderID"></my-hotels>
                 <div class="toTheLeft">
+                  <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="updateState()">
+                    SET ORDER AS FINISHED
+                  </button>
                   <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="onClick()">Back</button>
+                  
                 </div>
               </div>
             </ng-template>
-            
+            <div>
+             
+            </div>
           </div>
         <!-- </div> -->
       </div>

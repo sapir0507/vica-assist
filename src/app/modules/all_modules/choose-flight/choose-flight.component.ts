@@ -13,7 +13,7 @@ export class ChooseFlightComponent implements OnDestroy{
   
     @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
     notifier: Subject<boolean> = new Subject();
-    @Input() orderID: number = 1;
+    @Input() orderID: number = 1; //to find all flights with coresponding orderIDs
     _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlight(this.orderID);
 
   constructor(

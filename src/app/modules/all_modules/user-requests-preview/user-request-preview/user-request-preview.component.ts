@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { ItemService } from 'projects/item/src/item';
-import { filter, map, Observable, of, Subject, takeUntil } from 'rxjs';
-import { userRequestService } from 'src/app/services/user-request/user-request.service';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -12,13 +11,14 @@ import { Order } from 'src/interfaces/order.interface';
 })
 export class UserRequestPreviewComponent implements OnInit {
 
-  _allOrders$: Observable<Order[]> = this.orderService.getOrders();
-   myOrder?: Order;
+  _allOrders$: Observable<Order[] | undefined> = this.orderQuery.getorders$
+
+  myOrder?: Order;
    private reminder: Subject<boolean> = new Subject();
-   @Input() orderid: number = 1;
+   @Input() orderID: number = 1;
 
   constructor(
-    private orderService: userRequestService
+      private orderQuery: OrderQuery
   ) { 
       
     }

@@ -13,7 +13,7 @@ import { Subject, Subscription } from 'rxjs';
   styleUrls: ['./my-hotels.component.scss']
 })
 export class MyHotelsComponent implements OnDestroy {
-  @Input() orderID: string | null = null;
+  @Input() orderID: string | null = null; //id of order
   notifier: Subject<boolean> = new Subject();
   fileName?: string;
   myObservable?: Subscription;

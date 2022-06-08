@@ -20,7 +20,7 @@ export class MyFlightsComponent implements OnInit {
 
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
   private _hasStop: boolean = false;
-  @Input() orderID: string | null = null;
+  @Input() orderID: string | null = null; //id of order
   NewFlight?: FlightsRequest;
   showHint: boolean = false;
   addDivider: boolean = false;

@@ -9,13 +9,10 @@ import { switchMap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFinishedOrderComponent implements OnInit {
-  myParam: string = ''
   constructor(
-    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.paramMap.get('id'))
   }
 
 }

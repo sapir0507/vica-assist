@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
-import { Button } from 'bootstrap';
 import { Observable, Subject, takeUntil} from 'rxjs';
-import { userRequestService } from 'src/app/services/user-request/user-request.service';
+import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -22,15 +21,15 @@ export class OrdersListComponent implements OnInit {
 
 
   reminder: Subject<boolean> = new Subject();
-  _orders$: Observable<Order[]> = this.orderService.getOrders();
+  _orders$: Observable<Order[] | undefined> = this.orderQuery.getorders$;
 
   constructor(
-    private orderService: userRequestService
+    private orderQuery: OrderQuery
   ) { 
     this._orders$.pipe(
       takeUntil(this.reminder)
     ).subscribe(item=>{
-      this.maxIDs.emit(item.length);
+      this.maxIDs.emit(item?.length);
     })
   }
 

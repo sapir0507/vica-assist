@@ -7,7 +7,9 @@ import { createOrder, Order } from './order.model';
 
 export interface OrderState extends EntityState<Order, number>, ActiveState<number> {
   id?: number;
-  order?: orderInt;
+  orders?: orderInt[];
+  pendingOrders?: orderInt[];
+  finishedOrders?: orderInt[];
   isloading?: boolean;
 }
 

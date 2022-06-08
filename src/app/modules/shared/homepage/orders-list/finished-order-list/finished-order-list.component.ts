@@ -1,8 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
-import { finalOrder } from 'src/interfaces/final-order.interface';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -12,22 +11,22 @@ import { Order } from 'src/interfaces/order.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinishedOrderListComponent implements OnInit {
+  private currentOrders: Order[] | null = null;
+  @Output() item: EventEmitter<Order> = new EventEmitter();
+  _orders$: Observable<Order[] | undefined> = this.orderQuery.getFinishedOrders$
+
+   
   reminder: Subject<boolean> = new Subject();
   step: number = 1;
-  @Output() item: EventEmitter<Order> = new EventEmitter();
-
-
-  // _orders$: Observable<Order[]> = this.orderService.getOrders();
-  _orders$: Observable<Order[]> = this.orderQuery.getFinishedOrders$;
  
   constructor( 
-    // private orderService: userRequestService,
     private orderQuery: OrderQuery,
+    private changeDetectionRef: ChangeDetectorRef,
     private finalOrderStore: finalOrderStore
     ) {
       this._orders$.pipe(
         takeUntil(this.reminder)
-      ).subscribe(data=>console.log(data))
+      ).subscribe()
    }
 
   ngOnInit(): void {

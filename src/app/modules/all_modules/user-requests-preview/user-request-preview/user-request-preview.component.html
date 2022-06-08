@@ -1,7 +1,7 @@
 <div class="preview">
     <div *ngIf="_allOrders$ | async">
         <div *ngFor="let order of _allOrders$ | async as list ">
-            <mat-card class="container" *ngIf="order && order.id === orderid">
+            <mat-card class="container" *ngIf="order && order.id === orderID">
               <mat-card-header>
                   <mat-card-title>Order Details</mat-card-title>
                   <mat-card-subtitle>ID: {{order.id}}</mat-card-subtitle>
