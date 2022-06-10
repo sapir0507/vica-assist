@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { FinalOrderComponent } from 'src/app/modules/all_modules/final-order/final-order.component';
 import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
+import { OnWindowResizeService } from 'src/app/services/onWindowResize/on-window-resize.service';
 import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
@@ -17,6 +18,9 @@ export class UserHomepageComponent implements OnInit {
   @Input() status: string = 'Pending';
   
   private tracker: Subject<boolean> = new Subject();
+  private step: number = 0;
+  breakpoint: number | null = null;
+  ScreenType: string = 'laptop';
   pendingOrders$:  Observable<Order[] | undefined> =  this.OrderQuery.getPenddingOrders$
   finishedOrders$: Observable<Order[] | undefined> = this.OrderQuery.getFinishedOrders$
   
@@ -27,6 +31,7 @@ export class UserHomepageComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private windowResizeService: OnWindowResizeService,
     private finalOrderStore: finalOrderStore,
     private OrderQuery: OrderQuery
   ) {
@@ -41,6 +46,47 @@ export class UserHomepageComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.breakpoint = (window.innerWidth <= 600) ? 1: 2;
+    this.ScreenType = (window.innerWidth <= 600) ? 'phone': 'laptop';
+    this.ScreenType = this.windowResizeService.screenType;
+    this.breakpoint = this.windowResizeService.screenType == 'laptop'? 2:1;
+  }
+
+  getTitleClasses(){
+    return {
+      'title': true,
+      'size1': this.ScreenType === 'desktop'? true : false,
+      'size2': this.ScreenType === 'laptop'? true : false,
+      'size3':  this.ScreenType === 'tablet' || this.ScreenType === 'phone' ? true: false,
+      'title-letter-spacing-animation': true
+    }
+  }
+
+  handleSizeEvent(event: UIEvent){
+    const newType = this.windowResizeService.handleSizeEvent(event)
+   
+    switch (newType) {
+      case 'phone':
+        this.breakpoint = 1;
+        break;
+      case 'tablet':
+        this.breakpoint = 2;
+        break;
+      case 'laptop':
+        this.breakpoint = 2;
+        break;
+      case 'desktop':
+        this.breakpoint = 2;
+        break;
+      default:
+        this.breakpoint = 2;
+        break;
+    }
+    
+  }
+
+  handleFontSizeEvent(event: UIEvent){
+    this.ScreenType = this.windowResizeService.handleSizeEvent(event)
   }
 
   onChosen(id: number /* order id */){
@@ -59,10 +105,27 @@ export class UserHomepageComponent implements OnInit {
     this.onChosen(item.id)
   }
 
+  getChoice(){
+    return this.step;
+  }
+ 
+  newOrder(){
+    this.step = 1;
+  }
+
+  seeAllOrders(){
+    this.step = 2;
+  }
+
+  goBack(){
+    this.step = 0;
+  }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.tracker.next(true)
     this.tracker.complete()
   }
+
 }

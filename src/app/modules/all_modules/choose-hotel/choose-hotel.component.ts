@@ -15,19 +15,23 @@ import { Hotel } from 'src/app/interfaces/hotel.interface';
 export class ChooseHotelComponent implements OnInit, OnDestroy {
 
   notifier: Subject<boolean> = new Subject();
-  @Input() orderID: number = 1; //to find all flights with coresponding orderIDs
-  _allHotels$: Observable<Hotel[]> = this.SHotel.getHotelsByOrderID(this.orderID + 1);
+  @Input() orderID: string | null = null; //to find all flights with coresponding orderIDs
+  _allHotels$: Observable<Hotel[]> | null = null
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();
 
   constructor(private SHotel: HotelsService) {
+    
+   }
+
+  ngOnInit(): void {
+    const id: number = this.orderID? +this.orderID : 1;
+    this._allHotels$ = this.SHotel.getHotelsByOrderID(id);
     const allHotels = this._allHotels$
     .pipe(
       takeUntil(this.notifier)
     )
     .subscribe()
-   }
 
-  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {

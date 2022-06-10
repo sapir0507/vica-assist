@@ -1,56 +1,70 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-xl-12">
-      <h2 class="text-center mat-headline m-2">Homepage</h2>
+
+<div class="contrainer">
+  <div class="text-center">
+    <h1 [ngClass]="getTitleClasses()" (window:resize)="handleFontSizeEvent($event)">Homepage</h1>
+  </div>
+  <div class="choices m-5" *ngIf="getChoice() === 0">
+    <mat-grid-list [cols]="breakpoint" rowHeight="2:1" [gutterSize]="'20px'" (window:resize)="handleSizeEvent($event)">
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" (click)="newOrder()">          
+            Place A New Order
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-raised-button color="primary" (click)="seeAllOrders()">          
+          Monitor Previous Orders
+      </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <div class="choices" *ngIf="getChoice() === 1">
+    <div class="goBack m-4">
+      <button mat-button (click)="goBack()">
+        <span class="fa fa-arrow-alt-circle-left"></span>
+        &nbsp;Go Back 
+      </button>
+    </div>
+    <div class="container-fluid m-2">
+      <userRequests></userRequests>
     </div>
   </div>
-  <div class="row mt-3 justify-content-center">
-    <div class="col-md-3 bg-light m-2 center border">
-      <div class="container">
-        <h2 class="text-center m-2">My Orders</h2>
-
-        <div class="status mx-4" *ngIf="status">
-          <span class="mat-card bg-dark text-white">
-            Order Status: Pending <span class="fa fa-arrow-alt-circle-down"></span>
-          </span> 
-        </div>
-
-<!-- *ngFor="let item of stream | async as list" -->
-
-        <ng-container *ngFor="let pendingItem of pendingOrders$ | async as list">
-         
-              <ordersList 
-                [requestID]="pendingItem.id"
-                [status]="'customer'"
-                (item)="selectedItem($event)"
-              >
-              </ordersList>
-         
-        </ng-container>
-        </div>
-        <div class="container">
-
-          <div class="status mx-4" *ngIf="status">
-            <span class="mat-card bg-dark text-white">
-              Order Status: Finished <span class="fa fa-arrow-alt-circle-down"></span>
-            </span>
-          </div>
-
-        <ng-container *ngFor="let Finisheditem of finishedOrders$ | async as list">
-         
-          <ordersList 
-              [requestID]="Finisheditem.id"
+  <div class="choices" *ngIf="getChoice() === 2">
+    <div class="goBack m-4">
+      <button mat-button (click)="goBack()">
+        <span class="fa fa-arrow-alt-circle-left"></span>
+        &nbsp;Go Back 
+      </button>
+      
+      <mat-tab-group animationDuration="0ms" [backgroundColor]="'primary'">
+        <mat-tab label="Pending Orders">
+          <ng-container *ngFor="let pendingItem of pendingOrders$ | async as list">
+            <ng-container *ngIf="!pendingItem">
+              <h2>No Pending Orders</h2>
+            </ng-container>
+            <ordersList 
+              class="container"
+              [requestID]="pendingItem.id"
               [status]="'customer'"
               (item)="selectedItem($event)"
-          >
-          </ordersList>
-     
-        </ng-container>
-
-      </div>
-    </div>
-    <div class="container col-md-5 bg-light m-2 justify-content-center border">
-      <userRequests></userRequests>
+            >
+            </ordersList>
+          </ng-container>
+        </mat-tab>
+        <mat-tab label="Finished Orders">
+          <ng-container *ngFor="let Finisheditem of finishedOrders$ | async as list">
+            <ng-container *ngIf="!Finisheditem">
+              <h2>No Finished Orders</h2>
+            </ng-container>
+            <ordersList 
+                class="container"
+                [requestID]="Finisheditem.id"
+                [status]="'customer'"
+                (item)="selectedItem($event)"
+            >
+            </ordersList>
+          </ng-container>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </div>

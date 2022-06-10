@@ -81,7 +81,11 @@ export class OrderService {
 
     
     addOrder(newOrder: OrderRequest): Subscription {
-      return this.postOrder(newOrder).pipe(take(1)).subscribe()
+      this.pending = []
+      this.finished = []
+      var a =  this.postOrder(newOrder).pipe(take(1)).subscribe()
+      this.getAll().subscribe()
+      return a
     }
 
     //updates the status of a spacific order inside the mock json server 
