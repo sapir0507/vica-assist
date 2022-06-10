@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MyFlightsService } from 'projects/my-flights/src';
-import { Hotel as myHotel } from 'src/interfaces/hotel.interface';
 import { Hotel } from 'src/app/interfaces/hotel.interface';
-import { finalOrder, finalOrderRequest } from 'src/interfaces/final-order.interface';
+import { finalOrder } from 'src/interfaces/final-order.interface';
 import { finalOrderService } from 'src/app/services/finalOrder/finalOrder.service';
 import { finalOrderQuery } from 'src/app/services/finalOrder/finalOrder.query';
 import { Flights } from 'src/interfaces/flight.interface';
-import { state } from '@angular/animations';
-import { Order } from 'src/interfaces/order.interface';
 import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 
 @Component({
@@ -29,9 +26,8 @@ export class FinalOrderComponent implements OnInit {
     private finalOrderService: finalOrderService,
     private flightService: MyFlightsService
   ) { 
-    this.finalOrderQuery.allfinalOrder$.pipe().subscribe( data => {
-      console.log(data)
-      if(data.flight&&data.hotel&&data.order){
+    this.finalOrderQuery.allfinalOrder$.pipe().subscribe( (data) => {
+      if(this.isFinished(data)){
         //service update finished order
         this.finalOrderService.addfinalOrder(data);
         //routing to success page
@@ -68,6 +64,28 @@ export class FinalOrderComponent implements OnInit {
       ...state,
       hotel: ChosenHotel
     }))
+  }
+
+  isFinished(Mydata: object){
+
+    const data = Mydata as finalOrder
+    console.log(data)
+
+    switch (data.order?.choice) {
+      case 'both':
+        return data.flight&&data.hotel? true: false;
+        break;
+      case 'flight':
+        return data.flight? true: false;
+        break
+      case 'hotel':
+        return data.hotel? true: false;
+        break
+      default:
+        return false;
+        break;
+    }
+
   }
 
 }

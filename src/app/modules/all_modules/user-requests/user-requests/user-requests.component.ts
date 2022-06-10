@@ -77,7 +77,7 @@ export class UserRequestsComponent implements OnInit {
       .pipe(
         takeUntil(this.notifier),
         tap(orders=>{
-          if(orders) this.orderID = '' + (orders.length + 1)
+          if(orders) this.orderID = '' + (orders.length + 1) //*
         })
       )
       .subscribe()

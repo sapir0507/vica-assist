@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { switchMap } from 'rxjs';
+
 
 @Component({
   selector: 'finished-order',

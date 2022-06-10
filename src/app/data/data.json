@@ -37,74 +37,20 @@
     {
       "choice": "both",
       "orderID": "1",
-      "status": "finished",
-      "departureDate": "2022-06-04T21:00:00.000Z",
-      "returnDate": "2022-06-14T21:00:00.000Z",
-      "origin": "Hotel Grande",
-      "destination": "Berg",
+      "status": "pending",
+      "departureDate": "2022-06-09T21:00:00.000Z",
+      "returnDate": "2022-06-16T21:00:00.000Z",
+      "origin": "Israel",
+      "destination": "Italy",
       "passDetails": [
         {
           "fullName": "Sapir Shahar",
           "passID": 20568064
         }
       ],
-      "stars": 4,
-      "priceRange": 200,
+      "stars": 5,
+      "priceRange": 500,
       "id": 1
-    },
-    {
-      "choice": "hotel",
-      "orderID": "3",
-      "status": "pending",
-      "departureDate": "2022-06-05T21:00:00.000Z",
-      "returnDate": "2022-06-27T21:00:00.000Z",
-      "origin": "SDF",
-      "destination": "zxfsdv",
-      "passDetails": [
-        {
-          "fullName": "ela shahar",
-          "passID": 2462659569
-        }
-      ],
-      "stars": 5,
-      "priceRange": 1000,
-      "id": 3
-    },
-    {
-      "choice": "both",
-      "orderID": "4",
-      "status": "pending",
-      "departureDate": "2022-06-06T21:00:00.000Z",
-      "returnDate": "2022-06-13T21:00:00.000Z",
-      "origin": "Israel",
-      "destination": "Japan",
-      "passDetails": [
-        {
-          "fullName": "Sapir Shahar",
-          "passID": 20568064
-        }
-      ],
-      "stars": 5,
-      "priceRange": 400,
-      "id": 4
-    },
-    {
-      "choice": "both",
-      "orderID": "5",
-      "status": "pending",
-      "departureDate": "2022-06-06T21:00:00.000Z",
-      "returnDate": "2022-06-21T21:00:00.000Z",
-      "origin": "Israel",
-      "destination": "japan",
-      "passDetails": [
-        {
-          "fullName": "Topaz Shahar",
-          "passID": 20568064
-        }
-      ],
-      "stars": 5,
-      "priceRange": 400,
-      "id": 5
     }
   ],
   "hotels": [],
@@ -116,13 +62,13 @@
       "error": null,
       "id": 1,
       "order": {
-        "choice": "both",
+        "choice": "hotel",
         "orderID": "2",
         "status": "finished",
-        "departureDate": "2022-06-13T21:00:00.000Z",
-        "returnDate": "2022-06-20T21:00:00.000Z",
-        "origin": "Israel",
-        "destination": "Rome",
+        "departureDate": "2022-06-16T21:00:00.000Z",
+        "returnDate": "2022-06-23T21:00:00.000Z",
+        "origin": "Italy",
+        "destination": "Israel",
         "passDetails": [
           {
             "fullName": "Luffy D Monkey",
@@ -130,39 +76,20 @@
           }
         ],
         "stars": 5,
-        "priceRange": 400,
-        "id": 2
-      },
-      "flight": {
-        "orderID": "2",
-        "dest": "Rome",
-        "passangers": 1,
-        "fullName": "Luffy D Monkey",
-        "passID": 20568064,
-        "passArray": [],
-        "org": "Israel",
-        "returnDate": "2022-06-20T21:00:00.000Z",
-        "departureDate": "2022-06-13T21:00:00.000Z",
-        "returnHour": "10:30",
-        "departureHour": "6:30",
-        "stops": "0",
-        "stopDuration": "",
-        "bagage": "true",
-        "moreInfo": "",
-        "price": 100,
+        "priceRange": 350,
         "id": 2
       },
       "hotel": {
         "orderID": "2",
-        "name": "Rome svan",
-        "stars": 5,
+        "name": "new eves hotel",
+        "stars": 4,
         "guests": 1,
         "breakfast": "true",
-        "bedType": "Twin Beds",
+        "bedType": "Queen Bed",
         "image": "",
         "images": {},
-        "moreInfo": "",
-        "price": 100,
+        "moreInfo": "info",
+        "price": 350,
         "id": 1
       }
     }

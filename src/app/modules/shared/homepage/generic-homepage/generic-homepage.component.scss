@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Alfa+Slab+One&family=Caveat:wght@500&family=Indie+Flower&family=Permanent+Marker&family=Raleway:wght@300&family=Righteous&family=Volkhov&display=swap');
+
 :host{
     font-size: 20px;
     .homepage-image{
@@ -15,14 +17,79 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            .title{
-                color: #673ab7;
-                text-shadow: 3px 1px 1px #4c2a87;
-                font-size: 3em;
-            }
             .content{
                 text-shadow: 1px 1px 1px #4c2a87;
             }
         }
+    }
+    .background2{
+        background-color: rgb(255, 227, 244);
+        width: 100%;
+        padding-bottom: 34px;
+    }
+    .title{
+        margin-top: 20px;
+        padding: 5px;
+        font-family: 'Permanent Marker', cursive;
+        letter-spacing: 2px;
+        color: #673ab7;
+        text-shadow: 3px 1px 1px #4c2a87;
+        font-size: 3em;
+    }
+    .sub-title{
+        margin-top: 20px;
+        padding: 5px;
+        font-family: 'Permanent Marker', cursive;
+        letter-spacing: 2px;
+        color: #673ab7;
+        text-shadow: 3px 1px 1px #4c2a87;
+        font-size: 2em;
+    }
+    .content{
+        text-shadow: 1px 1px 1px #4c2a87;
+        font-size: 20px;
+    }
+    .sliding-title{
+        position: relative;
+        animation-name: offer;
+        animation-duration: 2s;
+
+        @keyframes offer {
+            from {
+                top: 0px;
+                left: 50px;
+                letter-spacing: 2px;
+
+            }
+            to {
+                top: 0px;
+                left: 0px;
+                letter-spacing: 2px;
+
+            }
+          }
+    }
+    .title-letter-spacing-animation{
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        place-content: center;
+        animation-name: offer;
+        animation-duration: 2s;
+
+        @keyframes offer {
+            from {
+                top: 0px;
+                left: 0px;
+                letter-spacing: 10px;
+            }
+            to {
+                top: 0px;
+                left: 0px;
+            }
+          }
+    }
+    .generic-list{
+        font-size: 1em;
     }
 }

@@ -25,6 +25,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from 'projects/mat-input/src/public-api';
 import { MatLineModule } from '@angular/material/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 
 
 
@@ -54,6 +58,9 @@ import { MatLineModule } from '@angular/material/core';
     MatInputModule,
     MatButtonModule,
     MatLineModule,
+    MatToolbarModule,
+    MatListModule,
+    MatGridListModule,
 
     UserRequestsModule,
     UserRequestsPreviewModule,

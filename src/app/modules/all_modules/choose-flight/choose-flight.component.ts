@@ -14,13 +14,21 @@ export class ChooseFlightComponent implements OnDestroy{
   
     @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
     notifier: Subject<boolean> = new Subject();
-    @Input() orderID: number = 1; //to find all flights with coresponding orderIDs
-    _ALLFlights$: Observable<Flights[]> = this.SFlight.getFlight(this.orderID + 1);
+    @Input() orderID: string | null = null; //to find all flights with coresponding orderIDs
+    _ALLFlights$: Observable<Flights[]> | null= null;
 
   constructor(
     private SFlight: SflightService,
     // private flight: MyFlightsService
   ) {
+    
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    const id: number = this.orderID? +this.orderID : 1;
+    this._ALLFlights$ = this.SFlight.getFlight(id);
     this._ALLFlights$
     .pipe(
       takeUntil(this.notifier)
