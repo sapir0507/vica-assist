@@ -8,7 +8,11 @@ import { Order as OrderInt, OrderRequest } from 'src/interfaces/order.interface'
 import { OrderStore } from './order.store';
 
 
-
+/**
+ * Client for the backend's `orders` endpoint. Keeps the Akita `OrderStore`
+ * in sync, splitting orders into `pending` (not yet matched with a
+ * flight/hotel) and `finished` buckets as they're fetched.
+ */
 @Injectable({ providedIn: 'root' })
 export class OrderService {
 
@@ -50,20 +54,31 @@ export class OrderService {
       }
     }
 
+    /**
+     * Fetches all orders and splits them into the `pending` and `finished`
+     * buckets (by `status`) before pushing the result into the store.
+     *
+     * Builds fresh arrays rather than mutating `this.pending`/`this.finished`
+     * in place: Akita deep-freezes the state objects it's handed in dev
+     * mode, and those same array instances get stored as `pendingOrders` /
+     * `finishedOrders` - pushing onto an already-frozen array throws, which
+     * silently broke every `getAll()` call after the first.
+     */
     getAll(){
         return this.http.get<OrderInt[]>(this.url).pipe(
           setLoading(this.orderStore),
           take(1),
           tap(orders=>{
-            orders.forEach(order=>{
-              if(order.status==='finished') this.finished.push(order)
-              else this.pending.push(order)
-            })
+            const newFinished = orders.filter(order => order.status === 'finished');
+            const newPending = orders.filter(order => order.status !== 'finished');
+            this.finished = [...this.finished, ...newFinished];
+            this.pending = [...this.pending, ...newPending];
             this.updateOrderStore()
           })
         );
     }
 
+    /** Fetches a single order by id, or every order when `id` is omitted. */
     get(id?: ID) {
       console.log("order -> get orders", this.orderStore)
       let url: ID = id? this.url + `/${id}`: this.url;
@@ -80,6 +95,7 @@ export class OrderService {
     }
 
     
+    /** Creates a new order on the backend, then refreshes the local pending/finished buckets. */
     addOrder(newOrder: OrderRequest): Subscription {
       this.pending = []
       this.finished = []
@@ -88,7 +104,8 @@ export class OrderService {
       return a
     }
 
-    //updates the status of a spacific order inside the mock json server 
+    //updates the status of a spacific order inside the mock json server
+    /** Updates the `status` field of the order with the given id. */
     updateStatusByOrderID(id: ID, status: string){
       this.get(id).pipe(
         take(1),
@@ -106,6 +123,7 @@ export class OrderService {
 
   //need to find a better way
 
+    /** Deletes every order record matching the given business `orderID` (not the entity `id`). */
     deleteByOrderID(orderID: ID){
       this.get().pipe(
         take(1),

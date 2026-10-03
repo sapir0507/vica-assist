@@ -7,6 +7,11 @@ import { ID } from '@datorama/akita';
 
 
 
+/**
+ * Client for the backend's `flights` endpoint used by the "add new flight"
+ * (agent) flow and by the final-order flow to look up and clean up a
+ * customer's flight choices.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -45,7 +50,7 @@ export class MyFlightsService {
 
 
   private _getFlights(){
-    return this.http.get<Flights>(this.FlightsServiceUrl + 'flights', { })
+    return this.http.get<Flights[]>(this.FlightsServiceUrl + 'flights', { })
     .pipe(
       catchError(err => this.handleError(err, 'postFlight', ""))
     );
@@ -62,27 +67,32 @@ export class MyFlightsService {
   }
 
   
+  /** Creates a new flight listing on the backend. */
   addFlight(newFlight: FlightsRequest): void {
     this.postFlight(newFlight).subscribe(data => console.log(data))
   }
 
-  getFlights(): Observable<Flights>{
+  /** Fetches every flight listing. */
+  getFlights(): Observable<Flights[]>{
     return this._getFlights()
   }
 
+  /** Fetches the flight listings associated with a given order id. */
   getFlightsByOrderID(orderID: string): Observable<Flights[]>{
     return this._flightByOrderID(orderID )
   }
-  
+
+  /** Appends a new, empty passenger `FormGroup` (full name + id) to a passenger `FormArray`. */
   createNewPassangerInput(fb: FormBuilder, newPassDetails: FormArray): void{
     const newPass: FormGroup = fb.group({
       fullName: ['', Validators.required],
       myID: ['', Validators.required]
     });
 
-    newPassDetails.push(newPass); 
+    newPassDetails.push(newPass);
   }
 
+  /** Deletes a single flight listing by id. */
   deleteFlight(id: ID){
     return this.http.delete<Flights>(this.FlightsServiceUrl + `flights/${id}`).pipe(
       take(1),
@@ -90,6 +100,7 @@ export class MyFlightsService {
     ).subscribe()
   }
 
+  /** Deletes every flight listing associated with a given order id, once it's been finalized. */
   deleteFlightsByOrderID(orderID: string){
    this.getFlightsByOrderID(orderID).pipe(
      take(1),

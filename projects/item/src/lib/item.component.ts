@@ -18,7 +18,7 @@ export class ItemComponent implements OnInit {
   @Input() flight?: Flights;
   @Input() hotel?: Hotel;
 
-  @Output() chosenFlight: EventEmitter<Hotel> = new EventEmitter();
+  @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();
 
   constructor() { 

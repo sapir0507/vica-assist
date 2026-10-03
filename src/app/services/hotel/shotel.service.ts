@@ -1,8 +1,16 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Hotel, HotelRequest } from './ihotel';
 
+/**
+ * Client for the backend's `hotels` endpoint.
+ *
+ * This duplicates `HotelsService` (projects/my-hotels); the app currently
+ * books hotels through that library service instead, so this one is kept
+ * for backward compatibility with any code still depending on it.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +20,7 @@ export class ShotelService {
   private hotelArray: Hotel[] = [];
   private _hotel$: BehaviorSubject<Hotel[]> = new BehaviorSubject(this.hotelArray);
   public hotel$: Observable<Hotel[]> = this._hotel$.asObservable();
-  private readonly HotelsServiceUrl = 'http://localhost:3000/hotels';
+  private readonly HotelsServiceUrl = environment.api + 'hotels';
 
 
   constructor(private http: HttpClient) { }
@@ -31,7 +39,7 @@ export class ShotelService {
   } 
 
   private _getHotel(){
-    return this.http.get<Hotel>(this.HotelsServiceUrl, {}).pipe(
+    return this.http.get<Hotel[]>(this.HotelsServiceUrl, {}).pipe(
       catchError(err => this.handleError(err, 'postHotel', ""))
     );
   }
@@ -50,24 +58,29 @@ export class ShotelService {
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
 
+  /** Creates a new hotel listing on the backend. */
   addHotel(newHotel: HotelRequest): void {
       this.postHotel(newHotel).subscribe(data=> console.log(data))
   }
 
-  getHotels(): Observable<Hotel>{
+  /** Fetches every hotel listing. */
+  getHotels(): Observable<Hotel[]>{
     return this._getHotel()
   }
 
+  /** Fetches the hotel listings associated with a given order id. */
   getHotelsByOrderID(orderID: string): Observable<Hotel[]>{
     return this._hotelByOrderID(orderID)
   }
 
+  /** Returns the number of locally cached hotels, used as a naive next-id hint. */
   getNewID(): number{
     return this.HOTELS? this.HOTELS.length : 0;
   }
 
+  /** Looks up a locally cached hotel by id. Returns `undefined` until `HOTELS` has been populated. */
   getFlight(FlightID: number){
     const result = this.HOTELS?.filter(hotel => hotel.id === FlightID)
-    return result; 
+    return result;
   }
 }

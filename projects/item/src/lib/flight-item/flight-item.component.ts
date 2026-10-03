@@ -13,24 +13,28 @@ export class FlightItemComponent implements OnInit {
   @Input() flight: Flights | null = null;
   @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
 
+  private static readonly LAST_STEP = 2;
+
   step = 0;
 
   constructor() { }
 
   ngOnInit(): void {
-    
+
   }
 
   setStep(index: number) {
     this.step = index;
   }
 
+  /** Advances to the next panel, clamped so it never exceeds the last one (otherwise every panel collapses). */
   nextStep() {
-    this.step++;
+    this.step = Math.min(this.step + 1, FlightItemComponent.LAST_STEP);
   }
 
+  /** Moves back to the previous panel, clamped at 0 (otherwise every panel collapses). */
   prevStep() {
-    this.step--;
+    this.step = Math.max(this.step - 1, 0);
   }
 
   selectFlight(chosenFlight: Flights){
