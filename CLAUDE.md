@@ -30,7 +30,7 @@ Code quality, security, and clarity matter more here than speed — assume a rev
 # Git workflow
 
 - Branch naming: meaningful, nested names (e.g. `feature/flight-item/date-filter`, `fix/my-hotels/upload-validation`), not generic names like `fix1` or `patch`.
-- Sync workflow: fetch → rebase → merge (rebase local work on top of latest remote, avoid merge commits from stale branches).
+- Sync workflow: create son branch to the main branch -> do changes -> go to parent branch -> fetch → rebase → merge (rebase local work on top of latest remote, avoid merge commits from stale branches).
 - Never force-push or rewrite shared/published history without explicit confirmation.
 - Since this repo is public on GitHub, be mindful of commit messages and PR descriptions — they're part of the portfolio presentation.
 
