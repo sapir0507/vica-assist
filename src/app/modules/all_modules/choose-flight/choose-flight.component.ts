@@ -5,6 +5,7 @@ import { Flights } from 'src/app/interfaces/flight.interface';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
 @Component({
+  standalone: false,
   selector: 'app-choose-flight',
   templateUrl: './choose-flight.component.html',
   styleUrls: ['./choose-flight.component.scss'],

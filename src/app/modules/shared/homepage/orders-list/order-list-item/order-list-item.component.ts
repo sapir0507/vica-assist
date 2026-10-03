@@ -3,6 +3,7 @@ import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'order-list-item',
   templateUrl: './order-list-item.component.html',
   styleUrls: ['./order-list-item.component.scss'],

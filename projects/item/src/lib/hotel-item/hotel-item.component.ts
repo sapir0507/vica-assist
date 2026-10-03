@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 @Component({
+  standalone: false,
   selector: 'hotel-item',
   templateUrl: './hotel-item.component.html',
   styleUrls: ['./hotel-item.component.scss']

@@ -4,6 +4,7 @@ import { RegisterRequest } from 'src/app/services/register/register.model';
 import { RegisterService } from 'src/app/services/register/register.service';
 
 @Component({
+  standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']

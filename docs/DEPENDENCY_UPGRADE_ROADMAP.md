@@ -153,7 +153,40 @@ doesn't exist on `SessionQuery` (only `isLoggedIn$` does). Neither is caught by 
 Full six/five-project test sweep and a development build both passed clean, with no forced change
 from Angular 18's (opt-in, unused here) zoneless change detection or further Material 3 token moves.
 
-The remaining hops (18 → 21) are a forward-looking roadmap, not yet started.
+Phase 2's sixth hop, **18 → 19**, is also done (`feature/angular-upgrade/19`): core/cdk/material/cli
+bumped to the 19.2.x line, `@angular-eslint/*` to `~19.8.1`, `ng-packagr` to `^19.2.2`,
+`@ng-bootstrap/ng-bootstrap` to `^18.0.0` (one-major-behind pattern holds again — `18.0.0`'s peer is
+`@angular/core: ^19.0.0`), TypeScript to `~5.8.3`. Deliberately stayed on `jest-preset-angular@^14.6.2`
+rather than bumping to the newly-available `15.x` line — 14.6.2's peer range (`>=15.0.0 <21.0.0`)
+already covers Angular 19, and 15.x would force an unrelated, unverified Jest 30 major bump
+(`build-angular@19.2.27` itself still peers on `jest: ^29.5.0`, confirming 14.x/Jest 29 is the
+intended pairing here, not a stale choice).
+
+This was the first genuinely forced breaking change in the whole ladder: Angular 19 flips the
+`@Component`/`@Directive`/`@Pipe` `standalone` default from `false` to `true` when unspecified. This
+app predates standalone components entirely (started on Angular 13) and declares every one of its 37
+components/pipes without an explicit `standalone` flag, relying on the old implicit default — so
+every one of them silently became standalone, which an `@NgModule.declarations` array cannot contain,
+and 28 of vica-assist's 78 tests failed with "is marked as standalone and can't be declared in any
+NgModule." This is normally handled automatically by `ng update`'s bundled `explicit-standalone-flag`
+migration schematic — since this repo bypasses `ng update` (its own temporary-CLI-install step has
+been unreliable in this environment since the Angular 15 hop), the schematic had to be found and run
+by hand: `npx ng generate ./node_modules/@angular/core/schematics/migrations.json:explicit-standalone-flag`
+(the ordinary `ng generate @angular/core:explicit-standalone-flag` form fails with "Schematic ...
+not found" — migrations live in a separate `migrations.json` collection, not the default one). That
+schematic itself couldn't run either: it locates tsconfigs via each project's `angular.json` architect
+config, and this workspace's Nx-split format (`"item": "projects/item"` path strings instead of full
+project objects) gives it nothing to resolve, so it fails with "Could not find any tsconfig file."
+Applied its exact documented intent by hand instead: added `standalone: false` to all 37 `@Component`/
+`@Pipe` decorators lacking the flag (zero already had one, confirming the whole codebase is pre-
+standalone). After that, all 99 tests (78 + 21) and the dev build passed clean.
+
+One new, non-blocking build warning appeared: webpack now reports "multiple modules with names that
+only differ in casing" for several files (drive-letter casing, e.g. `c:\...` vs `C:\...`), a side
+effect of `moduleResolution: "bundler"`'s stricter path resolution. Cosmetic on Windows' case-
+insensitive filesystem; worth a dedicated pass later if this is ever built on a case-sensitive one.
+
+The remaining hops (19 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -220,8 +253,9 @@ previous version's shape.
   surfaced. Zoneless change detection entered developer preview as predicted (opt-in, irrelevant
   here). Material's continued Material 3 token moves caused no fallout in the theme files touched at
   v15.
-- **18 → 19**: TypeScript `~5.5`–`5.6`. Standalone becomes the `ng generate` default, but
-  NgModule-based code keeps compiling — no forced rewrite.
+- **18 → 19** (done, see Status above): landed on TypeScript `~5.8.3`. This was *not* the "no forced
+  rewrite" hop it looked like on paper — the `standalone` default flip was a real, repo-wide forced
+  change (see Status above), the first genuinely breaking one in the ladder so far.
 - **19 → 20 → 21**: TypeScript `~5.8`–`5.9`. Same pattern: opt-in signals/zoneless features, no
   forced breakage for an NgModule + Zone.js app — but re-run the full test suite and a manual
   click-through at each hop regardless, since Material/CDK keep shifting internals release to

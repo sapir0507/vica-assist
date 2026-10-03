@@ -4,6 +4,7 @@ import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'userRequest-preview',
   templateUrl: './user-request-preview.component.html',
   styleUrls: ['./user-request-preview.component.scss'],

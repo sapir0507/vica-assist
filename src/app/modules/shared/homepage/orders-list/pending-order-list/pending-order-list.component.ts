@@ -5,6 +5,7 @@ import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'pending-order-list',
   templateUrl: './pending-order-list.component.html',
   styleUrls: ['./pending-order-list.component.scss'],

@@ -8,6 +8,7 @@ import { SessionService } from 'src/app/services/session/session.service';
 
 
 @Component({
+  standalone: false,
   selector: 'app-links',
   templateUrl: './links.component.html',
   styleUrls: ['./links.component.scss']

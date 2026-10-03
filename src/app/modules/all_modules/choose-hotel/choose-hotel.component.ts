@@ -7,6 +7,7 @@ import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 
 @Component({
+  standalone: false,
   selector: 'app-choose-hotel',
   templateUrl: './choose-hotel.component.html',
   styleUrls: ['./choose-hotel.component.scss'],

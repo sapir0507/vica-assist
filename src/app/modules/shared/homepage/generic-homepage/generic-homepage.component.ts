@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'generic-homepage',
   templateUrl: './generic-homepage.component.html',
   styleUrls: ['./generic-homepage.component.scss'],

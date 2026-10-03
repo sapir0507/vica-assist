@@ -10,6 +10,7 @@ import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { Order } from 'src/app/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'lib-myFlights',
   templateUrl: './my-flights.component.html',
   styleUrls: ['./my-flights.component.scss'],

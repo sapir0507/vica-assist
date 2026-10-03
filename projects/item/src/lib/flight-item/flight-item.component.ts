@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Flights } from 'src/app/interfaces/flight.interface';
 
 @Component({
+  standalone: false,
   selector: 'flight-item',
   templateUrl: './flight-item.component.html',
   styleUrls: ['./flight-item.component.scss']

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 
 @Component({
+  standalone: false,
   selector: 'app-add-new-flight',
   templateUrl: './add-new-flight.component.html',
   styleUrls: ['./add-new-flight.component.scss']

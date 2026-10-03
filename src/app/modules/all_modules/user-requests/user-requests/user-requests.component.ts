@@ -8,6 +8,7 @@ import { OrderService } from 'src/app/services/order/order.service';
 import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'userRequests',
   templateUrl: './user-requests.component.html',
   styleUrls: ['./user-requests.component.scss'],

@@ -12,6 +12,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
+  standalone: false,
   selector: 'form-field',
   templateUrl: './mat-formfield.component.html',
   styleUrls: ['./mat-formfield.component.scss']

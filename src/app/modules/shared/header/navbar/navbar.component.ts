@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ILinks } from 'src/app/services/links/links';
 
 @Component({
+  standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']

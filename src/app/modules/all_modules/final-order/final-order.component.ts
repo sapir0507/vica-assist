@@ -9,6 +9,7 @@ import { Flights } from 'src/interfaces/flight.interface';
 import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 
 @Component({
+  standalone: false,
   selector: 'app-final-order',
   templateUrl: './final-order.component.html',
   styleUrls: ['./final-order.component.scss'],

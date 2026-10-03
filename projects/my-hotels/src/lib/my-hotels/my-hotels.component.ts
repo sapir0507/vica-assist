@@ -8,6 +8,7 @@ import { Subject, Subscription } from 'rxjs';
 
 
 @Component({
+  standalone: false,
   selector: 'my-hotels',
   templateUrl: './my-hotels.component.html',
   styleUrls: ['./my-hotels.component.scss']

@@ -8,6 +8,7 @@ import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'user-homepage',
   templateUrl: './user-homepage.component.html',
   styleUrls: ['./user-homepage.component.scss'],

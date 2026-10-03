@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'fileUploader',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss'],

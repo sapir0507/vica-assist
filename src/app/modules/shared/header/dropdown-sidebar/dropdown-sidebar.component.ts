@@ -7,6 +7,7 @@ import { ILinks } from 'src/app/services/links/links';
 import { SessionQuery } from 'src/app/services/session/session.query';
 
 @Component({
+  standalone: false,
   selector: 'app-dropdown-sidebar',
   templateUrl: './dropdown-sidebar.component.html',
   styleUrls: ['./dropdown-sidebar.component.scss']

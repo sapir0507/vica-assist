@@ -4,6 +4,7 @@ import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'ordersList',
   templateUrl: './orders-list.component.html',
   styleUrls: ['./orders-list.component.scss'],

@@ -14,6 +14,7 @@ interface currentUser{
 }
 
 @Component({
+  standalone: false,
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']

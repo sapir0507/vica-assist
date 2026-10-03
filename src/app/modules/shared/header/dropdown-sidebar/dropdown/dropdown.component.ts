@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ILinks } from 'src/app/services/links/links';
 
 @Component({
+  standalone: false,
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss']

@@ -3,6 +3,7 @@ import { OrderService } from 'src/app/services/order/order.service';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
+  standalone: false,
   selector: 'agent-homepage',
   templateUrl: './agent-homepage.component.html',
   styleUrls: ['./agent-homepage.component.scss'],
