@@ -77,7 +77,24 @@ risk areas flagged going in (karma's `test.ts`/`FindTestsPlugin` interaction, th
 -project test sweep and a development build both passed clean on the first try, as predicted by the
 roadmap's low-risk call for this hop.
 
-The remaining hops (16 → 21) are a forward-looking roadmap, not yet started.
+Phase 2's fourth hop, **16 → 17**, is also done (`feature/angular-upgrade/17`): core/cdk/material/cli
+bumped to the 17.3.x line, `@angular-eslint/*` to `~17.5.3`, `ng-packagr` to `^17.3.0`, TypeScript to
+`~5.4.5` (compiler-cli/build-angular/ng-packagr's shared peer range `>=5.4 <5.5` — the roadmap's
+earlier `~5.2` guess for this hop was off; verified via `npm view` up front, same discipline as every
+hop so far). `@ng-bootstrap/ng-bootstrap` went to `^16.0.0` — its own versioning runs one major
+behind Angular's, confirmed again here (`16.0.0`'s peer is `@angular/core: ^17.0.0`, while the
+nominally-matching `17.0.1` actually targets Angular 18). `jest-preset-angular` moved to `^14.6.2`
+(13.x's peer ceiling is `<19.0.0`, which already covered Angular 17, but 14.x was current and verified
+compatible) — jest/ts-jest/jest-environment-jsdom needed no version change (preset 14.x stays on the
+jest `^29.0.0` line). One real fix this hop exposed: `jest-preset-angular@14.x` deprecated importing
+`setup-jest.js` directly (removal planned) in favor of calling `setupZoneTestEnv()` — updated both
+Jest-based projects' `test-setup.ts` (`my-hotels`, `my-pipes`) to the new form. Full six/five-project
+test sweep and a development build both passed clean otherwise — no forced template or NgModule
+changes from the new (opt-in) `@if`/`@for`/`@switch` control-flow syntax or the new (default-for-new-
+projects-only) esbuild/Vite builder, since this app's existing `browser`/`karma` executors keep
+working unchanged.
+
+The remaining hops (17 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -134,13 +151,21 @@ previous version's shape.
   here.
 - **15 → 16** (done, see Status above): landed on TypeScript `~5.1.6`. Signals landed as developer
   preview as predicted (unused here) — no forced change, and none surfaced.
-- **16 → 17**: TypeScript `~5.2`. The new esbuild/Vite application builder becomes the default for
-  *new* projects, but the existing `browser`/`karma` executors keep working unchanged. New
-  `@if`/`@for`/`@switch` control-flow syntax is introduced; existing `*ngIf`/`*ngFor` templates
-  aren't broken and don't need touching.
-- **17 → 18**: TypeScript `~5.4`. Zoneless change detection enters developer preview (opt-in,
-  irrelevant here — this app relies on Zone.js throughout). Material moves further into Material 3
-  design tokens; re-check the theme files touched at v15.
+- **16 → 17** (done, see Status above): landed on TypeScript `~5.4.5` (not the originally-guessed
+  `~5.2` — verified the real ceiling via `npm view` instead). The new esbuild/Vite application
+  builder became the default for *new* projects, but this app's existing `browser`/`karma` executors
+  kept working unchanged, as expected. New `@if`/`@for`/`@switch` control-flow syntax was introduced;
+  existing `*ngIf`/`*ngFor` templates weren't touched and didn't need to be.
+- **17 → 18**: `@angular/compiler-cli@18.2.13`'s peer range (`>=5.4 <5.6`, verified via `npm view`)
+  reaches as high as `5.5.4` — the latest-patch-under-ceiling convention used at every hop so far
+  would land here on TypeScript 5.5, not 5.4. That's the first version where `tsconfig.json`'s
+  `baseUrl` (used for the `item`/`mat-input`/`myFlights`/`myHotels` path aliases) is actually
+  deprecated (slated for TS 7.0 removal) — on 16/5.1.6 the deprecation warning some editors show is
+  just VS Code's bundled TypeScript being newer than the project's; it isn't real yet. Decide at
+  that hop whether to migrate off `baseUrl`+`paths` or silence the deprecation. Zoneless change
+  detection enters developer preview (opt-in, irrelevant here — this app relies on Zone.js
+  throughout). Material moves further into Material 3 design tokens; re-check the theme files
+  touched at v15.
 - **18 → 19**: TypeScript `~5.5`–`5.6`. Standalone becomes the `ng generate` default, but
   NgModule-based code keeps compiling — no forced rewrite.
 - **19 → 20 → 21**: TypeScript `~5.8`–`5.9`. Same pattern: opt-in signals/zoneless features, no
