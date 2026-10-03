@@ -18,10 +18,10 @@ export class RegisterComponent implements OnInit {
   }
 
   formGroup = new FormGroup({
-    username: new FormControl(undefined, [Validators.required]),
-    role: new FormControl(undefined, [Validators.required]),
-    password: new FormControl(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
-    email: new FormControl(undefined, Validators.compose([Validators.required]))
+    username: new FormControl<string | undefined>(undefined, [Validators.required]),
+    role: new FormControl<string | undefined>(undefined, [Validators.required]),
+    password: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
+    email: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required]))
   });
 
   constructor(
@@ -37,9 +37,9 @@ export class RegisterComponent implements OnInit {
     if(this.formGroup.valid){
         this.registerRequest = {
           active: 1,
-          username: this.formGroup.get('username')?.value,
-          password: this.formGroup.get('password')?.value,
-          email: this.formGroup.get('email')?.value,
+          username: this.formGroup.get('username')?.value ?? undefined,
+          password: this.formGroup.get('password')?.value ?? undefined,
+          email: this.formGroup.get('email')?.value ?? undefined,
           role: role === 'agent' || role === 'customer'? role : 'customer'
         }
         // this.registerService.add()

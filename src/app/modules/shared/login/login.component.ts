@@ -24,9 +24,9 @@ export class LoginComponent implements OnInit {
 
 
   formGroup = new FormGroup({
-    username: new FormControl(undefined, [Validators.required]),
-    password: new FormControl(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
-    googleAuthenticator: new FormControl(undefined, Validators.required)
+    username: new FormControl<string | undefined>(undefined, [Validators.required]),
+    password: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
+    googleAuthenticator: new FormControl<boolean | undefined>(undefined, Validators.required)
   });
 
   isLoading$ = this.sessionQuery.selectLoading();
@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(){
     //login
-    const a = this.sessionService.login(this.formGroup.value['username'], this.formGroup.value['password'])
+    const a = this.sessionService.login(this.formGroup.value['username'] ?? undefined, this.formGroup.value['password'] ?? undefined)
      //if logged in 
 
     //  if(this._status){

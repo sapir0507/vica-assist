@@ -15,7 +15,23 @@ during execution: `@auth0/angular-jwt@5.2.0` looked safe via `npm outdated` but 
 Angular 13. Also removed three fully-unused dead dependencies found while auditing `package.json`:
 `angular-material` (legacy AngularJS 1.x Material, unrelated to `@angular/material`), `popper.js`
 v1 (superseded by the already-present `@popperjs/core` v2), and a stray package literally named
-`latest`. Phases 2-4 below are a forward-looking roadmap, not yet started.
+`latest`. Phase 2's first hop, **13 → 14**, is also done (`feature/angular-upgrade/14`): core/cdk/
+material/cli/eslint bumped to the 14.x line, `@ng-bootstrap/ng-bootstrap` to `^13.1.1` (the line that
+targets Angular 14) and `@auth0/angular-jwt` to `~5.2.0` (closing the gap noted above, now that
+`@angular/common` is actually `>=14.0.0`). Along the way, fixed three things this hop exposed rather
+than caused: `angular.json`'s `"version"` field had been flipped from `1` to `2` in an old commit,
+breaking every direct `ng` CLI invocation (`version: 2` is actually required here, since Nx's own
+split `project.json` files depend on it — restored it rather than "fixing" it away); the root
+`tsconfig.json` never actually inherited `tsconfig.base.json`'s `skipLibCheck`, so TypeScript 4.8's
+stricter generic-constraint checking surfaced a latent typing bug in Akita's own `.d.ts` (added
+`skipLibCheck` directly to the root config); and Angular 14's reactive forms becoming generically
+typed by default surfaced a few real `null`-vs-`undefined` gaps in `login`/`register` components
+under this app's `strict: true` TypeScript config. Also had to bump `jest-preset-angular` to
+`^12.2.6` (11.x doesn't actually work against Angular 14's compiler-cli despite its open-ended peer
+range) which pulled `jest`/`ts-jest`/`@types/jest` to 28.x, and pin `jest-environment-jsdom`
+directly at the root — without that pin, npm hoists the wrong (27.x) copy via Nx's own
+`@nrwl/jest`-pinned transitive dependency, which crashes on construction. The remaining hops
+(14 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -52,8 +68,12 @@ Do this **one major version at a time**, each as its own branch/PR: `ng update @
 `ng update` only supports one major at a time, and each version's migration schematics assume the
 previous version's shape.
 
-- **13 → 14**: TypeScript `~4.6.2`–`4.7`. Standalone components/directives/pipes are introduced as
-  *opt-in* — no forced change, the existing NgModule structure keeps working. Lowest-risk hop.
+- **13 → 14** (done, see Status above): landed on TypeScript `~4.8.4` in practice (the actual
+  ceiling `@angular/compiler-cli@14.3.0` allows). Standalone components/directives/pipes are
+  introduced as *opt-in* — no forced NgModule changes. The real cost of this "lowest-risk" hop
+  turned out to be in tooling (jest/jsdom version hoisting, a stale `skipLibCheck` gap) and in
+  Angular 14's reactive forms becoming generically typed by default, not in the app's own
+  NgModule/template code.
 - **14 → 15**: TypeScript `~4.8`–`4.9`. **Angular Material's MDC-based component rewrite lands
   here** — the single highest-risk step in this roadmap, since the app uses 18 distinct Material
   modules (`MatButtonModule`, `MatCardModule`, `MatCheckboxModule`, `MatDatepickerModule`,
