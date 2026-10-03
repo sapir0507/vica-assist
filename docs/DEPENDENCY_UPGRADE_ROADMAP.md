@@ -30,8 +30,41 @@ under this app's `strict: true` TypeScript config. Also had to bump `jest-preset
 `^12.2.6` (11.x doesn't actually work against Angular 14's compiler-cli despite its open-ended peer
 range) which pulled `jest`/`ts-jest`/`@types/jest` to 28.x, and pin `jest-environment-jsdom`
 directly at the root — without that pin, npm hoists the wrong (27.x) copy via Nx's own
-`@nrwl/jest`-pinned transitive dependency, which crashes on construction. The remaining hops
-(14 → 21) are a forward-looking roadmap, not yet started.
+`@nrwl/jest`-pinned transitive dependency, which crashes on construction. Phase 2's second hop,
+**14 → 15** (the Material MDC rewrite), is also done (`feature/angular-upgrade/15`): core/cdk/
+material/cli/eslint bumped to 15.2.x, `@ng-bootstrap/ng-bootstrap` to `^14.2.0`, TypeScript to
+`~4.9.5`. Deleted `src/assets/styles/theme.scss` (confirmed dead — never wired into the build or
+`index.html`) rather than migrating its legacy `@angular/material/theming` Sass API. Updated four
+`.scss` files' hardcoded legacy class overrides (`.mat-form-field`, `.mat-card`,
+`.mat-card-subtitle`, `.mat-radio-button`) to their MDC `-mdc-` infixed equivalents, verified against
+the actually-installed `@angular/material` package source rather than assumed. Three real
+regressions surfaced by this hop, none of them Material-related:
+- `ng update`'s own schematic wrote `@angular/cdk`/`@angular/material` at a nonexistent `14.3.0`-style
+  patch again (same class of error as the 13→14 hop) — had to manually verify and pin the real
+  ceiling (`cdk`/`material` top out one patch behind `core` in the 15.x line, same as 14.x did).
+  `ng update`'s own "install a temporary newer CLI" step also failed in this environment (it resolved
+  a stray ancient `npm` package sitting outside the project, under the user's home directory) — ended
+  up setting every package version by hand instead, same discipline as working around a bad `ng
+  update` result, just earlier in the process.
+- Angular 15's karma builder has a real regression in the legacy `main: src/test.ts` +
+  `require.context(...)` spec-discovery pattern (public issue: angular/angular-cli#24287, still open,
+  no official fix). The builder's own `FindTestsPlugin` already auto-discovers and injects spec files
+  into whichever `main` entry is configured regardless of whether `main` is custom or the builder's
+  built-in virtual one — so the fix was removing just the obsolete `require.context(...)` block from
+  each project's `test.ts` (all four karma-based projects), not `test.ts` itself. Learned this the
+  hard way: an interim attempt to delete `test.ts`/`main` entirely also works for spec *discovery*,
+  but loses the `zone.js`/`zone.js/testing` + `initTestEnvironment` setup `test.ts` was also doing
+  (the builder's virtual-main fallback only replaces the TestBed init half, not the zone import) —
+  reverted to the surgical fix instead of the wholesale deletion.
+- Setting `tsconfig.json`'s `target` to `ES2022` (required to silence an Angular-15-forced compiler
+  warning, which turned out to be *necessary* — not just cosmetic — for the `require.context` fix
+  above to take effect) implicitly turned on TypeScript's real ES2022 class-field `[[Define]]`
+  semantics, which broke every Akita `Query` subclass with a field initializer calling `this.select()`
+  (Angular's CLI normally forces `useDefineForClassFields: false` to prevent exactly this, but only
+  while it's silently overriding `target` itself — once `target` is set explicitly, that protection
+  has to be set explicitly too). Added `"useDefineForClassFields": false` alongside it.
+
+The remaining hops (15 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -74,16 +107,18 @@ previous version's shape.
   turned out to be in tooling (jest/jsdom version hoisting, a stale `skipLibCheck` gap) and in
   Angular 14's reactive forms becoming generically typed by default, not in the app's own
   NgModule/template code.
-- **14 → 15**: TypeScript `~4.8`–`4.9`. **Angular Material's MDC-based component rewrite lands
-  here** — the single highest-risk step in this roadmap, since the app uses 18 distinct Material
-  modules (`MatButtonModule`, `MatCardModule`, `MatCheckboxModule`, `MatDatepickerModule`,
-  `MatExpansionModule`, `MatFormFieldModule`, `MatGridListModule`, `MatIconModule`,
-  `MatInputModule`, `MatListModule`, `MatRadioModule`, `MatSelectModule`, `MatSliderModule`,
-  `MatSnackBarModule`, `MatSortModule`, `MatTableModule`, `MatTabsModule`, `MatToolbarModule`,
-  `MatTooltipModule`) plus hand-rolled SCSS in `src/assets/styles/theme.scss`/`mixin.scss` and the
-  custom `mat-formfield`/`select` wrappers in `projects/mat-input`. Expect DOM-structure and
-  CSS-class changes under every one of those components; budget manual QA clicking through every
-  screen after the schematic runs. Do this hop alone, nothing else bundled in.
+- **14 → 15** (done, see Status above): landed on TypeScript `~4.9.5`. The actual Material MDC
+  rewrite itself turned out low-friction — of the 18 modules used, only `button`, `card`, `checkbox`,
+  `form-field`, `input`, `radio`, `select`, `snack-bar`, `tabs`, `tooltip` are MDC-rebuilt in v15, and
+  the only code fallout was four `.scss` files' hardcoded class overrides needing their `-mdc-`
+  infixed equivalents (the custom `mat-formfield` wrapper in `projects/mat-input` needed no changes
+  at all — it only consumes the public API). `src/assets/styles/theme.scss` was deleted rather than
+  migrated (confirmed dead). The real cost of this hop was three unrelated regressions it exposed:
+  `ng update` guessing a nonexistent `cdk`/`material` patch version again, a genuine Angular-15 karma
+  builder bug in the legacy `test.ts` spec-discovery pattern, and a `useDefineForClassFields` gap that
+  broke every Akita `Query` subclass — see Status above for details. Manual click-through of
+  `appearance="fill"` form fields (~29 across 4 templates) is still worth doing; not verified visually
+  here.
 - **15 → 16**: TypeScript `~4.9`–`5.1`. Signals land as developer preview (no forced change). Low
   functional risk once the v15 Material migration is settled.
 - **16 → 17**: TypeScript `~5.2`. The new esbuild/Vite application builder becomes the default for

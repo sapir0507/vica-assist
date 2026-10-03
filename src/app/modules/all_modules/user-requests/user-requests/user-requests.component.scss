@@ -9,12 +9,12 @@
         align-items: center;
     }
 
-    .example-headers-align .mat-form-field + .mat-form-field,
-    .example-container .mat-form-field + .mat-form-field {
+    .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field,
+    .example-container .mat-mdc-form-field + .mat-mdc-form-field {
         margin-left: 8px;
     }
-   
-      .example-container .mat-form-field {
+
+      .example-container .mat-mdc-form-field {
         // width: 220px;
       }
       .example-container form {
@@ -26,7 +26,7 @@
         margin: 5px 0;
       }
       
-      .example-container .mat-radio-button {
+      .example-container .mat-mdc-radio-button {
         margin: 0 12px;
       }
 
