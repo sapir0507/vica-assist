@@ -186,7 +186,17 @@ only differ in casing" for several files (drive-letter casing, e.g. `c:\...` vs 
 effect of `moduleResolution: "bundler"`'s stricter path resolution. Cosmetic on Windows' case-
 insensitive filesystem; worth a dedicated pass later if this is ever built on a case-sensitive one.
 
-The remaining hops (19 → 21) are a forward-looking roadmap, not yet started.
+Phase 2's seventh hop, **19 → 20**, is also done (`feature/angular-upgrade/20`): core/cdk/material/cli
+bumped to the 20.2.x/20.3.x lines, `@angular-eslint/*` to `~20.7.0`, `ng-packagr` to `^20.3.2`,
+`@ng-bootstrap/ng-bootstrap` to `^19.0.1` (one-major-behind pattern holds yet again — `19.0.1`'s peer
+is `@angular/core: ^20.0.0`), TypeScript to `~5.9.3`. Stayed on `jest-preset-angular@^14.6.2` again
+(its `<21.0.0` ceiling still covers Angular 20; `build-angular@20.3.37` itself now peers on
+`jest: '^29.5.0 || ^30.2.0'`, so both lines are still officially supported — no reason to force the
+30.x move yet). This was a clean hop: no forced code changes, full six/five-project test sweep and a
+development build both passed with no new warnings beyond the pre-existing drive-letter-casing ones
+from the 19 hop.
+
+The remaining hops (20 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -256,10 +266,13 @@ previous version's shape.
 - **18 → 19** (done, see Status above): landed on TypeScript `~5.8.3`. This was *not* the "no forced
   rewrite" hop it looked like on paper — the `standalone` default flip was a real, repo-wide forced
   change (see Status above), the first genuinely breaking one in the ladder so far.
-- **19 → 20 → 21**: TypeScript `~5.8`–`5.9`. Same pattern: opt-in signals/zoneless features, no
-  forced breakage for an NgModule + Zone.js app — but re-run the full test suite and a manual
-  click-through at each hop regardless, since Material/CDK keep shifting internals release to
-  release.
+- **19 → 20** (done, see Status above): landed on TypeScript `~5.9.3`. Unlike the previous hop, this
+  one really was the clean, no-forced-change hop it looked like on paper.
+- **20 → 21**: TypeScript ceiling TBD — verify via `npm view` rather than assume, same discipline as
+  every hop so far. Same pattern expected: opt-in signals/zoneless features, no forced breakage for an
+  NgModule + Zone.js app — but re-run the full test suite and a manual click-through regardless, since
+  Material/CDK keep shifting internals release to release (and the 19 hop proved "looks clean on
+  paper" isn't a guarantee).
 
 At every hop: bump `@ng-bootstrap/ng-bootstrap` and `@angular-eslint/*` to match, and re-run the
 full test sweep (`nx test vica-assist myFlights item mat-input my-hotels my-pipes`).
