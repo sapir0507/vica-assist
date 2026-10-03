@@ -1,7 +1,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "paths": {
+      "*": ["./*"]
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
@@ -11,32 +13,13 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
-    "paths": {
-      "item": [
-        "dist/item/item",
-        "dist/item"
-      ],
-      "mat-input": [
-        "dist/mat-input/mat-input",
-        "dist/mat-input"
-      ],
-      "myFlights": [
-        "dist/my-flights/my-flights",
-        "dist/my-flights"
-      ],
-      "myHotels": [
-        "dist/my-hotels/my-hotels",
-        "dist/my-hostels"
-      ]
-    },
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "useDefineForClassFields": false,
-    "module": "es2020",
+    "module": "ES2022",
     "lib": [
       "es2020",
       "dom"

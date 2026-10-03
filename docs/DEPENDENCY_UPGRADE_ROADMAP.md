@@ -94,7 +94,66 @@ changes from the new (opt-in) `@if`/`@for`/`@switch` control-flow syntax or the 
 projects-only) esbuild/Vite builder, since this app's existing `browser`/`karma` executors keep
 working unchanged.
 
-The remaining hops (17 → 21) are a forward-looking roadmap, not yet started.
+Phase 2's fifth hop, **17 → 18**, is also done (`feature/angular-upgrade/18`): core/cdk/material/cli
+bumped to the 18.2.14 line, `@angular-eslint/*` to `~18.4.3`, `ng-packagr` to `^18.2.1`,
+`@ng-bootstrap/ng-bootstrap` to `^17.0.1` (the one-major-behind pattern confirmed yet again — `17.0.1`'s
+peer is `@angular/core: ^18.0.0`). TypeScript landed on `~5.5.4` (compiler-cli/build-angular/
+ng-packagr's shared peer range `>=5.4 <5.6`), exactly the version flagged two hops ago as the one
+where `tsconfig.json`'s `baseUrl` deprecation stops being a future-editor-only warning and becomes
+real. Resolving it surfaced a much bigger issue than expected:
+
+- `tsconfig.json`'s `paths` block (the dead `item`/`mat-input`/`myFlights`/`myHotels` → `dist/...`
+  mappings) was confirmed fully unused — no source file imports those bare specifiers — and was
+  deleted outright. But `baseUrl` itself turned out to be load-bearing far beyond that block: the
+  entire app relies on root-relative imports (`'projects/my-hotels/src/lib/...'`,
+  `'src/app/interfaces/flight.interface'`, etc.) throughout, which only resolve because of `baseUrl`.
+  A first attempt to delete `baseUrl` entirely broke ~30 files' worth of imports. The actual fix,
+  following TypeScript's own documented migration path (`paths` has worked without `baseUrl` since
+  TS 4.1, resolving relative to `tsconfig.json`'s own directory): replace bare `baseUrl: "./"` with
+  `"paths": { "*": ["./*"] }`, which reproduces the same resolution without tripping the deprecation.
+- While fixing this, `module`/`moduleResolution` briefly got set to `"Node16"`/`"node"` directly in
+  the editor outside of this work (an invalid pairing — TS hard-errors unless `moduleResolution` is
+  also `Node16`/`NodeNext`, and `Node16` mode isn't what Angular's own tooling uses anyway). Checked
+  `@angular/cli`'s own schematic template directly (`node_modules/@schematics/angular/workspace/
+  files/tsconfig.json.template`) to confirm the actually-correct pairing for Angular 18:
+  `"module": "ES2022"` + `"moduleResolution": "bundler"` (the TS 5.0+ resolution mode built for
+  bundler-based toolchains like Angular's webpack/esbuild pipeline, as opposed to `node`/`node16`
+  which target real Node.js runtime resolution and require explicit file extensions).
+- That same `module`/`moduleResolution` pairing turned out to need applying to **two separate tsconfig
+  hierarchies**: `item`/`mat-input`/`myFlights` extend the root `tsconfig.json` directly, but
+  `my-hotels`/`my-pipes` extend a completely separate `tsconfig.base.json` that had been stuck on
+  `target: "es2015"` / `module: "esnext"` / `moduleResolution: "node"` / `lib: ["es2017","dom"]` since
+  before Phase 2 even started — never touched by any prior hop. Brought it in line with the root
+  config's Angular-18/TS-5.5 settings. This also had its own dead `paths` block (`@vica-assist/*`
+  aliases, confirmed unused the same way) — left in place for now rather than deleted in the same pass
+  as the live fix, flagged for a later cleanup pass.
+- That alignment broke one file: `projects/my-pipes/tsconfig.spec.json` deliberately overrides
+  `"module": "commonjs"` for ts-jest (Jest's CJS runtime), and TypeScript 5.x requires `moduleResolution:
+  "bundler"` to pair only with `"preserve"` or ES2015+ modules, not `commonjs`. Fixed by pinning
+  `"moduleResolution": "node"` on just that one file, since it genuinely needs CommonJS output.
+- `@angular-eslint/eslint-plugin@18.4.3` newly added a hard peer on `@typescript-eslint/utils: ^7.11.0
+  || ^8.0.0` (15.x/16.x/17.x only peer on `eslint`/`typescript` — confirmed via `npm view`, this is new
+  at 18). The repo is still on `@typescript-eslint/*@5.18.0` (plus `@nrwl/eslint-plugin-nx@14.1.4`'s own
+  nested `@typescript-eslint/experimental-utils@~5.18.0`), so a plain `npm install` now hits a hard
+  `ERESOLVE`. Properly fixing this means `@typescript-eslint/*` → v7/v8, which itself requires
+  `eslint: ^8.56.0`+ and ties into the ESLint flat-config migration Phase 4 already scopes as its own
+  dedicated pass (and potentially the still-untouched Nx upgrade track, Phase 3, since `@nrwl/
+  eslint-plugin-nx@14.1.4` ships its own nested v5-era copy) — not something to patch ad hoc mid-ladder.
+  `--legacy-peer-deps` remains the correct, intentional install flag for this repo for exactly this
+  class of known, deferred, non-blocking conflict.
+
+Two pre-existing bugs were found while verifying the `tsconfig.json` fix (confirmed present even
+under the original committed config, unrelated to this hop, deliberately not fixed yet — tracked for
+a cleanup pass after the full version ladder is done): `projects/my-hotels/src/public-api.ts` re-exports
+a nonexistent `./lib/my-hotels/my-hotels.service` (the real file is `hotels.service.ts`), and
+`src/app/services/auth/RoleGuardService.service.ts` accesses `this.sessionQuery.isLoggedIn`, which
+doesn't exist on `SessionQuery` (only `isLoggedIn$` does). Neither is caught by the normal `nx test`/
+`nx build` pipeline — only a direct `tsc -p tsconfig.json` against the whole repo surfaces them.
+
+Full six/five-project test sweep and a development build both passed clean, with no forced change
+from Angular 18's (opt-in, unused here) zoneless change detection or further Material 3 token moves.
+
+The remaining hops (18 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -156,16 +215,11 @@ previous version's shape.
   builder became the default for *new* projects, but this app's existing `browser`/`karma` executors
   kept working unchanged, as expected. New `@if`/`@for`/`@switch` control-flow syntax was introduced;
   existing `*ngIf`/`*ngFor` templates weren't touched and didn't need to be.
-- **17 → 18**: `@angular/compiler-cli@18.2.13`'s peer range (`>=5.4 <5.6`, verified via `npm view`)
-  reaches as high as `5.5.4` — the latest-patch-under-ceiling convention used at every hop so far
-  would land here on TypeScript 5.5, not 5.4. That's the first version where `tsconfig.json`'s
-  `baseUrl` (used for the `item`/`mat-input`/`myFlights`/`myHotels` path aliases) is actually
-  deprecated (slated for TS 7.0 removal) — on 16/5.1.6 the deprecation warning some editors show is
-  just VS Code's bundled TypeScript being newer than the project's; it isn't real yet. Decide at
-  that hop whether to migrate off `baseUrl`+`paths` or silence the deprecation. Zoneless change
-  detection enters developer preview (opt-in, irrelevant here — this app relies on Zone.js
-  throughout). Material moves further into Material 3 design tokens; re-check the theme files
-  touched at v15.
+- **17 → 18** (done, see Status above): landed on TypeScript `~5.5.4`, exactly where `baseUrl`'s
+  deprecation became real — see Status above for the full `tsconfig`/`tsconfig.base` fallout this
+  surfaced. Zoneless change detection entered developer preview as predicted (opt-in, irrelevant
+  here). Material's continued Material 3 token moves caused no fallout in the theme files touched at
+  v15.
 - **18 → 19**: TypeScript `~5.5`–`5.6`. Standalone becomes the `ng generate` default, but
   NgModule-based code keeps compiling — no forced rewrite.
 - **19 → 20 → 21**: TypeScript `~5.8`–`5.9`. Same pattern: opt-in signals/zoneless features, no
