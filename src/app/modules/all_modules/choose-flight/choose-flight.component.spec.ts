@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ChooseFlightComponent } from './choose-flight.component';
 
@@ -8,7 +10,9 @@ describe('ChooseFlightComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChooseFlightComponent ]
+      imports: [ HttpClientTestingModule ],
+      declarations: [ ChooseFlightComponent ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });

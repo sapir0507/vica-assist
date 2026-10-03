@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { SessionQuery } from 'src/app/services/session/session.query';
 
 import { HeaderComponent } from './header.component';
 
@@ -8,7 +11,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ]
+      imports: [ HttpClientTestingModule ],
+      declarations: [ HeaderComponent ],
+      providers: [ SessionQuery ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });
