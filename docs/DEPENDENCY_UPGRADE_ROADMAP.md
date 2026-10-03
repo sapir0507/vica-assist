@@ -64,7 +64,20 @@ regressions surfaced by this hop, none of them Material-related:
   while it's silently overriding `target` itself — once `target` is set explicitly, that protection
   has to be set explicitly too). Added `"useDefineForClassFields": false` alongside it.
 
-The remaining hops (15 → 21) are a forward-looking roadmap, not yet started.
+Phase 2's third hop, **15 → 16**, is also done (`feature/angular-upgrade/16`): core/cdk/material/cli
+bumped to the 16.2.x line, `@angular-eslint/*` to `~16.3.1`, `@ng-bootstrap/ng-bootstrap` to
+`^15.1.2`, TypeScript to `~5.1.6`, `ng-packagr` to `^16.2.3`. `jest-preset-angular`'s `^12.2.6` peer
+range tops out just below Angular 16, so it had to move to `^13.1.6`, pulling `jest`/`ts-jest`/
+`@types/jest`/`jest-environment-jsdom` to the 29.x line (same explicit root-level
+`jest-environment-jsdom` pin as the last two hops, just bumped, to avoid Nx hoisting a stale copy
+again). This was the first hop in the ladder with no forced code change and none surfaced: all three
+risk areas flagged going in (karma's `test.ts`/`FindTestsPlugin` interaction, the
+`target`/`useDefineForClassFields` pairing protecting Akita's `Query` subclasses, and
+`jest-environment-jsdom` resolving correctly at the root) held with zero fixes needed — full six/five
+-project test sweep and a development build both passed clean on the first try, as predicted by the
+roadmap's low-risk call for this hop.
+
+The remaining hops (16 → 21) are a forward-looking roadmap, not yet started.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -119,8 +132,8 @@ previous version's shape.
   broke every Akita `Query` subclass — see Status above for details. Manual click-through of
   `appearance="fill"` form fields (~29 across 4 templates) is still worth doing; not verified visually
   here.
-- **15 → 16**: TypeScript `~4.9`–`5.1`. Signals land as developer preview (no forced change). Low
-  functional risk once the v15 Material migration is settled.
+- **15 → 16** (done, see Status above): landed on TypeScript `~5.1.6`. Signals landed as developer
+  preview as predicted (unused here) — no forced change, and none surfaced.
 - **16 → 17**: TypeScript `~5.2`. The new esbuild/Vite application builder becomes the default for
   *new* projects, but the existing `browser`/`karma` executors keep working unchanged. New
   `@if`/`@for`/`@switch` control-flow syntax is introduced; existing `*ngIf`/`*ngFor` templates
