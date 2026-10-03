@@ -3,6 +3,7 @@ import { Query } from '@datorama/akita';
 import { finalOrder } from './finalOrder.model';
 import { finalOrderStore } from './finalOrder.store';
 
+/** Read-only selectors over the `finalOrderStore`'s single in-progress final order. */
 @Injectable({ providedIn: 'root' })
 export class finalOrderQuery extends Query<finalOrder> {
 

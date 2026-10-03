@@ -3,6 +3,7 @@ import { SessionQuery } from '../session/session.query';
 import { SessionService } from '../session/session.service';
 import { ILinks } from './links';
 
+/** Provides the navbar links appropriate for a given user role (agent, customer, or shared/guest). */
 @Injectable({
   providedIn: 'root'
 })
@@ -52,6 +53,7 @@ export class LinksService {
     )
   }
 
+  /** Returns the navbar links for `'agent'`, `'customer'`, or `'shared'` (default: shared). */
   getLinks(user: string){
     switch(user){
       case 'agent':

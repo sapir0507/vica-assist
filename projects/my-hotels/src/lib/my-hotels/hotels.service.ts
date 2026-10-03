@@ -5,6 +5,11 @@ import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
 import { ID } from '@datorama/akita';
 
 
+/**
+ * Client for the backend's `hotels` endpoint used by the "add new hotel"
+ * (agent) flow and by the final-order flow to look up and clean up a
+ * customer's hotel choice.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -55,18 +60,22 @@ export class HotelsService {
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
 
+  /** Creates a new hotel listing on the backend. */
   addHotel(newHotel: HotelRequest): Subscription {
       return this.postHotel(newHotel).subscribe(data=> console.log(data))
   }
 
+  /** Fetches every hotel listing. */
   getHotels(): Observable<Hotel[]>{
     return this._getHotel()
   }
 
+  /** Fetches the hotel listings associated with a given order id. */
   getHotelsByOrderID(orderID: number): Observable<Hotel[]>{
     return this._hotelByOrderID(orderID)
   }
 
+  /** Deletes every hotel listing associated with a given order id, once it's been finalized. */
   deleteHotel(orderID: ID){
    this.getHotels().pipe(
      take(1),
@@ -78,6 +87,7 @@ export class HotelsService {
    ).subscribe()
   }
 
+  /** Deletes a single hotel listing by id. */
   deleteHotelById(id: ID){
     return this.http.delete<Hotel>(this.HotelsServiceUrl + `/${id}`)
     .pipe(

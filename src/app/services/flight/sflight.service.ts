@@ -4,6 +4,10 @@ import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
 import { BehaviorSubject, catchError, observable, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+/**
+ * Client for the backend's `flights` endpoint, used by the "choose flight"
+ * screen to list and pick flights for an order.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -55,17 +59,23 @@ export class SflightService {
     return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
   }
 
-  addFlight(newFlight: FlightsRequest): void {  
-      this.postFlight(newFlight).subscribe(data => console.log(data))  
+  /** Creates a new flight listing on the backend. */
+  addFlight(newFlight: FlightsRequest): void {
+      this.postFlight(newFlight).subscribe(data => console.log(data))
   }
 
+  /** Fetches every flight listing. */
   getFlights(): Observable<Flights[]>{
     return this._getFlights()
   }
 
+  /**
+   * Fetches the flight listings associated with a given order id, despite
+   * the parameter being named `FlightID` for historical reasons.
+   */
   getFlight(FlightID: number){
     // const result = this.FLIGHTS?.filter(flight => flight.id === FlightID)
-    // return result; 
+    // return result;
     return this._getFlight(FlightID)
   }
 

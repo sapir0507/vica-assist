@@ -15,6 +15,14 @@ interface currentUser{
 }
 
 
+/**
+ * Handles logging a user in (locally or via a third party) and keeps the
+ * Akita `SessionStore` updated with the current user's identity and role.
+ *
+ * Third-party sign-in (Google/Twitter/Facebook) is stubbed out for now:
+ * only `siteLogin` (username/password against the backend's `login`
+ * endpoint) is implemented.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -73,6 +81,7 @@ export class SessionService {
     
   }
 
+  /** Looks up a user by username/password and, if found, marks the session as logged in. */
   siteLogin(username: string, password: string){
     let obs1 = this._login(username, password)
     let obs2 = obs1.pipe(
