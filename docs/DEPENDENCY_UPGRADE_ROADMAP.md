@@ -457,6 +457,114 @@ the `@typescript-eslint` peer conflict, fixed here) are now resolved: **a plain 
 with no flags.** Full six-project test sweep, a `vica-assist` development build, and
 `nx run-many --target=lint` (for the two projects that have a lint target) all pass clean.
 
+## Phase 5 — Akita → `@ngrx/signals` migration (planned, not started)
+
+A full `package.json` audit (prompted by wanting dependencies that are actively maintained, widely
+used, and low-risk) surfaced the roadmap's next headline finding: **`@datorama/akita`** (this app's
+state-management library, used throughout `src/app/services/`) **was officially archived by its
+maintainers on GitHub in May 2025** — last published September 2023. Its own team's recommended
+successor, Elf (`@ngneat/elf`), is itself stale (last published August 2024). The real modern choice
+is **NgRx**, specifically `@ngrx/signals` — actively maintained (publishes monthly), and by far the
+most widely-adopted Angular state-management library. Decided (with explicit confirmation) to migrate
+rather than just flag it, given Akita's archived status is a genuine, unbounded forward risk — no
+security patches, no compatibility fixes for future Angular versions, ever again.
+
+**Version**: `@ngrx/signals@^21.1.1`, not the newer `22.x` line — `22.x` targets Angular 22 (released
+since this app's Phase 2 ladder finished at 21), and `21.1.1`'s peer (`@angular/core: ^21.0.0`)
+matches what's installed now exactly. A further Angular 21 → 22 hop is realistic future work but
+deliberately decoupled from this migration — bundling the two would conflate two large, independent
+efforts.
+
+**Full usage inventory** (gathered via a dedicated research pass before planning the migration, so
+this phase can be picked up cold without re-deriving it):
+
+- **Five Store/Query pairs**, all in `src/app/services/`: Session, Order, FinalOrder, Link, Register.
+  **None actually use Akita's entity features** — every "EntityStore" in this app is really a
+  single-object store with root-level fields (`id?`, `order?`, `flight?`, etc.), never a normalized
+  entity collection. The NgRx replacement is plain `withState()` + `withMethods()` (+
+  `withComputed()` where useful) throughout — **`withEntities()` is not needed anywhere**, which
+  significantly simplifies every single store's migration versus a naive 1:1 port.
+- **`AkitaNgRouterStoreModule`** (registered in `app.module.ts`): zero consumers — no `RouterQuery`
+  exists anywhere in the codebase; components read route data via `ActivatedRoute` directly. Pure
+  deletion, no replacement needed.
+- **`@datorama/akita-ng-entity-service`**: the `NG_ENTITY_SERVICE_CONFIG` provider in `app.module.ts`
+  has no class extending `NgEntityService` anywhere in the app. Pure deletion, no replacement needed.
+- **`RegisterStore`/`RegisterQuery`** (`src/app/services/register/`): `RegisterQuery` is never
+  injected anywhere; `RegisterStore`'s write methods are never called (only
+  `RegisterService.addRegister()`'s HTTP POST is actually used, and it never touches the store). This
+  pair should be **deleted outright, not migrated** — keep `addRegister()`'s HTTP call, strip the
+  unused Akita plumbing around it.
+- **`src/app/services/auth/RoleGuardService.service.ts`**: confirmed dead code — no route references
+  it, unreachable from `main.ts`. It's also the exact pre-existing bug flagged back at the Angular 18
+  hop (`this.sessionQuery.isLoggedIn` references a member that doesn't exist on `SessionQuery` — only
+  `isLoggedIn$`, the observable, exists). Since it's unreachable and this phase already touches
+  everything `SessionQuery`-related, this is the natural point to finally resolve that long-flagged
+  item by deleting the file (confirm with the user first, as ever, but this is about as clear-cut as
+  dead-code deletion gets).
+- **`AkitaNgDevtools`** (`app.module.ts`, dev-only): no direct NgRx-Signals-ecosystem replacement
+  needed — Angular DevTools (the browser extension) already shows signal state natively since Angular
+  17+, and SignalStore state is built on signals. Drop the explicit devtools dependency rather than
+  chase a replacement package.
+- **Order's hidden side effect**: `OrderQuery`'s constructor injects `OrderService`, so merely
+  injecting `OrderQuery` anywhere triggers the first `GET orders` HTTP call. The SignalStore
+  replacement must preserve this "load on first use" behavior — likely via `withHooks({ onInit })`
+  calling the load method once.
+- **Order's deep-freeze workaround becomes obsolete**: `order.service.ts`'s `deleteOrder`-adjacent
+  logic rebuilds arrays immutably specifically to work around Akita's dev-mode state freezing (a
+  regression test covers this). SignalStore doesn't freeze by default, so this workaround can likely
+  be simplified once migrated — verify first, since newer SignalStore versions can optionally freeze
+  in dev mode too; don't assume it's safe to simplify without checking.
+- **Cross-library coupling preserved as-is**: `projects/my-flights/src/lib/my-flights.component.ts`
+  imports `OrderQuery` directly from `src/app/...` — the same architectural smell already flagged and
+  downgraded to a lint warning in Phase 4 (`enforce-module-boundaries`). This migration translates
+  that same coupling to the new store; it is not an invitation to fix the underlying architecture,
+  which is separate, larger, unscoped work.
+- **Dead selectors to drop, not port forward**: `SessionQuery.allState$` / `isLoggedIn$` (the plain
+  property, as opposed to `selectIsLoggedIn$` which *is* used) / `selectName$` / `selectPass$` /
+  `selectRole$` / `selectExperationDate$` / `multiPropsCallback$`; `OrderQuery.allOrders$` /
+  `getisLoading$`; `FinalOrderQuery.getOrder$` / `getHotel$` / `getFlight$` / `getID$`; `LinkQuery`'s
+  `multiPropsCallback$`; `login.component.ts`'s `isLoading$`/`error$` (assigned from
+  `selectLoading()`/`selectError()`, never read in any template). Porting dead selectors forward would
+  just carry Akita-era cruft into the new store.
+
+**Migration order** — one store per branch/PR, same discipline as the Angular ladder: simplest and
+most isolated first, to prove the SignalStore pattern before tackling the more coupled stores.
+
+1. **Prep + dead-code removal**: install `@ngrx/signals@^21.1.1`; delete `RegisterStore`/
+   `RegisterQuery`/`register.model.ts`'s Akita plumbing (keep `addRegister()`'s HTTP call),
+   `AkitaNgRouterStoreModule`, the `NG_ENTITY_SERVICE_CONFIG` provider, and (pending confirmation)
+   `RoleGuardService.service.ts`. This shrinks the surface area before touching anything actually live.
+2. **Link** (first real migration — single consumer component, `dropdown-sidebar.component.ts`, no
+   cross-library coupling, a clean read/write boundary): `LinkStore`/`LinkQuery`/`LinkService` → one
+   `LinkStore` built with `signalStore(withState(...), withMethods(...))`, with methods replacing
+   `updateSharedLinks`/`updateAgentLinks`/`updateCustomersLinks` and the `_AfterLogin`/
+   `_WhenNotLoggedIn` wrappers. `dropdown-sidebar.component.ts` reads the new store directly instead
+   of subscribing to `multiProps$`.
+3. **Session**: `SessionStore`/`SessionQuery`/`SessionService` → one `SessionStore`. Components
+   currently call `SessionService.updateUsername`/`updatePassword`/`updateRole` directly — keep that
+   same external-call shape as `withMethods()` entries rather than over-refactoring the call sites
+   beyond what the store-API change requires.
+4. **FinalOrder**: several components currently call `finalOrderStore.update()` directly from outside
+   the service (`user-homepage`, `pending-order-list`, `finished-order-list`, `final-order.component`)
+   — Akita allowed this; SignalStore convention is to encapsulate all mutation inside the store's own
+   `withMethods()` and have components call named methods instead. This is a real, beneficial
+   side-effect of the migration, not scope creep — update each of those four call sites accordingly.
+5. **Order** (last, most coupled): preserve the "load on first use" side effect via `withHooks`;
+   re-verify before simplifying the deep-freeze workaround; keep the `my-flights` library's
+   cross-boundary `OrderQuery` import working against the new store.
+
+After Order lands: remove `@datorama/akita`, `@datorama/akita-ngdevtools`,
+`@datorama/akita-ng-entity-service`, `@datorama/akita-ng-router-store` from `package.json` entirely,
+and `nx.json`'s now-meaningless `"cli": {"defaultCollection": "@datorama/akita"}`. Re-verify whether
+`tsconfig.json`'s `useDefineForClassFields: false` (added specifically to keep Akita `Query`
+subclasses' field-initializer pattern working — see the 15 → 16 hop's Status entry) is still needed
+once no `Query` subclass exists anywhere; don't change it without confirming nothing else now depends
+on that compiler behavior.
+
+**Verification**: same bar as every Phase 2 hop — full six-project test sweep + a development build
+green before landing each store's branch, plus (since no automated UI testing exists in this repo) a
+manual click-through of whatever screens that store's data actually drives.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend
