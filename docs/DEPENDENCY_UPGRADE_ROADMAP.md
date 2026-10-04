@@ -308,16 +308,88 @@ previous version's shape.
 At every hop: bump `@ng-bootstrap/ng-bootstrap` and `@angular-eslint/*` to match, and re-run the
 full test sweep (`nx test vica-assist myFlights item mat-input my-hotels my-pipes`).
 
-## Phase 3 — Nx (semi-independent track, can trail behind Angular)
+## Phase 3 — Nx (done, `chore/nx-upgrade-21`)
 
-Since no `@nrwl/angular` executors are in play, Nx can upgrade on its own schedule via
-`npx nx migrate latest` (it runs the intermediate migrations for you, unlike `ng update`'s
-one-major rule) — but this workspace's config is already non-standard (`angular.json` *and*
-`project.json` both present; `ng test`/`ng build` invoked directly fail with
-`Invalid format version detected - Expected:[1] Found:[2]`, only `nx test`/`nx build` work). Do a
-dry run (`nx migrate latest --dry-run`) and expect to reconcile: Nx renamed `@nrwl/*` to `@nx/*`
-from v16 on, and later Nx versions increasingly expect configuration to live in `project.json`
-exclusively — resolve that drift before migrating further rather than compounding it.
+Nx 14.1.4 → 23.2.1, a 9-major jump. Two findings surfaced before touching any version, both folded
+into this branch since they were directly in scope:
+- **Security**: `nx.json`'s `tasksRunnerOptions.default.options.accessToken` was a **committed,
+  plaintext, read-write Nx Cloud access token**, present since the repo's first Nx commit — exposed
+  in this public repo for the project's entire history. Removed it (and the whole now-pointless
+  `tasksRunnerOptions`/`@nrwl/nx-cloud` block, since Nx Cloud has been unreachable in this environment
+  for every single build/test run across the whole Angular ladder). **The user still needs to revoke/
+  rotate this token on the Nx Cloud dashboard (nx.app)** — removing it from the current file doesn't
+  undo the exposure, and rewriting git history to scrub it is a separate, more drastic step not taken
+  here without explicit confirmation.
+- **Dead dependency**: `@e-square/nx-ddd@^1.2.0` had zero actual usage anywhere in the repo (not
+  referenced by any `nx.json` generator/plugin config, no `project.json` target invokes it). It shipped
+  its own pinned `@nrwl/*@13.1.2` nested deps — one of the two standing reasons `--legacy-peer-deps`
+  has been necessary since the Angular 14 hop. Removed.
+
+`npx nx migrate latest` itself only bumped the core `nx` package — it left every `@nrwl/*` plugin
+untouched (they're not part of its recognized package group). Renamed them all by hand, verified
+against npm: `@nrwl/cli` dropped entirely (the `nx` package ships its own CLI binary now),
+`@nrwl/eslint-plugin-nx` → `@nx/eslint-plugin`, `@nrwl/jest` → `@nx/jest`, `@nrwl/linter` → `@nx/eslint`,
+`@nrwl/workspace` → `@nx/workspace`. Also updated the two `project.json` executor references this
+renamed (`@nrwl/jest:jest` → `@nx/jest:jest`, `@nrwl/linter:eslint` → `@nx/eslint:lint` in `my-hotels`/
+`my-pipes`).
+
+Real fallout from the jump, each hit via the full test/build sweep rather than guessed:
+- Modern Nx rejects bare relative `outputs` paths in `project.json` (`"coverage/projects/my-hotels"`) —
+  requires the `{workspaceRoot}/`/`{projectRoot}/` token syntax. Fixed in `my-hotels`/`my-pipes`.
+- `jest.preset.ts` (the root-level file every project's `jest.config.ts` explicitly points `preset` at
+  — confirmed live, not dead, despite looking unreferenced from `nx.json`/`package.json` alone) needed
+  its `require('@nrwl/jest/preset')` renamed to `@nx/jest/preset` — but the modern package's export
+  shape also changed, wrapping the actual preset under a nested `nxPreset` key instead of exporting it
+  directly, so the old `const nxPreset = require(...); module.exports = {...nxPreset}` pattern silently
+  produced a broken config (no real options, just `{nxPreset: {...}}`). Fixed by destructuring:
+  `const { nxPreset } = require('@nx/jest/preset')`. This one was subtle — tests failed with
+  `document is not defined` and a cryptic Jest worker crash, not an obvious "preset is wrong" error.
+- `nx.json`'s `npmScope` and `targetDependencies` keys are no longer recognized — removed `npmScope`
+  (package.json's own name covers it now) and renamed `targetDependencies` to the modern
+  `targetDefaults` shape (`{"prepare": {"dependsOn": ["^prepare"]}, ...}`, using `^` instead of
+  `"projects": "dependencies"`).
+- Same hoisting-gap class of bug hit at the Angular 14 hop (`jest-environment-jsdom`): `jest-util`
+  resolved only to nested copies under several packages, not hoisted to the top level, so `ts-jest`'s
+  bare `require('jest-util')` failed. Fixed the same way — pinned `jest-util` as an explicit root-level
+  devDependency to force correct hoisting.
+- Modern Nx infers project names from directory/config rather than `angular.json`'s legacy name map —
+  `myFlights` (camelCase, only ever defined via an `angular.json` alias) is now `my-flights` (matching
+  its actual directory, consistent with every other project). A real, if cosmetic, rename — not a bug.
+- `tsconfig.base.json`'s dead `@vica-assist/*` paths block (flagged but deliberately left alone at the
+  18 hop) started actively breaking the build once Nx's improved dependency-graph inference correctly
+  wired up `my-hotels`/`my-flights`/`item`'s library builds as real tasks for the first time — it's
+  non-relative and `baseUrl` isn't set in that context, producing a hard `TS5090` error. Removed it
+  (confirmed dead; the `"*": ["./*"]` entry already there covers all real path resolution).
+- `my-hotels/src/public-api.ts`'s known pre-existing bug (flagged, deliberately unfixed, at the 18 hop
+  — a dead re-export of a nonexistent `my-hotels.service`, should be `hotels.service`) got fixed here,
+  since it was directly blocking this phase's build verification.
+- **A genuine, unresolved upstream TypeScript 5.9 bug** (`Cannot destructure property 'pos' of
+  'file.referencedFiles[index]'` — tracked at angular/angular-cli#31649, #32281, and
+  angular/angular#57850, the first two closed by the Angular team as "not planned," no fix or
+  workaround available as of this writing): once Nx's dependency graph correctly required `my-hotels`
+  and `my-flights` to build via `ng-packagr` before `vica-assist` (a relationship nominally declared
+  in the original `nx.json` too, via `targetDependencies`, but apparently never actually exercised
+  under Nx 14), their standalone `ng-packagr` builds started crashing on this TS-internal bug. Spent
+  real effort root-causing this (confirmed via a minimal repro against `ng-packagr`'s own programmatic
+  API, and against TypeScript's `NgtscProgram` directly) before concluding it's a genuine upstream
+  compiler bug, not a project misconfiguration — several documented workarounds (removing project
+  references, `skipDefaultLibCheck`, `disableReferencedProjectLoad`, cache clears) were already
+  reported as ineffective by other affected users. Since `vica-assist`'s own webpack build compiles
+  every library straight from TypeScript source and never actually consumes any library's packaged
+  `dist/` output, forcing that `ng-packagr` pre-build isn't functionally necessary here — removed the
+  `build` entry from `nx.json`'s `targetDefaults` entirely, restoring the same behavior that held
+  (apparently by accident) throughout the whole Angular 13 → 21 ladder. **Known, documented limitation**:
+  `nx build my-hotels` / `nx build my-flights` standalone remain broken until TypeScript fixes this
+  upstream; `nx build vica-assist` itself is unaffected and was the only build target ever actually
+  exercised by this project's verification bar.
+
+Flagged, not fixed (found incidentally, out of scope for this phase): four root-level duplicate files
+(`jest.config.ts`/`.js`, `jest.preset.js` — only `jest.preset.ts` turned out to be live) and
+`my-hotels/.babelrc`'s reference to the never-installed `@nrwl/web` package; both are unreferenced
+dead config, not blocking anything.
+
+Full six-project test sweep (`vica-assist` + all 5 libraries) and a `vica-assist` development build
+both pass clean.
 
 ## Phase 4 — ESLint & Jest tooling (after Phase 2 settles, not in parallel)
 

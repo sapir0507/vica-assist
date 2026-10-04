@@ -19,7 +19,7 @@
       "defaultConfiguration": "production"
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": [
         "{options.outputFile}"
       ],
@@ -30,9 +30,9 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
-        "coverage/projects/my-hotels"
+        "{workspaceRoot}/coverage/projects/my-hotels"
       ],
       "options": {
         "jestConfig": "projects/my-hotels/jest.config.ts",

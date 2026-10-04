@@ -6,7 +6,7 @@
     "build": {
       "executor": "@angular-devkit/build-angular:ng-packagr",
       "outputs": [
-        "dist/projects/my-pipes"
+        "{workspaceRoot}/dist/projects/my-pipes"
       ],
       "options": {
         "project": "projects/my-pipes/ng-package.json"
@@ -22,9 +22,9 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
-        "coverage/projects/my-pipes"
+        "{workspaceRoot}/coverage/projects/my-pipes"
       ],
       "options": {
         "jestConfig": "projects/my-pipes/jest.config.ts",
@@ -32,7 +32,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "projects/my-pipes/src/**/*.ts",

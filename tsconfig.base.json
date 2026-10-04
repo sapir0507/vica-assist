@@ -21,19 +21,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "*": ["./*"],
-      "@vica-assist/my-flights": [
-        "projects/my-flights/src/index.ts"
-      ],
-      "@vica-assist/my-hotels": [
-        "projects/my-hotels/src/index.ts"
-      ],
-      "@vica-assist/my-pipes": [
-        "projects/my-pipes/src/index.ts"
-      ],
-      "@vica-assist/item": [
-        "projects/item/src/item.ts"
-      ]
+      "*": ["./*"]
     }
   },
   "exclude": [
