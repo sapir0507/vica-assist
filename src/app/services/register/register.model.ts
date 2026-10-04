@@ -1,10 +1,11 @@
 import { EntityState, ActiveState } from '@datorama/akita';
+import { UserRole } from '../session/session.store';
 
 export interface RegisterRequest extends EntityState<Register, number>, ActiveState<number> {
   username?: string;
   password?: string;
   email?: string;
-  role?: string;
+  role?: UserRole;
 }
 
 export interface Register extends EntityState<Register, number>, ActiveState<number> {
@@ -12,7 +13,7 @@ export interface Register extends EntityState<Register, number>, ActiveState<num
   username?: string;
   password?: string;
   email?: string;
-  role?: string;
+  role?: UserRole;
 }
 
 export function createRegister(params: Partial<Register>) {

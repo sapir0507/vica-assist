@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, CanActivate } from '@angular/router';
-import { 
-  AuthGuardService as AuthGuard 
-} from './services/auth-guard/auth-guard.service';
+import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from './services/auth-guard/auth.guard';
+import { UserRole } from './services/session/session.store';
 
 const routes: Routes = [
   {
     path: 'homepage',
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     loadChildren: () => import('./modules/shared/homepage/homepage.module').then(m => m.HomepageModule)
   },
   {
     path: 'add-hotel',
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
+    data: { expectedRole: 'agent' satisfies UserRole },
     loadChildren: () => import('./modules/all_modules/add-new-hotel/add-new-hotel.module').then(m => m.AddNewHotelModule)
   },
   // {
@@ -21,7 +21,8 @@ const routes: Routes = [
   // },
   {
     path: 'add-flight',
-     canActivate: [AuthGuard],
+     canActivate: [authGuard],
+     data: { expectedRole: 'agent' satisfies UserRole },
     loadChildren: () => import('./modules/all_modules/add-new-flight/add-new-flight.module').then(m => m.AddNewFlightModule)
   },
   // {
@@ -38,7 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'final-order',
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     loadChildren: () => import('./modules/all_modules/final-order/final-order.module').then(m => m.FinalOrderModule)
   },
   {
@@ -55,7 +56,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-  providers: [AuthGuard]
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

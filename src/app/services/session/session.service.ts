@@ -1,15 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SessionStore } from './session.store';
+import { SessionStore, UserRole } from './session.store';
 import { environment } from 'src/environments/environment';
-import { Observable, tap } from 'rxjs';
+import { Observable, catchError, finalize, of, tap } from 'rxjs';
 
 const date = new Date().getDate() + 30
 
 interface currentUser{
   username?: string,
   password?: string,
-  role?: string,
+  role?: UserRole,
   experationDate?: number,
   isLoggedIn?: boolean
 }
@@ -32,7 +32,7 @@ export class SessionService {
   currentUser: currentUser = {
     username: '',
     password: '',
-    role: 'unknown',
+    role: 'customer',
     experationDate: date - 30,
     isLoggedIn: false
   }
@@ -70,21 +70,21 @@ export class SessionService {
   }
 
   /** Looks up a user by username/password and, if found, marks the session as logged in. */
-  siteLogin(username: string, password: string){
-    let obs1 = this._login(username, password)
-    let obs2 = obs1.pipe(
+  siteLogin(username: string, password: string): Observable<currentUser[]>{
+    this.sessionStore.setLoading(true);
+    return this._login(username, password).pipe(
       tap( user => {
         if(user && user[0]){
           user[0].isLoggedIn = true;
           this.updateCurrentUser(user[0]) //updating the store per the documents
         }
-        else{
-          //  this.updateCurrentUser(this.currentUser)
-        }
-      })
-    ).subscribe()
-     
-    return obs2;
+      }),
+      catchError(error => {
+        this.sessionStore.setError(error);
+        return of([]);
+      }),
+      finalize(() => this.sessionStore.setLoading(false))
+    );
   }
   
   updateUsername(newName: string){
@@ -111,8 +111,8 @@ export class SessionService {
     }
   }
 
-  updateRole(newRole: string){
-    try 
+  updateRole(newRole: UserRole){
+    try
     {
         this.sessionStore.update(state => ({
           ...state,
@@ -121,6 +121,14 @@ export class SessionService {
     } catch(error) {
       this.sessionStore.setError(error);
     }
+  }
+
+  /** Clears the session's logged-in flag; this is the one thing route guards actually check. */
+  logout(){
+    this.sessionStore.update(state => ({
+      ...state,
+      isLoggedIn: false
+    }));
   }
 
   updateCurrentUser(currentUser: currentUser){

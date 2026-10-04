@@ -4,11 +4,13 @@ import { environment } from 'src/environments/environment';
 
 const date: Date = new Date();
 
+export type UserRole = 'agent' | 'customer';
+
 export interface SessionState {
    token?: string;
    username: string;
    password: string;
-   role: string;
+   role: UserRole;
    isLoggedIn: boolean;
    experationDate?: number;
 }

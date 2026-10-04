@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { LinkQuery } from 'src/app/services/links/link.query';
 import { LinkService } from 'src/app/services/links/link.service';
 import { ILinks } from 'src/app/services/links/links';
 import { SessionQuery } from 'src/app/services/session/session.query';
+import { SessionService } from 'src/app/services/session/session.service';
 
 @Component({
   standalone: false,
@@ -24,9 +24,9 @@ export class DropdownSidebarComponent implements OnInit {
 
   constructor(
     // private SLinks: LinksService,
-    private auth: AuthService, 
     private linkQuery: LinkQuery,
     private sessionQuery: SessionQuery,
+    private sessionService: SessionService,
     private linkService: LinkService
 
     ) {
@@ -46,7 +46,7 @@ export class DropdownSidebarComponent implements OnInit {
   }
 
   OnLogout(){
-    this.auth.logout()
+    this.sessionService.logout()
     this.linkService.updateSharedLinks_WhenNotLoggedIn()
   }
 

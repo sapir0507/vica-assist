@@ -2,7 +2,6 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { LinkService } from 'src/app/services/links/link.service';
 import { SessionQuery } from 'src/app/services/session/session.query';
 import { SessionService } from 'src/app/services/session/session.service';
@@ -37,7 +36,6 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private linksService: LinkService,
-    private auth: AuthService,
     private sessionQuery: SessionQuery,
     private sessionService: SessionService,
     ngZone: NgZone
@@ -57,18 +55,16 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(){
-    //login
-    const a = this.sessionService.login(this.formGroup.value['username'] ?? undefined, this.formGroup.value['password'] ?? undefined)
-     //if logged in 
-
-    //  if(this._status){
-       this.auth.login().pipe().subscribe()
-       this.linksService.updateSharedLinks_AfterLogin()
-       this.router.navigate(['/homepage'], navigationExtras);
-    //  }
-   
-    //else
-
+    this.myError = false;
+    this.sessionService.login(this.formGroup.value['username'] ?? undefined, this.formGroup.value['password'] ?? undefined)
+      ?.subscribe(() => {
+        if(this.sessionQuery.getValue().isLoggedIn){
+          this.linksService.updateSharedLinks_AfterLogin()
+          this.router.navigate(['/homepage'], navigationExtras);
+        } else {
+          this.myError = true;
+        }
+      })
   }
 
   ngOnDestroy(): void {

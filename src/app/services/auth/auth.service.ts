@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
 
 /**
- * Tracks the current session's authentication state and identity provider
- * (local account vs. a third party such as Google).
+ * Tracks the current session's identity provider (local account vs. a third
+ * party such as Google). Actual login/logout state lives in `SessionService`
+ * (backed by the Akita session store) — see session.service.ts's `logout()`.
  *
  * `isAuthenticated()` is currently a stub that always returns `true`; it's
  * meant to be wired up to real session/token validation.
@@ -12,8 +12,6 @@ import { Observable, of, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  isLoggedIn = false;
-  redirectUrl: string | null = null;
   isLocal: string = 'local';
 
   private isThirdParty(){
@@ -41,20 +39,5 @@ export class AuthService {
 
   getAuthStatus(){
     return this.isAuthenticated()
-  }
-
-  /** Marks the current session as logged in. Always succeeds (no real credential check yet). */
-  login(): Observable<boolean>{
-    return of(true)
-    .pipe(
-      tap(()=> this.isLoggedIn = true)
-    );
-    
-  }
-
-  /** Marks the current session as logged out. */
-  logout(){
-    const third = this.isThirdParty()
-    this.isLoggedIn = false;
   }
 }
