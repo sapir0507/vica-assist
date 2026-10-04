@@ -9,6 +9,7 @@ Code quality, security, and clarity matter more here than speed — assume a rev
 - Only comment the WHY when it's non-obvious: a hidden constraint, a subtle invariant, a workaround for a specific bug, or behavior that would surprise a reader.
 - No multi-paragraph docstrings or decorative comment blocks.
 - Don't create standalone docs/markdown files unless explicitly asked.
+- update the readme.md file of the project when it needs it
 
 # Code best practices
 
@@ -37,3 +38,23 @@ Code quality, security, and clarity matter more here than speed — assume a rev
 # Security
 
 - If a vulnerability is spotted while working in an area of the code (even unrelated to the current task), flag it and fix it — don't leave known issues in place, since this is public, interview-facing code.
+
+# Editing Rules
+
+When modifying existing code:
+
+- Change only what is necessary.
+
+- Preserve unrelated behavior.
+
+- Preserve existing public interfaces unless requested otherwise.
+
+- Avoid cosmetic-only edits.
+
+- Avoid unnecessary formatting churn.
+
+- Do not remove unrelated dead code, TODOs, or comments.
+
+- Avoid introducing new dependencies unless necessary. 
+
+Every modified line should have a direct reason tied to the task.
