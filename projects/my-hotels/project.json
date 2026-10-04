@@ -1,10 +1,13 @@
 {
+  "name": "my-hotels",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "projects/my-hotels/src",
   "prefix": "lib",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:ng-packagr",
+      "defaultConfiguration": "production",
       "options": {
         "project": "projects/my-hotels/ng-package.json"
       },
@@ -15,8 +18,7 @@
         "development": {
           "tsConfig": "projects/my-hotels/tsconfig.lib.json"
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "lint": {
       "executor": "@nx/eslint:lint",

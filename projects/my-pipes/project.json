@@ -1,4 +1,6 @@
 {
+  "name": "@vica-assist/my-pipes",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "projects/my-pipes/src",
   "prefix": "vica-assist",
@@ -8,6 +10,7 @@
       "outputs": [
         "{workspaceRoot}/dist/projects/my-pipes"
       ],
+      "defaultConfiguration": "production",
       "options": {
         "project": "projects/my-pipes/ng-package.json"
       },
@@ -18,8 +21,7 @@
         "development": {
           "tsConfig": "projects/my-pipes/tsconfig.lib.json"
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "test": {
       "executor": "@nx/jest:jest",

@@ -2,10 +2,14 @@
   "extends": "nx/presets/npm.json",
   "targetDefaults": {
     "prepare": {
-      "dependsOn": ["^prepare"]
+      "dependsOn": [
+        "^prepare"
+      ]
     },
     "package": {
-      "dependsOn": ["^package"]
+      "dependsOn": [
+        "^package"
+      ]
     }
   },
   "affected": {

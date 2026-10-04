@@ -81,7 +81,7 @@ export class HotelsService {
      take(1),
      map(hotels=>{
       hotels.forEach(hotel=>{
-        hotel.orderID === orderID? this.deleteHotelById(hotel.id) : ""
+        if (hotel.orderID === orderID) this.deleteHotelById(hotel.id)
       })
      })
    ).subscribe()
