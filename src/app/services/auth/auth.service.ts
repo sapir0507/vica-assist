@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import { SessionService } from '../session/session.service';
 
 /**
  * Tracks the current session's authentication state and identity provider
@@ -16,10 +15,6 @@ export class AuthService {
   isLoggedIn = false;
   redirectUrl: string | null = null;
   isLocal: string = 'local';
-
-  constructor(
-    private sessionService: SessionService
-  ) { }
 
   private isThirdParty(){
     if(this.isLocal === 'local') return false;
@@ -59,16 +54,7 @@ export class AuthService {
 
   /** Marks the current session as logged out. */
   logout(){
-    // if(this.isLocal !== 'local')
-    // {
-    //   this.onGoogleSignOut()
-    // }
     const third = this.isThirdParty()
     this.isLoggedIn = false;
-  }
-
-  /** Signs the user out of Google, when third-party sign-in is enabled. */
-  onGoogleSignOut(){
-    this.sessionService.GoogleSignOut()
   }
 }

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
 import { environment } from 'src/environments/environment';
-import { Observable, tap, ReplaySubject } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 const date = new Date().getDate() + 30
 
@@ -19,9 +19,9 @@ interface currentUser{
  * Handles logging a user in (locally or via a third party) and keeps the
  * Akita `SessionStore` updated with the current user's identity and role.
  *
- * Third-party sign-in (Google/Twitter/Facebook) is stubbed out for now:
- * only `siteLogin` (username/password against the backend's `login`
- * endpoint) is implemented.
+ * Third-party sign-in (Twitter/Facebook) is stubbed out for now: only
+ * `siteLogin` (username/password against the backend's `login` endpoint)
+ * is implemented.
  */
 @Injectable({
   providedIn: 'root'
@@ -29,8 +29,6 @@ interface currentUser{
 export class SessionService {
 
   HotelServiceUrl: string = environment.api + 'login'
-  // private auth2: gapi.auth2.GoogleAuth | null = null;
-  private subject: ReplaySubject<gapi.auth2.GoogleUser | null> = new ReplaySubject(1);
   currentUser: currentUser = {
     username: '',
     password: '',
@@ -43,14 +41,8 @@ export class SessionService {
   constructor(
     private sessionStore: SessionStore,
     private http: HttpClient
-    ) { 
+    ) {
        this.updateCurrentUser(this.currentUser)
-      //  if(gapi)
-      //  gapi.load('auth2', ()=>{
-      //    this.auth2 = gapi.auth2.init({
-      //      client_id: environment.GAPI_CLIENT_ID
-      //    })
-      //  })
   }
 
   private _login(username: string, password: string): Observable<currentUser[]>{
@@ -63,10 +55,6 @@ export class SessionService {
   login(username?: string, password?: string, thirdparty?: string){
     if(thirdparty){
       switch (thirdparty) {
-        case "GOOGLE":
-          // this.GoogleSignin();
-          // return this.GoogleObservable();
-          return null
         case "TWITTER":
           return null
         case "FACEBOOK":
@@ -99,29 +87,6 @@ export class SessionService {
     return obs2;
   }
   
-  GoogleSignin(){
-    // if(this.auth2)
-    // this.auth2.signIn({
-    //   //
-    //   scope: 'https://www.googleapis.com/auth/gmail.readonly'
-    // }).then( user => {
-    //   this.subject.next(user)
-    // }).catch(() => {
-    //   this.subject.next(null)
-    // })
-  }
-
-  GoogleSignOut(){
-    // if(this.auth2)
-    // this.auth2.signOut().then(() => {
-    //   this.subject.next(null)
-    // })
-  }
-
-  GoogleObservable(): Observable<gapi.auth2.GoogleUser|null>{
-    return this.subject.asObservable()
-  }
-
   updateUsername(newName: string){
     try 
     {

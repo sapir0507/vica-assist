@@ -4,8 +4,8 @@ import { delay } from 'rxjs';
 import { SessionState, SessionStore } from './session.store';
 
 
-@Injectable()
-export class SessionQuery extends Query<SessionState> {  
+@Injectable({providedIn: 'root'})
+export class SessionQuery extends Query<SessionState> {
 
     allState$ = this.select();
     isLoggedIn$ = this.select('isLoggedIn');

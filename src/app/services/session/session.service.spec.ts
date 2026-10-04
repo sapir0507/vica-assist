@@ -34,7 +34,6 @@ describe('SessionService', () => {
     });
 
     it('returns null for unimplemented third-party providers', () => {
-      expect(service.login('user', 'pass', 'GOOGLE')).toBeNull();
       expect(service.login('user', 'pass', 'TWITTER')).toBeNull();
       expect(service.login('user', 'pass', 'FACEBOOK')).toBeNull();
     });
