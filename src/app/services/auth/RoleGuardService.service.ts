@@ -4,8 +4,7 @@ import { Router,
          ActivatedRouteSnapshot
        } from '@angular/router';
 import { AuthService } from './auth.service';
-import decode from 'jwt-decode';
-import { globalAgent } from 'http';
+import { jwtDecode } from 'jwt-decode';
 import { SessionQuery } from '../session/session.query';
 
 @Injectable()
@@ -21,7 +20,7 @@ export class RoleGuardService implements CanActivate {
     // on the data property
     const expectedRole = route.data['expectedRole'];
     const token: string = localStorage.getItem('token') || '';
-    console.log('token', token, ' -- decode --', decode(token))
+    console.log('token', token, ' -- decode --', jwtDecode(token))
     const role = this.sessionQuery.isLoggedIn;
     // // decode the token to get its payload
     const isLoggedIn = role === 'agent' || role === 'customer'? true : false;
