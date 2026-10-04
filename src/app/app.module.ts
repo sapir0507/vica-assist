@@ -19,8 +19,6 @@ import { SessionStore } from './services/session/session.store';
 import { SflightService } from './services/flight/sflight.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
-import { NG_ENTITY_SERVICE_CONFIG } from '@datorama/akita-ng-entity-service';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { MatSliderModule } from '@angular/material/slider';
 import { ShotelService } from './services/hotel/shotel.service';
@@ -55,7 +53,6 @@ const JWT_Module_Options: JwtModuleOptions = {
     AppRoutingModule,
     ReactiveFormsModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    AkitaNgRouterStoreModule,
     HttpClientModule,
     MatSliderModule,
     JwtModule.forRoot(JWT_Module_Options),
@@ -64,11 +61,6 @@ const JWT_Module_Options: JwtModuleOptions = {
     NgbModule
   ],
   providers: [
-    { provide: 
-      NG_ENTITY_SERVICE_CONFIG, 
-      useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' }
-
-    },
     SessionQuery,
     SessionStore,
     SflightService,

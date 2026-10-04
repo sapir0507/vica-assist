@@ -12,7 +12,6 @@ import { RegisterService } from 'src/app/services/register/register.service';
 export class RegisterComponent implements OnInit {
 
   private registerRequest: RegisterRequest = {
-    active: 1,
     username: 'sapir0507',
     password: '1234',
     email: 'user@example.com'
@@ -37,7 +36,6 @@ export class RegisterComponent implements OnInit {
     const role = this.formGroup.get('role')?.value;
     if(this.formGroup.valid){
         this.registerRequest = {
-          active: 1,
           username: this.formGroup.get('username')?.value ?? undefined,
           password: this.formGroup.get('password')?.value ?? undefined,
           email: this.formGroup.get('email')?.value ?? undefined,

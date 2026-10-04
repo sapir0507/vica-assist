@@ -457,7 +457,7 @@ the `@typescript-eslint` peer conflict, fixed here) are now resolved: **a plain 
 with no flags.** Full six-project test sweep, a `vica-assist` development build, and
 `nx run-many --target=lint` (for the two projects that have a lint target) all pass clean.
 
-## Phase 5 — Akita → `@ngrx/signals` migration (planned, not started)
+## Phase 5 — Akita → `@ngrx/signals` migration (in progress — prep step done, stores not started)
 
 A full `package.json` audit (prompted by wanting dependencies that are actively maintained, widely
 used, and low-risk) surfaced the roadmap's next headline finding: **`@datorama/akita`** (this app's
@@ -526,6 +526,21 @@ this phase can be picked up cold without re-deriving it):
   `multiPropsCallback$`; `login.component.ts`'s `isLoading$`/`error$` (assigned from
   `selectLoading()`/`selectError()`, never read in any template). Porting dead selectors forward would
   just carry Akita-era cruft into the new store.
+
+**Prep step done** (`chore/ngrx-signals-prep-dead-code`): installed `@ngrx/signals@^21.1.1` (not yet
+used — no store has been migrated). Deleted `RegisterStore`/`RegisterQuery` outright per the plan
+(confirmed: `RegisterQuery` was never injected anywhere, `RegisterStore`'s write methods were never
+called) — `register.model.ts` and `register.service.ts` were trimmed to keep only `RegisterRequest`
+and `addRegister()`'s HTTP call, stripping the now-meaningless Akita `EntityState`/`ActiveState`
+inheritance. That inheritance had been silently adding a vestigial `active: 1` field to every register
+payload in `register.component.ts` (hard-coded, never read back anywhere) — removed along with it, a
+genuine small cleanup the type change forced into the open. Removed `AkitaNgRouterStoreModule` and the
+`NG_ENTITY_SERVICE_CONFIG` provider from `app.module.ts` (and the matching `@datorama/akita-ng-router-
+store`/`@datorama/akita-ng-entity-service` packages) — both confirmed zero-consumer per the inventory.
+Deleted `RoleGuardService.service.ts` (confirmed dead, user-approved) — the exact pre-existing bug
+flagged at the 18 hop. `@datorama/akita` itself stays for now; it's still used by the four remaining
+stores. Full six-project test sweep, a development build, lint, and a live `nx serve` check of
+`/homepage`, `/login`, and `/register` (the routes touched by this step) all pass clean.
 
 **Migration order** — one store per branch/PR, same discipline as the Angular ladder: simplest and
 most isolated first, to prove the SignalStore pattern before tackling the more coupled stores.
