@@ -196,7 +196,40 @@ is `@angular/core: ^20.0.0`), TypeScript to `~5.9.3`. Stayed on `jest-preset-ang
 development build both passed with no new warnings beyond the pre-existing drive-letter-casing ones
 from the 19 hop.
 
-The remaining hops (20 → 21) are a forward-looking roadmap, not yet started.
+Phase 2's eighth and final hop, **20 → 21**, is also done (`feature/angular-upgrade/21`): core/cdk/
+material/cli bumped to the 21.2.x line, `@angular-eslint/*` to `~21.4.0`, `ng-packagr` to `^21.2.7`,
+`@ng-bootstrap/ng-bootstrap` to `^20.0.0` (one-major-behind pattern held for the eighth and final
+time — `20.0.0`'s peer is `@angular/core: ^21.0.0`). TypeScript stayed at `~5.9.3` (the shared ceiling
+across compiler-cli/build-angular/ng-packagr is `>=5.9 <6.0`; already at the latest 5.9.x patch).
+
+Unlike every prior hop, this one forced a real Jest ecosystem bump, not just an optional one:
+`@angular-devkit/build-angular@21.2.24` now peers on `jest: '^30.2.0'` exclusively — no more `^29.x`
+fallback — so `jest-preset-angular` had to move too. Its own latest version at the time of the 19 and
+20 hops (`15.0.3`) tops out at `@angular/core: '<21.0.0'`, i.e. doesn't cover this hop at all; had to
+go all the way to the actual current `latest` dist-tag, `17.0.1` (`>=20.0.0 <23.0.0`), skipping over
+an intermediate `16.x` line entirely. That pulled `jest`/`jest-environment-jsdom` to `30.5.2` and
+`@types/jest` to `30.0.0`. `ts-jest` needed no version change — `29.4.14` already peers on
+`jest: '^29.0.0 || ^30.0.0'` natively. Despite being the largest single tooling jump of the whole
+ladder, it was clean in practice: all 21 Jest-based library tests (`my-hotels`, `my-pipes`, plus
+`myFlights`/`item`/`mat-input`) passed with zero changes needed beyond the version bumps themselves,
+and the full 78-test karma suite plus a development build passed clean too.
+
+**The full Angular 13 → 21 upgrade ladder (Phase 2) is now complete.** Every hop landed on its own
+branch, squashed, fast-forward-merged per the sync workflow. Three items were deliberately deferred
+rather than fixed mid-ladder, tracked for a dedicated follow-up pass:
+- Phase 4 (ESLint flat-config migration: `eslint` → 9.x+, `@typescript-eslint/*` → v7/v8, `.eslintrc.json`
+  → `eslint.config.js`) — scoped out from the start, confirmed necessary by the `@angular-eslint@18.4.3`+
+  `@typescript-eslint/utils` peer conflict hit at the 18 hop.
+- Phase 3 (the Nx upgrade track: `@nrwl/*@14.1.4` → `@nx/*` current, plus reconciling `angular.json`'s
+  Nx-split format, which has caused friction at nearly every hop — the `ng update` migration-schematic
+  failure at the 19 hop and the `angular.json` version-field flip dance at every hop both trace back to
+  it) — not started, still fully on the Phase 0 baseline.
+- Two pre-existing bugs found while fixing the 18 hop's `tsconfig.json` (`projects/my-hotels/src/
+  public-api.ts`'s dead re-export, `RoleGuardService`'s `isLoggedIn` vs `isLoggedIn$` typo), plus the
+  dead `@vica-assist/*` paths block found in `tsconfig.base.json` at the same hop — all three
+  confirmed unrelated to any version bump, left for a cleanup pass.
+
+The remaining hops (none — the ladder is done) have no further roadmap entries.
 
 Two structural facts shape the plan:
 - **No `@nrwl/angular` package is installed.** All Angular projects use plain
@@ -268,11 +301,9 @@ previous version's shape.
   change (see Status above), the first genuinely breaking one in the ladder so far.
 - **19 → 20** (done, see Status above): landed on TypeScript `~5.9.3`. Unlike the previous hop, this
   one really was the clean, no-forced-change hop it looked like on paper.
-- **20 → 21**: TypeScript ceiling TBD — verify via `npm view` rather than assume, same discipline as
-  every hop so far. Same pattern expected: opt-in signals/zoneless features, no forced breakage for an
-  NgModule + Zone.js app — but re-run the full test suite and a manual click-through regardless, since
-  Material/CDK keep shifting internals release to release (and the 19 hop proved "looks clean on
-  paper" isn't a guarantee).
+- **20 → 21** (done, see Status above): landed on TypeScript `~5.9.3` (no change from the 20 hop — same
+  ceiling). The ladder's biggest tooling jump (a forced Jest 30 bump, `jest-preset-angular` 15.x→17.x)
+  turned out clean in practice — see Status above.
 
 At every hop: bump `@ng-bootstrap/ng-bootstrap` and `@angular-eslint/*` to match, and re-run the
 full test sweep (`nx test vica-assist myFlights item mat-input my-hotels my-pipes`).
