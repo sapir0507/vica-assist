@@ -22,6 +22,14 @@ export default [
                 {
                     enforceBuildableLibDependency: true,
                     allow: [],
+                    // This rule's auto-fixer rewrites same-project "src/app/..." imports (this
+                    // codebase's one established style) to relative "../../..." paths. Confirmed
+                    // this isn't cosmetic: that rewrite made webpack bundle a second, duplicate copy
+                    // of a providedIn: 'root' class across a lazy-loaded route boundary (a casing
+                    // mismatch between the two resolved absolute paths), silently breaking singleton
+                    // DI for anything injecting it. allowCircularSelfDependency disables just this
+                    // same-project check; cross-library boundary enforcement below is unaffected.
+                    allowCircularSelfDependency: true,
                     depConstraints: [
                         {
                             sourceTag: "*",
