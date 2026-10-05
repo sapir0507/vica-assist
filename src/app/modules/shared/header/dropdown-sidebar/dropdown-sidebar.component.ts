@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs';
-import { LinkQuery } from 'src/app/services/links/link.query';
-import { LinkService } from 'src/app/services/links/link.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { ILinks } from 'src/app/services/links/links';
+import { LinkStore } from 'src/app/services/links/link.store';
 import { SessionQuery } from 'src/app/services/session/session.query';
 import { SessionService } from 'src/app/services/session/session.service';
 
@@ -13,41 +11,28 @@ import { SessionService } from 'src/app/services/session/session.service';
   styleUrls: ['./dropdown-sidebar.component.scss']
 })
 export class DropdownSidebarComponent implements OnInit {
-  customersLinks: Array<ILinks> | null = null;
-  agentsLinks: Array<ILinks> | null = null;
-  sharedLinks: Array<ILinks> | null = null;
   logoutLink: Array<ILinks> = [{
     name: 'Logout',
     link: '#'
   }];
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
+  protected linkStore = inject(LinkStore);
 
   constructor(
-    // private SLinks: LinksService,
-    private linkQuery: LinkQuery,
     private sessionQuery: SessionQuery,
-    private sessionService: SessionService,
-    private linkService: LinkService
+    private sessionService: SessionService
 
     ) {
-    this.linkQuery.multiProps$.subscribe(data=>{
-      this.sharedLinks = data.sharedLinks;
-      this.agentsLinks = data.agentLinks;
-      this.customersLinks = data.customersLinks;
-    })
-
     this.sessionQuery.selectIsLoggedIn$.subscribe( data => {
       this.isLoggedIn = data;
     })
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void { /* empty */ }
 
   OnLogout(){
     this.sessionService.logout()
-    this.linkService.updateSharedLinks_WhenNotLoggedIn()
+    this.linkStore.updateSharedLinks_WhenNotLoggedIn()
   }
 
 }

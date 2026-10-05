@@ -1,21 +1,51 @@
-import { Injectable } from '@angular/core';
-import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
-import { createLink, Link } from './link.model';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { ILinks } from './links';
 
-export interface LinkState extends EntityState<Link> {
-  id: number | string;
-  sharedLinks: Array<ILinks> | null,
-  agentLinks: Array<ILinks> | null,
-  customersLinks: Array<ILinks> | null
+export interface LinkState {
+  sharedLinks: ILinks[];
+  agentLinks: ILinks[];
+  customersLinks: ILinks[];
 }
 
-@Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'link' })
-export class LinkStore extends EntityStore<LinkState> {
+const initialState: LinkState = {
+  sharedLinks: [
+    { link: '', name: 'Homepage' },
+    { link: '/login', name: 'Login' },
+    { link: '/register', name: 'Register' }
+  ],
+  agentLinks: [
+    { link: '/add-flight', name: 'Add Flight' },
+    { link: '/add-hotel', name: 'Add Hotel' }
+  ],
+  customersLinks: [
+    { link: '/choose-flight', name: 'Choose Flight' },
+    { link: '/choose-hotel', name: 'Choose Hotel' }
+  ]
+};
 
-  constructor() {
-    super(createLink());
-  }
-
-}
+export const LinkStore = signalStore(
+  { providedIn: 'root' },
+  withState(initialState),
+  withMethods((store) => ({
+    updateSharedLinks(sharedLinks: ILinks[]) {
+      patchState(store, { sharedLinks });
+    },
+    updateSharedLinks_AfterLogin() {
+      patchState(store, {
+        sharedLinks: [
+          { link: '/homepage', name: 'Homepage' },
+          { link: '#', name: 'Logout' }
+        ]
+      });
+    },
+    updateSharedLinks_WhenNotLoggedIn() {
+      patchState(store, {
+        sharedLinks: [
+          { link: '/homepage', name: 'Homepage' },
+          { link: '/login', name: 'Login' },
+          { link: '/register', name: 'Register' }
+        ]
+      });
+    }
+  }))
+);

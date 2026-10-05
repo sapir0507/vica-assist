@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { LinkService } from 'src/app/services/links/link.service';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { LinkStore } from 'src/app/services/links/link.store';
 import { ILinks } from 'src/app/services/links/links';
 import { SessionService } from 'src/app/services/session/session.service';
 // import { LinksService } from 'src/app/services/links/links.service';
@@ -21,22 +21,18 @@ export class LinksComponent implements OnInit {
   @Input() isLogout?: boolean | null = null;
   @Input() username?: string | null = null;
 
+  private linkStore = inject(LinkStore);
 
- 
   constructor(
-    private sessionService: SessionService,
-    private linkService: LinkService
+    private sessionService: SessionService
     ) {
   }
 
-  ngOnInit(): void {
-
-
-  }
+  ngOnInit(): void {/* empty */ }
 
   onLogout(){
     this.sessionService.logout()
-    this.linkService.updateSharedLinks_WhenNotLoggedIn()
+    this.linkStore.updateSharedLinks_WhenNotLoggedIn()
   }
 
   
