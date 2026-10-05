@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
 import { authGuard } from './auth.guard';
-import { SessionStore, UserRole } from '../session/session.store';
+import { SessionStore, UserRole } from 'src/app/services/session/session.store';
 
 describe('authGuard', () => {
   let store: InstanceType<typeof SessionStore>;
@@ -27,34 +28,34 @@ describe('authGuard', () => {
   }
 
   it('redirects to /login when not logged in', () => {
-    patchState(store, { isLoggedIn: false });
+    patchState(unprotected(store), { isLoggedIn: false });
 
     expect(run()).toBe(dummyTree);
     expect(router.createUrlTree).toHaveBeenCalledWith(['/login']);
   });
 
   it('redirects to /login when not logged in, even if the route requires a role', () => {
-    patchState(store, { isLoggedIn: false });
+    patchState(unprotected(store), { isLoggedIn: false });
 
     expect(run('agent')).toBe(dummyTree);
     expect(router.createUrlTree).toHaveBeenCalledWith(['/login']);
   });
 
   it('allows access when logged in and no role is required', () => {
-    patchState(store, { isLoggedIn: true });
+    patchState(unprotected(store), { isLoggedIn: true });
 
     expect(run()).toBeTruthy();
   });
 
   it('redirects to /homepage when logged in but the role does not match', () => {
-    patchState(store, { isLoggedIn: true, role: 'customer' });
+    patchState(unprotected(store), { isLoggedIn: true, role: 'customer' });
 
     expect(run('agent')).toBe(dummyTree);
     expect(router.createUrlTree).toHaveBeenCalledWith(['/homepage']);
   });
 
   it('allows access when logged in and the role matches', () => {
-    patchState(store, { isLoggedIn: true, role: 'agent' });
+    patchState(unprotected(store), { isLoggedIn: true, role: 'agent' });
 
     expect(run('agent')).toBeTruthy();
   });

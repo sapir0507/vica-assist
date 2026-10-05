@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
 
 import { LinksService } from './links.service';
-import { SessionStore } from '../session/session.store';
+import { SessionStore } from 'src/app/services/session/session.store';
 
 describe('LinksService', () => {
   let service: LinksService;
@@ -36,7 +37,7 @@ describe('LinksService', () => {
 
   it('omits login/register links once logged in', () => {
     const store = TestBed.inject(SessionStore);
-    patchState(store, { isLoggedIn: true });
+    patchState(unprotected(store), { isLoggedIn: true });
 
     const links = service.getLinks('shared');
     expect(links.map(l => l.link)).toEqual(['/homepage']);

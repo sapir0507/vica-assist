@@ -1,78 +1,126 @@
 import { Injectable, inject } from '@angular/core';
-import { SessionStore } from '../session/session.store';
+import { SessionStore } from 'src/app/services/session/session.store';
 import { ILinks } from './links';
 
-/** Provides the navbar links appropriate for a given user role (agent, customer, or shared/guest). */
+type UserRole = 'agent' | 'customer' | 'shared';
+
+interface LinksStrategy {
+  getLinks(): ILinks[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class LinksService {
 
-  private navbarLinks_agents: Array<ILinks> = [{
-    link: '/add-flight',
-    name: 'Add Flight'
-  },
-  {
-    link: '/add-hotel',
-    name: 'Add Hotel'
-  }];
-  private navbarLinks_customers: Array<ILinks> = [{
-    link: '/choose-flight',
-    name: 'Choose Flight'
-  },
-  {
-    link: '/choose-hotel',
-    name: 'Choose Hotel'
-  }];
-  private navbarLinks_homepage: Array<ILinks> = [{
-    link: '/homepage',
-    name: 'Homepage'
-  }];
+  private readonly sessionStore = inject(SessionStore);
 
-  private navbarLinks_login: Array<ILinks> = [
-  {
-    link: '/login',
-    name: 'Login'
-  },
-  {
-    link: '/register',
-    name: 'Register'
-  }];
+  private readonly links = {
+    agent: [
+      {
+        link: '/add-flight',
+        name: 'Add Flight'
+      },
+      {
+        link: '/add-hotel',
+        name: 'Add Hotel'
+      }
+    ],
 
-  private sessionStore = inject(SessionStore);
+    customer: [
+      {
+        link: '/choose-flight',
+        name: 'Choose Flight'
+      },
+      {
+        link: '/choose-hotel',
+        name: 'Choose Hotel'
+      }
+    ],
 
-  /** Returns the navbar links for `'agent'`, `'customer'`, or `'shared'` (default: shared). */
-  getLinks(user: string){
-    switch(user){
-      case 'agent':
-        return this.getAgentLinks()
-        break
-      case 'customer':
-        return this.getCutomersLinks()
-        break
-      case 'shared':
-        return this.getSharedLinks()
-        break
-      default:
-        return this.getSharedLinks()
-        break;
+    homepage: [
+      {
+        link: '/homepage',
+        name: 'Homepage'
+      }
+    ],
+
+    authentication: [
+      {
+        link: '/login',
+        name: 'Login'
+      },
+      {
+        link: '/register',
+        name: 'Register'
+      }
+    ]
+  } satisfies Record<string, ILinks[]>;
+
+  private readonly strategies: Record<UserRole, LinksStrategy> = {
+    agent: new AgentLinksStrategy(this.links.agent),
+    customer: new CustomerLinksStrategy(this.links.customer),
+    shared: new SharedLinksStrategy(
+      this.links.homepage,
+      this.links.authentication,
+      this.sessionStore
+    )
+  };
+
+  getLinks(role: string): ILinks[] {
+    const strategy = this.strategies[role as UserRole];
+
+    return strategy?.getLinks() ?? this.strategies.shared.getLinks();
+  }
+}
+
+/**
+ * Strategy for agent users.
+ */
+class AgentLinksStrategy implements LinksStrategy {
+
+  constructor(
+    private readonly links: ILinks[]
+  ) {}
+
+  getLinks(): ILinks[] {
+    return [...this.links];
+  }
+}
+
+/**
+ * Strategy for customer users.
+ */
+class CustomerLinksStrategy implements LinksStrategy {
+
+  constructor(
+    private readonly links: ILinks[]
+  ) {}
+
+  getLinks(): ILinks[] {
+    return [...this.links];
+  }
+}
+
+/**
+ * Strategy for shared/guest users.
+ */
+class SharedLinksStrategy implements LinksStrategy {
+
+  constructor(
+    private readonly homepageLinks: ILinks[],
+    private readonly authenticationLinks: ILinks[],
+    private readonly sessionStore: InstanceType<typeof SessionStore>
+  ) {}
+
+  getLinks(): ILinks[] {
+    if (this.sessionStore.isLoggedIn()) {
+      return [...this.homepageLinks];
     }
-  }
 
-  private getAgentLinks(){
-    return this.navbarLinks_agents;
+    return [
+      ...this.homepageLinks,
+      ...this.authenticationLinks
+    ];
   }
-
-  private getCutomersLinks(){
-    return this.navbarLinks_customers;
-  }
-
-  private getSharedLinks(){
-    const link = this.sessionStore.isLoggedIn()
-        ? this.navbarLinks_homepage
-        : [...this.navbarLinks_homepage, ...this.navbarLinks_login];
-    console.log("links of shared Links", link)
-    return link;
-  }
-
 }
