@@ -1,8 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ILinks } from 'src/app/services/links/links';
 import { LinkStore } from 'src/app/services/links/link.store';
-import { SessionQuery } from 'src/app/services/session/session.query';
-import { SessionService } from 'src/app/services/session/session.service';
+import { SessionStore } from 'src/app/services/session/session.store';
 
 @Component({
   standalone: false,
@@ -15,23 +14,13 @@ export class DropdownSidebarComponent implements OnInit {
     name: 'Logout',
     link: '#'
   }];
-  isLoggedIn = false;
   protected linkStore = inject(LinkStore);
-
-  constructor(
-    private sessionQuery: SessionQuery,
-    private sessionService: SessionService
-
-    ) {
-    this.sessionQuery.selectIsLoggedIn$.subscribe( data => {
-      this.isLoggedIn = data;
-    })
-  }
+  protected sessionStore = inject(SessionStore);
 
   ngOnInit(): void { /* empty */ }
 
   OnLogout(){
-    this.sessionService.logout()
+    this.sessionStore.logout()
     this.linkStore.updateSharedLinks_WhenNotLoggedIn()
   }
 

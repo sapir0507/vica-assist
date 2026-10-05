@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-import { SessionQuery } from '../session/session.query';
-import { SessionService } from '../session/session.service';
+import { Injectable, inject } from '@angular/core';
+import { SessionStore } from '../session/session.store';
 import { ILinks } from './links';
 
 /** Provides the navbar links appropriate for a given user role (agent, customer, or shared/guest). */
@@ -40,18 +39,7 @@ export class LinksService {
     name: 'Register'
   }];
 
-  private isLoggedIn: boolean = false;
-
-  constructor(
-    private sessionQuery: SessionQuery,
-    private sessionService: SessionService
-  ) { 
-    sessionQuery.selectIsLoggedIn$.subscribe(
-      data=> {
-        this.isLoggedIn = data;
-      }
-    )
-  }
+  private sessionStore = inject(SessionStore);
 
   /** Returns the navbar links for `'agent'`, `'customer'`, or `'shared'` (default: shared). */
   getLinks(user: string){
@@ -80,10 +68,9 @@ export class LinksService {
   }
 
   private getSharedLinks(){
-    let link;
-    this.isLoggedIn? 
-    link = this.navbarLinks_homepage : 
-    link = this.navbarLinks_homepage.concat(this.navbarLinks_login);
+    const link = this.sessionStore.isLoggedIn()
+        ? this.navbarLinks_homepage
+        : [...this.navbarLinks_homepage, ...this.navbarLinks_login];
     console.log("links of shared Links", link)
     return link;
   }

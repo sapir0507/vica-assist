@@ -2,13 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { SessionService } from './session.service';
 import { SessionStore } from './session.store';
 
-describe('SessionService', () => {
-  let service: SessionService;
+describe('SessionStore', () => {
+  let store: InstanceType<typeof SessionStore>;
   let httpMock: HttpTestingController;
-  let store: SessionStore;
 
   const url = environment.api + 'login';
 
@@ -16,31 +14,31 @@ describe('SessionService', () => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()]
     });
-    service = TestBed.inject(SessionService);
-    httpMock = TestBed.inject(HttpTestingController);
     store = TestBed.inject(SessionStore);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('starts logged out with the default role', () => {
+    expect(store.isLoggedIn()).toBeFalsy();
+    expect(store.role()).toBe('customer');
   });
 
   describe('login', () => {
     it('returns null when neither credentials nor a known third party are given', () => {
-      expect(service.login()).toBeNull();
+      expect(store.login()).toBeNull();
     });
 
     it('returns null for unimplemented third-party providers', () => {
-      expect(service.login('user', 'pass', 'TWITTER')).toBeNull();
-      expect(service.login('user', 'pass', 'FACEBOOK')).toBeNull();
+      expect(store.login('user', 'pass', 'TWITTER')).toBeNull();
+      expect(store.login('user', 'pass', 'FACEBOOK')).toBeNull();
     });
 
     it('delegates to siteLogin when username and password are given', () => {
-      service.login('user', 'pass')?.subscribe();
+      store.login('user', 'pass')?.subscribe();
 
       const req = httpMock.expectOne(r => r.url === url);
       expect(req.request.params.get('username')).toBe('user');
@@ -50,57 +48,68 @@ describe('SessionService', () => {
   });
 
   describe('siteLogin', () => {
-    it('updates the store with the returned user on success', () => {
-      service.siteLogin('user', 'pass').subscribe();
+    it('updates the store with the returned user on success, without storing the password', () => {
+      store.siteLogin('user', 'pass').subscribe();
 
       const req = httpMock.expectOne(r => r.url === url);
       req.flush([{ username: 'user', password: 'pass', role: 'customer' }]);
 
-      const state = store.getValue();
-      expect(state.username).toBe('user');
-      expect(state.role).toBe('customer');
-      expect(state.isLoggedIn).toBeTruthy();
+      expect(store.username()).toBe('user');
+      expect(store.role()).toBe('customer');
+      expect(store.isLoggedIn()).toBeTrue();
+      expect(store.password()).toBe('');
     });
 
-    it('leaves the store untouched when no user is found', () => {
-      service.siteLogin('user', 'wrong').subscribe();
+    it('toggles isLoading while the request is in flight', () => {
+      store.siteLogin('user', 'pass').subscribe();
+      expect(store.isLoading()).toBeTrue();
+
+      const req = httpMock.expectOne(r => r.url === url);
+      req.flush([{ username: 'user', password: 'pass', role: 'customer' }]);
+
+      expect(store.isLoading()).toBeFalse();
+    });
+
+    it('leaves the store logged out when no user is found', () => {
+      store.siteLogin('user', 'wrong').subscribe();
 
       const req = httpMock.expectOne(r => r.url === url);
       req.flush([]);
 
-      expect(store.getValue().isLoggedIn).toBeFalsy();
+      expect(store.isLoggedIn()).toBeFalsy();
     });
 
     it('does not throw on an HTTP error, and leaves the store logged out', () => {
-      service.siteLogin('user', 'pass').subscribe();
+      store.siteLogin('user', 'pass').subscribe();
 
       const req = httpMock.expectOne(r => r.url === url);
       req.flush('server error', { status: 500, statusText: 'Internal Server Error' });
 
-      expect(store.getValue().isLoggedIn).toBeFalsy();
+      expect(store.isLoggedIn()).toBeFalsy();
+      expect(store.isLoading()).toBeFalse();
     });
   });
 
   describe('field updates', () => {
     it('updateUsername updates the store', () => {
-      service.updateUsername('new-name');
-      expect(store.getValue().username).toBe('new-name');
+      store.updateUsername('new-name');
+      expect(store.username()).toBe('new-name');
     });
 
     it('updatePassword updates the store', () => {
-      service.updatePassword('new-pass');
-      expect(store.getValue().password).toBe('new-pass');
+      store.updatePassword('new-pass');
+      expect(store.password()).toBe('new-pass');
     });
 
     it('updateRole updates the store', () => {
-      service.updateRole('agent');
-      expect(store.getValue().role).toBe('agent');
+      store.updateRole('agent');
+      expect(store.role()).toBe('agent');
     });
 
     it('logout clears the logged-in flag', () => {
-      store.update(state => ({ ...state, isLoggedIn: true }));
-      service.logout();
-      expect(store.getValue().isLoggedIn).toBeFalsy();
+      store.updateRole('agent');
+      store.logout();
+      expect(store.isLoggedIn()).toBeFalsy();
     });
   });
 });

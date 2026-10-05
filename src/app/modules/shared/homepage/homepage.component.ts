@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, take, takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-import { SessionQuery } from 'src/app/services/session/session.query';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { SessionStore } from 'src/app/services/session/session.store';
 
 
 interface currentUser{
@@ -19,31 +19,16 @@ interface currentUser{
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']
 })
-export class HomepageComponent implements OnInit, OnDestroy {
+export class HomepageComponent implements OnInit {
 
-  userType?: string;
+  protected sessionStore = inject(SessionStore);
   isLoading: boolean = true;
   sessionId!: Observable<string>;
   token!: Observable<string>;
-  private reminder: Subject<boolean> = new Subject();
 
-  
-  constructor( 
-    private sessionQuery: SessionQuery,
+  constructor(
     private route: ActivatedRoute
-    ) {
-      this.isLoading = false;
-      this.sessionQuery.multiProps$
-    .pipe
-    (
-      take(2),
-      takeUntil(this.reminder)
-    )
-    .subscribe((item)=>{
-      this.userType = item.role
-    })
-    this.isLoading = true;
-     }
+    ) { }
 
   ngOnInit(): void {
     // Capture the session ID if available
@@ -59,11 +44,5 @@ export class HomepageComponent implements OnInit, OnDestroy {
       .pipe(map(fragment => fragment || 'None'));
     this.isLoading = true
   }
-
-  ngOnDestroy(): void {
-    this.reminder.next(true)
-    this.reminder.complete()
-  }
-
 
 }

@@ -1,13 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { SessionQuery } from 'src/app/services/session/session.query';
-import { UserRole } from 'src/app/services/session/session.store';
+import { SessionStore, UserRole } from 'src/app/services/session/session.store';
 
 export const authGuard: CanActivateFn = (route) => {
-  const sessionQuery = inject(SessionQuery);
+  const sessionStore = inject(SessionStore);
   const router = inject(Router);
 
-  const { isLoggedIn, role } = sessionQuery.getValue();
+  const isLoggedIn = sessionStore.isLoggedIn();
+  const role = sessionStore.role();
   const expectedRole = route.data['expectedRole'] as UserRole | undefined;
 
   if (!isLoggedIn) {

@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col">
           <ng-container *ngIf="linkStore.sharedLinks()">
-            <app-links [currentLinks]="linkStore.sharedLinks()" [isDropDown]="false" [isSideBar]="false" [isLogout]="isLoggedIn"></app-links>
+            <app-links [currentLinks]="linkStore.sharedLinks()" [isDropDown]="false" [isSideBar]="false" [isLogout]="sessionStore.isLoggedIn()"></app-links>
           </ng-container>
           <!-- <ng-container *ngIf="isLoggedIn">
             <app-links [currentLinks]="logoutLink" [isDropDown]="false" [isSideBar]="false" [isLogout]="true"></app-links> 

@@ -6,7 +6,7 @@
 </ng-template> -->
 
 
-<span [ngSwitch]="userType">
+<span [ngSwitch]="sessionStore.role()">
 <p *ngSwitchCase="'agent'">
   <agent-homepage></agent-homepage>
 </p>
