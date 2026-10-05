@@ -14,8 +14,7 @@ import { UserHomepageComponent } from './user-homepage/user-homepage.component';
 import { AgentHomepageComponent } from './agent-homepage/agent-homepage.component';
 import { OrdersListComponent } from './orders-list/orders-list.component';
 import { OrderListItemComponent } from './orders-list/order-list-item/order-list-item.component';
-import { FinishedOrderListComponent } from './orders-list/finished-order-list/finished-order-list.component';
-import { PendingOrderListComponent } from './orders-list/pending-order-list/pending-order-list.component';
+import { OrderStatusListComponent } from './orders-list/order-status-list/order-status-list.component';
 
 import { HomepageRoutingModule } from './homepage-routing.module';
 
@@ -40,8 +39,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     AgentHomepageComponent,
     UserHomepageComponent,
     GenericHomepageComponent,
-    PendingOrderListComponent,
-    FinishedOrderListComponent,
+    OrderStatusListComponent,
     OrderListItemComponent
   ],
   imports: [

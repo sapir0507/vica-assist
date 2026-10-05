@@ -1,8 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OnWindowResizeService } from 'src/app/services/onWindowResize/on-window-resize.service';
-import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -19,9 +17,6 @@ export class UserHomepageComponent implements OnInit {
   private step: number = 0;
   breakpoint: number | null = null;
   ScreenType: string = 'laptop';
-
-  private finalOrderStore = inject(FinalOrderStore);
-  protected orderStore = inject(OrderStore);
 
   constructor(
     private router: Router,
@@ -81,7 +76,6 @@ export class UserHomepageComponent implements OnInit {
   }
 
   selectedItem(item: Order){
-    this.finalOrderStore.update({ order: item })
     this.onChosen(item.id)
   }
 

@@ -41,32 +41,10 @@
         </button>
         <mat-tab-group animationDuration="0ms" [backgroundColor]="'primary'">
           <mat-tab label="Pending Orders">
-            @for (pendingItem of orderStore.pendingOrders(); track pendingItem.id) {
-              @if (!pendingItem) {
-                <h2>No Pending Orders</h2>
-              }
-              <ordersList
-                class="container"
-                [requestID]="pendingItem.id"
-                [status]="'customer'"
-                (item)="selectedItem($event)"
-                >
-              </ordersList>
-            }
+            <order-status-list status="pending" (item)="selectedItem($event)"></order-status-list>
           </mat-tab>
           <mat-tab label="Finished Orders">
-            @for (Finisheditem of orderStore.finishedOrders(); track Finisheditem.id) {
-              @if (!Finisheditem) {
-                <h2>No Finished Orders</h2>
-              }
-              <ordersList
-                class="container"
-                [requestID]="Finisheditem.id"
-                [status]="'customer'"
-                (item)="selectedItem($event)"
-                >
-              </ordersList>
-            }
+            <order-status-list status="finished" (item)="selectedItem($event)"></order-status-list>
           </mat-tab>
         </mat-tab-group>
       </div>
