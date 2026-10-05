@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, Subscription, take, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
-import { ID } from '@datorama/akita';
-
+import { environment } from 'src/environments/environment';
+import { HttpResourceService } from 'src/app/services/http-resource/http-resource.service';
 
 /**
  * Client for the backend's `hotels` endpoint used by the "add new hotel"
@@ -13,87 +13,39 @@ import { ID } from '@datorama/akita';
 @Injectable({
   providedIn: 'root'
 })
-export class HotelsService {
+export class HotelsService extends HttpResourceService<Hotel, HotelRequest> {
   HOTELS?: HotelRequest[];
   private hotelArray?: Hotel[] = [];
   private _hotel$: BehaviorSubject<Hotel[] | undefined> = new BehaviorSubject(this.hotelArray);
   public hotel$: Observable<Hotel[] | undefined> = (this._hotel$.asObservable());
-  private env = 'http://localhost:3000'; 
-  private readonly HotelsServiceUrl = this.env +'/hotels';
-  
-  constructor(
-    private http: HttpClient
-    ) { }
+  protected readonly resourceUrl = environment.api + 'hotels';
 
-
-  private postHotel(hotel: HotelRequest){
-    return this.http.post<Hotel>(this.HotelsServiceUrl, hotel).pipe(
-      catchError(err => this.handleError(err, 'postHotel', hotel))
-    );
-  }
-
-  private _getHotel(){
-    return this.http.get<Hotel[]>(this.HotelsServiceUrl, {}).pipe(
-      catchError(err => this.handleError(err, 'postHotel', ""))
-    );
-  }
-  
-  private _hotelByOrderID(orderID: number){
-    const url = this.HotelsServiceUrl ;
-    let params: HttpParams = new HttpParams();
-    params = params.append('orderID', orderID);
-    return this.http.get<Hotel[]>(url, {params}).pipe(  )
-  } 
- 
-
-  private handleError(error: HttpErrorResponse, methodName? : string, obj? : unknown) {
-    if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
-    }
-    // Return an observable with a user-facing error message.
-    return throwError('Something went wrong, please try again later.' + methodName + ' ' + obj);
+  constructor(http: HttpClient) {
+    super(http);
   }
 
   /** Creates a new hotel listing on the backend. */
   addHotel(newHotel: HotelRequest): Subscription {
-      return this.postHotel(newHotel).subscribe(data=> console.log(data))
+    return this.create(newHotel).subscribe(data => console.log(data));
   }
 
   /** Fetches every hotel listing. */
-  getHotels(): Observable<Hotel[]>{
-    return this._getHotel()
+  getHotels(): Observable<Hotel[]> {
+    return this.getAll();
   }
 
   /** Fetches the hotel listings associated with a given order id. */
-  getHotelsByOrderID(orderID: number): Observable<Hotel[]>{
-    return this._hotelByOrderID(orderID)
+  getHotelsByOrderID(orderID: number): Observable<Hotel[]> {
+    return this.getByOrderID(String(orderID));
   }
 
   /** Deletes every hotel listing associated with a given order id, once it's been finalized. */
-  deleteHotel(orderID: ID){
-   this.getHotels().pipe(
-     take(1),
-     map(hotels=>{
-      hotels.forEach(hotel=>{
-        if (hotel.orderID === orderID) this.deleteHotelById(hotel.id)
-      })
-     })
-   ).subscribe()
+  deleteHotel(orderID: string): void {
+    this.deleteByOrderID(orderID);
   }
 
   /** Deletes a single hotel listing by id. */
-  deleteHotelById(id: ID){
-    return this.http.delete<Hotel>(this.HotelsServiceUrl + `/${id}`)
-    .pipe(
-      take(1),
-      catchError(err => this.handleError(err, 'deleteHotel', ""))
-    ).subscribe()
+  deleteHotelById(id: number): void {
+    this.deleteById(id);
   }
-  
 }
