@@ -1,12 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MyFlightsService } from 'projects/my-flights/src';
 import { Hotel } from 'src/app/interfaces/hotel.interface';
-import { finalOrder } from 'src/interfaces/final-order.interface';
-import { finalOrderService } from 'src/app/services/finalOrder/finalOrder.service';
-import { finalOrderQuery } from 'src/app/services/finalOrder/finalOrder.query';
+import { FinalOrderState, FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { Flights } from 'src/interfaces/flight.interface';
-import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 
 @Component({
   standalone: false,
@@ -17,25 +14,28 @@ import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 })
 export class FinalOrderComponent implements OnInit {
   myParam: string | null = null;
-  finalOrder: finalOrder = {id: 1};
+
+  protected finalOrderStore = inject(FinalOrderStore);
+  private router = inject(Router);
+  private flightService = inject(MyFlightsService);
 
   constructor(
-    private route: ActivatedRoute,
-    private finalOrderStore: finalOrderStore,
-    private router: Router,
-    private finalOrderQuery: finalOrderQuery,
-    private finalOrderService: finalOrderService,
-    private flightService: MyFlightsService
-  ) { 
-    this.finalOrderQuery.allfinalOrder$.pipe().subscribe( (data) => {
+    private route: ActivatedRoute
+  ) {
+    effect(() => {
+      const data: FinalOrderState = {
+        order: this.finalOrderStore.order(),
+        flight: this.finalOrderStore.flight(),
+        hotel: this.finalOrderStore.hotel()
+      };
       if(this.isFinished(data)){
         //service update finished order
-        this.finalOrderService.addfinalOrder(data);
+        this.finalOrderStore.addFinalOrder(data);
         //routing to success page
         this.router.navigate(['user-finished-order']);
 
       }
-    } )
+    })
   }
 
   ngOnInit(): void {
@@ -52,24 +52,15 @@ export class FinalOrderComponent implements OnInit {
   }
 
   onChosenFlight(Chosenflight: Flights){
-    this.finalOrder.flight = Chosenflight;
-    this.finalOrderStore.update((state: finalOrder) => ({
-      ...state,
-      flight: Chosenflight
-    }))
+    this.finalOrderStore.update({ flight: Chosenflight })
   }
 
   onChosenHotel(ChosenHotel:  Hotel){
-    this.finalOrder.hotel = ChosenHotel;
-    this.finalOrderStore.update((state: finalOrder)=>({
-      ...state,
-      hotel: ChosenHotel
-    }))
+    this.finalOrderStore.update({ hotel: ChosenHotel })
   }
 
-  isFinished(Mydata: object){
+  isFinished(data: FinalOrderState){
 
-    const data = Mydata as finalOrder
     console.log(data)
 
     switch (data.order?.choice) {

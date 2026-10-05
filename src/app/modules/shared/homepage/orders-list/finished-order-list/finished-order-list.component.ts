@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { map, Observable, of, Subject, takeUntil, tap } from 'rxjs';
-import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
+import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
@@ -19,11 +19,11 @@ export class FinishedOrderListComponent implements OnInit {
    
   reminder: Subject<boolean> = new Subject();
   step: number = 1;
- 
-  constructor( 
+  private finalOrderStore = inject(FinalOrderStore);
+
+  constructor(
     private orderQuery: OrderQuery,
-    private changeDetectionRef: ChangeDetectorRef,
-    private finalOrderStore: finalOrderStore
+    private changeDetectionRef: ChangeDetectorRef
     ) {
       this._orders$.pipe(
         takeUntil(this.reminder)
@@ -42,10 +42,7 @@ export class FinishedOrderListComponent implements OnInit {
   }
 
   selectedItem(item: Order){
-    this.finalOrderStore.update(state=>({
-      ...state,
-      order: item
-    }))
+    this.finalOrderStore.update({ order: item })
     this.item.emit(item)
   }
 

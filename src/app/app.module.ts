@@ -8,7 +8,6 @@ import { AddNewFlightModule } from './modules/all_modules/add-new-flight/add-new
 import { AddNewHotelModule } from './modules/all_modules/add-new-hotel/add-new-hotel.module';
 import { ChooseFlightModule } from './modules/all_modules/choose-flight/choose-flight.module';
 import { ChooseHotelModule } from './modules/all_modules/choose-hotel/choose-hotel.module';
-import { FinalOrderModule } from './modules/all_modules/final-order/final-order.module';
 import { HomepageModule } from './modules/shared/homepage/homepage.module';
 import { HeaderModule } from './modules/shared/header/header.module';
 
@@ -43,7 +42,6 @@ const JWT_Module_Options: JwtModuleOptions = {
     NgbModule,
     HomepageModule,
     HeaderModule,
-    FinalOrderModule,
     ChooseFlightModule,
     ChooseHotelModule,
     AddNewFlightModule,

@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, inject, Output, ChangeDetectorRef } from '@angular/core';
 import { map, Observable, Subject, takeUntil } from 'rxjs';
-import { finalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
+import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderQuery } from 'src/app/services/order/order.query';
 import { Order } from 'src/interfaces/order.interface';
 
@@ -16,12 +16,12 @@ export class PendingOrderListComponent implements OnInit {
   reminder: Subject<boolean> = new Subject();
   step: number = 1;
   @Output() item: EventEmitter<Order> = new EventEmitter();
+  private finalOrderStore = inject(FinalOrderStore);
 
   _orders$: Observable<Order[] | undefined> = this.orderQuery.getPenddingOrders$;
   constructor(
-    private orderQuery: OrderQuery,
-    private finalOrderStore: finalOrderStore
-  ) { 
+    private orderQuery: OrderQuery
+  ) {
     this._orders$.pipe(
       takeUntil(this.reminder)
       
@@ -40,10 +40,7 @@ export class PendingOrderListComponent implements OnInit {
   }
 
   selectedItem(item: Order){
-    this.finalOrderStore.update(state=>({
-      ...state,
-      order: item
-    }))
+    this.finalOrderStore.update({ order: item })
     this.item.emit(item);
   }
 
