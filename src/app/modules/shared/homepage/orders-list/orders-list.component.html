@@ -1,7 +1,7 @@
 <div class="orderList container-fluid">
   <div class="row">
     <div class="col">
-      @for (item of _orders$ | async; track item.id) {
+      @for (item of orderStore.orders(); track item.id) {
         <div>
           @if (requestID === item.id) {
             <mat-card class="mt-3 mb-4">

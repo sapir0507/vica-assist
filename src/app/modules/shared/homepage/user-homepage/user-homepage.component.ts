@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
 import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OnWindowResizeService } from 'src/app/services/onWindowResize/on-window-resize.service';
-import { OrderQuery } from 'src/app/services/order/order.query';
+import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -17,29 +16,17 @@ export class UserHomepageComponent implements OnInit {
 
   @Input() status: string = 'Pending';
   
-  private tracker: Subject<boolean> = new Subject();
   private step: number = 0;
   breakpoint: number | null = null;
   ScreenType: string = 'laptop';
-  pendingOrders$:  Observable<Order[] | undefined> =  this.OrderQuery.getPenddingOrders$
-  finishedOrders$: Observable<Order[] | undefined> = this.OrderQuery.getFinishedOrders$
 
   private finalOrderStore = inject(FinalOrderStore);
+  protected orderStore = inject(OrderStore);
 
   constructor(
     private router: Router,
-    private windowResizeService: OnWindowResizeService,
-    private OrderQuery: OrderQuery
-  ) {
-
-    this.pendingOrders$.pipe(
-      takeUntil(this.tracker)
-    ).subscribe()
-    this.finishedOrders$.pipe(
-      takeUntil(this.tracker)
-    ).subscribe()
-          
-   }
+    private windowResizeService: OnWindowResizeService
+  ) { }
 
   ngOnInit(): void {
     this.breakpoint = (window.innerWidth <= 600) ? 1: 2;
@@ -112,13 +99,6 @@ export class UserHomepageComponent implements OnInit {
 
   goBack(){
     this.step = 0;
-  }
-
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.tracker.next(true)
-    this.tracker.complete()
   }
 
 }

@@ -7,7 +7,7 @@ import { Flights } from 'src/interfaces/flight.interface';
 import { Hotel } from 'src/interfaces/hotel.interface';
 import { Order } from 'src/interfaces/order.interface';
 import { environment } from 'src/environments/environment';
-import { OrderService } from '../order/order.service';
+import { OrderStore } from '../order/order.store';
 
 export interface FinalOrderState {
   order: Order | undefined;
@@ -26,7 +26,7 @@ export const FinalOrderStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const http = inject(HttpClient);
-    const orderService = inject(OrderService);
+    const orderStore = inject(OrderStore);
     const flightService = inject(MyFlightsService);
     const hotelService = inject(HotelsService);
     const finalUrl = environment.api + 'finalOrder';
@@ -47,7 +47,7 @@ export const FinalOrderStore = signalStore(
         try {
           const orderID = request.order?.orderID;
           try {
-            orderID ? orderService.deleteByOrderID(orderID) : '';
+            orderID ? orderStore.deleteByOrderID(orderID) : '';
           } catch (error) {
             console.log('final order -> order service', error);
           }

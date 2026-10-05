@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
-import { Observable, Subject, takeUntil} from 'rxjs';
-import { OrderQuery } from 'src/app/services/order/order.query';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, effect, inject } from '@angular/core';
+import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -20,18 +19,10 @@ export class OrdersListComponent implements OnInit {
   @Input() requestID: number = 1;
   @Input() status?: string = 'agent';
 
+  protected orderStore = inject(OrderStore);
 
-  reminder: Subject<boolean> = new Subject();
-  _orders$: Observable<Order[] | undefined> = this.orderQuery.getorders$;
-
-  constructor(
-    private orderQuery: OrderQuery
-  ) { 
-    this._orders$.pipe(
-      takeUntil(this.reminder)
-    ).subscribe(item=>{
-      this.maxIDs.emit(item?.length);
-    })
+  constructor() {
+    effect(() => this.maxIDs.emit(this.orderStore.orders()?.length));
   }
 
   ngOnInit(): void {
@@ -52,11 +43,5 @@ export class OrdersListComponent implements OnInit {
   openOrder(item: Order){
     this.item.emit(item)
   }
-  
-  ngOnDestroy(): void {
-    this.reminder.next(true);
-    this.reminder.complete();
-    
-  }
- 
+
 }

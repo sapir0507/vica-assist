@@ -1,18 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Order as OrderInt } from 'src/interfaces/order.interface';
-import { OrderService } from './order.service';
+import { Order } from 'src/interfaces/order.interface';
 import { OrderStore } from './order.store';
 
-describe('OrderService', () => {
-  let service: OrderService;
+describe('OrderStore', () => {
+  let store: InstanceType<typeof OrderStore>;
   let httpMock: HttpTestingController;
-  let store: OrderStore;
 
   const url = environment.api + 'orders';
 
-  const makeOrder = (overrides: Partial<OrderInt> = {}): OrderInt => ({
+  const makeOrder = (overrides: Partial<Order> = {}): Order => ({
     id: 1,
     orderID: 'abc',
     choice: 'flight',
@@ -28,15 +27,13 @@ describe('OrderService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [OrderService, OrderStore]
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     });
 
-    service = TestBed.inject(OrderService);
-    httpMock = TestBed.inject(HttpTestingController);
     store = TestBed.inject(OrderStore);
+    httpMock = TestBed.inject(HttpTestingController);
 
-    // The constructor calls getAll(); flush it so each test starts clean.
+    // onInit calls getAll(); flush it so each test starts clean.
     const req = httpMock.expectOne(url);
     req.flush([]);
   });
@@ -45,8 +42,10 @@ describe('OrderService', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('starts empty', () => {
+    expect(store.orders()).toEqual([]);
+    expect(store.pendingOrders()).toEqual([]);
+    expect(store.finishedOrders()).toEqual([]);
   });
 
   describe('getAll', () => {
@@ -54,49 +53,39 @@ describe('OrderService', () => {
       const pendingOrder = makeOrder({ id: 1, status: 'pending' });
       const finishedOrder = makeOrder({ id: 2, status: 'finished' });
 
-      service.getAll().subscribe();
+      store.getAll().subscribe();
       const req = httpMock.expectOne(url);
       req.flush([pendingOrder, finishedOrder]);
 
-      const state = store.getValue() as unknown as {
-        pendingOrders?: OrderInt[];
-        finishedOrders?: OrderInt[];
-        orders?: OrderInt[];
-      };
-
-      expect(state.pendingOrders).toEqual([pendingOrder]);
-      expect(state.finishedOrders).toEqual([finishedOrder]);
-      expect(state.orders).toEqual([pendingOrder, finishedOrder]);
+      expect(store.pendingOrders()).toEqual([pendingOrder]);
+      expect(store.finishedOrders()).toEqual([finishedOrder]);
+      expect(store.orders()).toEqual([pendingOrder, finishedOrder]);
     });
 
-    it('accumulates across repeated calls without throwing (regression: Akita freezes stored arrays)', () => {
-      service.getAll().subscribe();
+    it('accumulates across repeated calls without throwing (regression: Akita used to freeze stored arrays)', () => {
+      store.getAll().subscribe();
       httpMock.expectOne(url).flush([makeOrder({ id: 1, status: 'pending' })]);
 
       expect(() => {
-        service.getAll().subscribe();
+        store.getAll().subscribe();
         httpMock.expectOne(url).flush([makeOrder({ id: 2, status: 'finished' })]);
       }).not.toThrow();
 
-      const state = store.getValue() as unknown as {
-        pendingOrders?: OrderInt[];
-        finishedOrders?: OrderInt[];
-      };
-      expect(state.pendingOrders?.length).toBe(1);
-      expect(state.finishedOrders?.length).toBe(1);
+      expect(store.pendingOrders()?.length).toBe(1);
+      expect(store.finishedOrders()?.length).toBe(1);
     });
   });
 
   describe('get', () => {
     it('requests the base url when no id is given', () => {
-      service.get().subscribe();
+      store.get().subscribe();
       const req = httpMock.expectOne(url);
       expect(req.request.method).toBe('GET');
       req.flush([]);
     });
 
     it('requests a single order by id', () => {
-      service.get(7).subscribe();
+      store.get(7).subscribe();
       const req = httpMock.expectOne(`${url}/7`);
       expect(req.request.method).toBe('GET');
       req.flush([makeOrder({ id: 7 })]);
@@ -106,7 +95,7 @@ describe('OrderService', () => {
   describe('addOrder', () => {
     it('posts the new order and refreshes the order list', () => {
       const newOrder = makeOrder({ id: 3 });
-      service.addOrder(newOrder);
+      store.addOrder(newOrder);
 
       const postReq = httpMock.expectOne(r => r.url === url && r.method === 'POST');
       expect(postReq.request.body).toEqual(newOrder);
@@ -119,7 +108,7 @@ describe('OrderService', () => {
 
   describe('updateStatusByOrderID', () => {
     it('fetches the order then patches its status', () => {
-      service.updateStatusByOrderID(5, 'finished');
+      store.updateStatusByOrderID(5, 'finished');
 
       const getReq = httpMock.expectOne(`${url}/5`);
       getReq.flush(makeOrder({ id: 5 }));
@@ -136,7 +125,7 @@ describe('OrderService', () => {
       const match = makeOrder({ id: 1, orderID: 'match' });
       const other = makeOrder({ id: 2, orderID: 'other' });
 
-      service.deleteByOrderID('match');
+      store.deleteByOrderID('match');
 
       const getReq = httpMock.expectOne(url);
       getReq.flush([match, other]);

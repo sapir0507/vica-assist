@@ -4,20 +4,20 @@ import { provideHttpClient } from '@angular/common/http';
 import { MyFlightsService } from 'projects/my-flights/src';
 import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
 import { environment } from 'src/environments/environment';
-import { OrderService } from '../order/order.service';
+import { OrderStore } from '../order/order.store';
 import { FinalOrderStore } from './finalOrder.store';
 
 describe('FinalOrderStore', () => {
   let store: InstanceType<typeof FinalOrderStore>;
   let httpMock: HttpTestingController;
-  let orderServiceSpy: jasmine.SpyObj<OrderService>;
+  let orderStoreSpy: jasmine.SpyObj<InstanceType<typeof OrderStore>>;
   let flightServiceSpy: jasmine.SpyObj<MyFlightsService>;
   let hotelServiceSpy: jasmine.SpyObj<HotelsService>;
 
   const finalUrl = environment.api + 'finalOrder';
 
   beforeEach(() => {
-    orderServiceSpy = jasmine.createSpyObj('OrderService', ['deleteByOrderID']);
+    orderStoreSpy = jasmine.createSpyObj('OrderStore', ['deleteByOrderID']);
     flightServiceSpy = jasmine.createSpyObj('MyFlightsService', ['deleteFlightsByOrderID']);
     hotelServiceSpy = jasmine.createSpyObj('HotelsService', ['deleteHotel']);
 
@@ -25,7 +25,7 @@ describe('FinalOrderStore', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: OrderService, useValue: orderServiceSpy },
+        { provide: OrderStore, useValue: orderStoreSpy },
         { provide: MyFlightsService, useValue: flightServiceSpy },
         { provide: HotelsService, useValue: hotelServiceSpy }
       ]
@@ -80,7 +80,7 @@ describe('FinalOrderStore', () => {
 
       store.addFinalOrder(request);
 
-      expect(orderServiceSpy.deleteByOrderID).toHaveBeenCalledWith('order-1');
+      expect(orderStoreSpy.deleteByOrderID).toHaveBeenCalledWith('order-1');
       expect(hotelServiceSpy.deleteHotel).toHaveBeenCalledWith('order-1');
       expect(flightServiceSpy.deleteFlightsByOrderID).toHaveBeenCalledWith('order-1');
 
@@ -95,7 +95,7 @@ describe('FinalOrderStore', () => {
 
       store.addFinalOrder(request);
 
-      expect(orderServiceSpy.deleteByOrderID).not.toHaveBeenCalled();
+      expect(orderStoreSpy.deleteByOrderID).not.toHaveBeenCalled();
       expect(hotelServiceSpy.deleteHotel).not.toHaveBeenCalled();
       expect(flightServiceSpy.deleteFlightsByOrderID).not.toHaveBeenCalled();
 

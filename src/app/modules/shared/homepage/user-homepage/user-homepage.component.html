@@ -41,7 +41,7 @@
         </button>
         <mat-tab-group animationDuration="0ms" [backgroundColor]="'primary'">
           <mat-tab label="Pending Orders">
-            @for (pendingItem of pendingOrders$ | async; track pendingItem.id) {
+            @for (pendingItem of orderStore.pendingOrders(); track pendingItem.id) {
               @if (!pendingItem) {
                 <h2>No Pending Orders</h2>
               }
@@ -55,7 +55,7 @@
             }
           </mat-tab>
           <mat-tab label="Finished Orders">
-            @for (Finisheditem of finishedOrders$ | async; track Finisheditem.id) {
+            @for (Finisheditem of orderStore.finishedOrders(); track Finisheditem.id) {
               @if (!Finisheditem) {
                 <h2>No Finished Orders</h2>
               }

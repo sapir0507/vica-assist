@@ -1,10 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, effect, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, takeUntil, tap } from 'rxjs';
-import { OrderQuery } from 'src/app/services/order/order.query';
-import { OrderService } from 'src/app/services/order/order.service';
+import { OrderStore } from 'src/app/services/order/order.store';
 import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
 
 @Component({
@@ -15,7 +13,6 @@ import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserRequestsComponent implements OnInit {
-  notifier: Subject<boolean> = new Subject();
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
   step: number = 0;
@@ -66,22 +63,18 @@ export class UserRequestsComponent implements OnInit {
     return (this.requestForm.controls['passDetails']) as FormArray;
   }
 
+  private orderStore = inject(OrderStore);
+
   constructor(
     private fb: FormBuilder,
-    private orderService: OrderService,
-    private orderQuery: OrderQuery,
     private _snackBar: MatSnackBar
   ) {
       this.addNewPass()
-      
-      this.orderQuery.getorders$
-      .pipe(
-        takeUntil(this.notifier),
-        tap(orders=>{
-          if(orders) this.orderID = '' + (orders.length + 1) //*
-        })
-      )
-      .subscribe()
+
+      effect(() => {
+        const orders = this.orderStore.orders();
+        if(orders) this.orderID = '' + (orders.length + 1) //*
+      });
     }
 
   ngOnInit(): void {
@@ -129,19 +122,13 @@ export class UserRequestsComponent implements OnInit {
         priceRange: this.requestForm.get('price')?.value 
       }
     console.log(newOrder)
-    // this.notifier = this.orderService.addOrder(newOrder)
-    this.orderService.addOrder(newOrder);
+    this.orderStore.addOrder(newOrder);
     this.openSnackBar("Order added!")
   }
   }
 
   openSnackBar(message: string) {
     this._snackBar.open(message);
-  }
-
-  ngOnDestroy(): void {
-    this.notifier.next(true);
-    this.notifier.complete()
   }
 
 }

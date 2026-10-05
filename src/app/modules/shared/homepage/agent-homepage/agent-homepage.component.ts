@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { OrderService } from 'src/app/services/order/order.service';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from 'src/interfaces/order.interface';
 
 @Component({
@@ -15,9 +15,7 @@ export class AgentHomepageComponent implements OnInit {
   orderID: string | null = null;
   nextID: number = 1;
   maxID: number = 1;
-  constructor(
-    private orderService: OrderService
-  ) { }
+  private orderStore = inject(OrderStore);
 
   ngOnInit(): void {
   }
@@ -49,7 +47,7 @@ export class AgentHomepageComponent implements OnInit {
   }
 
   updateState(){
-    if(this.orderID) this.orderService.updateStatusByOrderID(this.orderID, 'finished') //search
+    if(this.orderID) this.orderStore.updateStatusByOrderID(this.orderID, 'finished') //search
   }
 
 }

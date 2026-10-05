@@ -1,7 +1,7 @@
 
 <!-- <mat-tab label="finished order list"> -->
 <div class="order mat-elevation-z4">
-  @for (item of _orders$ | async; track item.id) {
+  @for (item of orderStore.pendingOrders(); track item.id) {
     <div>
       <order-list-item [currentItem]="item" (item)="selectedItem($event)"></order-list-item>
     </div>

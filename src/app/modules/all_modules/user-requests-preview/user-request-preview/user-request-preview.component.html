@@ -1,7 +1,7 @@
 <div class="preview">
-  @if (_allOrders$ | async) {
+  @if (orderStore.orders()) {
     <div>
-      @for (order of _allOrders$ | async; track order.id) {
+      @for (order of orderStore.orders(); track order.id) {
         <div>
           @if (order && order.id === orderID) {
             <mat-card class="container">
