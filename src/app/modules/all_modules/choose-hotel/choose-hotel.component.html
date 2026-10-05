@@ -1,11 +1,13 @@
-<div class="choose-hotels" *ngIf="_allHotels$ | async">
+@if (_allHotels$ | async) {
+  <div class="choose-hotels">
     <h1>Hotels</h1>
-    <ng-container *ngFor="let hotel of _allHotels$ | async as list">
-        <item
-            [item_type]="'hotel'"
-            [hotel]="hotel"
-            (chosenHotel)="onChooseHotel($event)"
-        ></item>
-    </ng-container>
- </div>
+    @for (hotel of _allHotels$ | async; track hotel.id) {
+      <item
+        [item_type]="'hotel'"
+        [hotel]="hotel"
+        (chosenHotel)="onChooseHotel($event)"
+      ></item>
+    }
+  </div>
+}
 

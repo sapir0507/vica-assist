@@ -1,186 +1,181 @@
-<!-- 
- <div class="flight-item" *ngIf="flight!==undefined">
-     <div class="container-md container-lg container-sm container-xl container-xxl">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Flight</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <div *ngIf="flight.org&&flight.dest">
-                    <div class="orgtodest">
-                        <div class="org">
-                            <span >{{flight.org | Capitalize}}</span>
-                            <mat-card-subtitle>{{flight.departureHour}}</mat-card-subtitle>
-                        </div>
-                        <mat-icon class="icon">flight_takeoff</mat-icon>
-                        <div class="dest">
-                            <span>{{flight.dest | Capitalize}}</span>
-                            <mat-card-subtitle>{{flight.returnHour}}</mat-card-subtitle>
-                        </div>
-                    </div>
+<!--
+<div class="flight-item" *ngIf="flight!==undefined">
+  <div class="container-md container-lg container-sm container-xl container-xxl">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Flight</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="flight.org&&flight.dest">
+          <div class="orgtodest">
+            <div class="org">
+              <span >{{flight.org | Capitalize}}</span>
+              <mat-card-subtitle>{{flight.departureHour}}</mat-card-subtitle>
+            </div>
+            <mat-icon class="icon">flight_takeoff</mat-icon>
+            <div class="dest">
+              <span>{{flight.dest | Capitalize}}</span>
+              <mat-card-subtitle>{{flight.returnHour}}</mat-card-subtitle>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="flight.stops==='one stop'; else noStops">
+          <div class="container-md">
+            <div class="my-mat-content-item row">
+              <div class="container row row-cols-3 ">
+                <div class="takeoff">
+                  <p>Takeoff - {{flight.departureDate | date}}</p>
+                </div>
+                <div class="stop">
+                  <p>Stop Duration - {{flight.stopDuration}}</p>
+                </div>
+                <div class="land">
+                  <p>Landing - {{flight.returnDate | date}}</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </ng-container>
+        <ng-template #noStops>
+
+          <div class="container-md">
+            <div class="my-mat-content-item row">
+              <div class="container row row-cols-2">
+                <div class="takeoff">
+                  <p>Takeoff - {{flight.departureDate | date}}</p>
                 </div>
 
-                <ng-container *ngIf="flight.stops==='one stop'; else noStops">
-                    <div class="container-md">
-                        <div class="my-mat-content-item row"> 
-                            <div class="container row row-cols-3 ">
-                                <div class="takeoff">
-                                    <p>Takeoff - {{flight.departureDate | date}}</p>
-                                </div>
-                                <div class="stop">
-                                    <p>Stop Duration - {{flight.stopDuration}}</p>
-                                </div>
-                                <div class="land">
-                                    <p>Landing - {{flight.returnDate | date}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                </ng-container>
-                <ng-template #noStops>
-                   
-                    <div class="container-md">
-                        <div class="my-mat-content-item row"> 
-                            <div class="container row row-cols-2">
-                                <div class="takeoff">
-                                    <p>Takeoff - {{flight.departureDate | date}}</p>
-                                </div>
-                               
-                                <div class="land">
-                                    <p>Landing - {{flight.returnDate | date}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>    
-                </ng-template>
-
-                
+                <div class="land">
+                  <p>Landing - {{flight.returnDate | date}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
 
 
-            </mat-card-content>
-        </mat-card>
-     </div>
-    </div> -->
 
-   
-            <mat-accordion *ngIf="flight">
-                <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle multi>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <mat-icon color="primary">flight_takeoff</mat-icon>
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            <span class="font-title">
-                                {{ flight.org  }} 
-                                <span class="fa fa-arrow-right"> </span> 
-                                {{  flight.dest }}
-                            </span>
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
 
-                    <span class="fa fa-plane-departure"> 
-                        <span class="text-capitalize font-subtitle">
-                             Takeoff:
-                        </span>
-                    </span>
-                
-                    <div class="indent font">                         
-                        {{flight.departureDate | date}}, {{flight.departureHour}}
-                    </div>        
-                       
-                    <span class="fa fa-plane-arrival"> 
-                        <span class="text-capitalize font-subtitle">
-                            landing:
-                        </span>
-                    </span>
-                
-                    <div class="indent font">
-                        {{flight.returnDate | date}}, {{flight.returnHour}}
-                    </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> -->
 
-                    <span class="fa fa-stopwatch"> 
-                        <span class="text-capitalize font-subtitle">
-                            stops: {{flight.stops}}
-                        </span>
-                    </span>
-                
-                    <div class="indent font" *ngIf="flight.stopDuration">
-                        Duration: {{flight.stopDuration}}
-                    </div>
-                    <mat-action-row>
-                        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                        <button mat-button color="primary" (click)="nextStep()">Next</button>
-                      </mat-action-row>
-                </mat-expansion-panel>
 
-                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle multi>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <mat-icon color="primary">person</mat-icon>
-                        </mat-panel-title>
-                        <mat-panel-description class="font-title">
-                            Passangers
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
+@if (flight) {
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle multi>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon color="primary">flight_takeoff</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          <span class="font-title">
+            {{ flight.org  }}
+            <span class="fa fa-arrow-right"> </span>
+            {{  flight.dest }}
+          </span>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <span class="fa fa-plane-departure">
+        <span class="text-capitalize font-subtitle">
+          Takeoff:
+        </span>
+      </span>
+      <div class="indent font">
+        {{flight.departureDate | date}}, {{flight.departureHour}}
+      </div>
+      <span class="fa fa-plane-arrival">
+        <span class="text-capitalize font-subtitle">
+          landing:
+        </span>
+      </span>
+      <div class="indent font">
+        {{flight.returnDate | date}}, {{flight.returnHour}}
+      </div>
+      <span class="fa fa-stopwatch">
+        <span class="text-capitalize font-subtitle">
+          stops: {{flight.stops}}
+        </span>
+      </span>
+      @if (flight.stopDuration) {
+        <div class="indent font">
+          Duration: {{flight.stopDuration}}
+        </div>
+      }
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle multi>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon color="primary">person</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description class="font-title">
+          Passangers
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <span class="font-title">
+        <div class="font-subtitle">Passangers:</div>
+        <div class="font fa fa-passport">
+          {{flight.fullName}}, {{flight.passID}}
+        </div>
+        @if (flight.passangers && flight.passangers > 1) {
+          <mat-list>
+            @for (item of flight.passArray; track item) {
+              <mat-list-item>
+                @if (item) {
+                  <div class="font fa fa-passport">
+                    {{item.fullName}}, {{item.passID}}
+                  </div>
+                }
+              </mat-list-item>
+            }
+          </mat-list>
+        }
+      </span>
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle multi>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon color="primary">info</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description class="font-title">
+          Details
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <span class="font-title">
+        <div class="font-subtitle m-2">
+          <span class="fa fa-suitcase"></span>
+          Bagage:
+          <span class="font">
+            {{flight.bagage? "bagage included": "bagage not included"}}
+          </span>
+        </div>
+        <div class="font-subtitle m-2">
+          <span class="fa fa-info-circle"></span>
+          More information:
+        </div>
+        <div class="font info indent border p-2 text-capitalize">
+          {{flight.moreInfo}}
+        </div>
+        <div class="font-subtitle m-2">
+          <span class="fa fa-credit-card"></span> Price: {{flight.price}}
+        </div>
+      </span>
+      <mat-action-row>
+        <button mat-button color="primary" (click)="selectFlight(flight)">Select Flight</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+}
 
-                      <span class="font-title">
-                        <div class="font-subtitle">Passangers:</div>
-                        <div class="font fa fa-passport">
-                            {{flight.fullName}}, {{flight.passID}}
-                        </div>
-                        <mat-list *ngIf="flight.passangers && flight.passangers > 1">
-                            <mat-list-item *ngFor="let item of flight.passArray">
-                                <div *ngIf="item" class="font fa fa-passport">
-                                    {{item.fullName}}, {{item.passID}}
-                                </div>
-                            </mat-list-item>
-                        </mat-list>
-                    </span>
-                    <mat-action-row>
-                        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                        <button mat-button color="primary" (click)="nextStep()">Next</button>
-                    </mat-action-row>
-                </mat-expansion-panel>
 
-                <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle multi>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <mat-icon color="primary">info</mat-icon>
-                        </mat-panel-title>
-                        <mat-panel-description class="font-title">
-                            Details
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-
-                      <span class="font-title">
-                        <div class="font-subtitle m-2">
-                            <span class="fa fa-suitcase"></span>
-                            Bagage: 
-                            <span class="font"> 
-                                {{flight.bagage? "bagage included": "bagage not included"}}
-                            </span>
-                        </div>
-                        
-                        
-                        <div class="font-subtitle m-2"> 
-                            <span class="fa fa-info-circle"></span>
-                            More information:
-                        </div>
-                        <div class="font info indent border p-2 text-capitalize">
-                            {{flight.moreInfo}}
-                        </div>
-
-                        <div class="font-subtitle m-2">
-                            <span class="fa fa-credit-card"></span> Price: {{flight.price}}
-                        </div>
-                        
-                    </span>
-                    <mat-action-row>
-                        <button mat-button color="primary" (click)="selectFlight(flight)">Select Flight</button>
-                    </mat-action-row>
-                </mat-expansion-panel>
-            </mat-accordion>
-       
-
-            

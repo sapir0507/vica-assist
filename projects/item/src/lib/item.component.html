@@ -1,15 +1,19 @@
 
-      <div *ngIf="item_type == 'flight' && flight">
-        <flight-item 
-          [flight]="flight"
-          (chosenFlight)="onChosenFlight($event)"
-        ></flight-item>
-      </div>
+@if (item_type == 'flight' && flight) {
+  <div>
+    <flight-item
+      [flight]="flight"
+      (chosenFlight)="onChosenFlight($event)"
+    ></flight-item>
+  </div>
+}
 
-      <div *ngIf="item_type == 'hotel' && hotel">
-        <hotel-item 
-          [hotel]="hotel"
-          (chosenHotel)="onChosenHotel($event)"
-        ></hotel-item>
-      </div>
+@if (item_type == 'hotel' && hotel) {
+  <div>
+    <hotel-item
+      [hotel]="hotel"
+      (chosenHotel)="onChosenHotel($event)"
+    ></hotel-item>
+  </div>
+}
 

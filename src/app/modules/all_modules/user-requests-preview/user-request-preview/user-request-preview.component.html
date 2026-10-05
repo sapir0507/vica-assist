@@ -1,10 +1,13 @@
 <div class="preview">
-    <div *ngIf="_allOrders$ | async">
-        <div *ngFor="let order of _allOrders$ | async as list ">
-            <mat-card class="container" *ngIf="order && order.id === orderID">
+  @if (_allOrders$ | async) {
+    <div>
+      @for (order of _allOrders$ | async; track order.id) {
+        <div>
+          @if (order && order.id === orderID) {
+            <mat-card class="container">
               <mat-card-header>
-                  <mat-card-title>Order Details</mat-card-title>
-                  <mat-card-subtitle>ID: {{order.id}}</mat-card-subtitle>
+                <mat-card-title>Order Details</mat-card-title>
+                <mat-card-subtitle>ID: {{order.id}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <div class="container-fluid">
@@ -13,10 +16,12 @@
                       <span class="fa fa-calendar"></span>
                       Dates: {{order.departureDate | date}} - {{order.returnDate | date}}
                     </div>
-                    <div class="row-md-4" *ngIf="order.choice==='both' || order.choice === 'hotel'">
-                      <span class="fa fa-star"></span>
-                      Minimum stars: {{order.stars}}
-                    </div>
+                    @if (order.choice==='both' || order.choice === 'hotel') {
+                      <div class="row-md-4">
+                        <span class="fa fa-star"></span>
+                        Minimum stars: {{order.stars}}
+                      </div>
+                    }
                   </div>
                   <div class="row align-items-center">
                     <div class="col-md-6 p-2 m-2 align-self-start">
@@ -43,36 +48,37 @@
                   </div>
                   <div class="row">
                     <div class="col-md-5 border-1 p-2 m-2 align-self-start">
-                        <div class="passangers">
-                          <div class="title">
-                            <h3><b>Names and IDs</b></h3>
-                          </div>
-                          <ng-container *ngFor="let item of order.passDetails; let i=index">
-                            <div>
-                                Passanger {{i+1}}: 
-                            </div>
-                            <div class="item border mb-2 p-1">
-                              <div>
-                                Full Name: <span class="text-center">
-                                  {{item.fullName | Capitalize}}
-                                </span>
-                              </div>
-                              <div>
-                                ID:
-                                <span class="text-center">
-                                  {{item.passID}}
-                                </span>
-                              </div>
-          
-          
-                            </div>
-                          </ng-container>
+                      <div class="passangers">
+                        <div class="title">
+                          <h3><b>Names and IDs</b></h3>
                         </div>
-                      </div>
+                        @for (item of order.passDetails; track item; let i = $index) {
+                          <div>
+                            Passanger {{i+1}}:
+                          </div>
+                          <div class="item border mb-2 p-1">
+                            <div>
+                              Full Name: <span class="text-center">
+                              {{item.fullName | Capitalize}}
+                            </span>
+                          </div>
+                          <div>
+                            ID:
+                            <span class="text-center">
+                              {{item.passID}}
+                            </span>
+                          </div>
+                        </div>
+                      }
+                    </div>
                   </div>
                 </div>
-              </mat-card-content>
-            </mat-card>
-          <!-- </div> -->
-    <!-- </div> -->
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+}
 </div>

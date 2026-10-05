@@ -6,57 +6,57 @@
     <div class="my-flex-2">
       <div class="row">
         <div class="col">
-          <ng-container *ngIf="linkStore.sharedLinks()">
+          @if (linkStore.sharedLinks()) {
             <app-links [currentLinks]="linkStore.sharedLinks()" [isDropDown]="false" [isSideBar]="false" [isLogout]="sessionStore.isLoggedIn()"></app-links>
-          </ng-container>
+          }
           <!-- <ng-container *ngIf="isLoggedIn">
-            <app-links [currentLinks]="logoutLink" [isDropDown]="false" [isSideBar]="false" [isLogout]="true"></app-links> 
-          </ng-container> -->
-        </div>
+          <app-links [currentLinks]="logoutLink" [isDropDown]="false" [isSideBar]="false" [isLogout]="true"></app-links>
+        </ng-container> -->
       </div>
-  
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
     </div>
-    <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasNavbar"
-      aria-labelledby="offcanvasNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">vica-assist</h5>
-        <button type="button bg-light" style="background-color: white;" class="btn-close text-reset"
-          data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-          <!-- links -->
-          <!-- shared links -->
-          <ng-container *ngIf="linkStore.sharedLinks()">
-            <app-links [currentLinks]="linkStore.sharedLinks()" [isDropDown]="false" [isSideBar]="true"></app-links>
-          </ng-container>
 
-          <!-- customers links -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+  <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasNavbar"
+    aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasNavbarLabel">vica-assist</h5>
+      <button type="button bg-light" style="background-color: white;" class="btn-close text-reset"
+      data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+        <!-- links -->
+        <!-- shared links -->
+        @if (linkStore.sharedLinks()) {
+          <app-links [currentLinks]="linkStore.sharedLinks()" [isDropDown]="false" [isSideBar]="true"></app-links>
+        }
 
-          <li>
-            <hr class="dropdown-divider">
-          </li>
+        <!-- customers links -->
 
-          <app-dropdown [currentLinks]="linkStore.customersLinks()" [isDropDown]="true" [isSideBar]="true" [title]="'customers'">
-          </app-dropdown>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
 
-          <li>
-            <hr class="dropdown-divider">
-          </li>
+        <app-dropdown [currentLinks]="linkStore.customersLinks()" [isDropDown]="true" [isSideBar]="true" [title]="'customers'">
+        </app-dropdown>
 
-          <app-dropdown [currentLinks]="linkStore.agentLinks()" [isDropDown]="true" [isSideBar]="true" [title]="'agents'">
-          </app-dropdown>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+
+        <app-dropdown [currentLinks]="linkStore.agentLinks()" [isDropDown]="true" [isSideBar]="true" [title]="'agents'">
+        </app-dropdown>
 
 
 
 
-        </ul>
+      </ul>
 
-      </div>
     </div>
   </div>
+</div>
 </nav>

@@ -1,99 +1,97 @@
 <div class="linksComponent">
 
-<div class="row" *ngIf="!isSideBar">
-     <ng-container *ngIf="!isSideBar">
-          <div *ngFor="let link of currentLinks" class="col">
-               <ng-container *ngIf="isLogout && link.name === 'Logout'; then thenTemplate; else elseTemplate">
-                    <a 
-                    [routerLink]="link.link" 
-                    class="nav-link active header-links"
-               >
-                    {{link.name}}
-               </a>
-               </ng-container>
-               <ng-template #thenTemplate>
-                    <a 
-                    href="#"
-                    class="nav-link active header-links"
-               >
-                    Logout
-               </a>
-               </ng-template>
-               <ng-template #elseTemplate>
-                    <a 
-                    [routerLink]="link.link" 
-                    class="nav-link active header-links"
-               >
-                    {{link.name}}
-               </a>
-               </ng-template>
-               
-          </div>   
-      </ng-container>
+  @if (!isSideBar) {
+    <div class="row">
+      @if (!isSideBar) {
+        @for (link of currentLinks; track link) {
+          <div class="col">
+            @if (isLogout && link.name === 'Logout') {
+              <a
+                href="#"
+                class="nav-link active header-links"
+                >
+                Logout
+              </a>
+            } @else {
+              <a
+                [routerLink]="link.link"
+                class="nav-link active header-links"
+                >
+                {{link.name}}
+              </a>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+
+  <div class="side-bar-links">
+    @if (!isDropDown &&isSideBar && currentLinks) {
+      @for (link of currentLinks; track link) {
+        <div>
+          <li class="nav-item">
+            <a
+              [routerLink]="link.link"
+              class="dropdown-item header-links"
+              >
+              {{link.name}}
+            </a>
+          </li>
+        </div>
+      }
+    }
+
+    <div class="side-bar-dropdown-links">
+      @if (isSideBar && isDropDown) {
+        @for (link of currentLinks; track link) {
+          <div>
+            <div class="nav-item dropdown-links">
+              <a
+                [routerLink]="link.link"
+                class="dropdown-item header-links"
+                >
+                {{link.name}}
+              </a>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+  </div>
+
 </div>
 
-<div class="side-bar-links">
-     <ng-container *ngIf="!isDropDown &&isSideBar && currentLinks">
-          <div *ngFor="let link of currentLinks">
-               <li class="nav-item">
-                    <a 
-                         [routerLink]="link.link" 
-                         class="dropdown-item header-links"
-                    >
-                         {{link.name}}
-                    </a>
-               </li>
-          </div>
-     </ng-container>
-  
-     <div class="side-bar-dropdown-links">
-          <ng-container *ngIf="isSideBar && isDropDown">
-               <div *ngFor="let link of currentLinks">
-                    <div class="nav-item dropdown-links">
-                         <a 
-                              [routerLink]="link.link" 
-                              class="dropdown-item header-links"
-                         >
-                              {{link.name}}
-                         </a>
-                    </div>
-               </div>
-          </ng-container>
-     </div>
-  
-</div>
 
-</div>
+<!--
+<ng-container *ngIf="currentLinks && isSideBar">
 
+  <ng-container *ngIf="isDropDown">
+    <div *ngFor="let link of currentLinks">
+      <div class="dropdown-links">
+        <a
+          [routerLink]="link.link"
+          class="dropdown-item header-links"
+          >
+          {{link.name}}
+        </a>
+      </div>
+    </div>
+  </ng-container> -->
 
-<!-- 
- <ng-container *ngIf="currentLinks && isSideBar">
-     
-     <ng-container *ngIf="isDropDown">
-          <div *ngFor="let link of currentLinks">
-               <div class="dropdown-links">
-                    <a 
-                         [routerLink]="link.link" 
-                         class="dropdown-item header-links"
-                    >
-                         {{link.name}}
-                    </a>
-               </div>   
-          </div>
-     </ng-container> -->
+  <!-- not a dropdown?
+  <ng-container *ngIf="!isDropDown">
+    <div *ngFor="let link of currentLinks">
+      <li class="nav-item">
+        <a
+          [routerLink]="link.link"
+          class="nav-link active header-links"
+          >
+          {{link.name}}
+        </a>
+      </li>
+    </div>
+  </ng-container>
 
-     <!-- not a dropdown?
-     <ng-container *ngIf="!isDropDown"> 
-          <div *ngFor="let link of currentLinks">
-               <li class="nav-item">
-                    <a 
-                         [routerLink]="link.link" 
-                         class="nav-link active header-links"
-                    >
-                         {{link.name}}
-                    </a>
-               </li>
-          </div>
-     </ng-container>
-    
- </ng-container> -->
+</ng-container> -->

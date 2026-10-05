@@ -1,11 +1,11 @@
 <!-- <ng-container *ngIf="navbarComponentIs == 2 && currentLinks">
-    <app-navbar 
-        [currentLinks]="currentLinks">
-    </app-navbar>
+<app-navbar
+  [currentLinks]="currentLinks">
+</app-navbar>
 </ng-container> -->
 
-<ng-container *ngIf="navbarComponentIs == 1">
-    <app-dropdown-sidebar 
-    >     
-    </app-dropdown-sidebar>
-</ng-container>
+@if (navbarComponentIs == 1) {
+  <app-dropdown-sidebar
+    >
+  </app-dropdown-sidebar>
+}

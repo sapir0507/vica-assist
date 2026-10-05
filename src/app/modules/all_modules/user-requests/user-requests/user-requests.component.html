@@ -6,163 +6,162 @@
     <div class="row">
       <div class="col">
         <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
-         <div class="container-fluid justify-content-center">
-          <mat-accordion class="example-headers-align">
-            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
+          <div class="container-fluid justify-content-center">
+            <mat-accordion class="example-headers-align">
+              <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
 
-              <mat-expansion-panel-header>
-                <mat-panel-title>General Information</mat-panel-title>
-                <mat-panel-description>
-                  General Information about the request
-                  <mat-icon color="primary">personal_information</mat-icon>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-
-             
-                <mat-label>Order Choice</mat-label>
-                <div class="mt-4">
-                  <mat-radio-group formControlName="order" class="mat-radio-ripple">
-                      <mat-radio-button class="bi-check" value="both" checked>Flight and Hotel</mat-radio-button>
-                      <mat-radio-button class="bi-check" value="hotel">Hotel Only</mat-radio-button>
-                      <mat-radio-button class="bi-check" value="flight">Flight Only</mat-radio-button>
-                    </mat-radio-group>
-                </div>
-              
-
-              <mat-divider></mat-divider>
-
-              <button 
-                mat-raised-button 
-                class="btn btn-primary mb-4" 
-                color="primary" 
-                type="button" 
-                (click)="addNewPass()"
-              >
-                add person
-              </button>
-          
-            <ng-container formArrayName="passDetails">
-              <ng-container *ngFor="let item of passDetails.controls; let i=index">
-                <div [formGroupName]="i" class="container-fluid mx-2 mb-2">
-                
-                    <mat-form-field color="primary" appearance="fill" class="mx-2">
-                      <input matInput type="text" placeholder="Full Name" formControlName="fullName">
-                    </mat-form-field>
-                
-                    <mat-form-field color="primary" appearance="fill" class="mp-2">
-                      <input matInput type="number" placeholder="ID" formControlName="passID">
-                    </mat-form-field>
-                
-                    <button 
-                      mat-flat-button 
-                      color="warn" 
-                      type="button"
-                      class="btn mx-2"
-                      (click)="deleteExistingPass(i)"
-                    >
-                      delete
-                    </button>
-                </div>
-              </ng-container>
-            </ng-container>
-        
-            
-
-              <mat-action-row>
-                <button mat-button type="button" class="btn" color="primary" (click)="nextStep()">Next</button>
-              </mat-action-row>
-            </mat-expansion-panel>
-
-            <div>
-              <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>Travel Details</mat-panel-title>
+                  <mat-panel-title>General Information</mat-panel-title>
                   <mat-panel-description>
-                    Vication details
-                    <mat-icon color="primary">flight_takeoff</mat-icon>
+                    General Information about the request
+                    <mat-icon color="primary">personal_information</mat-icon>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
 
-               
-                      <mat-form-field appearance="fill" color="primary" class="mx-2">
-                        <mat-label>Origin</mat-label>
-                        <mat-hint>where are you traveling from</mat-hint>
-                        <input matInput type="text" placeholder="origin" formControlName="origin">
+
+                <mat-label>Order Choice</mat-label>
+                <div class="mt-4">
+                  <mat-radio-group formControlName="order" class="mat-radio-ripple">
+                    <mat-radio-button class="bi-check" value="both" checked>Flight and Hotel</mat-radio-button>
+                    <mat-radio-button class="bi-check" value="hotel">Hotel Only</mat-radio-button>
+                    <mat-radio-button class="bi-check" value="flight">Flight Only</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+
+                <mat-divider></mat-divider>
+
+                <button
+                  mat-raised-button
+                  class="btn btn-primary mb-4"
+                  color="primary"
+                  type="button"
+                  (click)="addNewPass()"
+                  >
+                  add person
+                </button>
+
+                <ng-container formArrayName="passDetails">
+                  @for (item of passDetails.controls; track item; let i = $index) {
+                    <div [formGroupName]="i" class="container-fluid mx-2 mb-2">
+                      <mat-form-field color="primary" appearance="fill" class="mx-2">
+                        <input matInput type="text" placeholder="Full Name" formControlName="fullName">
                       </mat-form-field>
-                  
-                      <mat-form-field appearance="fill" color="primary">
-                        <mat-label>Destination</mat-label>
-                        <mat-hint>where are you traveling to</mat-hint>
-                        <input matInput type="text" placeholder="Destination" formControlName="destination">
+                      <mat-form-field color="primary" appearance="fill" class="mp-2">
+                        <input matInput type="number" placeholder="ID" formControlName="passID">
                       </mat-form-field>
-                  
-                      <mat-form-field appearance="fill" [formGroup]="Dates">
-                        <mat-label>Dates</mat-label>
-                        <mat-date-range-input [rangePicker]="rangePicker">
-                          <input type="button" matStartDate placeholder="start" formControlName="departureDate">
-                          <input type="button" matEndDate placeholder="end" formControlName="returnDate">
-                        </mat-date-range-input>
-                        <mat-hint>MM/DD/YYY - MM/DD/YYY</mat-hint>
-                        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #rangePicker>
-                          <mat-datepicker-actions>
-                            <button mat-button matDatepickerCancel>Cancel</button>
-                            <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
-                          </mat-datepicker-actions>
-                        </mat-date-range-picker>
-                      </mat-form-field>
-                  
-                      <mat-form-field class="p-md-1" appearance="fill" color="primary" [formGroup]="hotel">
-                        <mat-label>Stars</mat-label>
-                        <mat-hint>Number of Stars</mat-hint>
-                        <mat-select formControlName="stars">
-                          <div *ngFor="let item of [1,2,3,4,5]; let i = index">
-                            <mat-option [value]="i+1">{{i+1}}</mat-option>
-                          </div>
-                        </mat-select>
-                      </mat-form-field>
-                 
+                      <button
+                        mat-flat-button
+                        color="warn"
+                        type="button"
+                        class="btn mx-2"
+                        (click)="deleteExistingPass(i)"
+                        >
+                        delete
+                      </button>
+                    </div>
+                  }
+                </ng-container>
+
+
 
                 <mat-action-row>
-                  <button mat-button type="button" class="btn" color="primary" (click)="prevStep()">Back</button>
                   <button mat-button type="button" class="btn" color="primary" (click)="nextStep()">Next</button>
                 </mat-action-row>
               </mat-expansion-panel>
-            </div>
 
-            <mat-expansion-panel [expanded]="step === 2"
-              (opened)="setStep(2)" hideToggle="">
-              <mat-expansion-panel-header>
-                <mat-panel-title>Hotel</mat-panel-title>
-                <mat-panel-description>
-                  The maximum payment you're comfortbale with
-                  <mat-icon color="primary">attach_money</mat-icon>
-                </mat-panel-description>
+              <div>
+                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>Travel Details</mat-panel-title>
+                    <mat-panel-description>
+                      Vication details
+                      <mat-icon color="primary">flight_takeoff</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-              </mat-expansion-panel-header>
 
-              <table class="container">
-                <tr>
-                  <td>
-                    <mat-form-field appearance="fill" class="m-1">
-                      <mat-label>Price</mat-label>
-                      <input matInput type="number" formControlName="price">
-                      <span matSuffix>$&nbsp;</span>                        
-                    </mat-form-field>
-                  </td>
-              
-                </tr>
-              </table>
-             
+                  <mat-form-field appearance="fill" color="primary" class="mx-2">
+                    <mat-label>Origin</mat-label>
+                    <mat-hint>where are you traveling from</mat-hint>
+                    <input matInput type="text" placeholder="origin" formControlName="origin">
+                  </mat-form-field>
 
-              <mat-action-row>
-                <button mat-button type="button" class="btn" color="primary" (click)="prevStep()">Back</button>
-                <button mat-raised-button color="primary">submit</button>
-              </mat-action-row>
-            </mat-expansion-panel>
+                  <mat-form-field appearance="fill" color="primary">
+                    <mat-label>Destination</mat-label>
+                    <mat-hint>where are you traveling to</mat-hint>
+                    <input matInput type="text" placeholder="Destination" formControlName="destination">
+                  </mat-form-field>
 
-          </mat-accordion>
-         </div>
+                  <mat-form-field appearance="fill" [formGroup]="Dates">
+                    <mat-label>Dates</mat-label>
+                    <mat-date-range-input [rangePicker]="rangePicker">
+                      <input type="button" matStartDate placeholder="start" formControlName="departureDate">
+                      <input type="button" matEndDate placeholder="end" formControlName="returnDate">
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYY - MM/DD/YYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #rangePicker>
+                      <mat-datepicker-actions>
+                        <button mat-button matDatepickerCancel>Cancel</button>
+                        <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+                      </mat-datepicker-actions>
+                    </mat-date-range-picker>
+                  </mat-form-field>
+
+                  <mat-form-field class="p-md-1" appearance="fill" color="primary" [formGroup]="hotel">
+                    <mat-label>Stars</mat-label>
+                    <mat-hint>Number of Stars</mat-hint>
+                    <mat-select formControlName="stars">
+                      @for (item of [1,2,3,4,5]; track item; let i = $index) {
+                        <div>
+                          <mat-option [value]="i+1">{{i+1}}</mat-option>
+                        </div>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+
+
+                  <mat-action-row>
+                    <button mat-button type="button" class="btn" color="primary" (click)="prevStep()">Back</button>
+                    <button mat-button type="button" class="btn" color="primary" (click)="nextStep()">Next</button>
+                  </mat-action-row>
+                </mat-expansion-panel>
+              </div>
+
+              <mat-expansion-panel [expanded]="step === 2"
+                (opened)="setStep(2)" hideToggle="">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Hotel</mat-panel-title>
+                  <mat-panel-description>
+                    The maximum payment you're comfortbale with
+                    <mat-icon color="primary">attach_money</mat-icon>
+                  </mat-panel-description>
+
+                </mat-expansion-panel-header>
+
+                <table class="container">
+                  <tr>
+                    <td>
+                      <mat-form-field appearance="fill" class="m-1">
+                        <mat-label>Price</mat-label>
+                        <input matInput type="number" formControlName="price">
+                        <span matSuffix>$&nbsp;</span>
+                      </mat-form-field>
+                    </td>
+
+                  </tr>
+                </table>
+
+
+                <mat-action-row>
+                  <button mat-button type="button" class="btn" color="primary" (click)="prevStep()">Back</button>
+                  <button mat-raised-button color="primary">submit</button>
+                </mat-action-row>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+          </div>
         </form>
       </div>
     </div>

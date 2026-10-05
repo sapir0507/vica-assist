@@ -1,33 +1,29 @@
 
-  <ng-container *ngIf="formControlName" >
-    <mat-form-field color="primary" appearance="fill">
-      <mat-label>{{label}}</mat-label>
-
-      <ng-container>
-        <input
-          matInput 
-          [type]="type"
-          [errorStateMatcher]="matcher"
-          [formControlName]="formControlName"
+@if (formControlName) {
+  <mat-form-field color="primary" appearance="fill">
+    <mat-label>{{label}}</mat-label>
+    <ng-container>
+      <input
+        matInput
+        [type]="type"
+        [errorStateMatcher]="matcher"
+        [formControlName]="formControlName"
         >
       </ng-container>
-      
-      
-      <ng-container *ngIf="isIcon">
+      @if (isIcon) {
         <mat-icon  matSuffix>{{IconName}}</mat-icon>
-      </ng-container>
-      <ng-container *ngIf="hint">
+      }
+      @if (hint) {
         <mat-hint >{{hint}}</mat-hint>
-      </ng-container>
-      <ng-container *ngIf="formControl?.hasError('email') && !formControl?.hasError('required')">
+      }
+      @if (formControl?.hasError('email') && !formControl?.hasError('required')) {
         <mat-error>Please enter a valid email address</mat-error>
-      </ng-container>
-      <ng-container *ngIf="formControl?.hasError('required')">
+      }
+      @if (formControl?.hasError('required')) {
         <mat-error>
           Value is <strong>required</strong>
         </mat-error>
-      </ng-container>
-        
+      }
     </mat-form-field>
-  </ng-container>
-  
+  }
+

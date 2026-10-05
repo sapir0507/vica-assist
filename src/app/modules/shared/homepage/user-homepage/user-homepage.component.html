@@ -3,68 +3,73 @@
   <div class="text-center">
     <h1 [ngClass]="getTitleClasses()" (window:resize)="handleFontSizeEvent($event)">Homepage</h1>
   </div>
-  <div class="choices m-5" *ngIf="getChoice() === 0">
-    <mat-grid-list [cols]="breakpoint" rowHeight="2:1" [gutterSize]="'20px'" (window:resize)="handleSizeEvent($event)">
-      <mat-grid-tile>
-        <button mat-raised-button color="primary" (click)="newOrder()">          
+  @if (getChoice() === 0) {
+    <div class="choices m-5">
+      <mat-grid-list [cols]="breakpoint" rowHeight="2:1" [gutterSize]="'20px'" (window:resize)="handleSizeEvent($event)">
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="newOrder()">
             Place A New Order
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <button mat-raised-button color="primary" (click)="seeAllOrders()">
+            Monitor Previous Orders
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  }
+  @if (getChoice() === 1) {
+    <div class="choices">
+      <div class="goBack m-4">
+        <button mat-button (click)="goBack()">
+          <span class="fa fa-arrow-alt-circle-left"></span>
+          &nbsp;Go Back
         </button>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <button mat-raised-button color="primary" (click)="seeAllOrders()">          
-          Monitor Previous Orders
-      </button>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </div>
-  <div class="choices" *ngIf="getChoice() === 1">
-    <div class="goBack m-4">
-      <button mat-button (click)="goBack()">
-        <span class="fa fa-arrow-alt-circle-left"></span>
-        &nbsp;Go Back 
-      </button>
+      </div>
+      <div class="container-fluid m-2">
+        <userRequests></userRequests>
+      </div>
     </div>
-    <div class="container-fluid m-2">
-      <userRequests></userRequests>
-    </div>
-  </div>
-  <div class="choices" *ngIf="getChoice() === 2">
-    <div class="goBack m-4">
-      <button mat-button (click)="goBack()">
-        <span class="fa fa-arrow-alt-circle-left"></span>
-        &nbsp;Go Back 
-      </button>
-      
-      <mat-tab-group animationDuration="0ms" [backgroundColor]="'primary'">
-        <mat-tab label="Pending Orders">
-          <ng-container *ngFor="let pendingItem of pendingOrders$ | async as list">
-            <ng-container *ngIf="!pendingItem">
-              <h2>No Pending Orders</h2>
-            </ng-container>
-            <ordersList 
-              class="container"
-              [requestID]="pendingItem.id"
-              [status]="'customer'"
-              (item)="selectedItem($event)"
-            >
-            </ordersList>
-          </ng-container>
-        </mat-tab>
-        <mat-tab label="Finished Orders">
-          <ng-container *ngFor="let Finisheditem of finishedOrders$ | async as list">
-            <ng-container *ngIf="!Finisheditem">
-              <h2>No Finished Orders</h2>
-            </ng-container>
-            <ordersList 
+  }
+  @if (getChoice() === 2) {
+    <div class="choices">
+      <div class="goBack m-4">
+        <button mat-button (click)="goBack()">
+          <span class="fa fa-arrow-alt-circle-left"></span>
+          &nbsp;Go Back
+        </button>
+        <mat-tab-group animationDuration="0ms" [backgroundColor]="'primary'">
+          <mat-tab label="Pending Orders">
+            @for (pendingItem of pendingOrders$ | async; track pendingItem.id) {
+              @if (!pendingItem) {
+                <h2>No Pending Orders</h2>
+              }
+              <ordersList
+                class="container"
+                [requestID]="pendingItem.id"
+                [status]="'customer'"
+                (item)="selectedItem($event)"
+                >
+              </ordersList>
+            }
+          </mat-tab>
+          <mat-tab label="Finished Orders">
+            @for (Finisheditem of finishedOrders$ | async; track Finisheditem.id) {
+              @if (!Finisheditem) {
+                <h2>No Finished Orders</h2>
+              }
+              <ordersList
                 class="container"
                 [requestID]="Finisheditem.id"
                 [status]="'customer'"
                 (item)="selectedItem($event)"
-            >
-            </ordersList>
-          </ng-container>
-        </mat-tab>
-      </mat-tab-group>
+                >
+              </ordersList>
+            }
+          </mat-tab>
+        </mat-tab-group>
+      </div>
     </div>
-  </div>
+  }
 </div>
