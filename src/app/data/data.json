@@ -37,7 +37,7 @@
     {
       "choice": "both",
       "orderID": "1",
-      "status": "pending",
+      "status": "finished",
       "departureDate": "2022-06-09T21:00:00.000Z",
       "returnDate": "2022-06-16T21:00:00.000Z",
       "origin": "Israel",
@@ -54,7 +54,27 @@
     }
   ],
   "hotels": [],
-  "flights": [],
+  "flights": [
+    {
+      "orderID": "1",
+      "dest": "Italy",
+      "passangers": 1,
+      "fullName": "Jane Doe ",
+      "passID": 12345678,
+      "passArray": [],
+      "org": "Israel",
+      "returnDate": "2022-06-16T21:00:00.000Z",
+      "departureDate": "2022-06-09T21:00:00.000Z",
+      "returnHour": "18:20",
+      "departureHour": "02:30",
+      "stops": "0",
+      "stopDuration": "",
+      "bagage": "false",
+      "moreInfo": "",
+      "price": 152,
+      "id": 1
+    }
+  ],
   "finalOrder": [
     {
       "entities": {},
