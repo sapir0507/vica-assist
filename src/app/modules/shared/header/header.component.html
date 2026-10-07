@@ -1,11 +1,7 @@
-<!-- <ng-container *ngIf="navbarComponentIs == 2 && currentLinks">
-<app-navbar
-  [currentLinks]="currentLinks">
-</app-navbar>
-</ng-container> -->
-
-@if (navbarComponentIs == 1) {
-  <app-dropdown-sidebar
-    >
-  </app-dropdown-sidebar>
-}
+<div (window:resize)="handleSizeEvent($event)">
+  @if (navbarComponentIs === HeaderComponentType.NAVBAR) {
+    <app-navbar/>
+  } @else {
+    <app-dropdown-sidebar/>
+  }
+</div>

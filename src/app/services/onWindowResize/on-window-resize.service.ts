@@ -4,7 +4,7 @@ import { Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class OnWindowResizeService {
-  screenType: string = 'laptop';
+  screenType = 'laptop';
   constructor() { 
    this.screenType = (window.innerWidth <= 600) ? 'phone' : 'laptop';
    const breakpoint = window.innerWidth;
@@ -17,7 +17,7 @@ export class OnWindowResizeService {
    else if(breakpoint <= 1024){
     this.screenType = 'laptop'
    }
-   else if(breakpoint <= 1200){
+   else {
     this.screenType = 'desktop'
    }
   }
@@ -34,7 +34,7 @@ export class OnWindowResizeService {
     else if(breakpoint <= 1024){
      this.screenType = 'laptop'
     }
-    else if(breakpoint <= 1200){
+    else {
      this.screenType = 'desktop'
     }
 

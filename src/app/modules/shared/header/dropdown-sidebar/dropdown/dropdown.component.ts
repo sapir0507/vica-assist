@@ -12,8 +12,7 @@ export class DropdownComponent implements OnInit {
   @Input() title: string | null = null;
   @Input() isDropDown: boolean | null = null;
   @Input() isSideBar: boolean | null = null;
-  constructor() { }
-
+  constructor() { /* empty*/}
   ngOnInit(): void {
     // console.log("dropdown component")
     // console.log("current links", this.currentLinks)
