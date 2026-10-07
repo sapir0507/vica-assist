@@ -97,10 +97,10 @@ instead of trusting the tool output blindly.
 
 ## Known Limitations
 
-- **The header sidebar dropdowns ("customers" / "agents") do not currently expand** on phone and
-  tablet widths. They depend on Bootstrap's global JS via data attributes, outside Angular's change
-  detection. Diagnosis and the fix plan (move to `@ng-bootstrap/ng-bootstrap`, upgrade Bootstrap)
-  are in [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
+- **Build and styling setup is still on Angular 13 conventions** (legacy webpack builder, duplicate
+  `project.json` config, a failing production index-html step). Tracked in
+  [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
+- **`/choose-flight` and `/choose-hotel` routes are disabled** while their header links remain.
 
 ## Code scaffolding
 
