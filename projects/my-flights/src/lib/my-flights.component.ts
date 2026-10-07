@@ -30,7 +30,7 @@ export class MyFlightsComponent implements OnInit {
   showHint: boolean = false;
   addDivider: boolean = false;
 
-  step: number = 0;
+  step = 0;
   hide = true;
 
   newFlightForm: FormGroup = this.fb.group({

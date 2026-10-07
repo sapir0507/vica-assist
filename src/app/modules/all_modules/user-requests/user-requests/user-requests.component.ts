@@ -15,7 +15,7 @@ import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
 export class UserRequestsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
-  step: number = 0;
+  step = 0;
   orderID: string | null = null;
   requestForm: FormGroup = this.fb.group({
 

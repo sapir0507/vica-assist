@@ -1,5 +1,6 @@
 import { outputAst } from '@angular/compiler';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ItemType } from 'projects/item/src/lib/item.component';
 import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
 // import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
@@ -14,7 +15,7 @@ import { Hotel } from 'src/app/interfaces/hotel.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChooseHotelComponent implements OnInit, OnDestroy {
-
+    readonly ItemType = ItemType;
   notifier: Subject<boolean> = new Subject();
   @Input() orderID: string | null = null; //to find all flights with coresponding orderIDs
   _allHotels$: Observable<Hotel[]> | null = null
@@ -25,7 +26,7 @@ export class ChooseHotelComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-    const id: number = this.orderID? +this.orderID : 1;
+    const id = this.orderID? +this.orderID : 1;
     this._allHotels$ = this.SHotel.getHotelsByOrderID(id);
     const allHotels = this._allHotels$
     .pipe(

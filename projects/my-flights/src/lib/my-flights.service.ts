@@ -25,8 +25,7 @@ export class MyFlightsService extends HttpResourceService<Flights, FlightsReques
     super(http);
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty*/}
 
   /** Creates a new flight listing on the backend. */
   addFlight(newFlight: FlightsRequest): void {

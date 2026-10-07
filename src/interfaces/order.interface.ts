@@ -17,7 +17,14 @@ export interface Order {
     priceRange: number ,
     finalPrice?: number
   }
-  
+
+  export function isPending(order: Order, isAgent: boolean): boolean {
+    return order.status === 'pending' && isAgent;
+  }
+  export function isFinished(order: Order, isAgent: boolean): boolean {
+    return order.status === 'finished' && !isAgent;
+  }
+
   export interface OrderRequest {
     orderID?: string,
     choice: string,

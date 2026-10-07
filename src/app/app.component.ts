@@ -4,10 +4,7 @@ import { Component } from '@angular/core';
   standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: [
-    './app.component.scss', 
-    '../../node_modules/bootstrap/dist/css/bootstrap.min.css'
-  ]
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'vica-assist';

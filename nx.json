@@ -19,14 +19,6 @@
     "libsDir": "projects",
     "appsDir": "projects"
   },
-  "pluginsConfig": {
-    "@nrwl/js": {
-      "analyzeSourceFiles": false
-    }
-  },
-  "cli": {
-    "defaultCollection": "@datorama/akita"
-  },
   "defaultProject": "vica-assist",
   "generators": {
     "@nrwl/angular:application": {
@@ -38,5 +30,6 @@
       "unitTestRunner": "jest"
     },
     "@nrwl/angular:component": {}
-  }
+  },
+  "analytics": false
 }

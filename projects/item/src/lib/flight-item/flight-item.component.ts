@@ -18,11 +18,9 @@ export class FlightItemComponent implements OnInit {
 
   step = 0;
 
-  constructor() { }
+  constructor() { /* empty */}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {/* empty */}
 
   setStep(index: number) {
     this.step = index;

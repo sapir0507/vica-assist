@@ -14,8 +14,7 @@ export class UserRequestPreviewComponent implements OnInit {
   protected orderStore = inject(OrderStore);
 
   myOrder?: Order;
-  @Input() orderID: number = 1;
+  @Input() orderID = 1;
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty*/}
 }

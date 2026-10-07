@@ -1,7 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { Flights } from 'src/interfaces/flight.interface';
+import { Hotel } from 'src/interfaces/hotel.interface';
 
-import { Flights } from 'src/app/interfaces/flight.interface';
-import { Hotel } from 'src/app/interfaces/hotel.interface';
+export enum ItemType {
+  Flight = "flight",
+  Hotel = "hotel"
+}
 
 @Component({
   standalone: false,
@@ -12,8 +16,9 @@ import { Hotel } from 'src/app/interfaces/hotel.interface';
 })
 export class ItemComponent implements OnInit {
 
+  readonly ItemType = ItemType;
   @Input() sub_image?: string;
-  @Input() item_type?: string = '';
+  @Input() item_type: ItemType = ItemType.Hotel;
 
   // flight
   @Input() flight?: Flights;
@@ -22,12 +27,9 @@ export class ItemComponent implements OnInit {
   @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();
 
-  constructor() { 
-  }
+  constructor() { /* empty */}
 
-  ngOnInit(): void {
-   
-  }
+  ngOnInit(): void { /* empty */ }
 
   onChosenHotel(chosenHotel: Hotel){
     this.chosenHotel.emit(chosenHotel)

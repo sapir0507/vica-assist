@@ -5,5 +5,4 @@ import { Injectable } from '@angular/core';
 })
 export class MatInputService {
 
-  constructor() { }
-}
+  constructor() { /* empty*/}}

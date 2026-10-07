@@ -6,7 +6,7 @@ import { RegisterRequest } from './register.model';
 @Injectable({ providedIn: 'root' })
 export class RegisterService {
 
-  private url: string = environment.api + 'login';
+  private url = environment.api + 'login';
 
   constructor(
     private http: HttpClient

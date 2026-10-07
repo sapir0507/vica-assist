@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  isLocal: string = 'local';
+  isLocal = 'local';
 
   private isThirdParty(){
     if(this.isLocal === 'local') return false;
@@ -26,11 +26,7 @@ export class AuthService {
    * - `isThirdParty` true with no name: clears `isLocal`.
    */
   setThirdParty(isThirdParty: boolean, thirdparty?: string){
-
-     !isThirdParty?
-        this.isLocal = this.isLocal :
-        thirdparty?
-            this.isLocal = thirdparty : this.isLocal = ''
+    this.isLocal = isThirdParty? (thirdparty || '') : (this.isLocal || '');
   }
 
   public isAuthenticated(): boolean {

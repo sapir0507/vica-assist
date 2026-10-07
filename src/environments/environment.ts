@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: 'http://localhost:3000/',
-  GAPI_CLIENT_ID: '16132945703-lm0ceaei1f24jmsg34vv0ta1uflf3g5s.apps.googleusercontent.com'
+  type: 'dev'
 };
 
 /*

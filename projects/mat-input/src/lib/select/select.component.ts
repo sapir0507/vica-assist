@@ -8,9 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SelectComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor() { /* empty*/}
+  ngOnInit(): void {/* empty*/}
 
 }

@@ -19,8 +19,6 @@ const navigationExtras: NavigationExtras = {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  
-
 
   formGroup = new FormGroup({
     username: new FormControl<string | undefined>(undefined, [Validators.required]),
@@ -36,9 +34,7 @@ export class LoginComponent implements OnInit {
     ngZone: NgZone
     ) { }
 
-  ngOnInit(): void {
-
-  }
+   ngOnInit(): void {/* empty*/}
 
   onSubmit(){
     this.myError = false;

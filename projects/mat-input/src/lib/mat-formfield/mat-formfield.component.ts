@@ -19,8 +19,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class MatFormfieldComponent implements OnInit {
   @Input() label?: string;
-  @Input() formControlName: string = 'name';
-  @Input() type: string = 'text';
+  @Input() formControlName = 'name';
+  @Input() type = 'text';
   @Input() hint?: string;
   @Input() IconName?: string;
 
@@ -49,8 +49,7 @@ export class MatFormfieldComponent implements OnInit {
 
    }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty*/}
 
   onSubmit(){}
 

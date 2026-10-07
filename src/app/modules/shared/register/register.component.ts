@@ -28,8 +28,7 @@ export class RegisterComponent implements OnInit {
     private registerService: RegisterService
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty*/}
 
   onSubmit(){
 

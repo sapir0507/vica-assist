@@ -1,10 +1,12 @@
-@import "../../../../../src/assets/styles/media.scss";
+@use "../../../../../src/assets/styles/media";
 @import url('https://fonts.googleapis.com/css2?family=Acme&family=Alfa+Slab+One&family=Caveat:wght@500&family=Indie+Flower&family=Righteous&family=Volkhov&display=swap');
+    
     $card-width: 150vh;
     // $card-content-width: 75vh;
     $card-content-item-width: 25vh;
     $card-price: 74vh;
     $font-size: 1.5em;
+    
 :host{
     font-size: $font-size;
     // .mat-card{

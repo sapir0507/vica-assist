@@ -9,25 +9,25 @@ import { Hotel } from 'src/app/interfaces/hotel.interface';
 })
 export class HotelItemComponent implements OnInit {
 
-  constructor() { }
+  constructor() { /* empty */}
 
   @Input() hotel: Hotel | null = null;
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter()
   currentRate = 5;
-  private path: string = 'assets/images/img/';
+  private path = 'assets/images/img/';
   private my_images = [
     'bed.png', 
     'bedroom.png', 
     'bg_bggenerator_com.png'
   ];
+  
   images = this.getImages();
   
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty */}
 
   getBad(): number{
     let stars = 5;
-    this.hotel && this.hotel.stars ? stars = this.hotel.stars : stars = 5;
+    stars = this.hotel && this.hotel.stars ? this.hotel.stars : 5;
     return stars;
   }
 

@@ -1,5 +1,5 @@
 
-@if (item_type == 'flight' && flight) {
+@if (item_type == ItemType.Flight && flight) {
   <div>
     <flight-item
       [flight]="flight"
@@ -8,7 +8,7 @@
   </div>
 }
 
-@if (item_type == 'hotel' && hotel) {
+@if (item_type == ItemType.Hotel && hotel) {
   <div>
     <hotel-item
       [hotel]="hotel"

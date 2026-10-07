@@ -13,9 +13,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MatInputComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor() { /* empty*/}
+  ngOnInit(): void {/* empty*/}
 
 }

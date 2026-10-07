@@ -3,7 +3,7 @@
     <h1>Hotels</h1>
     @for (hotel of _allHotels$ | async; track hotel.id) {
       <item
-        [item_type]="'hotel'"
+        [item_type]="ItemType.Hotel"
         [hotel]="hotel"
         (chosenHotel)="onChooseHotel($event)"
       ></item>

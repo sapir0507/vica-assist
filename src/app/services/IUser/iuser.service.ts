@@ -5,5 +5,4 @@ import { Injectable } from '@angular/core';
 })
 export class IUserService {
 
-  constructor() { }
-}
+  constructor() { /* empty*/}}

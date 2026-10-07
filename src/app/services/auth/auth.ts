@@ -1,2 +1,1 @@
-export interface Auth {
-}
+export interface Auth { /* empty */}

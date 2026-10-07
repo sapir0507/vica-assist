@@ -5,5 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export class ItemService {
 
-  constructor() { }
+  constructor() {/* empty */ }
 }

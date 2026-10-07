@@ -12,7 +12,6 @@ export class UserFinishedOrderComponent implements OnInit {
   constructor(
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty*/}
 
 }
