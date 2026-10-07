@@ -95,6 +95,13 @@ phase: fixed a latent version-skew bug where `@angular/compiler` could silently 
 suggested as safe but actually required `@angular/common >=14.0.0` — shipped the real safe version
 instead of trusting the tool output blindly.
 
+## Known Limitations
+
+- **The header sidebar dropdowns ("customers" / "agents") do not currently expand** on phone and
+  tablet widths. They depend on Bootstrap's global JS via data attributes, outside Angular's change
+  detection. Diagnosis and the fix plan (move to `@ng-bootstrap/ng-bootstrap`, upgrade Bootstrap)
+  are in [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use

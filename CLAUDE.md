@@ -27,6 +27,7 @@ Code quality, security, and clarity matter more here than speed — assume a rev
 
 - For non-trivial changes, align on a plan before implementing (use Plan mode), especially when there are multiple viable approaches.
 - Update the plan in place when the approach changes. also re-explain in chat only relevent changes.
+- Also identify areas where the project could be improved.
 
 # Git workflow
 
@@ -35,9 +36,26 @@ Code quality, security, and clarity matter more here than speed — assume a rev
 - Never force-push or rewrite shared/published history without explicit confirmation.
 - Since this repo is public on GitHub, be mindful of commit messages and PR descriptions — they're part of the portfolio presentation.
 
+# GitHub Presentation
+Improve the repository presentation.
+
+## Consider:
+- README badges where appropriate
+- Clear repository description
+- Feature highlights
+- Architecture diagram
+- Screenshots
+- Clean documentation hierarchy
+- Table of contents if useful
+- Links between README and /docs
+- Clear setup instructions
+
 # Security
 
 - If a vulnerability is spotted while working in an area of the code (even unrelated to the current task), flag it and fix it — don't leave known issues in place, since this is public, interview-facing code.
+
+# Bugs
+- If a bug is spotted while working in an area of the code (even unrelated to the current task), flag it and fix it — don't leave known issues in place, since this is public, interview-facing code.
 
 # Editing Rules
 
@@ -58,3 +76,108 @@ When modifying existing code:
 - Avoid introducing new dependencies unless necessary. 
 
 Every modified line should have a direct reason tied to the task.
+
+# Code quality
+
+- SOLID principles
+- Separation of concerns
+- Dependency injection
+- Reusable abstractions
+- Design patterns
+- Naming conventions
+- Error handling
+- Validation
+- Maintainability
+- Scalability
+- Potential technical debt
+
+# README
+- Use a clean professional structure.
+- Do not write a generic marketing README.
+- Explain why important architectural decisions were made.
+Suggested structure:
+
+# Project Name
+
+Short professional description
+
+## Overview
+
+## Key Features
+
+## Architecture
+
+## Authentication & Authorization
+
+## Application Flow
+
+## Technology Stack
+
+## Project Structure
+
+## Angular Architecture
+
+## Design & Engineering Decisions
+
+## Security Considerations
+
+## Validation & Error Handling
+
+## Testing
+
+## Getting Started 
+
+## Configuration 
+
+## Running the Application 
+
+## Build 
+
+## Code Quality 
+
+## Known Limitations 
+
+## Future Improvements 
+
+## Screenshots 
+
+## Author
+
+
+# Architecture Documentation
+Create a /docs directory if appropriate.
+Only create documents that provide real value.
+
+Suggested documentation:
+
+docs/
+├── architecture.md
+├── authentication-and-authorization.md
+├── application-flow.md
+├── development.md
+└── decisions.md
+
+#Development Guide
+
+Create:
+
+docs/development.md
+
+Include:
+
+Prerequisites
+Node version
+Angular CLI requirements
+Installation
+Environment configuration
+Development server
+Production build
+Testing
+Linting
+Formatting
+Debugging
+Common development issues
+
+Derive commands from the repository.
+
+Do not invent commands.
