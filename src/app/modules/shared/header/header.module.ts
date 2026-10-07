@@ -7,6 +7,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LinksComponent } from './links/links.component';
 import { DropdownComponent } from './dropdown-sidebar/dropdown/dropdown.component';
 import { RouterModule } from '@angular/router';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NgbDropdownModule
   ],
   exports:[
     HeaderComponent

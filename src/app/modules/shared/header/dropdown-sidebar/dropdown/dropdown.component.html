@@ -1,26 +1,16 @@
 @if (currentLinks) {
-  <li class="nav-item dropdown">
-    <a
-      class="nav-link dropdown-toggle"
-      href="#"
-      id="offcanvasNavbarDropdown"
-      role="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false">
+  <li class="nav-item" ngbDropdown display="static">
+    <button type="button" class="nav-link" ngbDropdownToggle>
       {{title}}
-    </a>
-    <ul
-      class="dropdown-menu ddm-bc ddm-s"
-      aria-labelledby="offcanvasNavbarDropdown">
-      @if (currentLinks) {
-        <li>
-          <app-links
-            [currentLinks]="currentLinks"
-            [isSideBar]="isSideBar"
-            [isDropDown]="isDropDown"
-          ></app-links>
-        </li>
-      }
+    </button>
+    <ul class="ddm-bc ddm-s" ngbDropdownMenu>
+      <li>
+        <app-links
+          [currentLinks]="currentLinks"
+          [isSideBar]="isSideBar"
+          [isDropDown]="isDropDown"
+        ></app-links>
+      </li>
     </ul>
   </li>
 }
