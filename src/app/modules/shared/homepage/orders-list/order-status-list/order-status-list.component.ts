@@ -2,13 +2,15 @@ import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output
 import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from 'src/interfaces/order.interface';
+import { OrderListItemComponent } from '../order-list-item/order-list-item.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'order-status-list',
   templateUrl: './order-status-list.component.html',
   styleUrls: ['./order-status-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [OrderListItemComponent]
 })
 export class OrderStatusListComponent {
   @Input({ required: true }) status!: 'pending' | 'finished';

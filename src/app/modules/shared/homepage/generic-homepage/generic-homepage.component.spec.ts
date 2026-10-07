@@ -8,7 +8,7 @@ describe('GenericHomepageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GenericHomepageComponent ]
+      imports: [ GenericHomepageComponent ]
     })
     .compileComponents();
   });

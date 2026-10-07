@@ -11,8 +11,7 @@ describe('UserHomepageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, RouterTestingModule ],
-      declarations: [ UserHomepageComponent ],
+      imports: [ HttpClientTestingModule, RouterTestingModule, UserHomepageComponent ],
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();

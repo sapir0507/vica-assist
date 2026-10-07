@@ -1,24 +1,35 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { MyFlightsModule } from 'projects/my-flights/src/lib/my-flights.module';
+import { MyHotelsModule } from 'projects/my-hotels/src/lib/my-hotels/my-hotels.module';
+import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
+import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from 'src/interfaces/order.interface';
+import { OrdersListComponent } from '../orders-list/orders-list.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'agent-homepage',
   templateUrl: './agent-homepage.component.html',
   styleUrls: ['./agent-homepage.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    UserRequestsModule,
+    UserRequestsPreviewModule,
+    MyFlightsModule,
+    MyHotelsModule,
+    OrdersListComponent
+  ]
 })
 export class AgentHomepageComponent implements OnInit {
-  step: string = 'flight';
-  chosenID: number = 1;
+  step = 'flight';
+  chosenID = 1;
   orderID: string | null = null;
-  nextID: number = 1;
-  maxID: number = 1;
+  nextID = 1;
+  maxID = 1;
   private orderStore = inject(OrderStore);
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {/* empty*/}
   onClick(){
     if(this.step ==='hotel') this.step ='flight';
     else this.step = 'hotel';

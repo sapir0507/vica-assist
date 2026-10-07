@@ -10,8 +10,7 @@ describe('OrdersListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      declarations: [ OrdersListComponent ],
+      imports: [ HttpClientTestingModule, OrdersListComponent ],
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();

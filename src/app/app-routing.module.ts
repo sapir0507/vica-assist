@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'homepage',
     canActivate: [authGuard],
-    loadChildren: () => import('./modules/shared/homepage/homepage.module').then(m => m.HomepageModule)
+    loadChildren: () => import('./modules/shared/homepage/homepage.routes').then(m => m.HOMEPAGE_ROUTES)
   },
   {
     path: 'add-hotel',
@@ -48,8 +48,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('./modules/shared/homepage/homepage.module').then(m => m.HomepageModule),
-    // redirectTo: 'homepage',
+    redirectTo: 'homepage',
     pathMatch: 'full'
   }
 ];
