@@ -580,6 +580,25 @@ on that compiler behavior.
 green before landing each store's branch, plus (since no automated UI testing exists in this repo) a
 manual click-through of whatever screens that store's data actually drives.
 
+## Phase 5 — Webpack builders to `@angular/build` (done, `chore/build/angular-application-builder`)
+
+`@angular-devkit/build-angular` is deprecated upstream (webpack support) and was the source of most
+high-severity `npm audit` findings (`webpack-dev-server`, `http-proxy-middleware`, `micromatch`,
+`sockjs`, `uuid`). Replaced with `@angular/build` (esbuild/Vite):
+
+- App: `browser` → `application` (`main` → `browser`, `polyfills` as a `["zone.js",
+  "@angular/localize/init"]` array, `src/polyfills.ts` deleted, webpack-only `vendorChunk`/
+  `buildOptimizer` dropped), `dev-server`, `extract-i18n` (`browserTarget` → `buildTarget`), `karma`.
+- Libraries: `ng-packagr` and `karma` executors swapped. The Karma configs no longer register the
+  webpack karma plugin; the new builder wires it itself.
+- Production build time dropped from ~30s to ~7s; output is still `dist/vica-assist/`. The
+  initial-bundle budget warning predates this phase.
+- High-severity findings in devDependencies: 18 → 5 (the remainder is the `karma` chain).
+
+Found, not fixed: `angular.json` only declares the root app, so Nx cannot run the library `build`/`test`
+targets that use Angular builders (`nx run item:build` fails with "Cannot find project"). The libraries'
+Karma tests and builds were verified by temporarily registering them in `angular.json`.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend
