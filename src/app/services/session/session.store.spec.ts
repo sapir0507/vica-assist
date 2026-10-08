@@ -56,18 +56,18 @@ describe('SessionStore', () => {
 
       expect(store.username()).toBe('user');
       expect(store.role()).toBe('customer');
-      expect(store.isLoggedIn()).toBeTrue();
+      expect(store.isLoggedIn()).toBe(true);
       expect(store.password()).toBe('');
     });
 
     it('toggles isLoading while the request is in flight', () => {
       store.siteLogin('user', 'pass').subscribe();
-      expect(store.isLoading()).toBeTrue();
+      expect(store.isLoading()).toBe(true);
 
       const req = httpMock.expectOne(r => r.url === url);
       req.flush([{ username: 'user', password: 'pass', role: 'customer' }]);
 
-      expect(store.isLoading()).toBeFalse();
+      expect(store.isLoading()).toBe(false);
     });
 
     it('leaves the store logged out when no user is found', () => {
@@ -86,7 +86,7 @@ describe('SessionStore', () => {
       req.flush('server error', { status: 500, statusText: 'Internal Server Error' });
 
       expect(store.isLoggedIn()).toBeFalsy();
-      expect(store.isLoading()).toBeFalse();
+      expect(store.isLoading()).toBe(false);
     });
   });
 

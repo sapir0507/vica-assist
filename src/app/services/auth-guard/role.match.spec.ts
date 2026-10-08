@@ -18,12 +18,12 @@ describe('roleMatch', () => {
   it('matches when the session role equals the required role', () => {
     patchState(unprotected(store), { role: 'agent' });
 
-    expect(run('agent')).toBeTrue();
+    expect(run('agent')).toBe(true);
   });
 
   it('does not match when the session role differs', () => {
     patchState(unprotected(store), { role: 'customer' });
 
-    expect(run('agent')).toBeFalse();
+    expect(run('agent')).toBe(false);
   });
 });

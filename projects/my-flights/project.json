@@ -19,11 +19,10 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@angular/build:karma",
+      "executor": "@angular/build:unit-test",
       "options": {
-        "main": "projects/my-flights/src/test.ts",
         "tsConfig": "projects/my-flights/tsconfig.spec.json",
-        "karmaConfig": "projects/my-flights/karma.conf.js"
+        "buildTarget": "vica-assist:build:testing"
       }
     }
   }

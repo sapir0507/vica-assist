@@ -4,7 +4,7 @@
     "paths": {
       "*": ["./*"]
     },
-    "types": ["jest", "jasmine"],
+    "types": [],
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,

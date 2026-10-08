@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
@@ -10,16 +11,16 @@ import { FinalOrderStore } from './finalOrder.store';
 describe('FinalOrderStore', () => {
   let store: InstanceType<typeof FinalOrderStore>;
   let httpMock: HttpTestingController;
-  let orderStoreSpy: jasmine.SpyObj<InstanceType<typeof OrderStore>>;
-  let flightServiceSpy: jasmine.SpyObj<MyFlightsService>;
-  let hotelServiceSpy: jasmine.SpyObj<HotelsService>;
+  let orderStoreSpy: { deleteByOrderID: Mock };
+  let flightServiceSpy: { deleteFlightsByOrderID: Mock };
+  let hotelServiceSpy: { deleteHotel: Mock };
 
   const finalUrl = environment.api + 'finalOrder';
 
   beforeEach(() => {
-    orderStoreSpy = jasmine.createSpyObj('OrderStore', ['deleteByOrderID']);
-    flightServiceSpy = jasmine.createSpyObj('MyFlightsService', ['deleteFlightsByOrderID']);
-    hotelServiceSpy = jasmine.createSpyObj('HotelsService', ['deleteHotel']);
+    orderStoreSpy = { deleteByOrderID: vi.fn() };
+    flightServiceSpy = { deleteFlightsByOrderID: vi.fn() };
+    hotelServiceSpy = { deleteHotel: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [

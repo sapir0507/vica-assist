@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { patchState } from '@ngrx/signals';
@@ -7,12 +8,11 @@ import { SessionStore, UserRole } from 'src/app/services/session/session.store';
 
 describe('authGuard', () => {
   let store: InstanceType<typeof SessionStore>;
-  let router: jasmine.SpyObj<Router>;
+  let router: { createUrlTree: Mock };
   const dummyTree = {} as UrlTree;
 
   beforeEach(() => {
-    router = jasmine.createSpyObj('Router', ['createUrlTree']);
-    router.createUrlTree.and.returnValue(dummyTree);
+    router = { createUrlTree: vi.fn().mockReturnValue(dummyTree) };
 
     TestBed.configureTestingModule({
       providers: [{ provide: Router, useValue: router }]

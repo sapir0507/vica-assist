@@ -19,11 +19,10 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@angular/build:karma",
+      "executor": "@angular/build:unit-test",
       "options": {
-        "main": "projects/mat-input/src/test.ts",
         "tsConfig": "projects/mat-input/tsconfig.spec.json",
-        "karmaConfig": "projects/mat-input/karma.conf.js"
+        "buildTarget": "vica-assist:build:testing"
       }
     }
   }

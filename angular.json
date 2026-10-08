@@ -58,6 +58,11 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false
             }
           },
           "defaultConfiguration": "production"
@@ -81,25 +86,18 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
-            ],
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
+            "reporters": [
+              "default"
             ],
-            "styles": [
-              "@angular/material/prebuilt-themes/deeppurple-amber.css",
-              "src/styles.scss"
+            "coverageReporters": [
+              "html",
+              "text-summary"
             ],
-            "scripts": []
+            "buildTarget": "vica-assist:build:testing",
+            "runner": "vitest"
           }
         }
       }
