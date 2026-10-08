@@ -1,5 +1,18 @@
 {
   "projectType": "library",
   "sourceRoot": "projects/mat-input/src",
-  "prefix": "lib"
+  "prefix": "lib",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "projects/mat-input/**/*.ts"
+        ]
+      }
+    }
+  }
 }

@@ -2,5 +2,18 @@
   "projectType": "library",
   "sourceRoot": "projects/shared/src",
   "prefix": "lib",
-  "name": "shared"
+  "name": "shared",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "projects/shared/**/*.ts"
+        ]
+      }
+    }
+  }
 }

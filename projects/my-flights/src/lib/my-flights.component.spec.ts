@@ -33,4 +33,16 @@ describe('MyFlightsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('requires a stop duration only when the flight has a stop', () => {
+    const stopDuration = component.newFlightForm.get('stopDuration')!;
+
+    component.newFlightForm.patchValue({ stops: '1' });
+    component.onSelectionChange();
+    expect(stopDuration.hasError('required')).toBe(true);
+
+    component.newFlightForm.patchValue({ stops: '0' });
+    component.onSelectionChange();
+    expect(stopDuration.valid).toBe(true);
+  });
 });

@@ -51,6 +51,6 @@ export class MatFormfieldComponent implements OnInit {
 
   ngOnInit(): void {/* empty*/}
 
-  onSubmit(){}
+  onSubmit(){/* empty*/}
 
 }

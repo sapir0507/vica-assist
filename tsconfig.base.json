@@ -21,7 +21,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "*": ["./*"]
+      "src/*": ["./src/*"],
+      "projects/*": ["./projects/*"],
+      "@vica-assist/shared": ["./projects/shared/src/index.ts"],
+      "@vica-assist/item": ["./projects/item/src/item.ts"],
+      "@vica-assist/my-pipes": ["./projects/my-pipes/src/index.ts"]
     }
   },
   "exclude": [

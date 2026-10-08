@@ -2,5 +2,18 @@
   "projectType": "library",
   "sourceRoot": "projects/item/src",
   "prefix": "lib",
-  "name": "item"
+  "name": "item",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "projects/item/**/*.ts"
+        ]
+      }
+    }
+  }
 }

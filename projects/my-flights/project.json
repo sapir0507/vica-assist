@@ -1,5 +1,18 @@
 {
   "projectType": "library",
   "sourceRoot": "projects/my-flights/src",
-  "prefix": "lib"
+  "prefix": "lib",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "projects/my-flights/**/*.ts"
+        ]
+      }
+    }
+  }
 }

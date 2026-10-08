@@ -20,12 +20,12 @@ export class MyFlightsComponent implements OnInit {
   private CountryValidator = '[a-zA-Z ]*'
 
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
-  private _hasStop: boolean = false;
+  private _hasStop = false;
   @Input() orderID: string | null = null; //id of order
   @Input() order?: Order; //order used to prefill the form
   NewFlight?: FlightsRequest;
-  showHint: boolean = false;
-  addDivider: boolean = false;
+  showHint = false;
+  addDivider = false;
 
   step = 0;
   hide = true;
@@ -103,7 +103,7 @@ export class MyFlightsComponent implements OnInit {
 
   DeleteAddedCustomer(i: number) {
     this.passangersFullName.removeAt(i)
-    this.passangersFullName.length === 0 ? this.addDivider = false : ""
+    if (this.passangersFullName.length === 0) this.addDivider = false;
   }
 
   setStep(index: number) {
@@ -129,8 +129,11 @@ export class MyFlightsComponent implements OnInit {
   }
 
   onSelectionChange() : void {
-    this.newFlightForm.get('stops')?.value === '1' ? this._hasStop = true : this._hasStop = false;
-    this._hasStop? this.newFlightForm.get('stopsDuration')?.addValidators(Validators.required):this.newFlightForm.get('stopsDuration')?.removeValidators(Validators.required)
+    this._hasStop = this.newFlightForm.get('stops')?.value === '1';
+    const stopDuration = this.newFlightForm.get('stopDuration');
+    if (this._hasStop) stopDuration?.addValidators(Validators.required);
+    else stopDuration?.removeValidators(Validators.required);
+    stopDuration?.updateValueAndValidity();
   }
 
   hasStop() {
