@@ -55,11 +55,11 @@ Both need to be running for the app to do anything useful — every service in `
 
 ```bash
 npm test                  # the main app (Vitest)
-npx nx test myFlights      # projects/my-flights (Vitest)
-npx nx test my-hotels       # projects/my-hotels (Vitest)
-npx nx test my-pipes        # projects/my-pipes (Vitest)
-npx nx test item            # projects/item (Vitest)
-npx nx test mat-input       # projects/mat-input (Vitest)
+ng test my-flights        # projects/my-flights
+ng test my-hotels         # projects/my-hotels
+ng test my-pipes          # projects/my-pipes
+ng test item              # projects/item
+ng test mat-input         # projects/mat-input
 ```
 
 Several component specs render only a construction smoke test (`expect(component).toBeTruthy()`

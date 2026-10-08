@@ -5,21 +5,6 @@
   "sourceRoot": "projects/my-hotels/src",
   "prefix": "lib",
   "targets": {
-    "build": {
-      "executor": "@angular/build:ng-packagr",
-      "defaultConfiguration": "production",
-      "options": {
-        "project": "projects/my-hotels/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "projects/my-hotels/tsconfig.lib.prod.json"
-        },
-        "development": {
-          "tsConfig": "projects/my-hotels/tsconfig.lib.json"
-        }
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": [
@@ -29,13 +14,6 @@
         "lintFilePatterns": [
           "projects/my-hotels/**/*.ts"
         ]
-      }
-    },
-    "test": {
-      "executor": "@angular/build:unit-test",
-      "options": {
-        "tsConfig": "projects/my-hotels/tsconfig.spec.json",
-        "buildTarget": "vica-assist:build:testing"
       }
     }
   }

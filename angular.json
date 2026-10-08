@@ -51,7 +51,15 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              }
             },
             "development": {
               "optimization": false,
@@ -98,6 +106,161 @@
             ],
             "buildTarget": "vica-assist:build:testing",
             "runner": "vitest"
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "item": {
+      "projectType": "library",
+      "root": "projects/item",
+      "sourceRoot": "projects/item/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/item/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/item/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/item/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/item/tsconfig.spec.json",
+            "buildTarget": "vica-assist:build:testing"
+          }
+        }
+      }
+    },
+    "mat-input": {
+      "projectType": "library",
+      "root": "projects/mat-input",
+      "sourceRoot": "projects/mat-input/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/mat-input/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mat-input/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mat-input/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/mat-input/tsconfig.spec.json",
+            "buildTarget": "vica-assist:build:testing"
+          }
+        }
+      }
+    },
+    "my-flights": {
+      "projectType": "library",
+      "root": "projects/my-flights",
+      "sourceRoot": "projects/my-flights/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/my-flights/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-flights/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-flights/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/my-flights/tsconfig.spec.json",
+            "buildTarget": "vica-assist:build:testing"
+          }
+        }
+      }
+    },
+    "my-hotels": {
+      "projectType": "library",
+      "root": "projects/my-hotels",
+      "sourceRoot": "projects/my-hotels/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "defaultConfiguration": "production",
+          "options": {
+            "project": "projects/my-hotels/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-hotels/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-hotels/tsconfig.lib.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/my-hotels/tsconfig.spec.json",
+            "buildTarget": "vica-assist:build:testing"
+          }
+        }
+      }
+    },
+    "my-pipes": {
+      "projectType": "library",
+      "root": "projects/my-pipes",
+      "sourceRoot": "projects/my-pipes/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "defaultConfiguration": "production",
+          "options": {
+            "project": "projects/my-pipes/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-pipes/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-pipes/tsconfig.lib.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/my-pipes/tsconfig.spec.json",
+            "buildTarget": "vica-assist:build:testing"
           }
         }
       }

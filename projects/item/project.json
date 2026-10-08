@@ -1,29 +1,5 @@
 {
   "projectType": "library",
   "sourceRoot": "projects/item/src",
-  "prefix": "lib",
-  "targets": {
-    "build": {
-      "executor": "@angular/build:ng-packagr",
-      "options": {
-        "project": "projects/item/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "projects/item/tsconfig.lib.prod.json"
-        },
-        "development": {
-          "tsConfig": "projects/item/tsconfig.lib.json"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "test": {
-      "executor": "@angular/build:unit-test",
-      "options": {
-        "tsConfig": "projects/item/tsconfig.spec.json",
-        "buildTarget": "vica-assist:build:testing"
-      }
-    }
-  }
+  "prefix": "lib"
 }

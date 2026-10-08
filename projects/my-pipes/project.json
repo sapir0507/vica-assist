@@ -5,31 +5,6 @@
   "sourceRoot": "projects/my-pipes/src",
   "prefix": "vica-assist",
   "targets": {
-    "build": {
-      "executor": "@angular/build:ng-packagr",
-      "outputs": [
-        "{workspaceRoot}/dist/projects/my-pipes"
-      ],
-      "defaultConfiguration": "production",
-      "options": {
-        "project": "projects/my-pipes/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "projects/my-pipes/tsconfig.lib.prod.json"
-        },
-        "development": {
-          "tsConfig": "projects/my-pipes/tsconfig.lib.json"
-        }
-      }
-    },
-    "test": {
-      "executor": "@angular/build:unit-test",
-      "options": {
-        "tsConfig": "projects/my-pipes/tsconfig.spec.json",
-        "buildTarget": "vica-assist:build:testing"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
