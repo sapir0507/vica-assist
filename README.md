@@ -56,8 +56,8 @@ Both need to be running for the app to do anything useful — every service in `
 ```bash
 npm test                  # the main app (Vitest)
 npx nx test myFlights      # projects/my-flights (Vitest)
-npx nx test my-hotels       # projects/my-hotels (Jest)
-npx nx test my-pipes        # projects/my-pipes (Jest)
+npx nx test my-hotels       # projects/my-hotels (Vitest)
+npx nx test my-pipes        # projects/my-pipes (Vitest)
 npx nx test item            # projects/item (Vitest)
 npx nx test mat-input       # projects/mat-input (Vitest)
 ```

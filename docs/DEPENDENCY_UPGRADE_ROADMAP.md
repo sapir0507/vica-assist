@@ -613,13 +613,14 @@ Karma tests and builds were verified by temporarily registering them in `angular
   lint rule the new `angular-eslint` ships.
 - The `canMatch` signature gained a required third argument; `role.match.spec.ts` was the only
   caller affected.
-- Karma/Jasmine replaced by Vitest through `@angular/build:unit-test`: the app and the `item`,
-  `mat-input`, `my-flights` libraries (the libraries reuse the app's `testing` build configuration,
+- Karma/Jasmine and Jest replaced by Vitest through `@angular/build:unit-test`: the app and all five
+  libraries (`item`, `mat-input`, `my-flights`, `my-hotels`, `my-pipes`; the libraries reuse the app's `testing` build configuration,
   which compiles in JIT mode). Vitest fails a spec on unknown elements/properties that Karma only
   logged, which exposed three smoke specs with missing imports; they now import `RouterModule` or
   use `CUSTOM_ELEMENTS_SCHEMA`. `@types/node` moved from 12 to 24 because Vite 8 requires it.
 - `npm audit --omit=prod` is down to 1 high finding (`undici` 7.x, a transitive dependency of `nx`
-  with no newer `nx` release to pick up) and 27 moderate ones in the Jest toolchain.
+  with no newer `nx` release to pick up) and 5 moderate ones. Removing the Jest toolchain
+  (`jest`, `ts-jest`, `jest-preset-angular`, `@nx/jest`) cleared the other 22.
 
 Found, not fixed: `ng build my-flights` and `ng build my-hotels` fail with TS6059 because those
 libraries import files from the app's `src/` (the same coupling `@nx/enforce-module-boundaries`
