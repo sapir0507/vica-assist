@@ -599,6 +599,32 @@ Found, not fixed: `angular.json` only declares the root app, so Nx cannot run th
 targets that use Angular builders (`nx run item:build` fails with "Cannot find project"). The libraries'
 Karma tests and builds were verified by temporarily registering them in `angular.json`.
 
+## Phase 6 — Angular 22, TypeScript 6 and Vitest (done, `feature/angular-upgrade/22`)
+
+- `ng update` failed on this machine (Angular CLI 21 and 22 both choke parsing `npm view` output on
+  Windows), so the packages were bumped in `package.json` and the migration schematics were run
+  directly with `ng generate <migrations.json>:<name>`: core (`http-xhr-backend`,
+  `strict-safe-navigation-narrow`, `change-detection-eager`), Material and CDK `migration-v22`.
+- TypeScript moved to `~6.0.3`, the only range `@angular/build` and `ng-packagr@22` accept.
+  `ts-jest@29` and `typescript-eslint@8` already allow it, so neither needed replacing.
+- Angular 22 makes `OnPush` the default, so the migration marks every existing component
+  `ChangeDetectionStrategy.Eager`. This preserves behavior but is a debt item: components should be
+  moved to `OnPush` one at a time, which also clears the `prefer-on-push-component-change-detection`
+  lint rule the new `angular-eslint` ships.
+- The `canMatch` signature gained a required third argument; `role.match.spec.ts` was the only
+  caller affected.
+- Karma/Jasmine replaced by Vitest through `@angular/build:unit-test`: the app and the `item`,
+  `mat-input`, `my-flights` libraries (the libraries reuse the app's `testing` build configuration,
+  which compiles in JIT mode). Vitest fails a spec on unknown elements/properties that Karma only
+  logged, which exposed three smoke specs with missing imports; they now import `RouterModule` or
+  use `CUSTOM_ELEMENTS_SCHEMA`. `@types/node` moved from 12 to 24 because Vite 8 requires it.
+- `npm audit --omit=prod` is down to 1 high finding (`undici` 7.x, a transitive dependency of `nx`
+  with no newer `nx` release to pick up) and 27 moderate ones in the Jest toolchain.
+
+Found, not fixed: `ng build my-flights` and `ng build my-hotels` fail with TS6059 because those
+libraries import files from the app's `src/` (the same coupling `@nx/enforce-module-boundaries`
+warns about). The app consumes the libraries by source path, so the package builds are unused.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend

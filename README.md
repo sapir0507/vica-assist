@@ -54,12 +54,12 @@ Both need to be running for the app to do anything useful — every service in `
 ## Testing
 
 ```bash
-npm test                  # the main app (Karma + Jasmine)
-npx nx test myFlights      # projects/my-flights (Karma)
+npm test                  # the main app (Vitest)
+npx nx test myFlights      # projects/my-flights (Vitest)
 npx nx test my-hotels       # projects/my-hotels (Jest)
 npx nx test my-pipes        # projects/my-pipes (Jest)
-npx nx test item            # projects/item (Karma)
-npx nx test mat-input       # projects/mat-input (Karma)
+npx nx test item            # projects/item (Vitest)
+npx nx test mat-input       # projects/mat-input (Vitest)
 ```
 
 Several component specs render only a construction smoke test (`expect(component).toBeTruthy()`
@@ -97,8 +97,9 @@ instead of trusting the tool output blindly.
 
 ## Known Limitations
 
-- **Build and styling setup is still on Angular 13 conventions** (legacy webpack builder, duplicate
-  `project.json` config, a failing production index-html step). Tracked in
+- **Build and styling setup still carries Angular 13 conventions** (duplicate `angular.json` /
+  `project.json` config, so Nx cannot run the library Angular-builder targets, and a failing
+  production index-html step). Tracked in
   [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
 - **`/choose-flight` and `/choose-hotel` routes are disabled** while their header links remain.
 
