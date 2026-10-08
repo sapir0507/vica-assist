@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LinkStore } from 'src/app/services/links/link.store';
 import { ILinks } from 'src/app/services/links/links';
 import { SessionStore } from 'src/app/services/session/session.store';
@@ -10,6 +10,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
   standalone: false,
   selector: 'app-links',
   templateUrl: './links.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./links.component.scss']
 })
 export class LinksComponent implements OnInit {

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   standalone: false,
   selector: 'app-date-picker',
   templateUrl: './date-picker.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./date-picker.component.scss']
 })
 export class DatePickerComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { LinkStore } from 'src/app/services/links/link.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 
@@ -6,6 +6,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
   standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {

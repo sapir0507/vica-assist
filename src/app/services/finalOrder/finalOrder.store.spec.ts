@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { MyFlightsService } from 'projects/my-flights/src';
 import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
 import { environment } from 'src/environments/environment';
@@ -23,7 +23,7 @@ describe('FinalOrderStore', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         { provide: OrderStore, useValue: orderStoreSpy },
         { provide: MyFlightsService, useValue: flightServiceSpy },

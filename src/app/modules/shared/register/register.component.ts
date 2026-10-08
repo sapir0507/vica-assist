@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegisterRequest } from 'src/app/services/register/register.model';
 import { RegisterService } from 'src/app/services/register/register.service';
@@ -7,6 +7,7 @@ import { RegisterService } from 'src/app/services/register/register.service';
   standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {

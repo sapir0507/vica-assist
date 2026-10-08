@@ -1,4 +1,4 @@
-import { Component, inject, NgZone, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -16,6 +16,7 @@ const navigationExtras: NavigationExtras = {
   standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {

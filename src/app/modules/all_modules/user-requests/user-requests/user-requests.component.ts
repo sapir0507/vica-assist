@@ -9,6 +9,7 @@ import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
   standalone: false,
   selector: 'userRequests',
   templateUrl: './user-requests.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./user-requests.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })

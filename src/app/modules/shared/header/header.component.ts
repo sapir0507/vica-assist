@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { OnWindowResizeService } from 'src/app/services/onWindowResize/on-window-resize.service';
 
 export enum HeaderComponentType {
@@ -10,6 +10,7 @@ export enum HeaderComponentType {
   standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {

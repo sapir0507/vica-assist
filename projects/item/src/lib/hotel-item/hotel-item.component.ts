@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Hotel } from 'src/app/interfaces/hotel.interface';
 
 @Component({
   standalone: false,
   selector: 'hotel-item',
   templateUrl: './hotel-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./hotel-item.component.scss']
 })
 export class HotelItemComponent implements OnInit {

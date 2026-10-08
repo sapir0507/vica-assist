@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Flights } from 'src/app/interfaces/flight.interface';
 
 @Component({
   standalone: false,
   selector: 'flight-item',
   templateUrl: './flight-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./flight-item.component.scss']
 })
 export class FlightItemComponent implements OnInit {

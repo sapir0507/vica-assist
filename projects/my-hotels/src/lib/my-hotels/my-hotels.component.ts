@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotelsService } from './hotels.service';
@@ -11,6 +11,7 @@ import { Subject, Subscription } from 'rxjs';
   standalone: false,
   selector: 'my-hotels',
   templateUrl: './my-hotels.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./my-hotels.component.scss']
 })
 export class MyHotelsComponent implements OnDestroy {

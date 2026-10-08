@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ILinks } from 'src/app/services/links/links';
 
 @Component({
   standalone: false,
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dropdown.component.scss']
 })
 export class DropdownComponent implements OnInit {

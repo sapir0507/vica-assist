@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, TemplateRef } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
@@ -11,6 +11,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
   standalone: false,
   selector: 'app-dropdown-sidebar',
   templateUrl: './dropdown-sidebar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dropdown-sidebar.component.scss']
 })
 export class DropdownSidebarComponent implements OnInit {
