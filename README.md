@@ -15,6 +15,9 @@ confirm it as a finished booking. It's an Nx workspace generated with Angular CL
   - `item` — presentational `flight-item` / `hotel-item` cards used by the "choose" screens.
   - `mat-input` — a reusable Material form-field wrapper.
   - `my-pipes` — shared pipes (e.g. `Capitalize`).
+  - `shared` — the flight/hotel/order interfaces, `HttpResourceService` and the `API_URL` token that the
+    other libraries and the app depend on (imported as `@vica-assist/shared`). Libraries never import
+    from the app; the app provides `API_URL` from `environment.api` in `AppModule`.
 - **State management** uses [Akita](https://opensource.salesforce.com/akita/): each domain has a
   `*.store.ts` (holds state), `*.query.ts` (read-only selectors), and a `*.service.ts`
   (HTTP + store mutations) — see `services/order`, `services/finalOrder`, `services/session`,
@@ -97,10 +100,11 @@ instead of trusting the tool output blindly.
 
 ## Known Limitations
 
-- **Build and styling setup still carries Angular 13 conventions** (duplicate `angular.json` /
-  `project.json` config, so Nx cannot run the library Angular-builder targets, and a failing
-  production index-html step). Tracked in
-  [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
+- **A failing production index-html step** and other styling leftovers from the Angular 13 setup are
+  tracked in [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
+- **Nx only runs lint and the project graph.** The Angular CLI (`ng`) is authoritative for build, serve
+  and test via `angular.json`; Nx's adapter cannot run Angular's Vitest builder ("Vitest failed to find
+  the runner"), so use `ng test <project>`.
 - **One high-severity `npm audit` finding remains** (`undici` 7.x, pulled in by `nx` 23.3.0, the latest
   release). It is a dev-only dependency and will be picked up with the next Nx release.
 - **`/choose-flight` and `/choose-hotel` routes are disabled** while their header links remain.
@@ -112,7 +116,10 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build` to build the app into `dist/vica-assist/`. `npm run build:libs` builds every library into
+`dist/<name>/` in dependency order (`shared` → `my-pipes` → `item` → `my-flights` / `my-hotels` →
+`mat-input`). Libraries that depend on other libraries resolve them from `dist/` through their
+`tsconfig.lib.json` paths, so the order matters.
 
 ## Further help
 

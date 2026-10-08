@@ -626,6 +626,39 @@ Found, not fixed: `ng build my-flights` and `ng build my-hotels` fail with TS605
 libraries import files from the app's `src/` (the same coupling `@nx/enforce-module-boundaries`
 warns about). The app consumes the libraries by source path, so the package builds are unused.
 
+## Phase 7 — Workspace configuration and the shared library (done)
+
+Branches: `chore/workspace/angular-json-source-of-truth`, `refactor/shared/extract-shared-library`.
+
+- **Who reads which file** (tested by hiding `angular.json`): the Angular CLI reads only `angular.json`;
+  Nx discovers projects from `project.json` but, when `angular.json` exists, its Angular adapter looks
+  projects up there, so libraries missing from `angular.json` failed with "Cannot find project".
+  `angular.json` is therefore the single source for the Angular-builder targets (all six libraries are
+  registered); each `project.json` keeps only Nx-specific config (the `@nx/eslint:lint` targets, now on
+  every library). The one setting that existed only in `project.json`
+  (`optimization.inlineCritical: false`) and the component `style: scss` schematic default were carried
+  over; the inert `@schematics/angular:application` and misspelt `i18n` generator entries were dropped.
+- **`projects/shared`** replaces the libraries' imports of app code (`src/app/interfaces`,
+  `src/environments`, `HttpResourceService`, the app's `OrderStore`). `MyFlightsComponent` now takes an
+  `order` input (supplied by `AgentHomepageComponent`) instead of reading the store, and the flight and
+  hotel services read their base URL from an `API_URL` token that `AppModule` provides.
+- Two drifted copies of the interfaces (`src/interfaces`, `src/app/interfaces`) were merged into one:
+  only the first had `isPending`/`isFinished`, only the second had `Flights.orderID`.
+- Library packaging now works end to end (the TS6059 limitation is gone): inter-library imports use the
+  `@vica-assist/*` aliases, mapped to source in the root `tsconfig.json` and to `dist/` in each library's
+  `tsconfig.lib.json`; `npm run build:libs` builds them in order. Library peer ranges were still on
+  Angular 21 and were updated.
+- The catch-all `"*": ["./*"]` path mapping was narrowed to `src/*` and `projects/*`. It made Nx treat
+  every bare package import as a file of the root app, producing ~40 "Imports of apps are forbidden"
+  warnings that disappeared with it.
+- Linting every library (previously only two had a target) found real problems, fixed in `my-flights`:
+  a `stopsDuration` typo meant the "required when the flight has a stop" validator was never applied
+  (the control is `stopDuration`), plus a ternary used as a statement and redundant type annotations.
+  `mat-input` had an empty method.
+- Not solved, by design: `nx test` (Nx's adapter cannot run Angular's Vitest builder; use `ng test`) and
+  the app's own lint (the root project has no lint target). The Nx graph also shows no edges from the
+  app to the libraries, because the root project at `.` overlaps the library folders.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend
