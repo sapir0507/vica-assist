@@ -4,7 +4,7 @@ import { patchState, signalStore, withHooks, withMethods, withState } from '@ngr
 import { throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Order, OrderRequest } from 'src/interfaces/order.interface';
+import { Order, OrderRequest } from '@vica-assist/shared';
 
 export interface OrderState {
   orders: Order[] | undefined;

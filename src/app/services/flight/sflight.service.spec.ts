@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { environment } from 'src/environments/environment';
-import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
+import { Flights, FlightsRequest } from '@vica-assist/shared';
 import { SflightService } from './sflight.service';
 
 describe('SflightService', () => {

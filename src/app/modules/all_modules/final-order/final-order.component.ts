@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MyFlightsService } from 'projects/my-flights/src';
-import { Hotel } from 'src/app/interfaces/hotel.interface';
+import { Flights, Hotel } from '@vica-assist/shared';
 import { FinalOrderState, FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
-import { Flights } from 'src/interfaces/flight.interface';
 
 @Component({
   standalone: false,

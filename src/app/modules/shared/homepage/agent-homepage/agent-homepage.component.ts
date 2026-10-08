@@ -4,7 +4,7 @@ import { MyHotelsModule } from 'projects/my-hotels/src/lib/my-hotels/my-hotels.m
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
 import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Order } from 'src/interfaces/order.interface';
+import { Order } from '@vica-assist/shared';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
 
 @Component({
@@ -28,6 +28,10 @@ export class AgentHomepageComponent implements OnInit {
   nextID = 1;
   maxID = 1;
   private orderStore = inject(OrderStore);
+
+  get order(): Order | undefined {
+    return this.orderStore.orders()?.find(order => order.orderID == this.orderID);
+  }
 
   ngOnInit(): void {/* empty*/}
   onClick(){

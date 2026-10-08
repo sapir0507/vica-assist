@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Order } from 'src/interfaces/order.interface';
+import { Order } from '@vica-assist/shared';
 import { OrderStore } from './order.store';
 
 describe('OrderStore', () => {

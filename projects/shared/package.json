@@ -1,11 +1,9 @@
 {
-  "name": "@vica-assist/item",
+  "name": "@vica-assist/shared",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "~22.2.1",
-    "@angular/core": "~22.2.1",
-    "@vica-assist/my-pipes": "*",
-    "@vica-assist/shared": "*"
+    "@angular/core": "~22.2.1"
   },
   "dependencies": {
     "tslib": "^2.3.0"

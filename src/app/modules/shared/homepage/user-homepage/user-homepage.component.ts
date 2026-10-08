@@ -10,7 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 
 import { OnWindowResizeService } from 'src/app/services/onWindowResize/on-window-resize.service';
-import { Order } from 'src/interfaces/order.interface';
+import { Order } from '@vica-assist/shared';
 
 import { OrderStatusListComponent } from '../orders-list/order-status-list/order-status-list.component';
 import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';

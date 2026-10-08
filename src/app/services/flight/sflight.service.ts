@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
+import { Flights, FlightsRequest, HttpResourceService } from '@vica-assist/shared';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpResourceService } from 'src/app/services/http-resource/http-resource.service';
 
 /**
  * Client for the backend's `flights` endpoint, used by the "choose flight"

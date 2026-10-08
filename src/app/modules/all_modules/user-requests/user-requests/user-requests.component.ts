@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { OrderRequest, passDetails } from 'src/interfaces/order.interface';
+import { OrderRequest, passDetails } from '@vica-assist/shared';
 
 @Component({
   standalone: false,

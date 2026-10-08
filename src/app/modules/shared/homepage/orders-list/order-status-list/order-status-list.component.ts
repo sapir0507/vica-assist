@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Order } from 'src/interfaces/order.interface';
+import { Order } from '@vica-assist/shared';
 import { OrderListItemComponent } from '../order-list-item/order-list-item.component';
 
 @Component({

@@ -1,10 +1,10 @@
 import { outputAst } from '@angular/compiler';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ItemType } from 'projects/item/src/lib/item.component';
+import { ItemType } from '@vica-assist/item';
 import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
 // import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { Hotel } from 'src/app/interfaces/hotel.interface';
+import { Hotel } from '@vica-assist/shared';
 
 
 @Component({

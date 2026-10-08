@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
-import { Flights } from 'src/app/interfaces/flight.interface';
+import { Flights } from '@vica-assist/shared';
 
 @Component({
   standalone: false,

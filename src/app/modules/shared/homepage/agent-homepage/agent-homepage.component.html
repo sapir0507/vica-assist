@@ -33,7 +33,7 @@
     <!-- <div class="col"> -->
     <div class="RightTile container">
       @if (step==='flight') {
-        <lib-myFlights [orderID]="orderID"></lib-myFlights>
+        <lib-myFlights [orderID]="orderID" [order]="order"></lib-myFlights>
         <div class="toTheLeft">
           <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="updateState()">
             SET ORDER AS FINISHED

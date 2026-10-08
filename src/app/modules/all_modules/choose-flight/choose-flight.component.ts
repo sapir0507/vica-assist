@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { ItemType } from 'projects/item/src/lib/item.component';
+import { ItemType } from '@vica-assist/item';
 // import { MyFlightsService } from 'projects/my-flights/src';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { Flights } from 'src/app/interfaces/flight.interface';
+import { Flights } from '@vica-assist/shared';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
 @Component({

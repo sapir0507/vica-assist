@@ -4,9 +4,9 @@ import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MyPipesModule } from 'projects/my-pipes/src/lib/my-pipes.module';
+import { MyPipesModule } from '@vica-assist/my-pipes';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { isFinished, isPending, Order } from 'src/interfaces/order.interface';
+import { isFinished, isPending, Order } from '@vica-assist/shared';
 
 @Component({
   standalone: true,

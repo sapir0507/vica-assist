@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
-import { Hotel } from 'src/app/interfaces/hotel.interface';
+import { Hotel } from '@vica-assist/shared';
 
 @Component({
   standalone: false,

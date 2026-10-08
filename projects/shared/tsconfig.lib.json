@@ -6,8 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": [],
-    "paths": {"@vica-assist/item":["../../dist/item"],"@vica-assist/shared":["../../dist/shared"]}
+    "types": []
   },
   "exclude": [
     "**/*.spec.ts"

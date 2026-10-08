@@ -1,12 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FlightsRequest } from 'src/app/interfaces/flight.interface';
-import { OrderStore } from 'src/app/services/order/order.store';
-import { Order } from 'src/app/interfaces/order.interface';
+import { FlightsRequest, Order } from '@vica-assist/shared';
 
 @Component({
   standalone: false,
@@ -23,9 +21,8 @@ export class MyFlightsComponent implements OnInit {
 
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
   private _hasStop: boolean = false;
-  private orderStore = inject(OrderStore);
-  private Myorder: Order | undefined;
   @Input() orderID: string | null = null; //id of order
+  @Input() order?: Order; //order used to prefill the form
   NewFlight?: FlightsRequest;
   showHint: boolean = false;
   addDivider: boolean = false;
@@ -63,20 +60,13 @@ export class MyFlightsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const orders = this.orderStore.orders();
-    orders?.forEach(order=>{
-      if(order.orderID == this.orderID){
-        this.Myorder = order;
-      }
-    })
-
     this.newFlightForm.patchValue({
-      dest: this.Myorder?.destination,
-      org: this.Myorder?.origin,
-      departureDate: this.Myorder?.departureDate,
-      returnDate: this.Myorder?.returnDate,
-      fullName: this.Myorder?.passDetails[0].fullName,
-      myID: this.Myorder?.passDetails[0].passID
+      dest: this.order?.destination,
+      org: this.order?.origin,
+      departureDate: this.order?.departureDate,
+      returnDate: this.order?.returnDate,
+      fullName: this.order?.passDetails[0].fullName,
+      myID: this.order?.passDetails[0].passID
     })
 
   }
@@ -85,20 +75,13 @@ export class MyFlightsComponent implements OnInit {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
 
-    const orders = this.orderStore.orders();
-    orders?.forEach(order=>{
-      if(order.orderID == this.orderID){
-        this.Myorder = order;
-      }
-    })
-
     this.newFlightForm.patchValue({
-      dest: this.Myorder?.destination,
-      org: this.Myorder?.origin,
-      departureDate: this.Myorder?.departureDate,
-      returnDate: this.Myorder?.returnDate,
-      fullName: this.Myorder?.passDetails[0].fullName,
-      myID: this.Myorder?.passDetails[0].passID
+      dest: this.order?.destination,
+      org: this.order?.origin,
+      departureDate: this.order?.departureDate,
+      returnDate: this.order?.returnDate,
+      fullName: this.order?.passDetails[0].fullName,
+      myID: this.order?.passDetails[0].passID
     })
   }
 

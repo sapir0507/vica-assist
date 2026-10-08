@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { API_URL, Flights } from '@vica-assist/shared';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Flights } from 'src/app/interfaces/flight.interface';
 import { MyFlightsService } from './my-flights.service';
 
 describe('MyFlightsService', () => {
@@ -11,6 +11,7 @@ describe('MyFlightsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      providers: [{ provide: API_URL, useValue: 'http://localhost:3000/' }],
       imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(MyFlightsService);

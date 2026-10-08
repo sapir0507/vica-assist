@@ -6,7 +6,8 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": [],
+    "paths": {"@vica-assist/my-pipes":["../../dist/my-pipes"],"@vica-assist/shared":["../../dist/shared"]}
   },
   "exclude": [
     "**/*.spec.ts"

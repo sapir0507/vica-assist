@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Flights, FlightsRequest } from 'src/app/interfaces/flight.interface';
+import { API_URL, Flights, FlightsRequest, HttpResourceService } from '@vica-assist/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { HttpResourceService } from 'src/app/services/http-resource/http-resource.service';
 
 /**
  * Client for the backend's `flights` endpoint used by the "add new flight"
@@ -19,7 +17,7 @@ export class MyFlightsService extends HttpResourceService<Flights, FlightsReques
   flightsArray: Flights[] = [];
   private _flight$: BehaviorSubject<Flights[]> = new BehaviorSubject(this.flightsArray);
   public flight$: Observable<Flights[]> = this._flight$.asObservable();
-  protected readonly resourceUrl = environment.api + 'flights';
+  protected readonly resourceUrl = inject(API_URL) + 'flights';
 
   constructor(http: HttpClient) {
     super(http);

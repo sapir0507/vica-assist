@@ -3,9 +3,7 @@ import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { MyFlightsService } from 'projects/my-flights/src';
 import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
-import { Flights } from 'src/interfaces/flight.interface';
-import { Hotel } from 'src/interfaces/hotel.interface';
-import { Order } from 'src/interfaces/order.interface';
+import { Flights, Hotel, Order } from '@vica-assist/shared';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';
 

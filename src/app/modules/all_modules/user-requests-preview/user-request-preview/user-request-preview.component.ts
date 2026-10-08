@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, Input } from '@angular/core';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Order } from 'src/interfaces/order.interface';
+import { Order } from '@vica-assist/shared';
 
 @Component({
   standalone: false,

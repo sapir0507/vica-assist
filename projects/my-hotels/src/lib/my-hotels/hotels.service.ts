@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
-import { environment } from 'src/environments/environment';
-import { HttpResourceService } from 'src/app/services/http-resource/http-resource.service';
+import { API_URL, Hotel, HotelRequest, HttpResourceService } from '@vica-assist/shared';
 
 /**
  * Client for the backend's `hotels` endpoint used by the "add new hotel"
@@ -18,7 +16,7 @@ export class HotelsService extends HttpResourceService<Hotel, HotelRequest> {
   private hotelArray?: Hotel[] = [];
   private _hotel$: BehaviorSubject<Hotel[] | undefined> = new BehaviorSubject(this.hotelArray);
   public hotel$: Observable<Hotel[] | undefined> = (this._hotel$.asObservable());
-  protected readonly resourceUrl = environment.api + 'hotels';
+  protected readonly resourceUrl = inject(API_URL) + 'hotels';
 
   constructor(http: HttpClient) {
     super(http);

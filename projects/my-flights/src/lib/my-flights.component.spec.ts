@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { API_URL } from '@vica-assist/shared';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -12,6 +13,7 @@ describe('MyFlightsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [{ provide: API_URL, useValue: 'http://localhost:3000/' }],
       imports: [ HttpClientTestingModule, ReactiveFormsModule, MatSnackBarModule ],
       declarations: [ MyFlightsComponent ],
       schemas: [NO_ERRORS_SCHEMA]

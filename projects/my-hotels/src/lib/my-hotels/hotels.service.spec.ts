@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { API_URL, Hotel, HotelRequest } from '@vica-assist/shared';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Hotel, HotelRequest } from 'src/app/interfaces/hotel.interface';
 import { HotelsService } from './hotels.service';
 
 describe('HotelsService', () => {
@@ -11,6 +11,7 @@ describe('HotelsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      providers: [{ provide: API_URL, useValue: 'http://localhost:3000/' }],
       imports: [HttpClientTestingModule]
     });
     service = TestBed.inject(HotelsService);

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { MyPipesModule } from 'projects/my-pipes/src/lib/my-pipes.module';
-import { Order } from 'src/interfaces/order.interface';
+import { MyPipesModule } from '@vica-assist/my-pipes';
+import { Order } from '@vica-assist/shared';
 
 @Component({
   standalone: true,

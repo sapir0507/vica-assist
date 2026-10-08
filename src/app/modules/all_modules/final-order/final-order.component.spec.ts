@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { API_URL } from '@vica-assist/shared';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,6 +16,7 @@ describe('FinalOrderComponent', () => {
       imports: [ HttpClientTestingModule, RouterTestingModule ],
       declarations: [ FinalOrderComponent ],
       providers: [
+        { provide: API_URL, useValue: 'http://localhost:3000/' },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({}) } } }
       ],
       schemas: [NO_ERRORS_SCHEMA]

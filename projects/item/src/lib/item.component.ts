@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { Flights } from 'src/interfaces/flight.interface';
-import { Hotel } from 'src/interfaces/hotel.interface';
+import { Flights, Hotel } from '@vica-assist/shared';
 
 export enum ItemType {
   Flight = "flight",

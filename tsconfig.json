@@ -2,7 +2,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "*": ["./*"]
+      "*": ["./*"],
+      "@vica-assist/shared": ["./projects/shared/src/index.ts"],
+      "@vica-assist/item": ["./projects/item/src/item.ts"],
+      "@vica-assist/my-pipes": ["./projects/my-pipes/src/index.ts"]
     },
     "types": [],
     "outDir": "./dist/out-tsc",

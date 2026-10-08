@@ -10,7 +10,7 @@ import { NgbCarouselModule, NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FlightItemComponent } from './flight-item/flight-item.component';
 import { HotelItemComponent } from './hotel-item/hotel-item.component';
-import { MyPipesModule } from 'projects/my-pipes/src';
+import { MyPipesModule } from '@vica-assist/my-pipes';
 import { MatButtonModule } from '@angular/material/button';
 import { MatLineModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';

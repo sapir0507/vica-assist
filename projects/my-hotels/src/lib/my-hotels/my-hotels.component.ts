@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/c
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HotelsService } from './hotels.service';
-import { HotelRequest } from 'src/app/interfaces/hotel.interface'
+import { HotelRequest } from '@vica-assist/shared'
 import { Subject, Subscription } from 'rxjs';
 
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ChooseHotelRoutingModule } from './choose-hotel-routing.module';
 import { ChooseHotelComponent } from './choose-hotel.component';
-import { ItemModule } from 'projects/item/src/item';
+import { ItemModule } from '@vica-assist/item';
 import { UserRequestsModule } from '../user-requests/user-requests.module';
 
 

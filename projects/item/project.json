@@ -1,5 +1,6 @@
 {
   "projectType": "library",
   "sourceRoot": "projects/item/src",
-  "prefix": "lib"
+  "prefix": "lib",
+  "name": "item"
 }
