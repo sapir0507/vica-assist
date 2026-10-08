@@ -8,9 +8,7 @@
     "types": []
   },
   "exclude": [
-    "src/test-setup.ts",
-    "**/*.spec.ts",
-    "jest.config.ts"
+    "**/*.spec.ts"
   ],
   "include": [
     "**/*.ts"

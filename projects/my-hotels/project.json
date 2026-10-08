@@ -32,13 +32,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/projects/my-hotels"
-      ],
+      "executor": "@angular/build:unit-test",
       "options": {
-        "jestConfig": "projects/my-hotels/jest.config.ts",
-        "passWithNoTests": true
+        "tsConfig": "projects/my-hotels/tsconfig.spec.json",
+        "buildTarget": "vica-assist:build:testing"
       }
     }
   }

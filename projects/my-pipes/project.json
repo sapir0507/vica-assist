@@ -24,13 +24,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/projects/my-pipes"
-      ],
+      "executor": "@angular/build:unit-test",
       "options": {
-        "jestConfig": "projects/my-pipes/jest.config.ts",
-        "passWithNoTests": true
+        "tsConfig": "projects/my-pipes/tsconfig.spec.json",
+        "buildTarget": "vica-assist:build:testing"
       }
     },
     "lint": {
