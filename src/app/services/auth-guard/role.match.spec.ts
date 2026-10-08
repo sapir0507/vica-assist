@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Route } from '@angular/router';
+import { PartialMatchRouteSnapshot, Route } from '@angular/router';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 import { roleMatch } from './role.match';
@@ -13,7 +13,7 @@ describe('roleMatch', () => {
   });
 
   const run = (role: 'agent' | 'customer') =>
-    TestBed.runInInjectionContext(() => roleMatch(role)({} as Route, []));
+    TestBed.runInInjectionContext(() => roleMatch(role)({} as Route, [], {} as PartialMatchRouteSnapshot));
 
   it('matches when the session role equals the required role', () => {
     patchState(unprotected(store), { role: 'agent' });
