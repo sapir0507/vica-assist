@@ -50,8 +50,8 @@
     "@types/jasmine": "~3.10.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^12.11.1",
-    "@typescript-eslint/eslint-plugin": "8.71.0",
-    "@typescript-eslint/parser": "8.71.0",
+    "@typescript-eslint/eslint-plugin": "8.71.1",
+    "@typescript-eslint/parser": "8.71.1",
     "angular-eslint": "21.4.0",
     "eslint": "9.39.5",
     "jasmine-core": "~4.0.0",
@@ -70,7 +70,7 @@
     "ts-jest": "29.4.14",
     "ts-node": "~10.9.0",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.58.0"
+    "typescript-eslint": "^8.71.1"
   },
   "peerDependencies": {
     "@ng-bootstrap/ng-bootstrap": "^20.0.0"
