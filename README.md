@@ -101,6 +101,8 @@ instead of trusting the tool output blindly.
   `project.json` config, so Nx cannot run the library Angular-builder targets, and a failing
   production index-html step). Tracked in
   [docs/BOOTSTRAP_ROADMAP.md](docs/BOOTSTRAP_ROADMAP.md).
+- **One high-severity `npm audit` finding remains** (`undici` 7.x, pulled in by `nx` 23.3.0, the latest
+  release). It is a dev-only dependency and will be picked up with the next Nx release.
 - **`/choose-flight` and `/choose-hotel` routes are disabled** while their header links remain.
 
 ## Code scaffolding
