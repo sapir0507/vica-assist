@@ -6,7 +6,7 @@
   "prefix": "vica-assist",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "executor": "@angular/build:ng-packagr",
       "outputs": [
         "{workspaceRoot}/dist/projects/my-pipes"
       ],

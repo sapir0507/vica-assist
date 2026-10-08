@@ -4,7 +4,7 @@
   "prefix": "lib",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "executor": "@angular/build:ng-packagr",
       "options": {
         "project": "projects/my-flights/ng-package.json"
       },
@@ -19,7 +19,7 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@angular/build:karma",
       "options": {
         "main": "projects/my-flights/src/test.ts",
         "tsConfig": "projects/my-flights/tsconfig.spec.json",

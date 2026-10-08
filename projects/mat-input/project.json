@@ -4,7 +4,7 @@
   "prefix": "lib",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "executor": "@angular/build:ng-packagr",
       "options": {
         "project": "projects/mat-input/ng-package.json"
       },
@@ -19,7 +19,7 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@angular/build:karma",
       "options": {
         "main": "projects/mat-input/src/test.ts",
         "tsConfig": "projects/mat-input/tsconfig.spec.json",

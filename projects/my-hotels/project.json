@@ -6,7 +6,7 @@
   "prefix": "lib",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:ng-packagr",
+      "executor": "@angular/build:ng-packagr",
       "defaultConfiguration": "production",
       "options": {
         "project": "projects/my-hotels/ng-package.json"

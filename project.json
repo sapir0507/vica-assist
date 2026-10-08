@@ -15,12 +15,14 @@
   "prefix": "app",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular/build:application",
       "options": {
         "outputPath": "dist/vica-assist",
         "index": "src/index.html",
-        "main": "src/main.ts",
-        "polyfills": "src/polyfills.ts",
+        "polyfills": [
+          "zone.js",
+          "@angular/localize/init"
+        ],
         "tsConfig": "tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -28,10 +30,11 @@
           "src/assets"
         ],
         "styles": [
-          "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "@angular/material/prebuilt-themes/deeppurple-amber.css",
           "src/styles.scss"
         ],
-        "scripts": []
+        "scripts": [],
+        "browser": "src/main.ts"
       },
       "configurations": {
         "production": {
@@ -64,9 +67,7 @@
           }
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
@@ -75,7 +76,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "vica-assist:build:production"
@@ -87,16 +88,19 @@
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@angular/build:extract-i18n",
       "options": {
-        "browserTarget": "vica-assist:build"
+        "buildTarget": "vica-assist:build"
       }
     },
     "test": {
-      "executor": "@angular-devkit/build-angular:karma",
+      "executor": "@angular/build:karma",
       "options": {
         "main": "src/test.ts",
-        "polyfills": "src/polyfills.ts",
+        "polyfills": [
+          "zone.js",
+          "@angular/localize/init"
+        ],
         "tsConfig": "tsconfig.spec.json",
         "karmaConfig": "karma.conf.js",
         "inlineStyleLanguage": "scss",
@@ -105,7 +109,7 @@
           "src/assets"
         ],
         "styles": [
-          "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "@angular/material/prebuilt-themes/deeppurple-amber.css",
           "src/styles.scss"
         ],
         "scripts": []
