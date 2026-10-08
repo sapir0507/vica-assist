@@ -20,16 +20,5 @@
     "appsDir": "projects"
   },
   "defaultProject": "vica-assist",
-  "generators": {
-    "@nrwl/angular:application": {
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:library": {
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {}
-  },
   "analytics": false
 }

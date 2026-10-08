@@ -4,11 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
-    "start server": "npx json-server --watch src/app/data/data.json --port 3000",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "e2e": "ng e2e",
     "mock-api": "json-server --watch src/app/data/data.json --port 3000",
     "int:extract": "ng xi18n"
   },
@@ -62,12 +60,8 @@
     "nx": "23.3.0",
     "postcss": "^8.5.29",
     "ts-jest": "29.4.14",
-    "ts-node": "~10.9.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.1",
     "vitest": "^5.0.3"
-  },
-  "peerDependencies": {
-    "@ng-bootstrap/ng-bootstrap": "^21.0.0"
   }
 }
