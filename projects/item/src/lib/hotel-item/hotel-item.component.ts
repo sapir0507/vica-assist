@@ -5,7 +5,7 @@ import { Hotel } from '@vica-assist/shared';
   standalone: false,
   selector: 'hotel-item',
   templateUrl: './hotel-item.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./hotel-item.component.scss']
 })
 export class HotelItemComponent implements OnInit {
