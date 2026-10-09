@@ -10,7 +10,7 @@ export enum HeaderComponentType {
   standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
