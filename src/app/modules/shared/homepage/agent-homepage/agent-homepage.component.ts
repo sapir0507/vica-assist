@@ -57,10 +57,6 @@ export class AgentHomepageComponent implements OnInit {
     this.orderID = item.id + ''; //gives all flights and hotels a common id that belongs to an order
   }
 
-  onOrder(){
-    //this.orderID = orderID;  
-  }
-
   updateState(){
     if(this.orderID) this.orderStore.updateStatusByOrderID(this.orderID, 'finished') //search
   }
