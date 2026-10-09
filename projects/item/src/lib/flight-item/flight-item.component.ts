@@ -5,7 +5,7 @@ import { Flights } from '@vica-assist/shared';
   standalone: false,
   selector: 'flight-item',
   templateUrl: './flight-item.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./flight-item.component.scss']
 })
 export class FlightItemComponent implements OnInit {
