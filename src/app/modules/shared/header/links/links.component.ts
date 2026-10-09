@@ -10,7 +10,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
   standalone: false,
   selector: 'app-links',
   templateUrl: './links.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./links.component.scss']
 })
 export class LinksComponent implements OnInit {
