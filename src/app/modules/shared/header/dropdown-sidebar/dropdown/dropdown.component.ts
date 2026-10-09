@@ -5,7 +5,7 @@ import { ILinks } from 'src/app/services/links/links';
   standalone: false,
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./dropdown.component.scss']
 })
 export class DropdownComponent implements OnInit {
