@@ -25,8 +25,6 @@ import { isFinished, isPending, Order } from '@vica-assist/shared';
 })
 export class OrdersListComponent implements OnInit {
 
-  @Output() chosen: EventEmitter<number> = new EventEmitter();
-  @Output() orderID: EventEmitter<string> = new EventEmitter();
   @Output() item: EventEmitter<Order> = new EventEmitter();
   @Output() maxIDs: EventEmitter<number> = new EventEmitter();
 
