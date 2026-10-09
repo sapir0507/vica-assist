@@ -608,9 +608,12 @@ Karma tests and builds were verified by temporarily registering them in `angular
 - TypeScript moved to `~6.0.3`, the only range `@angular/build` and `ng-packagr@22` accept.
   `ts-jest@29` and `typescript-eslint@8` already allow it, so neither needed replacing.
 - Angular 22 makes `OnPush` the default, so the migration marks every existing component
-  `ChangeDetectionStrategy.Eager`. This preserves behavior but is a debt item: components should be
-  moved to `OnPush` one at a time, which also clears the `prefer-on-push-component-change-detection`
-  lint rule the new `angular-eslint` ships.
+  `ChangeDetectionStrategy.Eager`. That preserved behavior, and all 17 were then moved to `OnPush`
+  one commit each (`refactor/change-detection/on-push`): each component was read for state that changes
+  outside template events, signals and inputs. Only `LoginComponent` had some (`myError`, set in an HTTP
+  callback; it only rendered because the template also reads the `isLoading` signal) and it is now a
+  signal. A header spec guards the `(window:resize)` navbar/sidebar swap, and a login spec guards the
+  error message. No `Eager` remains, and the `prefer-on-push-component-change-detection` rule is clean.
 - The `canMatch` signature gained a required third argument; `role.match.spec.ts` was the only
   caller affected.
 - Karma/Jasmine and Jest replaced by Vitest through `@angular/build:unit-test`: the app and all five
