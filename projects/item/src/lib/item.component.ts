@@ -10,7 +10,7 @@ export enum ItemType {
   standalone: false,
   selector: 'item',
   templateUrl: './item.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./item.component.scss'],
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
