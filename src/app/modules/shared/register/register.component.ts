@@ -7,7 +7,7 @@ import { RegisterService } from 'src/app/services/register/register.service';
   standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
