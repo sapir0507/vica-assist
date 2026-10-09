@@ -18,7 +18,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UserFinishedOrderModule } from './modules/all_modules/user-finished-order/user-finished-order.module';
 
 
 

@@ -11,8 +11,8 @@ export class FileUploadComponent  {
   @Output() files: EventEmitter<File[] > = new EventEmitter<File[] >();
   fileName?: string;
 
-  onUpload(event: any): void{
-    const chosenFiles: File[] = event.target.files;
+  onUpload(event: Event): void{
+    const chosenFiles = Array.from((event.target as HTMLInputElement).files ?? []);
     this.files.emit(chosenFiles)
   }
 }

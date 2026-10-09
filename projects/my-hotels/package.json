@@ -1,5 +1,5 @@
 {
-  "name": "my-hotels",
+  "name": "@vica-assist/my-hotels",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "~22.2.1",

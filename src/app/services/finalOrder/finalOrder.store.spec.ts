@@ -2,11 +2,12 @@ import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
-import { MyFlightsService } from 'projects/my-flights/src';
-import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
+import { MyFlightsService } from '@vica-assist/my-flights';
+import { HotelsService } from '@vica-assist/my-hotels';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';
-import { FinalOrderStore } from './finalOrder.store';
+import { Flights, Hotel, Order } from '@vica-assist/shared';
+import { FinalOrderState, FinalOrderStore } from './finalOrder.store';
 
 describe('FinalOrderStore', () => {
   let store: InstanceType<typeof FinalOrderStore>;
@@ -48,7 +49,7 @@ describe('FinalOrderStore', () => {
 
   describe('update', () => {
     it('patches only the order field', () => {
-      const order = { id: 1, orderID: 'order-1' } as any;
+      const order = { id: 1, orderID: 'order-1' } as Order;
       store.update({ order });
 
       expect(store.order()).toEqual(order);
@@ -57,7 +58,7 @@ describe('FinalOrderStore', () => {
     });
 
     it('patches only the flight field', () => {
-      const flight = { id: 2 } as any;
+      const flight = { id: 2 } as Flights;
       store.update({ flight });
 
       expect(store.flight()).toEqual(flight);
@@ -66,7 +67,7 @@ describe('FinalOrderStore', () => {
     });
 
     it('patches only the hotel field', () => {
-      const hotel = { id: 3 } as any;
+      const hotel = { id: 3 } as Hotel;
       store.update({ hotel });
 
       expect(store.hotel()).toEqual(hotel);
@@ -77,7 +78,7 @@ describe('FinalOrderStore', () => {
 
   describe('addFinalOrder', () => {
     it('cleans up the pending order, flight and hotel before posting the final order', () => {
-      const request = { order: { orderID: 'order-1' } } as any;
+      const request = { order: { orderID: 'order-1' } } as FinalOrderState;
 
       store.addFinalOrder(request);
 
@@ -92,7 +93,7 @@ describe('FinalOrderStore', () => {
     });
 
     it('skips cleanup and still posts when there is no orderID', () => {
-      const request = { order: {} } as any;
+      const request = { order: {} } as FinalOrderState;
 
       store.addFinalOrder(request);
 

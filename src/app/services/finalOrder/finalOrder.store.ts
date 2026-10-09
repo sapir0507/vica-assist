@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { MyFlightsService } from 'projects/my-flights/src';
-import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
+import { MyFlightsService } from '@vica-assist/my-flights';
+import { HotelsService } from '@vica-assist/my-hotels';
 import { Flights, Hotel, Order } from '@vica-assist/shared';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';

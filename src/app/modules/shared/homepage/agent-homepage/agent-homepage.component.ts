@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { MyFlightsModule } from 'projects/my-flights/src/lib/my-flights.module';
-import { MyHotelsModule } from 'projects/my-hotels/src/lib/my-hotels/my-hotels.module';
+import { MyFlightsModule } from '@vica-assist/my-flights';
+import { MyHotelsModule } from '@vica-assist/my-hotels';
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
 import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';
 import { OrderStore } from 'src/app/services/order/order.store';
@@ -57,7 +57,7 @@ export class AgentHomepageComponent implements OnInit {
     this.orderID = item.id + ''; //gives all flights and hotels a common id that belongs to an order
   }
 
-  onOrder(orderID: string){
+  onOrder(){
     //this.orderID = orderID;  
   }
 

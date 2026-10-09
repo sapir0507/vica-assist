@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AddNewHotelRoutingModule } from './add-new-hotel-routing.module';
 import { AddNewHotelComponent } from './add-new-hotel.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MyHotelsModule } from 'projects/my-hotels/src/lib/my-hotels/my-hotels.module';
+import { MyHotelsModule } from '@vica-assist/my-hotels';
 
 
 @NgModule({

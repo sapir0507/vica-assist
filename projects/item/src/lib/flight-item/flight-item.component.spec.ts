@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { Flights } from '@vica-assist/shared';
 import { FlightItemComponent } from './flight-item.component';
 
 describe('FlightItemComponent', () => {
@@ -49,8 +50,8 @@ describe('FlightItemComponent', () => {
   });
 
   it('selectFlight emits the chosen flight', () => {
-    const flight = { id: 1 } as any;
-    const emitted: any[] = [];
+    const flight = { id: 1 } as Flights;
+    const emitted: Flights[] = [];
     component.chosenFlight.subscribe(f => emitted.push(f));
 
     component.selectFlight(flight);

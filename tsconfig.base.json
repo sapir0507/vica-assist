@@ -25,7 +25,9 @@
       "projects/*": ["./projects/*"],
       "@vica-assist/shared": ["./projects/shared/src/index.ts"],
       "@vica-assist/item": ["./projects/item/src/item.ts"],
-      "@vica-assist/my-pipes": ["./projects/my-pipes/src/index.ts"]
+      "@vica-assist/my-pipes": ["./projects/my-pipes/src/index.ts"],
+      "@vica-assist/my-flights": ["./projects/my-flights/src/public-api.ts"],
+      "@vica-assist/my-hotels": ["./projects/my-hotels/src/public-api.ts"]
     }
   },
   "exclude": [

@@ -35,7 +35,7 @@ describe('MyFlightsComponent', () => {
   });
 
   it('requires a stop duration only when the flight has a stop', () => {
-    const stopDuration = component.newFlightForm.get('stopDuration')!;
+    const stopDuration = component.newFlightForm.controls['stopDuration'];
 
     component.newFlightForm.patchValue({ stops: '1' });
     component.onSelectionChange();

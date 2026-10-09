@@ -1,7 +1,6 @@
-import { outputAst } from '@angular/compiler';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ItemType } from '@vica-assist/item';
-import { HotelsService } from 'projects/my-hotels/src/lib/my-hotels/hotels.service';
+import { HotelsService } from '@vica-assist/my-hotels';
 // import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Hotel } from '@vica-assist/shared';
@@ -28,7 +27,7 @@ export class ChooseHotelComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const id = this.orderID? +this.orderID : 1;
     this._allHotels$ = this.SHotel.getHotelsByOrderID(id);
-    const allHotels = this._allHotels$
+    this._allHotels$
     .pipe(
       takeUntil(this.notifier)
     )

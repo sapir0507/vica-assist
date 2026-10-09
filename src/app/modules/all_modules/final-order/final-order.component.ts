@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MyFlightsService } from 'projects/my-flights/src';
+import { MyFlightsService } from '@vica-assist/my-flights';
 import { Flights, Hotel } from '@vica-assist/shared';
 import { FinalOrderState, FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 

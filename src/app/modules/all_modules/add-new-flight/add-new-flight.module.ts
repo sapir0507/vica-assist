@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AddNewFlightRoutingModule } from './add-new-flight-routing.module';
 import { AddNewFlightComponent } from './add-new-flight.component';
-import { MyFlightsModule } from 'projects/my-flights/src/public-api';
+import { MyFlightsModule } from '@vica-assist/my-flights';
 
 
 @NgModule({

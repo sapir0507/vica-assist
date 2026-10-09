@@ -1,10 +1,8 @@
-import { Component, inject, NgZone, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { LinkStore } from 'src/app/services/links/link.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { environment } from 'src/environments/environment';
 
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'preserve',
@@ -31,8 +29,7 @@ export class LoginComponent implements OnInit {
   private linkStore = inject(LinkStore);
 
   constructor(
-    private router: Router,
-    ngZone: NgZone
+    private router: Router
     ) { }
 
    ngOnInit(): void {/* empty*/}
