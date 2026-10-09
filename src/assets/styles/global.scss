@@ -1,4 +1,4 @@
-@import "mixin";
+@use "mixin";
 $color-primary: #faaca5;
 $sub-title: #f26a76;
 $sidebar-color-primary: #f5cec9;
@@ -15,35 +15,35 @@ $content-height: calc(100vh - #{$nav-bar-height});
 $arr: 1 2 3 4 5 6 7 8 9 10 16;
 @each $size in $arr {
   .mrg-t-#{$size} {
-    margin-top: times8($size);
+    margin-top: mixin.times8($size);
   }
   .mrg-x-#{$size} {
-    margin-right: times8($size);
-    margin-left: times8($size);
+    margin-right: mixin.times8($size);
+    margin-left: mixin.times8($size);
   }
   .mrg-y-#{$size} {
-    margin-bottom: times8($size);
-    margin-top: times8($size);
+    margin-bottom: mixin.times8($size);
+    margin-top: mixin.times8($size);
   }.mrg-b-#{$size} {
-    margin-bottom: times8($size);
+    margin-bottom: mixin.times8($size);
   }
   .mrg-l-#{$size} {
-    margin-left: times8($size);
+    margin-left: mixin.times8($size);
   }
   .mrg-#{$size} {
-    margin: times8($size);
+    margin: mixin.times8($size);
   }
   .grd-col-#{$size} {
     display: grid;
     grid-template-columns: repeat($size, auto);
   }
   .grd-gap-#{$size} {
-    grid-gap: times8($size);
+    grid-gap: mixin.times8($size);
   }
   .app-col-gap-#{$size} {
-    column-gap: times8($size);
+    column-gap: mixin.times8($size);
   }
   .app-row-gap-#{$size} {
-    row-gap: times8($size);
+    row-gap: mixin.times8($size);
   }
 }

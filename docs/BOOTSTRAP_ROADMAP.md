@@ -35,8 +35,8 @@ was then moved to ng-bootstrap so open/close state lives in Angular instead of a
 
 ## Build and styling setup still on Angular 13 conventions
 
-Found while checking how the project handles Bootstrap, CSS and Sass on Angular 21. Items 1 to 3
-are done (see Phase 5 and Phase 7 of the dependency upgrade roadmap); items 4 to 6 are still open.
+Found while checking how the project handles Bootstrap, CSS and Sass on Angular 21. Items 1 to 5
+are done (see Phase 5 and Phase 7 of the dependency upgrade roadmap for the build items); item 6 is still open.
 
 1. **Done: migrate to `@angular/build:application`.** `angular.json` used the deprecated
    `@angular-devkit/build-angular:browser` builder with `main`, a separate `polyfills.ts`
@@ -48,10 +48,12 @@ are done (see Phase 5 and Phase 7 of the dependency upgrade roadmap); items 4 to
    false` in `angular.json`; whether the builder or that setting is what fixed it was not isolated.
 3. **Done: the duplicate build config is gone.** `angular.json` is the single source for build, serve
    and test; `project.json` keeps only Nx lint targets.
-4. **Bootstrap 4 class leftovers.** `mr-2` in `orders-list.component.html` (twice) and
-   `order-list-item.component.html` has no effect in Bootstrap 5; it is `me-2`.
-5. **Sass `@import` to `@use`.** `src/assets/styles/global.scss` uses `@import "mixin"`, which Sass
-   has deprecated. The `@import url(...)` Google Fonts lines in component styles are plain CSS and
+4. **Done: Bootstrap 4 class leftovers.** `mr-2` in `orders-list.component.html` (twice) and
+   `order-list-item.component.html` had no effect in Bootstrap 5; they are now `me-2`, so those buttons
+   gain a small right margin they never actually had.
+5. **Done: Sass `@import` to `@use`.** `src/assets/styles/global.scss` used `@import "mixin"`, which Sass
+   has deprecated; it now uses `@use "mixin"` with `mixin.times8(...)` and compiles to byte-identical CSS.
+   Nothing imports `global.scss`, `global.css`, `mixin.css` or `media.css` any more, so they may be dead. The `@import url(...)` Google Fonts lines in component styles are plain CSS and
    fine.
 6. **Global Bootstrap and Material together.** Bootstrap CSS (`@use "bootstrap/scss/bootstrap"`)
    and Material's prebuilt `deeppurple-amber.css` are both loaded globally. Revisit with the
