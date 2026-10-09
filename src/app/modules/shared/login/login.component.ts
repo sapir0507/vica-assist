@@ -1,4 +1,4 @@
-import { Component, inject, NgZone, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, NgZone, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ const navigationExtras: NavigationExtras = {
   standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.minLength(4)]))
   });
 
-  myError?: boolean;
+  myError = signal(false);
   protected sessionStore = inject(SessionStore);
   private linkStore = inject(LinkStore);
 
@@ -38,14 +38,14 @@ export class LoginComponent implements OnInit {
    ngOnInit(): void {/* empty*/}
 
   onSubmit(){
-    this.myError = false;
+    this.myError.set(false);
     this.sessionStore.login(this.formGroup.value['username'] ?? undefined, this.formGroup.value['password'] ?? undefined)
       ?.subscribe(() => {
         if(this.sessionStore.isLoggedIn()){
           this.linkStore.updateSharedLinks_AfterLogin()
           this.router.navigate(['/homepage'], navigationExtras);
         } else {
-          this.myError = true;
+          this.myError.set(true);
         }
       })
   }
