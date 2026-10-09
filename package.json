@@ -8,6 +8,7 @@
     "build:libs": "ng build shared && ng build my-pipes && ng build item && ng build my-flights && ng build my-hotels && ng build mat-input",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "lint": "nx run-many -t lint",
     "mock-api": "json-server --watch src/app/data/data.json --port 3000",
     "int:extract": "ng xi18n"
   },

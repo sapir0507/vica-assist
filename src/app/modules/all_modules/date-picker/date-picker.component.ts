@@ -9,9 +9,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class DatePickerComponent implements OnInit {
   
-  constructor() { 
-    
-  }
+  constructor() { /* empty*/}
 
   ngOnInit(): void {/* empty*/}
 

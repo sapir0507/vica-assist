@@ -10,6 +10,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 })
 export class AddNewFlightComponent {
   
-  constructor() {}
+  constructor() { /* empty*/}
 
 }

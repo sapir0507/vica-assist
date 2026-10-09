@@ -78,9 +78,7 @@ export class UserRequestsComponent implements OnInit {
       });
     }
 
-  ngOnInit(): void {
-   
-  }
+  ngOnInit(): void {/* empty*/}
 
   setStep(index: number){
     this.step = index;

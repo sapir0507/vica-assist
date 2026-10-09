@@ -9,8 +9,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFinishedOrderComponent implements OnInit {
-  constructor(
-  ) { }
+  constructor() { /* empty*/}
 
   ngOnInit(): void {/* empty*/}
 

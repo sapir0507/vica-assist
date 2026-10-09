@@ -1,5 +1,18 @@
 {
   "projectType": "application",
   "sourceRoot": "src",
-  "prefix": "app"
+  "prefix": "app",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "src/**/*.ts"
+        ]
+      }
+    }
+  }
 }

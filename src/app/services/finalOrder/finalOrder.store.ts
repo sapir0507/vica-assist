@@ -45,17 +45,17 @@ export const FinalOrderStore = signalStore(
         try {
           const orderID = request.order?.orderID;
           try {
-            orderID ? orderStore.deleteByOrderID(orderID) : '';
+            if (orderID) orderStore.deleteByOrderID(orderID);
           } catch (error) {
             console.log('final order -> order service', error);
           }
           try {
-            orderID ? hotelService.deleteHotel(orderID) : '';
+            if (orderID) hotelService.deleteHotel(orderID);
           } catch (error) {
             console.log('final order -> my flights service', error);
           }
           try {
-            orderID ? flightService.deleteFlightsByOrderID(orderID) : '';
+            if (orderID) flightService.deleteFlightsByOrderID(orderID);
           } catch (error) {
             console.log('final order -> hotels service', error);
           }
