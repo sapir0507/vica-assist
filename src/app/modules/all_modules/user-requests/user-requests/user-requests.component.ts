@@ -9,7 +9,7 @@ import { OrderRequest, passDetails } from '@vica-assist/shared';
   standalone: false,
   selector: 'userRequests',
   templateUrl: './user-requests.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./user-requests.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
