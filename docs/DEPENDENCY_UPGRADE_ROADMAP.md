@@ -668,7 +668,15 @@ The root project had no lint target, so the app, the largest part of the code, w
 has the same `@nx/eslint:lint` target as the libraries and `npm run lint` runs it for all seven projects.
 The nine errors it surfaced were fixed: empty constructors/`ngOnInit` (marked `/* empty*/` like the rest
 of the codebase), ternaries used as statements in `FinalOrderStore.addFinalOrder`, and an unused empty
-`Auth` interface (`services/auth/auth.ts`, deleted). 22 warnings remain, mostly `any` types.
+`Auth` interface (`services/auth/auth.ts`, deleted).
+
+The 31 warnings that followed were then cleared too (`chore/lint/fix-warnings`): the app imported the
+flights and hotels libraries by relative path (10 `enforce-module-boundaries` warnings), so they now
+have `@vica-assist/my-flights` and `@vica-assist/my-hotels` aliases like the other libraries; unused
+imports, variables and parameters were removed; and the `any` types in specs and `FileUploadComponent`
+were replaced with real types (`onUpload` now takes an `Event` and emits a real `File[]` instead of a
+`FileList` cast). Lint is at 0 errors and 0 warnings. `AgentHomepageComponent.onOrder` is a no-op
+(its body is commented out); it lost its unused parameter but is a candidate for deletion.
 
 ## Out of scope
 
