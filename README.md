@@ -226,7 +226,6 @@ high-severity dev-only finding (see below).
 - **Initial bundle is over budget** (about 1.55 MB against a 500 kB warning). It is a warning, not an error.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
-- **Unused dependency:** `jwt-decode` is installed but never imported.
 
 ## Future improvements
 

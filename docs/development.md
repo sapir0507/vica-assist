@@ -98,8 +98,8 @@ editor apply it.
 ## Debugging
 
 - The development configuration (`ng serve`, `npm run watch`) has source maps and no optimisation.
-- `.vscode/launch.json` has an "ng serve" Chrome launch configuration. Its "ng test" configuration still
-  targets Karma's debug page (`localhost:9876/debug.html`) and no longer works now that tests run on Vitest.
+- `.vscode/launch.json` has an "ng serve" Chrome launch configuration. There is none for tests, which run
+  on Vitest rather than in a debuggable browser page.
 - To see why a lint warning appears, run `npx nx lint <project> --output-style=static`.
 
 ## Common development issues
