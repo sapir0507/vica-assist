@@ -5,7 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   standalone: false,
   selector: 'app-add-new-flight',
   templateUrl: './add-new-flight.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./add-new-flight.component.scss']
 })
 export class AddNewFlightComponent {
