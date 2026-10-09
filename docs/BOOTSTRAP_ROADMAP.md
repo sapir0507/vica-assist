@@ -35,19 +35,19 @@ was then moved to ng-bootstrap so open/close state lives in Angular instead of a
 
 ## Build and styling setup still on Angular 13 conventions
 
-Found while checking how the project handles Bootstrap, CSS and Sass on Angular 21. None of this
-has been changed yet, except that Bootstrap's JS is no longer loaded.
+Found while checking how the project handles Bootstrap, CSS and Sass on Angular 21. Items 1 to 3
+are done (see Phase 5 and Phase 7 of the dependency upgrade roadmap); items 4 to 6 are still open.
 
-1. **Migrate to `@angular/build:application`.** `angular.json` uses the deprecated
+1. **Done: migrate to `@angular/build:application`.** `angular.json` used the deprecated
    `@angular-devkit/build-angular:browser` builder with `main`, a separate `polyfills.ts`
    (`zone.js`, `@angular/localize/init`) and `browserTarget` in `extract-i18n`. Moving to the
-   application builder removes those and is the likely fix for item 2.
-2. **Fix the production build.** `ng build` (production) fails at "Index html generation" with
-   `document.documentElement?.setAttribute is not a function`; the development build passes.
-   Suspects: critical-CSS inlining or Google Fonts inlining (`index.html` loads several Google
-   Fonts links). Not confirmed.
-3. **Remove the duplicate build config.** `project.json` repeats the build/test config in
-   `angular.json`. Keep one source of truth.
+   application builder removed those.
+2. **Done: the production build works.** `ng build` (production) used to fail at "Index html generation" with
+   `document.documentElement?.setAttribute is not a function` while the development build passed. The
+   production build now succeeds on the application builder, with `optimization.styles.inlineCritical:
+   false` in `angular.json`; whether the builder or that setting is what fixed it was not isolated.
+3. **Done: the duplicate build config is gone.** `angular.json` is the single source for build, serve
+   and test; `project.json` keeps only Nx lint targets.
 4. **Bootstrap 4 class leftovers.** `mr-2` in `orders-list.component.html` (twice) and
    `order-list-item.component.html` has no effect in Bootstrap 5; it is `me-2`.
 5. **Sass `@import` to `@use`.** `src/assets/styles/global.scss` uses `@import "mixin"`, which Sass
