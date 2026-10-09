@@ -6,7 +6,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
   standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
