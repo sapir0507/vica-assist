@@ -9,7 +9,7 @@ export interface LinkState {
 
 const initialState: LinkState = {
   sharedLinks: [
-    { link: '', name: 'Homepage' },
+    { link: '/homepage', name: 'Homepage' },
     { link: '/login', name: 'Login' },
     { link: '/register', name: 'Register' }
   ],

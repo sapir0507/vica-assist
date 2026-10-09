@@ -10,7 +10,7 @@ describe('LinkStore', () => {
 
   it('starts with the default shared/agent/customer links', () => {
     expect(store.sharedLinks()).toEqual([
-      { link: '', name: 'Homepage' },
+      { link: '/homepage', name: 'Homepage' },
       { link: '/login', name: 'Login' },
       { link: '/register', name: 'Register' }
     ]);

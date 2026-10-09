@@ -4,7 +4,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-export type UserRole = 'agent' | 'customer';
+export type UserRole = 'agent' | 'customer' | 'unknown';
 
 const experationDate = new Date().getDate() + 30;
 
@@ -20,7 +20,7 @@ export interface SessionState {
 const initialState: SessionState = {
   username: '',
   password: '',
-  role: 'customer',
+  role: 'unknown',
   isLoggedIn: false,
   isLoading: false,
   experationDate
@@ -48,11 +48,12 @@ export const SessionStore = signalStore(
             // mirror the backend's plaintext password into client state.
             patchState(store, {
               username: users[0].username ?? username,
-              role: users[0].role ?? 'customer',
+              role: users[0].role ?? 'unknown',
               isLoggedIn: true,
               experationDate
             });
           }
+          else patchState(store, {...initialState});
         }),
         catchError(() => {
           patchState(store, { isLoading: false });

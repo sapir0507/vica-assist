@@ -6,7 +6,6 @@ import { UserRole } from './services/session/session.store';
 const routes: Routes = [
   {
     path: 'homepage',
-    canActivate: [authGuard],
     loadChildren: () => import('./modules/shared/homepage/homepage.routes').then(m => m.HOMEPAGE_ROUTES)
   },
   {

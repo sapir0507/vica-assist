@@ -24,7 +24,7 @@ describe('SessionStore', () => {
 
   it('starts logged out with the default role', () => {
     expect(store.isLoggedIn()).toBeFalsy();
-    expect(store.role()).toBe('customer');
+    expect(store.role()).toBe('unknown');
   });
 
   describe('login', () => {
@@ -77,6 +77,8 @@ describe('SessionStore', () => {
       req.flush([]);
 
       expect(store.isLoggedIn()).toBeFalsy();
+      expect(store.role()).toBe('unknown');
+      expect(store.username()).toBe('');
     });
 
     it('does not throw on an HTTP error, and leaves the store logged out', () => {
