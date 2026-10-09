@@ -11,7 +11,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
   standalone: false,
   selector: 'app-dropdown-sidebar',
   templateUrl: './dropdown-sidebar.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./dropdown-sidebar.component.scss']
 })
 export class DropdownSidebarComponent implements OnInit {
