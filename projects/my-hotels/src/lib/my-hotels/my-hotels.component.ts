@@ -11,7 +11,7 @@ import { Subject, Subscription } from 'rxjs';
   standalone: false,
   selector: 'my-hotels',
   templateUrl: './my-hotels.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./my-hotels.component.scss']
 })
 export class MyHotelsComponent implements OnDestroy {
