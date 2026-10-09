@@ -658,9 +658,17 @@ Branches: `chore/workspace/angular-json-source-of-truth`, `refactor/shared/extra
   a `stopsDuration` typo meant the "required when the flight has a stop" validator was never applied
   (the control is `stopDuration`), plus a ternary used as a statement and redundant type annotations.
   `mat-input` had an empty method.
-- Not solved, by design: `nx test` (Nx's adapter cannot run Angular's Vitest builder; use `ng test`) and
-  the app's own lint (the root project has no lint target). The Nx graph also shows no edges from the
+- Not solved, by design: `nx test` (Nx's adapter cannot run Angular's Vitest builder; use `ng test`).
+  The Nx graph also shows no edges from the
   app to the libraries, because the root project at `.` overlaps the library folders.
+
+## Phase 8 — Linting the app (done, `chore/lint/app-lint-target`)
+
+The root project had no lint target, so the app, the largest part of the code, was never linted. It now
+has the same `@nx/eslint:lint` target as the libraries and `npm run lint` runs it for all seven projects.
+The nine errors it surfaced were fixed: empty constructors/`ngOnInit` (marked `/* empty*/` like the rest
+of the codebase), ternaries used as statements in `FinalOrderStore.addFinalOrder`, and an unused empty
+`Auth` interface (`services/auth/auth.ts`, deleted). 22 warnings remain, mostly `any` types.
 
 ## Out of scope
 

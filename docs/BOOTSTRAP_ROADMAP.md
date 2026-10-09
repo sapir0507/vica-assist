@@ -80,7 +80,7 @@ layout.
 - **Spacing:** a scale of 4px, 8px, 16px and so on.
 
 ### Pages and components
-- **Homepage (`/` or `/home`):** a hero with gradient and call to action; a trending-destinations
+- **Homepage (`/` or `/homepage`):** a hero with gradient and call to action; a trending-destinations
   grid of 6 cards (image, name, emoji or icon, "Flights from $450" price, lift-and-shadow hover);
   two action cards ("Book Your Trip", "Manage Bookings"); a trust section with 3 icons. Keep the
   existing navigation, header and logout.

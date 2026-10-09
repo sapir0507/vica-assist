@@ -63,6 +63,7 @@ ng test my-hotels         # projects/my-hotels
 ng test my-pipes          # projects/my-pipes
 ng test item              # projects/item
 ng test mat-input         # projects/mat-input
+npm run lint              # ESLint for the app and every library
 ```
 
 Several component specs render only a construction smoke test (`expect(component).toBeTruthy()`
