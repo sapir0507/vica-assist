@@ -726,6 +726,13 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   never wired to `onLogout()`, so it did not log anyone out; `SessionStore.logout()` also kept the role and
   username. Both are now fixed with specs. The mobile menu still shows the "customers" and "agents" link groups to
   everyone, including the disabled `/choose-*` links; that is unchanged behaviour, left for a decision.
+- **Stage 2, footer and app shell (`style/footer`)**: `FooterComponent` was an empty stub that was never rendered,
+  and its module registered an empty-path `forChild` route (the same trap as the `/` bug). It is now a standalone
+  component (brand, tagline, copyright year, "portfolio demo, no real bookings"), the unused `FooterModule` and
+  `FooterRoutingModule` were deleted, and `AppComponent` renders header, `<main id="main-content">` and footer in
+  a full-height flex column with a "skip to main content" link. The old `app.component.scss` painted every element
+  of the shell black, which showed through the translucent header; it is gone. The login page overlaps the footer
+  until its own stage replaces its fixed-height layout.
 
 ## Out of scope
 
