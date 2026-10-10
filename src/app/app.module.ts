@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderModule } from './modules/shared/header/header.module';
+import { FooterComponent } from './modules/shared/footer/footer.component';
 
 import { environment } from '../environments/environment';
 import { JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
@@ -34,6 +35,7 @@ const JWT_Module_Options: JwtModuleOptions = {
      NgbModule,
     // HomepageModule,
      HeaderModule,
+     FooterComponent,
      AppRoutingModule,
      ReactiveFormsModule,
      HttpClientModule,

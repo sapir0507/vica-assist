@@ -1,15 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
+  imports: [MatIconModule]
 })
-export class FooterComponent implements OnInit {
-
-  constructor() { /* empty*/}
-  ngOnInit(): void {/* empty*/}
-
+export class FooterComponent {
+  readonly year = new Date().getFullYear();
 }
