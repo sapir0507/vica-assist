@@ -50,7 +50,7 @@ npm run build        # app → dist/vica-assist/
 npm run build:libs   # all libraries → dist/<name>/
 ```
 
-`build:libs` runs `shared`, `my-pipes`, `item`, `my-flights`, `my-hotels`, `mat-input` in that order. A
+`build:libs` runs `shared`, `my-pipes`, `item`, `my-flights`, `my-hotels` in that order. A
 library that imports another library resolves it from `dist/` inside its own `tsconfig.lib.json`, so the
 dependency must be built first. The app and the tests resolve the same imports to source through the
 `@vica-assist/*` paths in the root `tsconfig.json`.
@@ -64,7 +64,7 @@ Tests run on Vitest through `@angular/build:unit-test`, with the `testing` build
 
 ```bash
 npm test                 # the app
-ng test <project>        # my-flights | my-hotels | my-pipes | item | mat-input | shared
+ng test <project>        # my-flights | my-hotels | my-pipes | item | shared
 ng test --watch=false    # single run, as in CI
 ```
 

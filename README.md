@@ -44,19 +44,19 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
 └───────────────┬──────────────────────────────────────────────────────┬─────────────┘
                 │ imports (@vica-assist/*)                              │ HTTP
 ┌───────────────▼──────── projects/ (libraries) ─────────────┐   ┌───────▼────────┐
-│  my-flights ─► item ─► my-pipes                             │   │  json-server   │
-│       │         │                                           │   │  :3000         │
-│       └─────────┴─► shared ◄─ my-hotels        mat-input    │   │  data.json     │
+│  my-flights ─┐                                              │   │  json-server   │
+│  my-hotels ──┼─► shared                       my-pipes      │   │  :3000         │
+│  item ───────┘                                              │   │  data.json     │
 └─────────────────────────────────────────────────────────────┘   └────────────────┘
 ```
 
 - **`src/app`** is the application. Feature areas are lazy-loaded from `app-routing.module.ts`.
-- **`projects/`** holds six libraries. Libraries never import from the app, and their dependency graph has
+- **`projects/`** holds five libraries. Libraries never import from the app, and their dependency graph has
   no cycles:
   - `shared` — flight/hotel/order interfaces, `HttpResourceService`, and the `API_URL` injection token.
   - `my-flights`, `my-hotels` — the HTTP clients and the agent forms for flights and hotels.
   - `item` — presentational flight and hotel cards.
-  - `my-pipes`, `mat-input` — a small pipe library and a Material form-field wrapper.
+  - `my-pipes` — a small pipe library.
 - **Backend:** `environment.api` points at `http://localhost:3000/`. `json-server` serves
   `src/app/data/data.json`, whose top-level keys (`login`, `orders`, `hotels`, `flights`, `finalOrder`)
   become REST collections.
@@ -112,7 +112,7 @@ src/app/
   services/              session, order, finalOrder, links stores · auth guards · window-resize service
   data/data.json         json-server database
 projects/
-  shared · my-flights · my-hotels · item · mat-input · my-pipes
+  shared · my-flights · my-hotels · item · my-pipes
 docs/
   development.md                  how to work on the project
   DEPENDENCY_UPGRADE_ROADMAP.md   what was upgraded, in which order, and what broke
@@ -183,7 +183,6 @@ ng test my-flights        # projects/my-flights
 ng test my-hotels         # projects/my-hotels
 ng test my-pipes          # projects/my-pipes
 ng test item              # projects/item
-ng test mat-input         # projects/mat-input
 ng test shared            # projects/shared
 npm run lint              # ESLint for the app and every library
 ```

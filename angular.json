@@ -151,36 +151,6 @@
         }
       }
     },
-    "mat-input": {
-      "projectType": "library",
-      "root": "projects/mat-input",
-      "sourceRoot": "projects/mat-input/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "options": {
-            "project": "projects/mat-input/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/mat-input/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/mat-input/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:unit-test",
-          "options": {
-            "tsConfig": "projects/mat-input/tsconfig.spec.json",
-            "buildTarget": "vica-assist:build:testing"
-          }
-        }
-      }
-    },
     "my-flights": {
       "projectType": "library",
       "root": "projects/my-flights",
