@@ -7,3 +7,4 @@ export * from './lib/interfaces/order.interface';
 export * from './lib/interfaces/pass-array.interface';
 export * from './lib/icons/app-icons';
 export * from './lib/icons/provide-app-icons';
+export * from './lib/dates';

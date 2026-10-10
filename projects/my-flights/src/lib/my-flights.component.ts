@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FlightsRequest, Order } from '@vica-assist/shared';
+import { dateRangeValidator, FlightsRequest, Order, toDateInputValue } from '@vica-assist/shared';
 
 @Component({
   standalone: false,
@@ -45,7 +45,7 @@ export class MyFlightsComponent implements OnInit {
     bagage: ['', Validators.required],
     moreInfo: [''],
     price: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(4), Validators.pattern('[1-9][0-9]*')]]
-  })
+  }, { validators: dateRangeValidator('departureDate', 'returnDate') })
 
   get passangersFullName() {
     return (this.newFlightForm.controls['passangersFullName']) as FormArray;
@@ -63,8 +63,8 @@ export class MyFlightsComponent implements OnInit {
     this.newFlightForm.patchValue({
       dest: this.order?.destination,
       org: this.order?.origin,
-      departureDate: this.order?.departureDate,
-      returnDate: this.order?.returnDate,
+      departureDate: toDateInputValue(this.order?.departureDate),
+      returnDate: toDateInputValue(this.order?.returnDate),
       fullName: this.order?.passDetails[0].fullName,
       myID: this.order?.passDetails[0].passID
     })
@@ -78,8 +78,8 @@ export class MyFlightsComponent implements OnInit {
     this.newFlightForm.patchValue({
       dest: this.order?.destination,
       org: this.order?.origin,
-      departureDate: this.order?.departureDate,
-      returnDate: this.order?.returnDate,
+      departureDate: toDateInputValue(this.order?.departureDate),
+      returnDate: toDateInputValue(this.order?.returnDate),
       fullName: this.order?.passDetails[0].fullName,
       myID: this.order?.passDetails[0].passID
     })

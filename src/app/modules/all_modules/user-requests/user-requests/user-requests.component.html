@@ -93,21 +93,25 @@
                     <input matInput type="text" placeholder="Destination" formControlName="destination">
                   </mat-form-field>
 
-                  <mat-form-field appearance="fill" [formGroup]="Dates">
-                    <mat-label>Dates</mat-label>
-                    <mat-date-range-input [rangePicker]="rangePicker">
-                      <input type="button" matStartDate placeholder="start" formControlName="departureDate">
-                      <input type="button" matEndDate placeholder="end" formControlName="returnDate">
-                    </mat-date-range-input>
-                    <mat-hint>MM/DD/YYY - MM/DD/YYY</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-                    <mat-date-range-picker #rangePicker>
-                      <mat-datepicker-actions>
-                        <button mat-button matDatepickerCancel>Cancel</button>
-                        <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
-                      </mat-datepicker-actions>
-                    </mat-date-range-picker>
-                  </mat-form-field>
+                  <div class="form-grid" [formGroup]="Dates">
+                    <div class="form-field">
+                      <label for="trip-departure-date">Departure date</label>
+                      <input id="trip-departure-date" class="form-control" type="date" formControlName="departureDate" />
+                    </div>
+                    <div class="form-field">
+                      <label for="trip-return-date">Return date</label>
+                      <input
+                        id="trip-return-date"
+                        class="form-control"
+                        type="date"
+                        formControlName="returnDate"
+                        [min]="departureDate.value"
+                      />
+                    </div>
+                  </div>
+                  @if (Dates.hasError('dateRange')) {
+                    <p class="form-field__error" role="alert">The return date cannot be before the departure date.</p>
+                  }
 
                   <mat-form-field class="p-md-1" appearance="fill" color="primary" [formGroup]="hotel">
                     <mat-label>Stars</mat-label>

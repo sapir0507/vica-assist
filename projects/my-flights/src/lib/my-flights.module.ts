@@ -4,12 +4,10 @@ import { MyFlightsComponent } from './my-flights.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 import { MatSelectModule } from '@angular/material/select';
-import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatDividerModule} from '@angular/material/divider';
@@ -22,15 +20,11 @@ import { MatDividerModule} from '@angular/material/divider';
   imports: [
     CommonModule,
     ReactiveFormsModule, 
-    FormsModule,
-    MatNativeDateModule,
-    MatRippleModule,
-    MatIconModule,
+    FormsModule,    MatIconModule,
     MatFormFieldModule,
     MatExpansionModule,
     MatInputModule,
     MatButtonModule,
-    MatDatepickerModule,
     MatDividerModule,
     MatSelectModule,
     MatSnackBarModule,

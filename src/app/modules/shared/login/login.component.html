@@ -10,7 +10,7 @@
     }
 
     <form class="auth-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()" novalidate>
-      <div class="auth-field">
+      <div class="form-field">
         <label for="login-username">Username</label>
         <input
           id="login-username"
@@ -22,11 +22,11 @@
           [attr.aria-describedby]="myError() ? 'login-error' : null"
         />
         @if (formGroup.controls.username.touched && formGroup.controls.username.invalid) {
-          <p class="auth-field__error">Enter your username.</p>
+          <p class="form-field__error">Enter your username.</p>
         }
       </div>
 
-      <div class="auth-field">
+      <div class="form-field">
         <label for="login-password">Password</label>
         <input
           id="login-password"
@@ -38,7 +38,7 @@
           [attr.aria-describedby]="myError() ? 'login-error' : null"
         />
         @if (formGroup.controls.password.touched && formGroup.controls.password.invalid) {
-          <p class="auth-field__error">Enter your password (at least 4 characters).</p>
+          <p class="form-field__error">Enter your password (at least 4 characters).</p>
         }
       </div>
 

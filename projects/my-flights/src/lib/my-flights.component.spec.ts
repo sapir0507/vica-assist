@@ -34,6 +34,32 @@ describe('MyFlightsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('prefills the dates from the order as date-input values', () => {
+    fixture.componentRef.setInput('order', {
+      id: 1,
+      orderID: 'o-1',
+      choice: 'flight',
+      status: 'pending',
+      origin: 'Israel',
+      destination: 'Italy',
+      departureDate: new Date(2026, 5, 9).toISOString(),
+      returnDate: new Date(2026, 5, 16).toISOString(),
+      passDetails: [{ fullName: 'Jane Doe', passID: 12345678 }],
+      priceRange: 500
+    });
+
+    component.ngOnInit();
+
+    expect(component.newFlightForm.value.departureDate).toBe('2026-06-09');
+    expect(component.newFlightForm.value.returnDate).toBe('2026-06-16');
+  });
+
+  it('flags a return date before the departure date', () => {
+    component.newFlightForm.patchValue({ departureDate: '2026-06-10', returnDate: '2026-06-09' });
+
+    expect(component.newFlightForm.hasError('dateRange')).toBe(true);
+  });
+
   it('requires a stop duration only when the flight has a stop', () => {
     const stopDuration = component.newFlightForm.controls['stopDuration'];
 

@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -26,9 +25,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule,
-    MatDatepickerModule,
-    MatSelectModule,
+    MatDividerModule,    MatSelectModule,
     MatInputModule,
     MatRadioModule,
     MatSnackBarModule,

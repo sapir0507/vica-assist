@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MyHotelsComponent } from './my-hotels.component';
 
-import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,11 +21,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     FileUploadComponent
   ],
   imports: [
-    CommonModule,
-
-    MatNativeDateModule,
-    MatRippleModule,
-    MatIconModule,
+    CommonModule,    MatIconModule,
     MatFormFieldModule,
     MatExpansionModule,
     MatInputModule,

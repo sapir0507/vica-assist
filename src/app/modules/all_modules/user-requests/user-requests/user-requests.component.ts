@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { OrderRequest, passDetails } from '@vica-assist/shared';
+import { dateRangeValidator, OrderRequest, passDetails } from '@vica-assist/shared';
 
 @Component({
   standalone: false,
@@ -29,7 +29,7 @@ export class UserRequestsComponent implements OnInit {
     Dates: new FormGroup({
       departureDate: this.fb.control('', [Validators.required]),
       returnDate: this.fb.control('', [Validators.required])
-    }),
+    }, { validators: dateRangeValidator('departureDate', 'returnDate') }),
 
     hotel: this.fb.group({
       stars: this.fb.control(''),

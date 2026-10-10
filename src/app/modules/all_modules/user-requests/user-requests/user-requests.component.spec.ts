@@ -32,4 +32,17 @@ describe('UserRequestsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('rejects a return date before the departure date', () => {
+    component.Dates.patchValue({ departureDate: '2026-06-10', returnDate: '2026-06-09' });
+
+    expect(component.Dates.hasError('dateRange')).toBe(true);
+    expect(component.requestForm.valid).toBe(false);
+  });
+
+  it('accepts a return on or after the departure date', () => {
+    component.Dates.patchValue({ departureDate: '2026-06-10', returnDate: '2026-06-10' });
+
+    expect(component.Dates.hasError('dateRange')).toBe(false);
+  });
 });
