@@ -735,6 +735,15 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   a full-height flex column with a "skip to main content" link. The old `app.component.scss` painted every element
   of the shell black, which showed through the translucent header; it is gone. The login page overlaps the footer
   until its own stage replaces its fixed-height layout.
+- **Stage 3, login (`style/login`)**: the page is a centred "auth card" on a soft brand wash, built from shared
+  `.auth-page`/`.auth-card`/`.auth-field` patterns in the design system that Register reuses. It replaces ten
+  levels of nested containers, inline styles and a fixed-height gradient that overlapped the footer. Bootstrap's
+  body, border and primary-button variables now follow the tokens, so form controls and buttons switch with the
+  dark theme. Behaviour and accessibility: the form is `novalidate` with its own messages, an empty submit marks
+  the fields touched and sends no request (before, an invalid form still called the API), the failure message is
+  a `role="alert"` linked to both inputs, labels are bound with `for`/`id`, `autocomplete` hints are set, and
+  the button shows "Logging in…" while the request runs. The old `login.component.scss` was deleted with the
+  rewrite. Specs cover labels, empty submit and the failure alert.
 
 ## Out of scope
 
