@@ -57,9 +57,7 @@ a {
   justify-content: space-between;
   gap: var(--space-4);
   min-height: var(--header-height);
-  max-width: 75rem;
-  margin-inline: auto;
-  padding-inline: var(--space-4);
+  padding-inline: clamp(var(--space-4), 4vw, var(--space-12));
 }
 
 .brand {
