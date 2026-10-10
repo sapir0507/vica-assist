@@ -1,29 +1,50 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-
+import { provideHttpClient, withXhr } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Router, RouterModule } from '@angular/router';
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
+import { SessionStore } from 'src/app/services/session/session.store';
 import { LinksComponent } from './links.component';
 
 describe('LinksComponent', () => {
-  let component: LinksComponent;
   let fixture: ComponentFixture<LinksComponent>;
+  let session: InstanceType<typeof SessionStore>;
+  const links = [
+    { link: '/homepage', name: 'Homepage' },
+    { link: '#', name: 'Logout' }
+  ];
+
+  const anchors = () => Array.from<HTMLAnchorElement>(fixture.nativeElement.querySelectorAll('a'));
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      declarations: [ LinksComponent ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
-  });
+      imports: [RouterModule.forRoot([{ path: 'homepage', children: [] }])],
+      declarations: [LinksComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting()]
+    }).compileComponents();
 
-  beforeEach(() => {
+    session = TestBed.inject(SessionStore);
     fixture = TestBed.createComponent(LinksComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.componentRef.setInput('currentLinks', links);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('renders one anchor per link', () => {
+    fixture.detectChanges();
+
+    expect(anchors().map(a => a.textContent?.trim())).toEqual(['Homepage', 'Logout']);
+  });
+
+  it('logs the user out and returns to the homepage when Logout is clicked', async () => {
+    patchState(unprotected(session), { isLoggedIn: true, role: 'agent', username: 'agent-1' });
+    fixture.componentRef.setInput('isLogout', true);
+    fixture.detectChanges();
+
+    anchors().find(a => a.textContent?.trim() === 'Logout')?.click();
+    await fixture.whenStable();
+
+    expect(session.isLoggedIn()).toBe(false);
+    expect(session.role()).toBe('unknown');
+    expect(TestBed.inject(Router).url).toBe('/homepage');
   });
 });

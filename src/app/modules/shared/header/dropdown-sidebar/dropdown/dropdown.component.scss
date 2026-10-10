@@ -1,10 +1,20 @@
-:host{
-    .ddm-bc{
-        background-color: black;
-    }
-    .ddm-s{
-        border: 2px outset white;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
+.group-toggle {
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.08em;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.group-menu {
+  position: static;
+  float: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }

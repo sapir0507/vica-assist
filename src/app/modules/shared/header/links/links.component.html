@@ -1,97 +1,17 @@
-<div class="linksComponent">
-
-  @if (!isSideBar) {
-    <div class="row">
-      @if (!isSideBar) {
-        @for (link of currentLinks; track link) {
-          <div class="col">
-            @if (isLogout && link.name === 'Logout') {
-              <a
-                href="#"
-                class="nav-link active header-links"
-                >
-                Logout
-              </a>
-            } @else {
-              <a
-                [routerLink]="link.link"
-                class="nav-link active header-links"
-                >
-                {{link.name}}
-              </a>
-            }
-          </div>
-        }
+<ul class="links" [class.links--bar]="!isSideBar" [class.links--list]="isSideBar">
+  @for (link of currentLinks; track link.name) {
+    <li>
+      @if (isLogout && link.name === 'Logout') {
+        <a class="link" href="#" (click)="onLogout($event)">Logout</a>
+      } @else {
+        <a
+          class="link"
+          [routerLink]="link.link"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >{{ link.name }}</a
+        >
       }
-    </div>
+    </li>
   }
-
-  <div class="side-bar-links">
-    @if (!isDropDown &&isSideBar && currentLinks) {
-      @for (link of currentLinks; track link) {
-        <div>
-          <li class="nav-item">
-            <a
-              [routerLink]="link.link"
-              class="dropdown-item header-links"
-              >
-              {{link.name}}
-            </a>
-          </li>
-        </div>
-      }
-    }
-
-    <div class="side-bar-dropdown-links">
-      @if (isSideBar && isDropDown) {
-        @for (link of currentLinks; track link) {
-          <div>
-            <div class="nav-item dropdown-links">
-              <a
-                [routerLink]="link.link"
-                class="dropdown-item header-links"
-                >
-                {{link.name}}
-              </a>
-            </div>
-          </div>
-        }
-      }
-    </div>
-
-  </div>
-
-</div>
-
-
-<!--
-<ng-container *ngIf="currentLinks && isSideBar">
-
-  <ng-container *ngIf="isDropDown">
-    <div *ngFor="let link of currentLinks">
-      <div class="dropdown-links">
-        <a
-          [routerLink]="link.link"
-          class="dropdown-item header-links"
-          >
-          {{link.name}}
-        </a>
-      </div>
-    </div>
-  </ng-container> -->
-
-  <!-- not a dropdown?
-  <ng-container *ngIf="!isDropDown">
-    <div *ngFor="let link of currentLinks">
-      <li class="nav-item">
-        <a
-          [routerLink]="link.link"
-          class="nav-link active header-links"
-          >
-          {{link.name}}
-        </a>
-      </li>
-    </div>
-  </ng-container>
-
-</ng-container> -->
+</ul>

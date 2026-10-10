@@ -7,6 +7,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LinksComponent } from './links/links.component';
 import { DropdownComponent } from './dropdown-sidebar/dropdown/dropdown.component';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -22,6 +23,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CommonModule,
     RouterModule,
+    MatIconModule,
     NgbDropdownModule
   ],
   exports:[

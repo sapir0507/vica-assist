@@ -38,7 +38,6 @@ export class DropdownSidebarComponent implements OnInit {
   openSidebar(content: TemplateRef<unknown>) {
     this.offcanvasService.open(content, {
       position: 'end',
-      panelClass: 'bg-dark',
       ariaLabelledBy: 'offcanvasNavbarLabel'
     });
   }

@@ -1,4 +1,5 @@
 import { Component, inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { LinkStore } from 'src/app/services/links/link.store';
 import { ILinks } from 'src/app/services/links/links';
 import { SessionStore } from 'src/app/services/session/session.store';
@@ -24,12 +25,15 @@ export class LinksComponent implements OnInit {
 
   private linkStore = inject(LinkStore);
   private sessionStore = inject(SessionStore);
+  private router = inject(Router);
 
   ngOnInit(): void {/* empty */ }
 
-  onLogout(){
-    this.sessionStore.logout()
-    this.linkStore.updateSharedLinks_WhenNotLoggedIn()
+  onLogout(event: Event){
+    event.preventDefault();
+    this.sessionStore.logout();
+    this.linkStore.updateSharedLinks_WhenNotLoggedIn();
+    this.router.navigateByUrl('/homepage');
   }
 
   

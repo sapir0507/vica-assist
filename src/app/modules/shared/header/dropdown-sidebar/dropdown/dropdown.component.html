@@ -1,9 +1,9 @@
 @if (currentLinks) {
-  <li class="nav-item" ngbDropdown display="static">
-    <button type="button" class="nav-link" ngbDropdownToggle>
+  <div ngbDropdown display="static">
+    <button type="button" class="group-toggle" ngbDropdownToggle>
       {{title}}
     </button>
-    <ul class="ddm-bc ddm-s" ngbDropdownMenu>
+    <ul class="group-menu" ngbDropdownMenu>
       <li>
         <app-links
           [currentLinks]="currentLinks"
@@ -12,5 +12,5 @@
         ></app-links>
       </li>
     </ul>
-  </li>
+  </div>
 }

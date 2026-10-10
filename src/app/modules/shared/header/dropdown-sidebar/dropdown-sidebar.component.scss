@@ -1,10 +1,29 @@
-    .dropdown-divider{
-        background-color: gold;
-        opacity: 0.9;
-        width: 80%;
-        margin: 10px auto;
-    }
-    .my-flex-2{
-        display: flex;
-        justify-content: space-around;
-    }
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text);
+  transition: background-color var(--transition-fast);
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+}
+
+.menu-divider {
+  margin: var(--space-3) var(--space-4);
+  border-color: var(--color-border);
+  opacity: 1;
+}
