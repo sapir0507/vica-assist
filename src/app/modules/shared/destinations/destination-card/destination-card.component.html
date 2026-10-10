@@ -1,0 +1,25 @@
+@if (selectable()) {
+  <button
+    type="button"
+    class="destination"
+    role="radio"
+    [class.destination--selected]="selected()"
+    [attr.aria-checked]="selected()"
+    (click)="choose()"
+  >
+    <ng-container *ngTemplateOutlet="content" />
+  </button>
+} @else {
+  <article class="destination">
+    <ng-container *ngTemplateOutlet="content" />
+  </article>
+}
+
+<ng-template #content>
+  <span class="destination__art" [style.background]="destination().gradient" aria-hidden="true">{{ destination().emoji }}</span>
+  <span class="destination__body">
+    <span class="destination__name">{{ destination().name }}</span>
+    <span class="destination__description">{{ destination().description }}</span>
+    <span class="destination__price">Flights from {{ destination().fromPrice | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+  </span>
+</ng-template>
