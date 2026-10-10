@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideAppIcons } from '@vica-assist/shared';
 
+import { OrderStore } from 'src/app/services/order/order.store';
+
 import { UserRequestsModule } from '../user-requests.module';
 import { UserRequestsComponent } from './user-requests.component';
 
@@ -90,6 +92,24 @@ describe('UserRequestsComponent', () => {
 
     expect(host().textContent).toContain('Step 1 of 3');
     expect(component.requestForm.value.destination).toBe('Bali');
+  });
+
+  it('sends the order once and starts over, so it cannot be submitted twice', () => {
+    const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+    component.requestForm.patchValue({
+      origin: 'Tel Aviv',
+      destination: 'Paris',
+      Dates: { departureDate: '2026-06-10', returnDate: '2026-06-17' },
+      passDetails: [{ fullName: 'Dana Levi', passID: '123' }]
+    });
+
+    component.onSubmit();
+
+    expect(addOrder).toHaveBeenCalledTimes(1);
+    expect(addOrder.mock.calls[0][0]).toMatchObject({ destination: 'Paris', origin: 'Tel Aviv', choice: 'both', status: 'pending' });
+    expect(component.step).toBe(0);
+    expect(component.requestForm.value.destination).toBeNull();
+    expect(component.requestForm.valid).toBe(false);
   });
 
   it('rejects a return date before the departure date', () => {

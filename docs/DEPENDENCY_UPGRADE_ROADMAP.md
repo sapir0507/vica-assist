@@ -794,6 +794,30 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   token from `AppModule` pulled form-field into the initial bundle: +88 kB), responsive grids, labelled icon
   buttons and corrected copy; the photo chooser now shows the file names it was always supposed to.
 
+- **Stage 7, homepages and the destination picker (`style/homepage`)**, JS added per route beyond `main`, raw:
+
+  | Route | Before | After |
+  |---|---|---|
+  | agent homepage | 398 kB | 329 kB |
+  | user homepage | 462 kB | 409 kB |
+  | generic homepage | 137 kB | 99 kB |
+
+  Initial bundle 721 kB (unchanged). The generic homepage is now a hero, a six-card trending-destinations grid and
+  a three-point "what we offer" section. The hero is a 132 kB WebP `<img>` (`fetchpriority="high"`, explicit
+  size) instead of a 239 kB CSS background, and the Google font import is gone, so no component stylesheet loads
+  fonts from a CDN any more. The six destinations are a typed constant with gradient and emoji art, so the cards
+  weigh nothing and make no request; real photos can be dropped into `DestinationCardComponent` later. The
+  customer homepage has two action cards ("Book your trip", "Manage bookings") instead of the grid-list and its
+  window-resize handling, and the booking form is a three-step flow (destination, travelers, trip details) with a
+  progress indicator and the destination picker first; a typed destination works too, Next is disabled until the
+  step is valid, and the form model and submitted order are unchanged. The agent homepage got real previous/next
+  buttons (the arrows were clickable spans), a flights/hotels switch, and a token-based order summary replacing
+  the Material card. Fixed on the way: the mobile rule that hides expansion-panel descriptions never applied
+  because Material's own stylesheet loads later at the same specificity, so narrow screens showed clipped
+  descriptions in the agent forms.
+  Also fixed: the booking form kept its values after a submit, so pressing submit again placed a duplicate order;
+  it now starts over at step 1.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend

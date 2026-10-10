@@ -108,7 +108,7 @@ Flights and hotels are tied to an order through the order's id; `HttpResourceSer
 ```
 src/app/
   modules/all_modules/   feature modules (add flight/hotel, final-order, user requests, ...)
-  modules/shared/        header, homepage (+ role-specific pages), login, register, footer
+  modules/shared/        header, homepage (+ role-specific pages), destinations, login, register, footer
   services/              session, order, finalOrder, links stores · auth guards · window-resize service
   data/data.json         json-server database
 projects/
@@ -123,6 +123,12 @@ project.json (per project)        Nx-only configuration (lint targets)
 
 ## Design and engineering decisions
 
+- **Destinations are static sample data.** The six trending destinations, their prices and the destination picker
+  in the booking form come from one typed constant (`modules/shared/destinations`), with gradient and emoji art
+  instead of photos: no request, no image weight, and the picker writes the same `destination` control as the
+  free-text field, so the order sent to the API is unchanged.
+- **The hero is a WebP `<img>`**, not a CSS background, so the browser can prioritise it (`fetchpriority="high"`)
+  and reserve its space; it is 132 kB instead of a 239 kB JPG.
 - **Native date inputs instead of the Material date picker.** The picker cost about 126 kB of JS on every route with
   a date field. Dates are now plain `YYYY-MM-DD` strings with a shared "return not before departure" validator.
 - **Unused Material imports are audited.** Each module's Material imports were compared with the templates in
@@ -234,8 +240,8 @@ high-severity dev-only finding (see below).
   the library folders.
 - **One high-severity `npm audit` finding** (`undici` 7.x, pulled in by the latest `nx`). Dev-only.
 - **Material dominates the lazy routes.** The initial bundle is about 0.72 MB raw (174 kB transferred), inside its
-  750 kB budget, but the agent homepage, user homepage and final-order routes each add 0.4 to 0.46 MB of JS, roughly
-  270 kB of it Angular Material and CDK. Replacing more Material parts with native elements is the next lever.
+  750 kB budget, but the agent homepage, user homepage and final-order routes each add 0.33 to 0.43 MB of JS, roughly
+  150 to 240 kB of it Angular Material and CDK. Replacing more Material parts with native elements is the next lever.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
 

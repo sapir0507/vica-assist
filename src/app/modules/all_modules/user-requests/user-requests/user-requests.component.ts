@@ -134,6 +134,8 @@ export class UserRequestsComponent implements OnInit {
     console.log(newOrder)
     this.orderStore.addOrder(newOrder);
     this.openSnackBar("Order added!")
+    this.requestForm.reset({ order: 'both', price: '0' });
+    this.step = 0;
   }
   }
 

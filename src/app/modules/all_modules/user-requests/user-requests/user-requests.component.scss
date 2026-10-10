@@ -70,7 +70,7 @@
 
 .destination-picker {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
@@ -82,7 +82,7 @@
 
 .traveler {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)) auto;
+  grid-template-columns: 1fr 1fr auto;
   align-items: start;
   gap: var(--space-2) var(--space-4);
   margin-bottom: var(--space-2);
@@ -98,4 +98,10 @@
   justify-content: flex-end;
   gap: var(--space-2);
   margin-top: var(--space-8);
+}
+
+@media (max-width: 40rem) {
+  .traveler {
+    grid-template-columns: 1fr;
+  }
 }
