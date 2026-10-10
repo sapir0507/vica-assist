@@ -1,95 +1,101 @@
-@import url('https://fonts.googleapis.com/css2?family=Acme&family=Alfa+Slab+One&family=Caveat:wght@500&family=Indie+Flower&family=Permanent+Marker&family=Raleway:wght@300&family=Righteous&family=Volkhov&display=swap');
+:host {
+  display: block;
+}
 
-:host{
-    font-size: 20px;
-    .homepage-image{
-        display: block;
-        position: relative;
-        margin: 0 auto;
-        width: 100%;
-        height: 70vh;
-        background: url('../../../../../assets/images/img/homepage-image.jpg') center no-repeat;
-        background-size: cover;
-        .homepage-text{
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            .content{
-                text-shadow: 1px 1px 1px #4c2a87;
-            }
-        }
-    }
-    .background2{
-        background-color: rgb(255, 227, 244);
-        width: 100%;
-        padding-bottom: 34px;
-    }
-    .title{
-        margin-top: 20px;
-        padding: 5px;
-        font-family: 'Permanent Marker', cursive;
-        letter-spacing: 2px;
-        color: #673ab7;
-        text-shadow: 3px 1px 1px #4c2a87;
-        font-size: 3em;
-    }
-    .sub-title{
-        margin-top: 20px;
-        padding: 5px;
-        font-family: 'Permanent Marker', cursive;
-        letter-spacing: 2px;
-        color: #673ab7;
-        text-shadow: 3px 1px 1px #4c2a87;
-        font-size: 2em;
-    }
-    .content{
-        text-shadow: 1px 1px 1px #4c2a87;
-        font-size: 20px;
-    }
-    .sliding-title{
-        position: relative;
-        animation-name: offer;
-        animation-duration: 2s;
+.hero {
+  position: relative;
+  display: grid;
+  min-height: min(32rem, 70vh);
+  overflow: hidden;
+  color: #fff;
+}
 
-        @keyframes offer {
-            from {
-                top: 0px;
-                left: 50px;
-                letter-spacing: 2px;
+.hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-            }
-            to {
-                top: 0px;
-                left: 0px;
-                letter-spacing: 2px;
+.hero__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-12) clamp(var(--space-4), 4vw, var(--space-12));
+  background: linear-gradient(90deg, rgb(17 24 39 / 80%) 0%, rgb(17 24 39 / 55%) 55%, transparent 100%);
+}
 
-            }
-          }
-    }
-    .title-letter-spacing-animation{
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        place-content: center;
-        animation-name: offer;
-        animation-duration: 2s;
+.hero__title {
+  max-width: 18ch;
+  margin: 0;
+  color: inherit;
+}
 
-        @keyframes offer {
-            from {
-                top: 0px;
-                left: 0px;
-                letter-spacing: 10px;
-            }
-            to {
-                top: 0px;
-                left: 0px;
-            }
-          }
-    }
-    .generic-list{
-        font-size: 1em;
-    }
+.hero__lead {
+  max-width: 36rem;
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.hero__cta.mat-mdc-unelevated-button {
+  --mat-button-filled-container-color: var(--color-primary);
+  --mat-button-filled-label-text-color: var(--color-on-primary);
+}
+
+.section {
+  max-width: 75rem;
+  margin-inline: auto;
+  padding: var(--space-12) clamp(var(--space-4), 4vw, var(--space-12));
+}
+
+.section--tinted {
+  max-width: none;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.section__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-3xl);
+}
+
+.section__lead {
+  margin: 0 0 var(--space-6);
+  color: var(--color-text-secondary);
+}
+
+.destination-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-4);
+}
+
+.trust {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-6);
+  max-width: 75rem;
+  margin: var(--space-6) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trust__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-primary);
+}
+
+.trust__title {
+  margin: var(--space-2) 0 var(--space-1);
+  font-size: var(--text-xl);
+}
+
+.trust__text {
+  margin: 0;
+  color: var(--color-text-secondary);
 }

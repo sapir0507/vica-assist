@@ -1,33 +1,38 @@
+<section class="hero">
+  <img
+    class="hero__image"
+    src="assets/images/img/hero.webp"
+    width="1280"
+    height="640"
+    fetchpriority="high"
+    alt=""
+  />
+  <div class="hero__content">
+    <h1 class="hero__title">Your perfect vacation, planned for you</h1>
+    <p class="hero__lead">Tell us where you want to go. Our agents find the flights and hotels that fit your dates and budget.</p>
+    <a mat-flat-button class="hero__cta" routerLink="/register">Start here</a>
+  </div>
+</section>
 
-    <div class="homepage-image">
-        <div class="homepage-text">
-            <h1 class="text-capitalize title title-letter-spacing-animation">vica - assist</h1>
-            <div class="content text-dark p-2">
-                <h1 class="text-capitalize">Your fateful assistant for a perfect vication ✈</h1>
-            </div>
-            <button 
-                mat-raised-button 
-                color="primary" 
-                class="text-capitalize md-shadow-animated shadow button btn" 
-                (click)="registerPage.click()">Start Here</button>
-            <a routerLink="/register" style="display: none;" #registerPage></a>
-        </div>
-    </div>
-    <div class="container-fluid background2">
-        <div class="row">
-            <h1 class="sub-title">What do We Offer?</h1>
-            <div>
-                <mat-list>
-                    <mat-list-item class="content">
-                        Get your perfect vacation using the latest technology! All you need to do is fill in the crutioul details and our team will find the best flights and hotels for you!
-                    </mat-list-item>
-                    <mat-list-item class="content">
-                        Easy to read, all in one place and tailored to your spacific needs!                         
-                        Create an account, log in and place your order. Yes, it's that simple.
-                    </mat-list-item>
-                   
-                </mat-list>
-                
-            </div>
-        </div>
-    </div>
+<section class="section" aria-labelledby="trending-title">
+  <h2 id="trending-title" class="section__title">Trending destinations</h2>
+  <p class="section__lead">Popular picks to get you started. Sign up to book any of them.</p>
+  <div class="destination-grid">
+    @for (destination of destinations; track destination.name) {
+      <destination-card [destination]="destination" />
+    }
+  </div>
+</section>
+
+<section class="section section--tinted" aria-labelledby="trust-title">
+  <h2 id="trust-title" class="section__title">What do we offer?</h2>
+  <ul class="trust">
+    @for (point of trustPoints; track point.title) {
+      <li class="trust__item">
+        <mat-icon class="trust__icon" [svgIcon]="point.icon" aria-hidden="true"></mat-icon>
+        <h3 class="trust__title">{{ point.title }}</h3>
+        <p class="trust__text">{{ point.text }}</p>
+      </li>
+    }
+  </ul>
+</section>
