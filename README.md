@@ -94,7 +94,8 @@ Flights and hotels are tied to an order through the order's id; `HttpResourceSer
 |---|---|
 | Framework | Angular 22 (NgModule-based, lazy-loaded routes), zone.js |
 | Language | TypeScript 6.0 |
-| UI | Angular Material 22 + Bootstrap 5 + ng-bootstrap (header offcanvas and dropdowns) |
+| UI | Angular Material 22 (Material 3 theme) + a slimmed Bootstrap 5 + ng-bootstrap (header offcanvas and dropdowns) |
+| Styling | CSS custom property design tokens with a `prefers-color-scheme` dark theme; self-hosted Inter and DM Sans; inlined SVG icons |
 | State | NgRx Signals (`signalStore`) |
 | Build | `@angular/build` (esbuild / Vite) and ng-packagr for the libraries |
 | Tests | Vitest through `@angular/build:unit-test` |
@@ -122,6 +123,14 @@ project.json (per project)        Nx-only configuration (lint targets)
 
 ## Design and engineering decisions
 
+- **Design tokens as CSS custom properties.** Colors, typography and spacing live in
+  `src/assets/styles/design-system/` and switch to a dark palette through `prefers-color-scheme`; the Material 3
+  theme and Bootstrap read from the same brand colors. Components consume `var(--…)` instead of hex values.
+- **Lean global CSS.** Bootstrap is imported by part (only what the templates use, with trimmed utilities) and
+  Material uses its Material 3 `mat.theme` instead of a prebuilt theme, so global styles went from 334 kB to
+  123 kB raw (31 kB to 14 kB transferred).
+- **No third-party font or icon requests.** Inter and DM Sans are served from the app (Latin subset), and the 24
+  icons are inlined SVG strings registered through `provideAppIcons()` from `@vica-assist/shared`.
 - **Signal stores instead of services with subjects.** Each domain has one `signalStore`. Templates read
   signals directly, which is what lets every component run `OnPush` (below).
 - **`OnPush` everywhere.** Angular 22 makes it the default, and the upgrade migration first marked every

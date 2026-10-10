@@ -55,7 +55,8 @@ are done (see Phase 5 and Phase 7 of the dependency upgrade roadmap for the buil
    has deprecated; it now uses `@use "mixin"` with `mixin.times8(...)` and compiles to byte-identical CSS.
    Nothing imports `global.scss`, `global.css`, `mixin.css` or `media.css` any more, so they may be dead. The `@import url(...)` Google Fonts lines in component styles are plain CSS and
    fine.
-6. **Global Bootstrap and Material together.** Bootstrap CSS (`@use "bootstrap/scss/bootstrap"`)
+6. **Partly done: global Bootstrap and Material together.** Material now uses a Material 3 `mat.theme` and Bootstrap
+   is imported by part (see Phase 10 of the dependency upgrade roadmap); both read the same design tokens. Original note: Bootstrap CSS (`@use "bootstrap/scss/bootstrap"`)
    and Material's prebuilt `deeppurple-amber.css` are both loaded globally. Revisit with the
    restyle.
 
