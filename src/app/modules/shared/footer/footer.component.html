@@ -1,10 +1,45 @@
 <footer class="site-footer">
-  <div class="site-footer__inner">
-    <p class="brand">
-      <mat-icon class="brand__icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
-      <span class="brand__name">vica-assist</span>
-    </p>
-    <p class="site-footer__tagline">Flights and hotels, planned together.</p>
-    <p class="site-footer__note">&copy; {{ year }} vica-assist. A portfolio demo: no real bookings are made.</p>
+  <div class="site-footer__grid">
+    <div class="site-footer__about">
+      <p class="site-footer__brand">
+        <mat-icon class="site-footer__brand-icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
+        <span>vica-assist</span>
+      </p>
+      <p class="site-footer__tagline">
+        Flights and hotels, planned together. Customers describe a trip and agents put the pieces in place.
+      </p>
+    </div>
+
+    <nav class="site-footer__column" aria-label="Footer">
+      <h2 class="site-footer__heading">Explore</h2>
+      <ul>
+        <li><a routerLink="/homepage">Homepage</a></li>
+        <li><a routerLink="/login">Login</a></li>
+        <li><a routerLink="/register">Register</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-footer__column">
+      <h2 class="site-footer__heading">Customers</h2>
+      <ul>
+        <li>Request a trip</li>
+        <li>Choose a flight and a hotel</li>
+        <li>Follow your orders</li>
+      </ul>
+    </div>
+
+    <div class="site-footer__column">
+      <h2 class="site-footer__heading">Agents</h2>
+      <ul>
+        <li>Add flights</li>
+        <li>Add hotels</li>
+        <li>Finish customer orders</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <p>&copy; {{ year }} vica-assist</p>
+    <p>A portfolio demo: no real bookings are made.</p>
   </div>
 </footer>
