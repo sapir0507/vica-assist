@@ -92,6 +92,20 @@ describe('SessionStore', () => {
     });
   });
 
+  describe('logout', () => {
+    it('resets the session, including the role', () => {
+      store.siteLogin('user', 'pass').subscribe();
+      httpMock.expectOne(r => r.url === url).flush([{ username: 'user', password: 'pass', role: 'agent' }]);
+      expect(store.role()).toBe('agent');
+
+      store.logout();
+
+      expect(store.isLoggedIn()).toBe(false);
+      expect(store.role()).toBe('unknown');
+      expect(store.username()).toBe('');
+    });
+  });
+
   describe('field updates', () => {
     it('updateUsername updates the store', () => {
       store.updateUsername('new-name');

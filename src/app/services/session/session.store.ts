@@ -87,7 +87,7 @@ export const SessionStore = signalStore(
         patchState(store, { role: newRole });
       },
       logout() {
-        patchState(store, { isLoggedIn: false });
+        patchState(store, { ...initialState });
       }
     };
   })
