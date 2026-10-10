@@ -123,6 +123,10 @@ project.json (per project)        Nx-only configuration (lint targets)
 
 ## Design and engineering decisions
 
+- **Native date inputs instead of the Material date picker.** The picker cost about 126 kB of JS on every route with
+  a date field. Dates are now plain `YYYY-MM-DD` strings with a shared "return not before departure" validator.
+- **Unused Material imports are audited.** Each module's Material imports were compared with the templates in
+  its own scope, and 20 unused ones were removed; the strict template compiler guards against regressions.
 - **Design tokens as CSS custom properties.** Colors, typography and spacing live in
   `src/assets/styles/design-system/` and switch to a dark palette through `prefers-color-scheme`; the Material 3
   theme and Bootstrap read from the same brand colors. Components consume `var(--…)` instead of hex values.
@@ -229,15 +233,15 @@ high-severity dev-only finding (see below).
   The Nx graph also shows no edges from the app to the libraries, because the root project at `.` overlaps
   the library folders.
 - **One high-severity `npm audit` finding** (`undici` 7.x, pulled in by the latest `nx`). Dev-only.
-- **Initial bundle is over budget** (about 0.92 MB raw, 186 kB transferred, against a 500 kB warning). Roughly
-  a third is 334 kB of CSS (the full Bootstrap build plus the Material theme). It is a warning, not an error.
+- **Material dominates the lazy routes.** The initial bundle is about 0.72 MB raw (174 kB transferred), inside its
+  750 kB budget, but the agent homepage, user homepage and final-order routes each add 0.4 to 0.46 MB of JS, roughly
+  270 kB of it Angular Material and CDK. Replacing more Material parts with native elements is the next lever.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
 
 ## Future improvements
 
 - A real authentication backend (see Security considerations) and persisting the session.
-- Trim the global CSS (import only the Bootstrap parts in use) to meet the bundle budget.
 - Move from NgModules to standalone components, and zoneless change detection now that every component is
   `OnPush`.
 - Extract the duplicated flight services into one.

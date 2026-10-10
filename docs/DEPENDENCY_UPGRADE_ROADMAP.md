@@ -764,6 +764,35 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   button was an unstyled browser button because `OrderListItemComponent` never imported `MatButtonModule`; it is
   fixed and covered by a spec. The three component stylesheets were deleted, and the three smoke specs became
   behavioural specs (rendering, the agent/customer button rules, empty state, and the final-order store hand-off).
+- **Stage 6, libraries and the Material surface (`style/libraries`)**, planned in its own session, measured with
+  the esbuild metafile (JS added per route beyond `main`, raw):
+
+  | Route | Before | After |
+  |---|---|---|
+  | add-flight | 533 kB | 337 kB |
+  | add-hotel | 468 kB | 303 kB |
+  | final-order | 654 kB | 450 kB |
+  | agent homepage | 655 kB | 398 kB |
+  | user homepage | 675 kB | 462 kB |
+  | generic homepage | 213 kB | 137 kB |
+
+  Initial bundle 739 kB → 721 kB, global CSS 123 → 131 kB (new form, page and card patterns), `dist` 2.9 MB →
+  1.9 MB. What did it: (1) an audit of each module's Material imports against its own templates removed 20
+  unused ones (button toggle, slider, checkbox, sort, table, tabs, list, card, divider, ...); (2) native date
+  inputs replaced the Material date range picker (about 126 kB per route), with prefill converting old
+  UTC-midnight timestamps back to the local day; (3) two unneeded `ItemModule` imports (in `my-flights` and
+  `final-order`) were dropped; (4) nine images (about 0.9 MB, e.g. a 289 kB icon shown at 25 px) were deleted
+  once the hotel card stopped using them; (5) the unused `mat-input` library was deleted.
+
+  A mistake worth recording: the plan first called the `item` library dead because its `/choose-*` routes are
+  commented out. It is not: the customer's final-order screen embeds the choose-flight and choose-hotel pickers,
+  which render the item cards. The library was kept and restyled (tokens, SVG icons, no Google fonts, the hotel
+  card's three identical clip-art "photos" replaced by the hotel's own image or a placeholder), and only the two
+  dead menu links were removed. Also fixed: each picker made three HTTP calls (two `async` pipes plus a dead
+  `subscribe`) and the page a fourth, so a final-order visit now makes 1 hotel and 1 flight call instead of 3 and 4;
+  the agent forms got one outline form-field look (provided from the lazy modules, because providing Material's
+  token from `AppModule` pulled form-field into the initial bundle: +88 kB), responsive grids, labelled icon
+  buttons and corrected copy; the photo chooser now shows the file names it was always supposed to.
 
 ## Out of scope
 
