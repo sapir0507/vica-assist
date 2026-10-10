@@ -710,8 +710,8 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   class used in the templates against the full build to confirm nothing was dropped. Bootstrap is not Sass-module
   ready, so it uses `@import`; that deprecation is silenced in `angular.json` for this one entry point.
 - **Fonts and icons:** Inter and DM Sans (`@fontsource-variable`, Latin subset only, `font-display: swap`) replace
-  Roboto and eight Google families; Font Awesome and the Material Icons font are replaced by 24 inlined SVG
-  icons (21 Material Icons, Apache-2.0, plus Facebook/X/Google from Simple Icons, CC0). The three invalid
+  Roboto and eight Google families; Font Awesome and the Material Icons font are replaced by inlined SVG
+  icons (23 Material Icons, Apache-2.0; the unused Facebook/X/Google brand icons were dropped again in stage 4). The three invalid
   `mat-icon` ligatures left by the migration were fixed.
 - **Removed:** 30 unreferenced compiled `.css` twins, the unused `global.scss`/`mixin.scss`, eight unused
   images (about 230 kB) and the unused Google sign-in script.
@@ -744,6 +744,17 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   a `role="alert"` linked to both inputs, labels are bound with `for`/`id`, `autocomplete` hints are set, and
   the button shows "Logging in…" while the request runs. The old `login.component.scss` was deleted with the
   rewrite. Specs cover labels, empty submit and the failure alert.
+- **Stage 4, register (`style/register`)** and a one-screen rule for both auth pages: the page, header and footer
+  fit without scrolling at 1920×1080, 1366×768, 1280×720 and 1024×768, and the whole card is above the fold on
+  360×740 and 390×844 phones (login needs no scrolling at all on 390×844). To get there, `main` is a flex column,
+  the auth pages fill the space between header and footer, the cards are compact (default-size controls, a
+  two-column register form), the footer is shorter, and its Customers/Agents columns are hidden on phones. The
+  register form got unique field ids (Password and Role shared one), a Customer/Agent choice instead of a
+  free-text role box (default Customer; the payload is unchanged), an email validator, per-field messages, and an
+  empty or invalid submit no longer sends a request. `autocomplete="new-password"` and bound labels were added.
+  The commented-out social login icons, and the three brand icons only they used, were removed. Known gap, left
+  as is: registering still gives no on-screen confirmation (`RegisterService.addRegister` subscribes internally
+  and only logs), and anyone can still choose Agent (see the README's security notes).
 
 ## Out of scope
 

@@ -129,7 +129,7 @@ project.json (per project)        Nx-only configuration (lint targets)
 - **Lean global CSS.** Bootstrap is imported by part (only what the templates use, with trimmed utilities) and
   Material uses its Material 3 `mat.theme` instead of a prebuilt theme, so global styles went from 334 kB to
   123 kB raw (31 kB to 14 kB transferred).
-- **No third-party font or icon requests.** Inter and DM Sans are served from the app (Latin subset), and the 24
+- **No third-party font or icon requests.** Inter and DM Sans are served from the app (Latin subset), and the 23
   icons are inlined SVG strings registered through `provideAppIcons()` from `@vica-assist/shared`.
 - **Signal stores instead of services with subjects.** Each domain has one `signalStore`. Templates read
   signals directly, which is what lets every component run `OnPush` (below).
