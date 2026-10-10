@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MyFlightsService } from '@vica-assist/my-flights';
 import { Flights, Hotel } from '@vica-assist/shared';
 import { FinalOrderState, FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 
@@ -8,7 +7,6 @@ import { FinalOrderState, FinalOrderStore } from 'src/app/services/finalOrder/fi
   standalone: false,
   selector: 'app-final-order',
   templateUrl: './final-order.component.html',
-  styleUrls: ['./final-order.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinalOrderComponent implements OnInit {
@@ -16,7 +14,6 @@ export class FinalOrderComponent implements OnInit {
 
   protected finalOrderStore = inject(FinalOrderStore);
   private router = inject(Router);
-  private flightService = inject(MyFlightsService);
 
   constructor(
     private route: ActivatedRoute
@@ -39,15 +36,6 @@ export class FinalOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.myParam = this.route.snapshot.paramMap.get('id'); //gets the id param from the url
-    if(this.myParam){
-      this.getFlight(this.myParam)
-    }
-  }
-
-  private getFlight(flightID: string){
-    this.flightService.getFlightsByOrderID(flightID).subscribe(data=>{
-       console.log(data)
-    })
   }
 
   onChosenFlight(Chosenflight: Flights){

@@ -1,17 +1,13 @@
-@if (_ALLFlights$ | async) {
-  <div class="container-fluid">
-    @for (flight of _ALLFlights$ | async; track flight.id) {
-      <div>
-        <div class="choose-flights container-fluid">
-          <item
-            class="container-fluid flight-item"
-            (chosenFlight)="onChosenFlight($event)"
-            [item_type]="ItemType.Flight"
-            [flight]="flight">
-          </item>
-          <!-- <button class="">Final Choice</button> -->
-        </div>
-      </div>
+@if (_ALLFlights$ | async; as flights) {
+  <div class="choice-grid">
+    @for (flight of flights; track flight.id) {
+      <item
+        [item_type]="ItemType.Flight"
+        [flight]="flight"
+        (chosenFlight)="onChosenFlight($event)"
+      ></item>
+    } @empty {
+      <p class="choice-grid__empty">No flights have been added for this order yet.</p>
     }
   </div>
 }

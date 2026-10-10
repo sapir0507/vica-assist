@@ -375,3 +375,38 @@ app-register {
   background: color-mix(in srgb, var(--color-success) 16%, transparent);
   color: var(--color-success);
 }
+
+// A routed page: a centred column with a title.
+.page {
+  max-width: 75rem;
+  margin-inline: auto;
+  padding: var(--space-8) clamp(var(--space-4), 4vw, var(--space-12));
+}
+
+.page__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-3xl);
+}
+
+.page__subtitle {
+  margin: 0 0 var(--space-6);
+  color: var(--color-text-secondary);
+}
+
+// Cards to choose from (hotels, flights).
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+}
+
+.choice-grid__empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: var(--space-8) var(--space-4);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+}

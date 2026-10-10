@@ -6,7 +6,6 @@ import { FinalOrderComponent } from './final-order.component';
 import { UserFinishedOrderModule } from '../user-finished-order/user-finished-order.module';
 import { ChooseFlightModule } from '../choose-flight/choose-flight.module';
 import { ChooseHotelModule } from '../choose-hotel/choose-hotel.module';
-import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 
 
@@ -17,7 +16,6 @@ import { MatTabsModule } from '@angular/material/tabs';
   ],
   imports: [
     CommonModule,
-    MatCardModule,
     MatTabsModule,
 
     ChooseFlightModule,

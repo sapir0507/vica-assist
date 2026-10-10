@@ -1,47 +1,19 @@
-<div class="">
-    <div class="title h2 text-center text-capitalize m-3">
-        title
-    </div>
-    
+<section class="page">
+  <h1 class="page__title">Choose your hotel and flight</h1>
+  <p class="page__subtitle">Pick one of each from the options your agent added to this order.</p>
 
-        <mat-tab-group backgroundColor="primary" color="accent">
-            <mat-tab label="Hotel">
-                <div class="hotel mat-elevation-z5">
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>Hotel</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <app-choose-hotel
-                                (chosenHotel)="onChosenHotel($event)"
-                                [orderID]="myParam"
-                            ></app-choose-hotel>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-            </mat-tab>
-            <mat-tab label="Flight">
-                <div class="flight mat-elevation-z5">
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>
-                                Flight
-                            </mat-card-title>
-                        </mat-card-header>
-                        <app-choose-flight
-                            (chosenFlight)="onChosenFlight($event)"
-                            [orderID]="myParam"
-                            
-                        >
-                        </app-choose-flight>
-                    </mat-card>
-                </div>
-            </mat-tab>
-        </mat-tab-group>
-        
-        
-        
-        
-    
-
-</div>
+  <mat-tab-group>
+    <mat-tab label="Hotel">
+      <app-choose-hotel
+        (chosenHotel)="onChosenHotel($event)"
+        [orderID]="myParam"
+      ></app-choose-hotel>
+    </mat-tab>
+    <mat-tab label="Flight">
+      <app-choose-flight
+        (chosenFlight)="onChosenFlight($event)"
+        [orderID]="myParam"
+      ></app-choose-flight>
+    </mat-tab>
+  </mat-tab-group>
+</section>

@@ -1,13 +1,13 @@
-@if (_allHotels$ | async) {
-  <div class="choose-hotels">
-    <h1>Hotels</h1>
-    @for (hotel of _allHotels$ | async; track hotel.id) {
+@if (_allHotels$ | async; as hotels) {
+  <div class="choice-grid">
+    @for (hotel of hotels; track hotel.id) {
       <item
         [item_type]="ItemType.Hotel"
         [hotel]="hotel"
         (chosenHotel)="onChooseHotel($event)"
       ></item>
+    } @empty {
+      <p class="choice-grid__empty">No hotels have been added for this order yet.</p>
     }
   </div>
 }
-
