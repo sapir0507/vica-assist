@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { DestinationCardComponent } from '../../shared/destinations/destination-card/destination-card.component';
 import { UserRequestsComponent } from './user-requests/user-requests.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -22,15 +21,15 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/mat
     UserRequestsComponent
   ],
   imports: [
-    MatExpansionModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule,    MatSelectModule,
+    MatSelectModule,
     MatInputModule,
     MatRadioModule,
     MatSnackBarModule,
     MatFormFieldModule,
 
+    DestinationCardComponent,
     ReactiveFormsModule,
     CommonModule
   ],

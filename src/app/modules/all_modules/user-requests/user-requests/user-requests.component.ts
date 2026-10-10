@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, effect, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, effect, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { dateRangeValidator, OrderRequest, passDetails } from '@vica-assist/shared';
+import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
 
 @Component({
   standalone: false,
@@ -15,7 +15,8 @@ import { dateRangeValidator, OrderRequest, passDetails } from '@vica-assist/shar
 })
 export class UserRequestsComponent implements OnInit {
 
-  @ViewChild(MatAccordion) accordion?: MatAccordion;
+  readonly steps = ['Destination', 'Travelers', 'Trip details'];
+  readonly destinations = DESTINATIONS;
   step = 0;
   orderID: string | null = null;
   requestForm: FormGroup = this.fb.group({
@@ -80,8 +81,18 @@ export class UserRequestsComponent implements OnInit {
 
   ngOnInit(): void {/* empty*/}
 
-  setStep(index: number){
-    this.step = index;
+  get canContinue(): boolean {
+    if (this.step === 0) return this.requestForm.controls['destination'].valid;
+    if (this.step === 1) return this.passDetails.valid;
+    return true;
+  }
+
+  isSelected(destination: Destination): boolean {
+    return this.requestForm.value.destination?.trim().toLowerCase() === destination.name.toLowerCase();
+  }
+
+  selectDestination(destination: Destination) {
+    this.requestForm.patchValue({ destination: destination.name });
   }
 
   nextStep() {
