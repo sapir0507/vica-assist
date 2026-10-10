@@ -755,6 +755,15 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   The commented-out social login icons, and the three brand icons only they used, were removed. Known gap, left
   as is: registering still gives no on-screen confirmation (`RegisterService.addRegister` subscribes internally
   and only logs), and anyone can still choose Agent (see the README's security notes).
+- **Stage 5, order list (`style/order-list`)**: `orders-list` (the single order the agent homepage pages through),
+  `order-list-item` and `order-status-list` (the customer's pending/finished tabs) share one `.order-card`,
+  `.chip` and `.order-grid` pattern in the design system: a title with a pending/finished status chip, a
+  labelled details list (made by, trip type, route, dates, which the old cards did not show) and a clear "Open
+  order" action. Lists are a responsive grid with an empty state ("No pending orders yet."). The icon-only
+  disabled button for finished orders now says "Finished". A real bug surfaced in the screenshots: the list card's
+  button was an unstyled browser button because `OrderListItemComponent` never imported `MatButtonModule`; it is
+  fixed and covered by a spec. The three component stylesheets were deleted, and the three smoke specs became
+  behavioural specs (rendering, the agent/customer button rules, empty state, and the final-order store hand-off).
 
 ## Out of scope
 
