@@ -1,62 +1,54 @@
-<div class="login">
-  <div class="container-fluid max-login-width">
-    <div class="">
-      <div class="my-login-form">
-        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="BK-1 container-md container-sm ">
+<div class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-card__title">Welcome back</h1>
+    <p class="auth-card__subtitle">Log in to manage your trips.</p>
 
-          <section class="gradient-custom">
-            <div class="container py-5 h-99">
-              <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                  <div class="card bg-dark text-white " style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center max-vw-50">
+    @if (myError()) {
+      <p id="login-error" class="auth-alert" role="alert">
+        We couldn't log you in. Check your username and password and try again.
+      </p>
+    }
 
-                      <div class="mb-md-5 mt-md-4 pb-5">
-
-                        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                        <p class="text-white-50">Please enter your login and password!</p>
-
-                        @if (myError()) {
-                          <div>
-                            <div class="text-warning m-1">
-                              <p>
-                                Something went wrong!
-                              </p>
-                              Username or Password are Invalid.
-                            </div>
-                          </div>
-                        }
-
-
-                        <div class="form-outline form-white mb-4 mt-5"> <label class="form-label" for="typeUsernameX">Username</label>
-                        <input type="text" id="typeUsernameX" class="form-control form-control-lg" formControlName="username"/>
-
-                      </div>
-
-                      <div class="form-outline form-white mb-4"><label class="form-label" for="typePasswordX">Password</label>
-                      <input type="password" id="typePasswordX" class="form-control form-control-lg" formControlName="password"/>
-
-                    </div>
-
-                    <!-- <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p> -->
-
-                    <button class="container btn btn-outline-light btn-lg px-5" type="submit" [disabled]="sessionStore.isLoading()">Login</button>
-
-                  </div>
-
-                  <div>
-                    <p class="mb-0">Don't have an account? <a [routerLink]="'/register'" class="text-white-50 fw-bold">Sign Up</a>
-                  </p>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
+    <form class="auth-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()" novalidate>
+      <div class="auth-field">
+        <label for="login-username">Username</label>
+        <input
+          id="login-username"
+          class="form-control form-control-lg"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          required
+          [attr.aria-describedby]="myError() ? 'login-error' : null"
+        />
+        @if (formGroup.controls.username.touched && formGroup.controls.username.invalid) {
+          <p class="auth-field__error">Enter your username.</p>
+        }
       </div>
-    </section>
-  </form>
-</div>
-</div>
-</div>
+
+      <div class="auth-field">
+        <label for="login-password">Password</label>
+        <input
+          id="login-password"
+          class="form-control form-control-lg"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          required
+          [attr.aria-describedby]="myError() ? 'login-error' : null"
+        />
+        @if (formGroup.controls.password.touched && formGroup.controls.password.invalid) {
+          <p class="auth-field__error">Enter your password (at least 4 characters).</p>
+        }
+      </div>
+
+      <button class="btn btn-primary btn-lg w-100" type="submit" [disabled]="sessionStore.isLoading()">
+        {{ sessionStore.isLoading() ? 'Logging in…' : 'Log in' }}
+      </button>
+    </form>
+
+    <p class="auth-card__footer">
+      Don't have an account? <a routerLink="/register">Create one</a>
+    </p>
+  </div>
 </div>

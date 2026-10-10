@@ -14,8 +14,7 @@ const navigationExtras: NavigationExtras = {
   standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./login.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
 
@@ -35,6 +34,10 @@ export class LoginComponent implements OnInit {
    ngOnInit(): void {/* empty*/}
 
   onSubmit(){
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
     this.myError.set(false);
     this.sessionStore.login(this.formGroup.value['username'] ?? undefined, this.formGroup.value['password'] ?? undefined)
       ?.subscribe(() => {

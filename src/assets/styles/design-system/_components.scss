@@ -96,3 +96,112 @@ a {
     transform: none;
   }
 }
+
+// Bootstrap keeps its own light and dark values; point them at the design tokens.
+:root {
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
+  --bs-border-color: var(--color-border);
+  --bs-secondary-color: var(--color-text-secondary);
+  --bs-link-color: var(--color-primary);
+  --bs-link-hover-color: var(--color-primary-hover);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--color-primary);
+  --bs-btn-border-color: var(--color-primary);
+  --bs-btn-color: var(--color-on-primary);
+  --bs-btn-hover-bg: var(--color-primary-hover);
+  --bs-btn-hover-border-color: var(--color-primary-hover);
+  --bs-btn-hover-color: var(--color-on-primary);
+  --bs-btn-active-bg: var(--color-primary-hover);
+  --bs-btn-active-border-color: var(--color-primary-hover);
+  --bs-btn-active-color: var(--color-on-primary);
+  --bs-btn-disabled-bg: var(--color-primary);
+  --bs-btn-disabled-border-color: var(--color-primary);
+  --bs-btn-disabled-color: var(--color-on-primary);
+  --bs-btn-focus-shadow-rgb: 124, 58, 237;
+  border-radius: var(--radius-pill);
+  font-weight: var(--weight-semibold);
+}
+
+.form-control {
+  --bs-body-bg: var(--color-surface);
+  border-radius: var(--radius-md);
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+}
+
+// Auth pages (login, register): a centred card on a soft brand wash.
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: var(--space-8) var(--space-4);
+  background:
+    radial-gradient(60rem 28rem at 50% -8%, color-mix(in srgb, var(--color-primary) 16%, transparent), transparent),
+    var(--color-bg);
+}
+
+.auth-card {
+  width: min(100%, 26rem);
+  padding: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-card__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-3xl);
+}
+
+.auth-card__subtitle {
+  margin: 0 0 var(--space-6);
+  color: var(--color-text-secondary);
+}
+
+.auth-card__footer {
+  margin: var(--space-6) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.auth-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.auth-field {
+  label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+  }
+
+  input.ng-invalid.ng-touched {
+    border-color: var(--color-danger);
+  }
+}
+
+.auth-field__error {
+  margin: var(--space-1) 0 0;
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+}
+
+.auth-alert {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--color-danger) 45%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  font-size: var(--text-sm);
+}
