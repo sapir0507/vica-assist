@@ -719,6 +719,14 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   homepage and item restyles; image optimization (navbar logo, hotel icons, hero) is done in the stage that
   uses each image. The initial budget is now 750 kB warning / 1 MB error and tightens as stages land.
 
+### Restyle stages
+
+- **Stage 1, header (`style/navbar`)**: navbar, links, dropdown and mobile sidebar on the tokens, light and dark,
+  checked with headless Chrome at 1280 and 390 px (including the open menu). Found and fixed: the Logout link was
+  never wired to `onLogout()`, so it did not log anyone out; `SessionStore.logout()` also kept the role and
+  username. Both are now fixed with specs. The mobile menu still shows the "customers" and "agents" link groups to
+  everyone, including the disabled `/choose-*` links; that is unchanged behaviour, left for a decision.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend
