@@ -728,7 +728,9 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   everyone, including the disabled `/choose-*` links; that is unchanged behaviour, left for a decision.
 - **Stage 2, footer and app shell (`style/footer`)**: `FooterComponent` was an empty stub that was never rendered,
   and its module registered an empty-path `forChild` route (the same trap as the `/` bug). It is now a standalone
-  component (brand, tagline, copyright year, "portfolio demo, no real bookings"), the unused `FooterModule` and
+  component on its own footer color tokens (brand and tagline, an Explore link column, what customers and
+  agents can do, and a bottom bar with the year and the "portfolio demo, no real bookings" note; one column on phones,
+  two on tablets, four on desktop), the unused `FooterModule` and
   `FooterRoutingModule` were deleted, and `AppComponent` renders header, `<main id="main-content">` and footer in
   a full-height flex column with a "skip to main content" link. The old `app.component.scss` painted every element
   of the shell black, which showed through the translucent header; it is gone. The login page overlaps the footer
