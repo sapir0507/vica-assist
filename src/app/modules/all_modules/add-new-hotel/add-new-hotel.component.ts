@@ -4,8 +4,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   standalone: false,
   selector: 'app-add-new-hotel',
   templateUrl: './add-new-hotel.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./add-new-hotel.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddNewHotelComponent {
 

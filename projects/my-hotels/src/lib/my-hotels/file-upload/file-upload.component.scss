@@ -1,6 +1,15 @@
-:host{
-    .file-input{
-        display: none;
-      }
-      
+.file-input {
+  display: none;
+}
+
+.file-upload {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.file-upload__name {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }

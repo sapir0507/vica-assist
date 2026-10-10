@@ -2,19 +2,21 @@
 
   <form [formGroup]="newHotelForm" class="newHotelForm" (ngSubmit)="addHotel()">
 
-    <mat-accordion class="example-headers-align">
+    <mat-accordion>
       <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Custumer Details
+            Guests
           </mat-panel-title>
           <mat-panel-description>
-            type what kind of hotel you plan to stay in
+            How many guests and how good the hotel is
             <mat-icon color="primary" svgIcon="hotel" aria-hidden="true"></mat-icon>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-form-field appearance="fill" class="mx-2">
+        <div class="form-grid">
+
+        <mat-form-field>
           <mat-label>Number of Guests</mat-label>
           <mat-select formControlName="guests">
             @for (item of [1,2,3,4,5]; track item) {
@@ -23,7 +25,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field>
           <mat-label>Stars</mat-label>
           <mat-select formControlName="stars">
             @for (item of [1,2,3,4,5]; track item) {
@@ -31,6 +33,7 @@
             }
           </mat-select>
         </mat-form-field>
+        </div>
 
         <mat-action-row>
           <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
@@ -48,20 +51,22 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-form-field appearance="fill" class="mx-2">
+        <div class="form-grid">
+
+        <mat-form-field>
           <mat-label>Name</mat-label>
           <input matInput type="text" formControlName="name">
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>breakfast</mat-label>
+        <mat-form-field>
+          <mat-label>Breakfast</mat-label>
           <mat-select formControlName="breakfast">
             <mat-option value="true">Included</mat-option>
             <mat-option value="false">Not Included</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field>
           <mat-label>Bed Type</mat-label>
           <mat-select formControlName="bedType">
             <mat-option value="Queen Bed">Queen Bed</mat-option>
@@ -70,16 +75,17 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Cancelation</mat-label>
+        <mat-form-field>
+          <mat-label>Cancellation</mat-label>
           <mat-select formControlName="cancelation">
             <mat-option value="included">Included</mat-option>
             <mat-option value="not included">Not Included</mat-option>
           </mat-select>
         </mat-form-field>
+        </div>
 
         <mat-action-row>
-          <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
+          <button mat-button color="primary" type="button" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
         </mat-action-row>
 
@@ -87,35 +93,37 @@
       <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Total
+            Price and photos
           </mat-panel-title>
           <mat-panel-description>
-            type final order details
+            What it costs and what it looks like
             <mat-icon color="primary" svgIcon="attach_money" aria-hidden="true"></mat-icon>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <mat-form-field appearance="fill" class="mx-2">
-          <mat-label>More Information</mat-label>
+        <div class="form-grid">
+
+        <mat-form-field>
+          <mat-label>More information</mat-label>
           <input matInput type="text" formControlName="moreInfo">
         </mat-form-field>
 
-        <mat-form-field appearance="fill" floatLabel="always">
-          <mat-label>price</mat-label>
+        <mat-form-field floatLabel="always">
+          <mat-label>Price</mat-label>
           <input matInput type="number" class="" placeholder="0" formControlName="price">
           <span matPrefix>$&nbsp;</span>
         </mat-form-field>
 
-        <div class="mb-2">
+        <div class="form-grid__full">
           <fileUploader
             (files)="onImagesChosen($event)"
           ></fileUploader>
         </div>
-
+        </div>
 
         <mat-action-row>
-          <button mat-button color="primary" type="button" (click)="prevStep()">Prev</button>
-          <button mat-raised-button color="primary" type="submit" value="submit" id="liveToastBtn" class="btn">Submit</button>
+          <button mat-button color="primary" type="button" (click)="prevStep()">Previous</button>
+          <button mat-flat-button color="primary" type="submit">Add hotel</button>
         </mat-action-row>
 
       </mat-expansion-panel>

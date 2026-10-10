@@ -1,71 +1,18 @@
 :host {
-  .mat-mdc-card{
-    width: 600px;
-  }
-  .add-new-hotel {
-    display: grid;
-    position: relative;
+  display: block;
+}
 
-    grid-template-columns: 1fr;
-    align-content: center;
+.add-new-hotel {
+  max-width: 44rem;
+}
 
-    h1 {
-      text-align: center;
-      text-decoration: underline solid;
-      text-transform: capitalize;
-      color: rgb(186, 10, 10);
-    }
+.newHotelForm {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
 
-    .newHotelForm {
-      display: grid;
-      position: relative;
-      grid-template-columns: repeat(1, 1fr);
-      align-content: center;
-      // width: 50%;
-      margin: 0 auto;
-      font-size: 20px;
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      border: 2px outset rgba(255, 255, 255, 0.5);
-      border-radius: 10px;
-      background-color: whitesmoke;
-      padding: 50px;
-
-    }
-  }
-
-  .example-headers-align .mat-expansion-panel-header-title,
-  .example-headers-align .mat-expansion-panel-header-description {
-    flex-basis: 0;
-  }
-
-  .example-headers-align .mat-expansion-panel-header-description {
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .example-headers-align .mat-expansion-panel-header-description {
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .example-headers-align .mat-mdc-form-field+.mat-mdc-form-field {
-    margin-left: 8px;
-  }
-
-  .example-container .mat-mdc-form-field+.mat-mdc-form-field {
-    margin-left: 8px;
-  }
-
-  .example-right-align {
-    text-align: right;
-  }
-
-  input.example-right-align::-webkit-outer-spin-button,
-  input.example-right-align::-webkit-inner-spin-button {
-    display: none;
-  }
-
-  input.example-right-align {
-    -moz-appearance: textfield;
-  }
+mat-form-field {
+  width: 100%;
 }

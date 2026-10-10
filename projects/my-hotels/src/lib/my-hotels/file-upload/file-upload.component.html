@@ -1,22 +1,17 @@
-<input 
-type="file" 
-class="file-input" 
-(change)="onUpload($event)" 
-accept=".jpg,.svg,.png,.jpeg"
-multiple
-#imageUpload
->
+<input
+  #imageUpload
+  id="hotel-images"
+  class="file-input"
+  type="file"
+  accept=".jpg,.svg,.png,.jpeg"
+  multiple
+  (change)="onUpload($event)"
+/>
 
 <div class="file-upload">
-
-{{fileName || "no file uploaded yet"}}
-
-<button mat-mini-fab
-  color="primary" 
-  class="upload-btn" 
-  type="button" 
-  (click)="imageUpload.click()"
-> 
-  <mat-icon svgIcon="attach_file" aria-hidden="true"></mat-icon> 
-</button>
+  <button mat-stroked-button type="button" (click)="imageUpload.click()">
+    <mat-icon svgIcon="attach_file" aria-hidden="true"></mat-icon>
+    Choose photos
+  </button>
+  <span class="file-upload__name" aria-live="polite">{{ fileName || 'No photos chosen yet' }}</span>
 </div>

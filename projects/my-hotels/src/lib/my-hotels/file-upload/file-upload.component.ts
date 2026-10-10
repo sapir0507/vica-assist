@@ -13,6 +13,7 @@ export class FileUploadComponent  {
 
   onUpload(event: Event): void{
     const chosenFiles = Array.from((event.target as HTMLInputElement).files ?? []);
-    this.files.emit(chosenFiles)
+    this.fileName = chosenFiles.map(file => file.name).join(', ');
+    this.files.emit(chosenFiles);
   }
 }
