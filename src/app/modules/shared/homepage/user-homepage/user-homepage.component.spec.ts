@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { provideAppIcons } from '@vica-assist/shared';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { UserHomepageComponent } from './user-homepage.component';
@@ -12,6 +13,7 @@ describe('UserHomepageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule, RouterTestingModule, UserHomepageComponent ],
+      providers: [provideAppIcons()],
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();

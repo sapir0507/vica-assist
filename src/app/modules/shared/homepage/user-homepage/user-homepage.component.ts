@@ -6,6 +6,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
 import { Router } from '@angular/router';
 
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -25,6 +26,7 @@ import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/us
     CommonModule,
     MatButtonModule,
     MatGridListModule,
+    MatIconModule,
     MatTabsModule,
      UserRequestsModule,
     UserRequestsPreviewModule,

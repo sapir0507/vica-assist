@@ -13,12 +13,12 @@
                 <div class="container-fluid">
                   <div class="row">
                     <div class="row-md-10">
-                      <span class="fa fa-calendar"></span>
+                      <span><mat-icon class="inline-icon" svgIcon="calendar_today" aria-hidden="true"></mat-icon></span>
                       Dates: {{order.departureDate | date}} - {{order.returnDate | date}}
                     </div>
                     @if (order.choice==='both' || order.choice === 'hotel') {
                       <div class="row-md-4">
-                        <span class="fa fa-star"></span>
+                        <span><mat-icon class="inline-icon" svgIcon="star" aria-hidden="true"></mat-icon></span>
                         Minimum stars: {{order.stars}}
                       </div>
                     }
@@ -29,19 +29,19 @@
                         <h3><b>General details</b></h3>
                       </div>
                       <div class="order-details">
-                        <span class="fa fa-globe-americas"> Hotel or Flight:</span>
+                        <span><mat-icon class="inline-icon" svgIcon="public" aria-hidden="true"></mat-icon> Hotel or Flight:</span>
                         {{order.choice | Capitalize}}
                       </div>
                       <div class="order-details">
-                        <span class="fa fa-map-marker-alt"> origin:</span>
+                        <span><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> origin:</span>
                         {{order.origin | Capitalize}}
                       </div>
                       <div class="order-details">
-                        <span class="fa fa-map-marker-alt"> destination:</span>
+                        <span><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> destination:</span>
                         {{order.destination| Capitalize}}
                       </div>
                       <div class="order-details">
-                        <span class="fa fa-money-bill"> maximum - price:</span>
+                        <span><mat-icon class="inline-icon" svgIcon="payments" aria-hidden="true"></mat-icon> maximum - price:</span>
                         {{order.priceRange | currency}}
                       </div>
                     </div>

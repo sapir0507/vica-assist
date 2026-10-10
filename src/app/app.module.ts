@@ -9,7 +9,7 @@ import { HeaderModule } from './modules/shared/header/header.module';
 import { environment } from '../environments/environment';
 import { JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
 import { SflightService } from './services/flight/sflight.service';
-import { API_URL } from '@vica-assist/shared';
+import { API_URL, provideAppIcons } from '@vica-assist/shared';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -44,7 +44,8 @@ const JWT_Module_Options: JwtModuleOptions = {
   ],
   providers: [
     SflightService,
-    { provide: API_URL, useValue: environment.api }
+    { provide: API_URL, useValue: environment.api },
+    provideAppIcons()
   ],
   bootstrap: [AppComponent]
 })

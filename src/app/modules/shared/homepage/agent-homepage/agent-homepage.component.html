@@ -4,7 +4,7 @@
     <div class="col">
       <h2 class="text-center">Pending Orders</h2>
       <div class="border bg-light orderList">
-        <span class="fa fa-arrow-alt-circle-left fa-2xl arrows" (click)="chosenIDPrev()"></span>
+        <span class="arrows" (click)="chosenIDPrev()"><mat-icon class="inline-icon icon-xl" svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon></span>
         <div class="oList">
           <ordersList
             [requestID]="nextID"
@@ -13,7 +13,7 @@
             (maxIDs)="onGetMaxIDs($event)"
           ></ordersList>
         </div>
-        <span class="fa fa-arrow-alt-circle-right fa-2xl arrows" (click)="chosenIDNext()"></span>
+        <span class="arrows" (click)="chosenIDNext()"><mat-icon class="inline-icon icon-xl" svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon></span>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { MyFlightsModule } from '@vica-assist/my-flights';
 import { MyHotelsModule } from '@vica-assist/my-hotels';
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
@@ -18,7 +19,8 @@ import { OrdersListComponent } from '../orders-list/orders-list.component';
     UserRequestsPreviewModule,
     MyFlightsModule,
     MyHotelsModule,
-    OrdersListComponent
+    OrdersListComponent,
+    MatIconModule
   ]
 })
 export class AgentHomepageComponent implements OnInit {

@@ -27,3 +27,20 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+.mat-icon.inline-icon {
+  width: 1.25em;
+  height: 1.25em;
+  font-size: inherit;
+  vertical-align: -0.25em;
+}
+
+.mat-icon.inline-icon.icon-lg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.mat-icon.inline-icon.icon-xl {
+  width: 2.25em;
+  height: 2.25em;
+}

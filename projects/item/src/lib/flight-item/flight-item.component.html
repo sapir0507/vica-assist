@@ -12,7 +12,7 @@
               <span >{{flight.org | Capitalize}}</span>
               <mat-card-subtitle>{{flight.departureHour}}</mat-card-subtitle>
             </div>
-            <mat-icon class="icon">flight_takeoff</mat-icon>
+            <mat-icon class="icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
             <div class="dest">
               <span>{{flight.dest | Capitalize}}</span>
               <mat-card-subtitle>{{flight.returnHour}}</mat-card-subtitle>
@@ -69,17 +69,17 @@
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle multi>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon color="primary">flight_takeoff</mat-icon>
+          <mat-icon color="primary" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
         </mat-panel-title>
         <mat-panel-description>
           <span class="font-title">
             {{ flight.org  }}
-            <span class="fa fa-arrow-right"> </span>
+            <span><mat-icon class="inline-icon" svgIcon="arrow_forward" aria-hidden="true"></mat-icon> </span>
             {{  flight.dest }}
           </span>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <span class="fa fa-plane-departure">
+      <span><mat-icon class="inline-icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
         <span class="text-capitalize font-subtitle">
           Takeoff:
         </span>
@@ -87,7 +87,7 @@
       <div class="indent font">
         {{flight.departureDate | date}}, {{flight.departureHour}}
       </div>
-      <span class="fa fa-plane-arrival">
+      <span><mat-icon class="inline-icon" svgIcon="flight_land" aria-hidden="true"></mat-icon>
         <span class="text-capitalize font-subtitle">
           landing:
         </span>
@@ -95,7 +95,7 @@
       <div class="indent font">
         {{flight.returnDate | date}}, {{flight.returnHour}}
       </div>
-      <span class="fa fa-stopwatch">
+      <span><mat-icon class="inline-icon" svgIcon="timer" aria-hidden="true"></mat-icon>
         <span class="text-capitalize font-subtitle">
           stops: {{flight.stops}}
         </span>
@@ -113,7 +113,7 @@
     <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle multi>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon color="primary">person</mat-icon>
+          <mat-icon color="primary" svgIcon="person" aria-hidden="true"></mat-icon>
         </mat-panel-title>
         <mat-panel-description class="font-title">
           Passangers
@@ -121,7 +121,7 @@
       </mat-expansion-panel-header>
       <span class="font-title">
         <div class="font-subtitle">Passangers:</div>
-        <div class="font fa fa-passport">
+        <div class="font"><mat-icon class="inline-icon" svgIcon="badge" aria-hidden="true"></mat-icon>
           {{flight.fullName}}, {{flight.passID}}
         </div>
         @if (flight.passangers && flight.passangers > 1) {
@@ -129,7 +129,7 @@
             @for (item of flight.passArray; track item) {
               <mat-list-item>
                 @if (item) {
-                  <div class="font fa fa-passport">
+                  <div class="font"><mat-icon class="inline-icon" svgIcon="badge" aria-hidden="true"></mat-icon>
                     {{item.fullName}}, {{item.passID}}
                   </div>
                 }
@@ -146,7 +146,7 @@
     <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle multi>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <mat-icon color="primary">info</mat-icon>
+          <mat-icon color="primary" svgIcon="info" aria-hidden="true"></mat-icon>
         </mat-panel-title>
         <mat-panel-description class="font-title">
           Details
@@ -154,21 +154,21 @@
       </mat-expansion-panel-header>
       <span class="font-title">
         <div class="font-subtitle m-2">
-          <span class="fa fa-suitcase"></span>
+          <span><mat-icon class="inline-icon" svgIcon="luggage" aria-hidden="true"></mat-icon></span>
           Bagage:
           <span class="font">
             {{flight.bagage? "bagage included": "bagage not included"}}
           </span>
         </div>
         <div class="font-subtitle m-2">
-          <span class="fa fa-info-circle"></span>
+          <span><mat-icon class="inline-icon" svgIcon="info" aria-hidden="true"></mat-icon></span>
           More information:
         </div>
         <div class="font info indent border p-2 text-capitalize">
           {{flight.moreInfo}}
         </div>
         <div class="font-subtitle m-2">
-          <span class="fa fa-credit-card"></span> Price: {{flight.price}}
+          <span><mat-icon class="inline-icon" svgIcon="credit_card" aria-hidden="true"></mat-icon></span> Price: {{flight.price}}
         </div>
       </span>
       <mat-action-row>

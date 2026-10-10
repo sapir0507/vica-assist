@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { provideAppIcons } from '@vica-assist/shared';
 
 import { UserFinishedOrderComponent } from './user-finished-order.component';
 
@@ -10,7 +12,8 @@ describe('UserFinishedOrderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ UserFinishedOrderComponent ],
-      imports: [RouterModule.forRoot([])]
+      imports: [RouterModule.forRoot([]), MatIconModule],
+      providers: [provideAppIcons()]
     })
     .compileComponents();
   });

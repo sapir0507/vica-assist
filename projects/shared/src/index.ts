@@ -5,3 +5,5 @@ export * from './lib/interfaces/flight.interface';
 export * from './lib/interfaces/hotel.interface';
 export * from './lib/interfaces/order.interface';
 export * from './lib/interfaces/pass-array.interface';
+export * from './lib/icons/app-icons';
+export * from './lib/icons/provide-app-icons';
