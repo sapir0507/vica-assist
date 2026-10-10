@@ -26,4 +26,12 @@ describe('DropdownSidebarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('lists only the link groups that have links', () => {
+    (fixture.nativeElement.querySelector('.menu-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    // customers have no extra links, so only the agents group is rendered
+    expect(document.querySelectorAll('app-dropdown')).toHaveLength(1);
+  });
 });

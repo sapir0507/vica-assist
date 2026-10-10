@@ -25,7 +25,7 @@
           [isLogout]="sessionStore.isLoggedIn()"
         ></app-links>
       }
-      @if (linkStore.customersLinks()) {
+      @if (linkStore.customersLinks().length) {
         <hr class="menu-divider">
         <app-dropdown
           [currentLinks]="linkStore.customersLinks()"

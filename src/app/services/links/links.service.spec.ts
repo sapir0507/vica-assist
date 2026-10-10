@@ -25,9 +25,8 @@ describe('LinksService', () => {
     expect(links.map(l => l.link)).toEqual(['/add-flight', '/add-hotel']);
   });
 
-  it('returns the customer links for a customer', () => {
-    const links = service.getLinks('customer');
-    expect(links.map(l => l.link)).toEqual(['/choose-flight', '/choose-hotel']);
+  it('has no customer-only links: customers work from their homepage', () => {
+    expect(service.getLinks('customer')).toEqual([]);
   });
 
   it('includes login/register links for a logged-out shared user', () => {

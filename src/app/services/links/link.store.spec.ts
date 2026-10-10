@@ -18,10 +18,7 @@ describe('LinkStore', () => {
       { link: '/add-flight', name: 'Add Flight' },
       { link: '/add-hotel', name: 'Add Hotel' }
     ]);
-    expect(store.customersLinks()).toEqual([
-      { link: '/choose-flight', name: 'Choose Flight' },
-      { link: '/choose-hotel', name: 'Choose Hotel' }
-    ]);
+    expect(store.customersLinks()).toEqual([]);
   });
 
   it('updateSharedLinks_AfterLogin switches sharedLinks to Homepage/Logout', () => {

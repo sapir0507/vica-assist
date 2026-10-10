@@ -230,8 +230,6 @@ high-severity dev-only finding (see below).
   The Nx graph also shows no edges from the app to the libraries, because the root project at `.` overlaps
   the library folders.
 - **One high-severity `npm audit` finding** (`undici` 7.x, pulled in by the latest `nx`). Dev-only.
-- **`/choose-flight` and `/choose-hotel` routes are disabled** while their header links remain; clicking the
-  links logs a "cannot match" error.
 - **Initial bundle is over budget** (about 0.92 MB raw, 186 kB transferred, against a 500 kB warning). Roughly
   a third is 334 kB of CSS (the full Bootstrap build plus the Material theme). It is a warning, not an error.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
@@ -240,7 +238,6 @@ high-severity dev-only finding (see below).
 ## Future improvements
 
 - A real authentication backend (see Security considerations) and persisting the session.
-- Restore or remove the disabled `choose-*` routes and their links.
 - Trim the global CSS (import only the Bootstrap parts in use) to meet the bundle budget.
 - Move from NgModules to standalone components, and zoneless change detection now that every component is
   `OnPush`.

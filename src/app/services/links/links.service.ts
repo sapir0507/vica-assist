@@ -27,16 +27,7 @@ export class LinksService {
       }
     ],
 
-    customer: [
-      {
-        link: '/choose-flight',
-        name: 'Choose Flight'
-      },
-      {
-        link: '/choose-hotel',
-        name: 'Choose Hotel'
-      }
-    ],
+    customer: [],
 
     homepage: [
       {

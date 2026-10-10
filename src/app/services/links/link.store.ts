@@ -17,10 +17,7 @@ const initialState: LinkState = {
     { link: '/add-flight', name: 'Add Flight' },
     { link: '/add-hotel', name: 'Add Hotel' }
   ],
-  customersLinks: [
-    { link: '/choose-flight', name: 'Choose Flight' },
-    { link: '/choose-hotel', name: 'Choose Hotel' }
-  ]
+  customersLinks: []
 };
 
 export const LinkStore = signalStore(
