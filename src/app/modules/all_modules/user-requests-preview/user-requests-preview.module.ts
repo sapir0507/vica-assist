@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserRequestPreviewComponent } from './user-request-preview/user-request-preview.component';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MyPipesModule } from '@vica-assist/my-pipes';
 
@@ -15,7 +14,6 @@ import { MyPipesModule } from '@vica-assist/my-pipes';
 
     MyPipesModule,
     
-    MatCardModule,
     MatIconModule,
   ],
   exports:[

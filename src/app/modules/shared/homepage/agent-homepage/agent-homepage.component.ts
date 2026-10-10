@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MyFlightsModule } from '@vica-assist/my-flights';
 import { MyHotelsModule } from '@vica-assist/my-hotels';
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
-import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from '@vica-assist/shared';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
@@ -15,16 +15,16 @@ import { OrdersListComponent } from '../orders-list/orders-list.component';
   styleUrls: ['./agent-homepage.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    UserRequestsModule,
     UserRequestsPreviewModule,
     MyFlightsModule,
     MyHotelsModule,
     OrdersListComponent,
+    MatButtonModule,
     MatIconModule
   ]
 })
 export class AgentHomepageComponent implements OnInit {
-  step = 'flight';
+  step: 'flight' | 'hotel' = 'flight';
   chosenID = 1;
   orderID: string | null = null;
   nextID = 1;
@@ -36,9 +36,8 @@ export class AgentHomepageComponent implements OnInit {
   }
 
   ngOnInit(): void {/* empty*/}
-  onClick(){
-    if(this.step ==='hotel') this.step ='flight';
-    else this.step = 'hotel';
+  showStep(step: 'flight' | 'hotel'){
+    this.step = step;
   }
 
   onGetMaxIDs(maxIDs: number){    

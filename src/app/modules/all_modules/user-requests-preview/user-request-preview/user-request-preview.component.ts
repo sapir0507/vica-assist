@@ -16,5 +16,9 @@ export class UserRequestPreviewComponent implements OnInit {
   myOrder?: Order;
   @Input() orderID = 1;
 
+  get selectedOrder(): Order | undefined {
+    return this.orderStore.orders()?.find(order => order.id === this.orderID);
+  }
+
   ngOnInit(): void {/* empty*/}
 }

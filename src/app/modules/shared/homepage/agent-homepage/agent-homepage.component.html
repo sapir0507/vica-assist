@@ -1,62 +1,55 @@
-<!-- <div class="container-fluid p-2"> -->
-<div class="container px-xxl-1 justify-content-center">
-  <div class="row">
-    <div class="col">
-      <h2 class="text-center">Pending Orders</h2>
-      <div class="border bg-light orderList">
-        <span class="arrows" (click)="chosenIDPrev()"><mat-icon class="inline-icon icon-xl" svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon></span>
-        <div class="oList">
-          <ordersList
-            [requestID]="nextID"
-            [status]="'agent'"
-            (item)="onChosen2($event)"
-            (maxIDs)="onGetMaxIDs($event)"
-          ></ordersList>
-        </div>
-        <span class="arrows" (click)="chosenIDNext()"><mat-icon class="inline-icon icon-xl" svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon></span>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="page">
+  <h1 class="page__title">Customer orders</h1>
+  <p class="page__subtitle">Open an order, add flights and hotels for the customer, then mark it as finished.</p>
 
-@if (orderID) {
-  <div class="container">
-    <div class="myGrid mt-4">
-      <!-- <div class="col"> -->
-      <div class="userRequest container mt-2">
-        <userRequest-preview
-          [orderID]="chosenID"
-        ></userRequest-preview>
-      </div>
-    <!-- </div> -->
-    <!-- <div class="col"> -->
-    <div class="RightTile container">
-      @if (step==='flight') {
-        <lib-myFlights [orderID]="orderID" [order]="order"></lib-myFlights>
-        <div class="toTheLeft">
-          <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="updateState()">
-            SET ORDER AS FINISHED
-          </button>
-          <button mat-raised-button class="btn btn-link" color="primary" type="button" (click)="onClick()">Next</button>
+  <div class="navigator">
+    <button mat-icon-button type="button" aria-label="Previous order" (click)="chosenIDPrev()">
+      <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+    </button>
+    <ordersList
+      class="navigator__card"
+      [requestID]="nextID"
+      [status]="'agent'"
+      (item)="onChosen2($event)"
+      (maxIDs)="onGetMaxIDs($event)"
+    ></ordersList>
+    <button mat-icon-button type="button" aria-label="Next order" (click)="chosenIDNext()">
+      <mat-icon svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon>
+    </button>
+  </div>
+
+  @if (orderID) {
+    <div class="workspace">
+      <userRequest-preview [orderID]="chosenID"></userRequest-preview>
+
+      <section class="workspace__forms" aria-label="Flights and hotels for this order">
+        <div class="segmented" role="group" aria-label="What to add">
+          <button
+            type="button"
+            class="segmented__option"
+            [class.segmented__option--active]="step === 'flight'"
+            [attr.aria-pressed]="step === 'flight'"
+            (click)="showStep('flight')"
+          >Flights</button>
+          <button
+            type="button"
+            class="segmented__option"
+            [class.segmented__option--active]="step === 'hotel'"
+            [attr.aria-pressed]="step === 'hotel'"
+            (click)="showStep('hotel')"
+          >Hotels</button>
         </div>
-      } @else {
-        @if (step==='hotel') {
-          <div>
-            <my-hotels [orderID]="orderID"></my-hotels>
-            <div class="toTheLeft">
-              <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="updateState()">
-                SET ORDER AS FINISHED
-              </button>
-              <button mat-raised-button class="btn btn-link mt-5" color="primary" type="button" (click)="onClick()">Back</button>
-            </div>
-          </div>
+
+        @if (step === 'flight') {
+          <lib-myFlights [orderID]="orderID" [order]="order"></lib-myFlights>
+        } @else {
+          <my-hotels [orderID]="orderID"></my-hotels>
         }
-      }
-      <div>
-      </div>
+
+        <div class="workspace__actions">
+          <button mat-flat-button type="button" (click)="updateState()">Set order as finished</button>
+        </div>
+      </section>
     </div>
-  <!-- </div> -->
+  }
 </div>
-</div>
-}
-<!-- </div> -->

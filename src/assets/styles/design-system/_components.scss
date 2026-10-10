@@ -449,7 +449,7 @@ mat-form-field {
 }
 
 @media (max-width: 36rem) {
-  .mat-expansion-panel-header-description {
+  .mat-expansion-panel-header .mat-expansion-panel-header-description {
     display: none;
   }
 }

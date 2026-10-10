@@ -1,84 +1,36 @@
-<div class="preview">
-  @if (orderStore.orders()) {
-    <div>
-      @for (order of orderStore.orders(); track order.id) {
-        <div>
-          @if (order && order.id === orderID) {
-            <mat-card class="container">
-              <mat-card-header>
-                <mat-card-title>Order Details</mat-card-title>
-                <mat-card-subtitle>ID: {{order.id}}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="row-md-10">
-                      <span><mat-icon class="inline-icon" svgIcon="calendar_today" aria-hidden="true"></mat-icon></span>
-                      Dates: {{order.departureDate | date}} - {{order.returnDate | date}}
-                    </div>
-                    @if (order.choice==='both' || order.choice === 'hotel') {
-                      <div class="row-md-4">
-                        <span><mat-icon class="inline-icon" svgIcon="star" aria-hidden="true"></mat-icon></span>
-                        Minimum stars: {{order.stars}}
-                      </div>
-                    }
-                  </div>
-                  <div class="row align-items-center">
-                    <div class="col-md-6 p-2 m-2 align-self-start">
-                      <div class="title">
-                        <h3><b>General details</b></h3>
-                      </div>
-                      <div class="order-details">
-                        <span><mat-icon class="inline-icon" svgIcon="public" aria-hidden="true"></mat-icon> Hotel or Flight:</span>
-                        {{order.choice | Capitalize}}
-                      </div>
-                      <div class="order-details">
-                        <span><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> origin:</span>
-                        {{order.origin | Capitalize}}
-                      </div>
-                      <div class="order-details">
-                        <span><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> destination:</span>
-                        {{order.destination| Capitalize}}
-                      </div>
-                      <div class="order-details">
-                        <span><mat-icon class="inline-icon" svgIcon="payments" aria-hidden="true"></mat-icon> maximum - price:</span>
-                        {{order.priceRange | currency}}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-5 border-1 p-2 m-2 align-self-start">
-                      <div class="passangers">
-                        <div class="title">
-                          <h3><b>Names and IDs</b></h3>
-                        </div>
-                        @for (item of order.passDetails; track item; let i = $index) {
-                          <div>
-                            Passanger {{i+1}}:
-                          </div>
-                          <div class="item border mb-2 p-1">
-                            <div>
-                              Full Name: <span class="text-center">
-                              {{item.fullName | Capitalize}}
-                            </span>
-                          </div>
-                          <div>
-                            ID:
-                            <span class="text-center">
-                              {{item.passID}}
-                            </span>
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-      </div>
-    }
-  </div>
+@if (selectedOrder; as order) {
+  <section class="order-details" aria-labelledby="order-details-title">
+    <header class="order-details__header">
+      <h2 id="order-details-title" class="order-details__title">Order details</h2>
+      <p class="order-details__dates">
+        <mat-icon class="inline-icon" svgIcon="calendar_today" aria-hidden="true"></mat-icon>
+        {{ order.departureDate | date: 'd MMM y' }} &ndash; {{ order.returnDate | date: 'd MMM y' }}
+      </p>
+    </header>
+
+    <dl class="order-details__list">
+      <dt><mat-icon class="inline-icon" svgIcon="public" aria-hidden="true"></mat-icon> Trip type</dt>
+      <dd>{{ order.choice | Capitalize }}</dd>
+      <dt><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> From</dt>
+      <dd>{{ order.origin | Capitalize }}</dd>
+      <dt><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> To</dt>
+      <dd>{{ order.destination | Capitalize }}</dd>
+      <dt><mat-icon class="inline-icon" svgIcon="payments" aria-hidden="true"></mat-icon> Maximum price</dt>
+      <dd>{{ order.priceRange | currency }}</dd>
+      @if (order.choice === 'both' || order.choice === 'hotel') {
+        <dt><mat-icon class="inline-icon" svgIcon="star" aria-hidden="true"></mat-icon> Minimum stars</dt>
+        <dd>{{ order.stars }}</dd>
+      }
+    </dl>
+
+    <h3 class="order-details__subtitle">Travelers</h3>
+    <ul class="order-details__travelers">
+      @for (traveler of order.passDetails; track $index) {
+        <li>
+          <span class="text-capitalize">{{ traveler.fullName }}</span>
+          <span class="order-details__id">ID {{ traveler.passID }}</span>
+        </li>
+      }
+    </ul>
+  </section>
 }
-</div>
