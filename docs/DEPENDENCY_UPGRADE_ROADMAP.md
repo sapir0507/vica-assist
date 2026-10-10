@@ -678,6 +678,19 @@ were replaced with real types (`onUpload` now takes an `Event` and emits a real 
 `FileList` cast). Lint is at 0 errors and 0 warnings. `AgentHomepageComponent.onOrder` is a no-op
 (its body is commented out); it lost its unused parameter but is a candidate for deletion.
 
+## Phase 9 — Eager feature modules (done, `perf/bundle/reduce-initial-size`)
+
+`AppModule` imported `AddNewFlightModule`, `AddNewHotelModule`, `ChooseFlightModule` and
+`ChooseHotelModule` directly while `app-routing.module.ts` also lazy-loads the first two. Besides pulling
+all of Angular Material (about 520 kB) and the feature code into the initial bundle, it was a routing bug:
+each of those modules registers a `RouterModule.forChild` route with `path: ''`, and eagerly imported child
+routes are merged ahead of the app's own routes, so opening `/` rendered `ChooseFlightComponent` instead of
+redirecting to `/homepage`. (The "Homepage" header link had pointed at `''` and was changed to
+`/homepage`, which hid the symptom.) Removing the four imports and the unused `MatSliderModule` fixes both.
+New specs assert that `/` redirects to `/homepage` and that a logged-out visitor is sent from `/add-flight` to
+`/login`. Initial bundle: 1.55 MB → 0.92 MB raw (297 kB → 186 kB transferred). The choose-flight/hotel
+modules are now unreferenced by routes, as their commented-out routes already implied.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend
