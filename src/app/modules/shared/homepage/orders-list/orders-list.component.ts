@@ -1,10 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, effect, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MyPipesModule } from '@vica-assist/my-pipes';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { isFinished, isPending, Order } from '@vica-assist/shared';
@@ -18,10 +15,7 @@ import { isFinished, isPending, Order } from '@vica-assist/shared';
      DatePipe,
      MyPipesModule,
      MatButtonModule,
-     MatCardModule,
      MatIconModule,
-     MatTabsModule,
-     MatListModule,
   ]
 })
 export class OrdersListComponent implements OnInit {

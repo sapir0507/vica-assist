@@ -3,10 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UserRequestPreviewComponent } from './user-request-preview/user-request-preview.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatTableModule } from '@angular/material/table';
 import { MyPipesModule } from '@vica-assist/my-pipes';
 
 
@@ -21,10 +17,6 @@ import { MyPipesModule } from '@vica-assist/my-pipes';
     
     MatCardModule,
     MatIconModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatTableModule,
-    MatButtonToggleModule
   ],
   exports:[
     UserRequestPreviewComponent

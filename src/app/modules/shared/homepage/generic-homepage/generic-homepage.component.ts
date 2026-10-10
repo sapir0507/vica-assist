@@ -1,9 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
@@ -13,9 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
       MatButtonModule,
-     MatCardModule,
-     MatIconModule,
-     MatTabsModule,
      MatListModule,
   ]
 })
