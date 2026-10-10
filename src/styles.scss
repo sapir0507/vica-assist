@@ -1,20 +1,32 @@
-@use "bootstrap/scss/bootstrap";
+@use "@angular/material" as mat;
+@use "assets/styles/design-system/fonts";
+@use "assets/styles/design-system/theme-colors" as theme;
+@use "assets/styles/design-system/bootstrap";
+@use "assets/styles/design-system/colors";
+@use "assets/styles/design-system/typography";
+@use "assets/styles/design-system/spacing";
+@use "assets/styles/design-system/components";
 
-/* You can add global styles to this file, and also import other style files */
-:host{
-    ::after, ::before, *{
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-    
+html {
+  @include mat.theme((
+    color: (
+      theme-type: color-scheme,
+      primary: theme.$primary-palette,
+      tertiary: theme.$tertiary-palette
+    ),
+    typography: (
+      plain-family: "Inter Variable",
+      brand-family: "DM Sans Variable",
+      bold-weight: 700,
+      medium-weight: 500,
+      regular-weight: 400
+    ),
+    density: 0
+  ));
+
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-background: var(--color-bg);
+  --mat-sys-on-surface: var(--color-text);
+  --mat-sys-on-background: var(--color-text);
+  --mat-sys-outline-variant: var(--color-border);
 }
-
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-
