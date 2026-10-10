@@ -8,7 +8,6 @@ import { ChooseFlightModule } from '../choose-flight/choose-flight.module';
 import { ChooseHotelModule } from '../choose-hotel/choose-hotel.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ItemModule } from '@vica-assist/item';
 
 
 
@@ -23,7 +22,6 @@ import { ItemModule } from '@vica-assist/item';
 
     ChooseFlightModule,
     ChooseHotelModule,
-    ItemModule, //should i really?
     FinalOrderRoutingModule,
     UserFinishedOrderModule
   ],

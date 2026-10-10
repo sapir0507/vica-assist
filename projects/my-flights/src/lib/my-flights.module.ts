@@ -13,7 +13,6 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatDividerModule} from '@angular/material/divider';
-import { ItemModule } from '@vica-assist/item';
 
 
 @NgModule({
@@ -24,7 +23,6 @@ import { ItemModule } from '@vica-assist/item';
     CommonModule,
     ReactiveFormsModule, 
     FormsModule,
-    ItemModule,
     MatNativeDateModule,
     MatRippleModule,
     MatIconModule,
