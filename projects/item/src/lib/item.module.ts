@@ -1,25 +1,14 @@
 import { NgModule } from '@angular/core';
-import { ItemComponent } from './item.component';
-
-import { MatCardModule } from '@angular/material/card'
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
+import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { NgbCarouselModule, NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { ItemComponent } from './item.component';
 import { FlightItemComponent } from './flight-item/flight-item.component';
 import { HotelItemComponent } from './hotel-item/hotel-item.component';
-import { MyPipesModule } from '@vica-assist/my-pipes';
-import { MatButtonModule } from '@angular/material/button';
-import { MatLineModule } from '@angular/material/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatListModule } from '@angular/material/list';
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -29,20 +18,11 @@ import { MatListModule } from '@angular/material/list';
   ],
   imports: [
     CommonModule,
-
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule,
     MatButtonModule,
-    MatLineModule,
-    MatTooltipModule,
+    MatCardModule,
     MatExpansionModule,
-    MatListModule,
-
-    NgbRatingModule,
-    NgbCarouselModule,
-
-    MyPipesModule
+    MatIconModule,
+    NgbRatingModule
   ],
   exports: [
     ItemComponent

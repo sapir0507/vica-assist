@@ -1,133 +1,63 @@
-@use "../../../../../src/assets/styles/media";
-@import url('https://fonts.googleapis.com/css2?family=Acme&family=Alfa+Slab+One&family=Caveat:wght@500&family=Indie+Flower&family=Righteous&family=Volkhov&display=swap');
-    
-    $card-width: 150vh;
-    // $card-content-width: 75vh;
-    $card-content-item-width: 25vh;
-    $card-price: 74vh;
-    $font-size: 1.5em;
-    
-:host{
-    font-size: $font-size;
-    // .mat-card{
-    //     // background-image: linear-gradient(rgb(234, 193, 238), rgb(202, 157, 225));
-    //     // border: 3px inset purple;
-    //     border-radius: 20px;
-    // }
-    .mat-expansion-panel{
-        min-width: 50vh;
-    }
-    .font-title{
-        font-family: 'Alfa Slab One', cursive;
-    }
-    .font-subtitle{
-        font-size: 20px;
-        font-family: 'Acme', sans-serif;
-    }
-    .font{
-        font-size: 20px;
-        font-family: 'Indie Flower', cursive;
-        margin:10px;
-    }
-    .info{
-        max-width: 45vh;
-    }
-    .other{
-        font-family: 'Acme', sans-serif;
-        font-family: 'Alfa Slab One', cursive;
-        font-family: 'Caveat', cursive;
-        font-family: 'Indie Flower', cursive;
-        font-family: 'Righteous', cursive;
-        font-family: 'Volkhov', serif;
-    }
-    .indent{
-        text-indent: 30px;
-    }
-    .flight-item{
-        margin: 0 auto;
-        max-width: $card-width;
-        // width: fit-content;
-        .orgtodest{
-            display: grid;
-            position: relative;
-            grid-template-columns: repeat(3, 1fr);
-            padding-top: 10px;
-            // border: 2px outset rgba(128, 0, 128, 0.726);
-            
-            border-radius: 10px;
-            margin: auto auto;
-            
-        .org, .icon, .dest {
-            padding: 10px;
-            font-size: $font-size;
-            text-align: center;
-            p{
-                  font-size: $font-size;
-            }
-          
-        }
-
-        .icon{
-            animation-name: fly; 
-            animation-duration: 2s;
-            animation-iteration-count: 1;
-            position: relative;
-            left: 43%;
-            top: 0px;
-
-            @keyframes fly {
-                0%   {left: 10%; top: 0px;} 
-                50%  {left: 90%; top: 0px;}
-                52%  {display: none;}
-                53%  {display: block; left: 10%; top: 0px;} 
-                55%  {left: 10%; top: 0px;} 
-                100% {left: 43%; top: 0px;} 
-                
-            }
-        }
-        }
-        .my-mat-content-item{
-          
-            font-size: $font-size;
-            margin-top: 20px;
-            padding: 10px;
-            text-align: center;
-            place-content: center;
-        }
-        .bagage{
-         margin-top: 5px;   
-        }
-        .mat-mdc-card-subtitle{
-            margin-top: 7px;
-            margin-bottom: 3px;
-            padding-bottom: 0px;
-        }
-        
-        
-    
-    }
-
-    .example-action-buttons {
-        padding-bottom: 20px;
-      }
-      
-      .example-headers-align .mat-expansion-panel-header-title,
-      .example-headers-align .mat-expansion-panel-header-description {
-        flex-basis: 0;
-      }
-      
-      .example-headers-align .mat-expansion-panel-header-description {
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
-        margin-left: 8px;
-      }
-
-    
-   
+:host {
+  display: block;
 }
 
+.trip-card {
+  display: block;
+  max-width: 40rem;
+  margin-inline: auto;
+}
 
+.panel-title {
+  align-items: center;
+  gap: var(--space-3);
+}
 
+.trip-route {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  text-transform: capitalize;
+}
+
+.detail-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-3) var(--space-6);
+  margin: 0;
+  font-size: var(--text-sm);
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-weight: var(--weight-medium);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.note {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.passenger-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  font-size: var(--text-sm);
+  list-style: none;
+  text-transform: capitalize;
+}

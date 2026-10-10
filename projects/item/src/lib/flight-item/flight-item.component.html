@@ -1,181 +1,85 @@
-<!--
-<div class="flight-item" *ngIf="flight!==undefined">
-  <div class="container-md container-lg container-sm container-xl container-xxl">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Flight</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div *ngIf="flight.org&&flight.dest">
-          <div class="orgtodest">
-            <div class="org">
-              <span >{{flight.org | Capitalize}}</span>
-              <mat-card-subtitle>{{flight.departureHour}}</mat-card-subtitle>
-            </div>
-            <mat-icon class="icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
-            <div class="dest">
-              <span>{{flight.dest | Capitalize}}</span>
-              <mat-card-subtitle>{{flight.returnHour}}</mat-card-subtitle>
-            </div>
-          </div>
-        </div>
-
-        <ng-container *ngIf="flight.stops==='one stop'; else noStops">
-          <div class="container-md">
-            <div class="my-mat-content-item row">
-              <div class="container row row-cols-3 ">
-                <div class="takeoff">
-                  <p>Takeoff - {{flight.departureDate | date}}</p>
-                </div>
-                <div class="stop">
-                  <p>Stop Duration - {{flight.stopDuration}}</p>
-                </div>
-                <div class="land">
-                  <p>Landing - {{flight.returnDate | date}}</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </ng-container>
-        <ng-template #noStops>
-
-          <div class="container-md">
-            <div class="my-mat-content-item row">
-              <div class="container row row-cols-2">
-                <div class="takeoff">
-                  <p>Takeoff - {{flight.departureDate | date}}</p>
-                </div>
-
-                <div class="land">
-                  <p>Landing - {{flight.returnDate | date}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-
-
-
-
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div> -->
-
-
 @if (flight) {
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle multi>
+  <mat-accordion class="trip-card">
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="panel-title">
           <mat-icon color="primary" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
-        </mat-panel-title>
-        <mat-panel-description>
-          <span class="font-title">
-            {{ flight.org  }}
-            <span><mat-icon class="inline-icon" svgIcon="arrow_forward" aria-hidden="true"></mat-icon> </span>
-            {{  flight.dest }}
+          <span class="trip-route">
+            {{ flight.org }}
+            <mat-icon class="inline-icon" svgIcon="arrow_forward" aria-label="to"></mat-icon>
+            {{ flight.dest }}
           </span>
-        </mat-panel-description>
+        </mat-panel-title>
       </mat-expansion-panel-header>
-      <span><mat-icon class="inline-icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon>
-        <span class="text-capitalize font-subtitle">
-          Takeoff:
-        </span>
-      </span>
-      <div class="indent font">
-        {{flight.departureDate | date}}, {{flight.departureHour}}
-      </div>
-      <span><mat-icon class="inline-icon" svgIcon="flight_land" aria-hidden="true"></mat-icon>
-        <span class="text-capitalize font-subtitle">
-          landing:
-        </span>
-      </span>
-      <div class="indent font">
-        {{flight.returnDate | date}}, {{flight.returnHour}}
-      </div>
-      <span><mat-icon class="inline-icon" svgIcon="timer" aria-hidden="true"></mat-icon>
-        <span class="text-capitalize font-subtitle">
-          stops: {{flight.stops}}
-        </span>
-      </span>
-      @if (flight.stopDuration) {
-        <div class="indent font">
-          Duration: {{flight.stopDuration}}
-        </div>
-      }
+      <dl class="detail-list">
+        <dt><mat-icon class="inline-icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon> Takeoff</dt>
+        <dd>{{ flight.departureDate | date }}, {{ flight.departureHour }}</dd>
+        <dt><mat-icon class="inline-icon" svgIcon="flight_land" aria-hidden="true"></mat-icon> Landing</dt>
+        <dd>{{ flight.returnDate | date }}, {{ flight.returnHour }}</dd>
+        <dt><mat-icon class="inline-icon" svgIcon="timer" aria-hidden="true"></mat-icon> Stops</dt>
+        <dd>
+          {{ flight.stops }}
+          @if (flight.stopDuration) {
+            <span class="muted">({{ flight.stopDuration }})</span>
+          }
+        </dd>
+      </dl>
       <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        <button mat-button type="button" (click)="prevStep()">Previous</button>
+        <button mat-button type="button" (click)="nextStep()">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle multi>
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="panel-title">
           <mat-icon color="primary" svgIcon="person" aria-hidden="true"></mat-icon>
+          Passengers
         </mat-panel-title>
-        <mat-panel-description class="font-title">
-          Passangers
-        </mat-panel-description>
       </mat-expansion-panel-header>
-      <span class="font-title">
-        <div class="font-subtitle">Passangers:</div>
-        <div class="font"><mat-icon class="inline-icon" svgIcon="badge" aria-hidden="true"></mat-icon>
-          {{flight.fullName}}, {{flight.passID}}
-        </div>
+      <ul class="passenger-list">
+        <li>
+          <mat-icon class="inline-icon" svgIcon="badge" aria-hidden="true"></mat-icon>
+          {{ flight.fullName }}, {{ flight.passID }}
+        </li>
         @if (flight.passangers && flight.passangers > 1) {
-          <mat-list>
-            @for (item of flight.passArray; track item) {
-              <mat-list-item>
-                @if (item) {
-                  <div class="font"><mat-icon class="inline-icon" svgIcon="badge" aria-hidden="true"></mat-icon>
-                    {{item.fullName}}, {{item.passID}}
-                  </div>
-                }
-              </mat-list-item>
+          @for (passenger of flight.passArray; track passenger) {
+            @if (passenger) {
+              <li>
+                <mat-icon class="inline-icon" svgIcon="badge" aria-hidden="true"></mat-icon>
+                {{ passenger.fullName }}, {{ passenger.passID }}
+              </li>
             }
-          </mat-list>
+          }
         }
-      </span>
+      </ul>
       <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        <button mat-button type="button" (click)="prevStep()">Previous</button>
+        <button mat-button type="button" (click)="nextStep()">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle multi>
+
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="panel-title">
           <mat-icon color="primary" svgIcon="info" aria-hidden="true"></mat-icon>
-        </mat-panel-title>
-        <mat-panel-description class="font-title">
           Details
-        </mat-panel-description>
+        </mat-panel-title>
       </mat-expansion-panel-header>
-      <span class="font-title">
-        <div class="font-subtitle m-2">
-          <span><mat-icon class="inline-icon" svgIcon="luggage" aria-hidden="true"></mat-icon></span>
-          Bagage:
-          <span class="font">
-            {{flight.bagage? "bagage included": "bagage not included"}}
-          </span>
-        </div>
-        <div class="font-subtitle m-2">
-          <span><mat-icon class="inline-icon" svgIcon="info" aria-hidden="true"></mat-icon></span>
-          More information:
-        </div>
-        <div class="font info indent border p-2 text-capitalize">
-          {{flight.moreInfo}}
-        </div>
-        <div class="font-subtitle m-2">
-          <span><mat-icon class="inline-icon" svgIcon="credit_card" aria-hidden="true"></mat-icon></span> Price: {{flight.price}}
-        </div>
-      </span>
+      <dl class="detail-list">
+        <dt><mat-icon class="inline-icon" svgIcon="luggage" aria-hidden="true"></mat-icon> Baggage</dt>
+        <dd>{{ flight.bagage ? 'Baggage included' : 'Baggage not included' }}</dd>
+        @if (flight.moreInfo) {
+          <dt><mat-icon class="inline-icon" svgIcon="info" aria-hidden="true"></mat-icon> More information</dt>
+          <dd class="note">{{ flight.moreInfo }}</dd>
+        }
+        <dt><mat-icon class="inline-icon" svgIcon="credit_card" aria-hidden="true"></mat-icon> Price</dt>
+        <dd>{{ flight.price | currency }}</dd>
+      </dl>
       <mat-action-row>
-        <button mat-button color="primary" (click)="selectFlight(flight)">Select Flight</button>
+        <button mat-button type="button" (click)="prevStep()">Previous</button>
+        <button mat-flat-button color="primary" type="button" (click)="selectFlight(flight)">Select flight</button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>
 }
-
-

@@ -1,99 +1,70 @@
-$font-size: 20px;
-$carousel-control-color: black;
-$carousel-indicator-active-bg: black;
-$carousel-caption-color: black;
-
 :host {
-  font-size: $font-size;
+  display: block;
+}
 
-  .example-card {
-    max-width: 900px;
-    width: 110%;
-    margin: 0 auto;
-    margin-bottom: 40px;
-    background-color: whitesmoke;
-    box-shadow: 5px 5px rgba(37, 1, 35, 0.669);
+.hotel-card {
+  max-width: 40rem;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.hotel-card__media {
+  aspect-ratio: 16 / 9;
+  background: var(--color-surface-raised);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
+}
 
-  .star {
-    font-size: 1.5rem;
-    color: #e9de0c;
+.hotel-card__placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 22%, transparent),
+    color-mix(in srgb, var(--color-secondary) 22%, transparent)
+  );
+  color: var(--color-primary);
+
+  mat-icon {
+    width: 3.5rem;
+    height: 3.5rem;
   }
+}
 
-  .filled {
-    color: rgba(0, 0, 0, 0.855);
-  }
+mat-card-header {
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-4);
+}
 
-  .bad {
-    color: #e9de0c;
-  }
+.star {
+  color: var(--color-border);
+  font-size: var(--text-xl);
+}
 
-  .filled.bad {
-    color: #e9de0c;
-  }
+.star.filled {
+  color: var(--color-warning);
+}
 
-  .grid {
-    display: grid;
-    // max-width: 900px;
-    grid-template-columns: 1fr;
-    
-    margin: 0 auto;
-    place-content: center;
-    grid-template-areas: 'images images'
-                         'images images'
-                         'content content'
-                         'content content';
-    .content {
-      grid-area: content;
-      margin-left: 20px;
+.facts {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  font-size: var(--text-sm);
+  list-style: none;
+}
 
-      .icon {
-        font-size: $font-size;
-        margin: 15px;
-      }
-      div.guests {
-        span.after-icon {
-          background-color: #e9de0c;
-          padding: 10px;
-        }
-      }
-
-      .breakfast {
-        margin: 15px;
-      }
-
-      .more-info {
-        border: 2px outset lightblue;
-        border-radius: 10px;
-        padding: 10px;
-        max-width: 50vh;
-        scroll-behavior: auto;
-        scroll-margin: 10px;
-        scroll-padding-inline-start: 10px;
-
-      }
-    }
-    .images-wrapper{
-      position: relative;
-      grid-area: images;
-      width: 500px;
-      background-color: black;
-      padding: 10px;
-      margin: 10px;
-      object-fit: contain;
-
-        .images {
-          display: block;
-          margin: 10px auto;
-          width: 300px;
-          height: 300px;
-          object-fit: contain;
-          
-        }
-  }
-  }
-
-
-
-
+.note {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
 }

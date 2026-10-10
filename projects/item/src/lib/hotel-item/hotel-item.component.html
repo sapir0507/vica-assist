@@ -1,70 +1,44 @@
 @if (hotel) {
-  <div>
-    <mat-card class="example-card">
-      <mat-card-header>
-        <mat-card-title>{{hotel.name}}</mat-card-title>
-        <ngb-rating [(rate)]="currentRate" [max]="5">
-          <ng-template let-fill="fill" let-index="index">
-            <span class="star" [class.filled]="fill === 100" [class.bad]="index < getBad()">&#9733;</span>
+  <mat-card class="hotel-card">
+    <div class="hotel-card__media">
+      @if (imageUrl) {
+        <img [src]="imageUrl" [alt]="hotel.name + ' photo'" width="640" height="360" loading="lazy" />
+      } @else {
+        <div class="hotel-card__placeholder">
+          <mat-icon svgIcon="hotel" aria-hidden="true"></mat-icon>
+        </div>
+      }
+    </div>
+
+    <mat-card-header>
+      <mat-card-title>{{ hotel.name }}</mat-card-title>
+      @if (hotel.stars) {
+        <ngb-rating [rate]="hotel.stars" [max]="5" [readonly]="true" [attr.aria-label]="hotel.stars + ' out of 5 stars'">
+          <ng-template let-fill="fill">
+            <span class="star" [class.filled]="fill === 100">&#9733;</span>
           </ng-template>
         </ngb-rating>
-      </mat-card-header>
-      <mat-card-content>
-        <br>
-          <mat-divider></mat-divider>
-          <br>
-            <div class="grid">
-              <div class="content">
-                <div class="guests icon">
-                  <img src="assets/images/img/guests.PNG" width="35" height="35" alt="guests">
-                  <span>{{hotel.guests}} guests</span>
-                </div>
-                <div class="cancle icon">
-                  <img src="assets/images/img/freeCancle.PNG" width="25" height="25" alt="free cancle">
-                  <span> Free Cancellation</span>
-                </div>
-                <div class="breakfast icon">
-                  <img src="assets/images/img/food.png" width="25" height="25" alt="food">
-                  @if (hotel.breakfast) {
-                    Breakfast included
-                  } @else {
-                    Breakfast not included
-                  }
-                </div>
-                <div class="bed-type icon">
-                  <img width="25" height="25" src="assets/images/img/bed (1).png" alt="bed">
-                  {{hotel.bedType}}
-                </div>
-                <div class="price icon">
-                  <img width="25" height="25" src="assets/images/img/price.png" alt="Price: ">
-                  {{hotel.price | currency}}
-                </div>
-                @if (hotel.moreInfo) {
-                  <div class="more-info icon">{{hotel.moreInfo}}</div>
-                }
-              </div>
-              <div class="images-wrapper">
-                @if (images.length > 0) {
-                  <ngb-carousel [wrap]="true" [pauseOnHover]="true">
-                    @for (image of images; track image; let i = $index) {
-                      <ng-template ngbSlide>
-                        <div class="">
-                          <img [src]='images[i]' class="images" alt="random slide">
-                        </div>
-                        <div class="carousel-caption">
-                          <h3></h3>
-                          <p></p>
-                        </div>
-                      </ng-template>
-                    }
-                  </ngb-carousel>
-                }
-              </div>
-            </div>
-          </mat-card-content>
-          <mat-card-actions align="end">
-            <button mat-button color="primary" (click)="onChosen(hotel)">Select Hotel</button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    }
+      }
+    </mat-card-header>
+
+    <mat-card-content>
+      <ul class="facts">
+        <li><mat-icon class="inline-icon" svgIcon="group" aria-hidden="true"></mat-icon> {{ hotel.guests }} guests</li>
+        <li><mat-icon class="inline-icon" svgIcon="free_cancellation" aria-hidden="true"></mat-icon> Free cancellation</li>
+        <li>
+          <mat-icon class="inline-icon" svgIcon="restaurant" aria-hidden="true"></mat-icon>
+          {{ hotel.breakfast ? 'Breakfast included' : 'Breakfast not included' }}
+        </li>
+        <li><mat-icon class="inline-icon" svgIcon="bed" aria-hidden="true"></mat-icon> {{ hotel.bedType }}</li>
+        <li><mat-icon class="inline-icon" svgIcon="sell" aria-hidden="true"></mat-icon> {{ hotel.price | currency }}</li>
+      </ul>
+      @if (hotel.moreInfo) {
+        <p class="note">{{ hotel.moreInfo }}</p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-flat-button color="primary" type="button" (click)="onChosen(hotel)">Select hotel</button>
+    </mat-card-actions>
+  </mat-card>
+}

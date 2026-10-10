@@ -10,9 +10,7 @@ export enum ItemType {
   standalone: false,
   selector: 'item',
   templateUrl: './item.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./item.component.scss'],
-  //changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemComponent implements OnInit {
 
