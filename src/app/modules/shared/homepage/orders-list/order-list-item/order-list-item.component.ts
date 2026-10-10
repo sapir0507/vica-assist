@@ -1,4 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MyPipesModule } from '@vica-assist/my-pipes';
 import { Order } from '@vica-assist/shared';
@@ -7,9 +9,8 @@ import { Order } from '@vica-assist/shared';
   standalone: true,
   selector: 'order-list-item',
   templateUrl: './order-list-item.component.html',
-  styleUrls: ['./order-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MyPipesModule, MatIconModule]
+  imports: [DatePipe, MyPipesModule, MatButtonModule, MatIconModule]
 })
 export class OrderListItemComponent implements OnInit {
 

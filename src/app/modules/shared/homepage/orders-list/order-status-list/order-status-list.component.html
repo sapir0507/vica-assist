@@ -1,7 +1,7 @@
-<div class="order mat-elevation-z4">
+<div class="order-grid">
   @for (item of orders(); track item.id) {
-    <div>
-      <order-list-item [currentItem]="item" (item)="selectedItem($event)"></order-list-item>
-    </div>
+    <order-list-item [currentItem]="item" (item)="selectedItem($event)"></order-list-item>
+  } @empty {
+    <p class="order-grid__empty">No {{ status }} orders yet.</p>
   }
 </div>

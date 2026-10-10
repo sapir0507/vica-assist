@@ -1,34 +1,27 @@
 @if (currentItem) {
-  <div class="order mat-card">
-    <div mat-card-title>Order {{currentItem.id}}</div>
-    <div mat-card-subtitle>Order ID: {{currentItem.orderID}}</div>
-    <div mat-card-content>
-      <div class="container-md">
-        <div class="row">
-          <div class="col-md-10 text-capitalize">
-            <span><b>order made by:</b></span> {{currentItem.passDetails[0].fullName}}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-10 text-capitalize">
-            <span><b>Hotel or Flight:</b></span> {{currentItem.choice | Capitalize}}
-          </div>
-        </div>
-        <div class="row">
-          @if (currentItem.orderID) {
-            <div class="col-md-1">
-              <button
-                mat-raised-button
-                (click)="openOrder(currentItem)"
-                class="me-2 mt-1"
-                color="primary"
-                >
-                <span><mat-icon class="inline-icon" svgIcon="open_in_new" aria-hidden="true"></mat-icon></span> order
-              </button>
-            </div>
-          }
-        </div>
+  <article class="order-card" [attr.aria-labelledby]="'order-title-' + currentItem.id">
+    <header class="order-card__header">
+      <h3 class="order-card__title" [id]="'order-title-' + currentItem.id">Order {{ currentItem.id }}</h3>
+      <span class="chip" [class]="'chip chip--' + currentItem.status">{{ currentItem.status }}</span>
+    </header>
+    <p class="order-card__ref">Order ID: {{ currentItem.orderID }}</p>
+    <dl class="order-card__meta">
+      <dt>Made by</dt>
+      <dd class="text-capitalize">{{ currentItem.passDetails[0].fullName }}</dd>
+      <dt>Trip type</dt>
+      <dd>{{ currentItem.choice | Capitalize }}</dd>
+      <dt>Route</dt>
+      <dd>{{ currentItem.origin }} &rarr; {{ currentItem.destination }}</dd>
+      <dt>Dates</dt>
+      <dd>{{ currentItem.departureDate | date: 'd MMM y' }} &ndash; {{ currentItem.returnDate | date: 'd MMM y' }}</dd>
+    </dl>
+    @if (currentItem.orderID) {
+      <div class="order-card__actions">
+        <button mat-raised-button color="primary" type="button" (click)="openOrder(currentItem)">
+          <mat-icon class="inline-icon" svgIcon="open_in_new" aria-hidden="true"></mat-icon>
+          Open order
+        </button>
       </div>
-    </div>
-  </div>
+    }
+  </article>
 }

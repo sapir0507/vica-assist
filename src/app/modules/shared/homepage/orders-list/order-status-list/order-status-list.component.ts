@@ -8,7 +8,6 @@ import { OrderListItemComponent } from '../order-list-item/order-list-item.compo
   standalone: true,
   selector: 'order-status-list',
   templateUrl: './order-status-list.component.html',
-  styleUrls: ['./order-status-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [OrderListItemComponent]
 })

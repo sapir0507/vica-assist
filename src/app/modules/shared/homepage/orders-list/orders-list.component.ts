@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input, effect, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,9 +13,9 @@ import { isFinished, isPending, Order } from '@vica-assist/shared';
   standalone: true,
   selector: 'ordersList',
   templateUrl: './orders-list.component.html',
-  styleUrls: ['./orders-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+     DatePipe,
      MyPipesModule,
      MatButtonModule,
      MatCardModule,
