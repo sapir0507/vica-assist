@@ -1,75 +1,67 @@
-<div class="login">
-  <div class="container-fluid max-login-width">
-    <div class="">
-      <div class="my-login-form">
-        <form 
-          [formGroup]="formGroup" 
-          (ngSubmit)="onSubmit()" 
-          class="BK-1 container-md container-sm "
-        >
+<div class="auth-page">
+  <div class="auth-card auth-card--wide">
+    <h1 class="auth-card__title">Create your account</h1>
+    <p class="auth-card__subtitle">Plan trips as a customer, or put them together as an agent.</p>
 
-          <section class="vh-50 gradient-custom">
-            <div class="container py-5 h-80">
-              <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                  <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center">
-
-                      <div class="mb-md-5 mt-md-4 pb-5">
-
-                        <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
-                        <p class="text-white-50 mb-5">Please enter your login and password!</p>
-
-                        <div class="form-outline form-white mb-4">
-                          <label class="form-label" for="typeUsernameX">Username</label>
-                          <input type="text" id="typeUsernameX" formControlName="username" class="form-control form-control-lg" />
-
-
-                        </div>
-                        <div class="form-outline form-white mb-4"> <label class="form-label"
-                            for="typeEmailX">Email</label>
-                          <input type="email" id="typeEmailX" formControlName="email" class="form-control form-control-lg" />
-
-                        </div>
-
-                        <div class="form-outline form-white mb-4"> <label class="form-label"
-                            for="typePasswordX">Password</label>
-                          <input type="password" id="typePasswordX" formControlName="password" class="form-control form-control-lg" />
-
-                        </div>
-
-                        <div class="form-outline form-white mb-4"> <label class="form-label"
-                          for="typePasswordX">Role</label>
-                        <input type="text" id="typePasswordX" formControlName="role" class="form-control form-control-lg" placeholder="agent/customer"/>
-
-                      </div>
-
-                        <!-- <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p> -->
-
-                        <button class="container btn btn-outline-light btn-lg px-5" type="submit">Register</button>
-
-                        <!-- <div class="d-flex justify-content-center text-center mt-4 pt-1">
-                          <a href="#!" class="text-white"><i><mat-icon class="inline-icon icon-lg" svgIcon="facebook" aria-hidden="true"></mat-icon></i></a>
-                          <a href="#!" class="text-white"><i class="mx-4 px-2"><mat-icon class="inline-icon icon-lg" svgIcon="x" aria-hidden="true"></mat-icon></i></a>
-                          <a href="#!" class="text-white"><i><mat-icon class="inline-icon icon-lg" svgIcon="google" aria-hidden="true"></mat-icon></i></a>
-                        </div> -->
-
-                      </div>
-
-                      <div>
-                        <p class="mb-0">Already have an account? <a [routerLink]="'/login'"
-                            class="text-white-50 fw-bold">Login</a>
-                        </p>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </form>
+    <form class="auth-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()" novalidate>
+      <div class="auth-field">
+        <label for="register-username">Username</label>
+        <input
+          id="register-username"
+          class="form-control"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          required
+        />
+        @if (formGroup.controls.username.touched && formGroup.controls.username.invalid) {
+          <p class="auth-field__error">Choose a username.</p>
+        }
       </div>
-    </div>
+
+      <div class="auth-field">
+        <label for="register-email">Email</label>
+        <input
+          id="register-email"
+          class="form-control"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          required
+        />
+        @if (formGroup.controls.email.touched && formGroup.controls.email.invalid) {
+          <p class="auth-field__error">Enter a valid email address.</p>
+        }
+      </div>
+
+      <div class="auth-field">
+        <label for="register-password">Password</label>
+        <input
+          id="register-password"
+          class="form-control"
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+          required
+        />
+        @if (formGroup.controls.password.touched && formGroup.controls.password.invalid) {
+          <p class="auth-field__error">Use at least 4 characters.</p>
+        }
+      </div>
+
+      <fieldset class="auth-choice">
+        <legend>I am a</legend>
+        <input id="register-role-customer" type="radio" formControlName="role" value="customer" />
+        <label for="register-role-customer">Customer</label>
+        <input id="register-role-agent" type="radio" formControlName="role" value="agent" />
+        <label for="register-role-agent">Agent</label>
+      </fieldset>
+
+      <button class="btn btn-primary auth-form__full" type="submit">Create account</button>
+    </form>
+
+    <p class="auth-card__footer">
+      Already have an account? <a routerLink="/login">Log in</a>
+    </p>
   </div>
 </div>

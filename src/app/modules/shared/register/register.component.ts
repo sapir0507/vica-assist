@@ -7,8 +7,7 @@ import { RegisterService } from 'src/app/services/register/register.service';
   standalone: false,
   selector: 'app-register',
   templateUrl: './register.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./register.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit {
 
@@ -20,9 +19,9 @@ export class RegisterComponent implements OnInit {
 
   formGroup = new FormGroup({
     username: new FormControl<string | undefined>(undefined, [Validators.required]),
-    role: new FormControl<string | undefined>(undefined, [Validators.required]),
+    role: new FormControl<string | undefined>('customer', [Validators.required]),
     password: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
-    email: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required]))
+    email: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.email]))
   });
 
   constructor(
@@ -32,18 +31,19 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {/* empty*/}
 
   onSubmit(){
-
-    const role = this.formGroup.get('role')?.value;
-    if(this.formGroup.valid){
-        this.registerRequest = {
-          username: this.formGroup.get('username')?.value ?? undefined,
-          password: this.formGroup.get('password')?.value ?? undefined,
-          email: this.formGroup.get('email')?.value ?? undefined,
-          role: role === 'agent' || role === 'customer'? role : 'customer'
-        }
-        // this.registerService.add()
-        this.registerService.addRegister(this.registerRequest)
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
     }
+
+    const { username, password, email, role } = this.formGroup.value;
+    this.registerRequest = {
+      username: username ?? undefined,
+      password: password ?? undefined,
+      email: email ?? undefined,
+      role: role === 'agent' || role === 'customer' ? role : 'customer'
+    };
+    this.registerService.addRegister(this.registerRequest);
   }
 
 }

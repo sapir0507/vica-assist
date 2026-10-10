@@ -14,7 +14,7 @@
         <label for="login-username">Username</label>
         <input
           id="login-username"
-          class="form-control form-control-lg"
+          class="form-control"
           type="text"
           formControlName="username"
           autocomplete="username"
@@ -30,7 +30,7 @@
         <label for="login-password">Password</label>
         <input
           id="login-password"
-          class="form-control form-control-lg"
+          class="form-control"
           type="password"
           formControlName="password"
           autocomplete="current-password"
@@ -42,7 +42,7 @@
         }
       </div>
 
-      <button class="btn btn-primary btn-lg w-100" type="submit" [disabled]="sessionStore.isLoading()">
+      <button class="btn btn-primary w-100" type="submit" [disabled]="sessionStore.isLoading()">
         {{ sessionStore.isLoading() ? 'Logging in…' : 'Log in' }}
       </button>
     </form>
