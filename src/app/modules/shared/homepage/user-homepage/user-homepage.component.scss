@@ -1,86 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Acme&family=Alfa+Slab+One&family=Caveat:wght@500&family=Indie+Flower&family=Permanent+Marker&family=Raleway:wght@300&family=Righteous&family=Volkhov&display=swap');
+:host {
+  display: block;
+}
 
-:host{
-    font-size: 24px;
-    .size1{
-        font-size: 4em;
-    }
-    .size2{
-        font-size: 3em;
-    }
-    .size3{
-        font-size: 2em;
-    }
-    .title{
-        margin-top: 20px;
-        padding: 5px;
-        font-family: 'Permanent Marker', cursive;
-        letter-spacing: 2px;
-        color: #673ab7;
-        text-shadow: 2px 1px 1px #4c2a87;
-    }
-    .sub-title{
-        margin-top: 20px;
-        padding: 5px;
-        font-family: 'Permanent Marker', cursive;
-        letter-spacing: 2px;
-        color: #673ab7;
-        text-shadow: 2px 1px 1px #4c2a87;
-        font-size: 2em;
-    }
-    .content{
-        text-shadow: 1px 1px 1px #4c2a87;
-        font-size: 20px;
-    }
-    .sliding-title{
-        position: relative;
-        animation-name: offer;
-        animation-duration: 2s;
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4);
+}
 
-        @keyframes offer {
-            from {
-                top: 0px;
-                left: 50px;
-                letter-spacing: 2px;
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
 
-            }
-            to {
-                top: 0px;
-                left: 0px;
-                letter-spacing: 2px;
+.action-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 24px rgb(0 0 0 / 12%);
+}
 
-            }
-          }
-    }
-    .title-letter-spacing-animation{
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        place-content: center;
-        animation-name: offer;
-        animation-duration: 2s;
+.action-card__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-primary);
+}
 
-        @keyframes offer {
-            from {
-                top: 0px;
-                left: 0px;
-                letter-spacing: 10px;
-            }
-            to {
-                top: 0px;
-                left: 0px;
-            }
-          }
-    }
+.action-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+}
 
-    .choices{
-        margin-top: 50px;
-        mat-grid-tile {
-            background: lightblue;
-        }
-        button{
-            font-size: 20px;
-            padding: 10px;
-        }
-    }
+.action-card__text {
+  color: var(--color-text-secondary);
+}
+
+.back {
+  margin-bottom: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-card:hover {
+    transform: none;
+  }
 }

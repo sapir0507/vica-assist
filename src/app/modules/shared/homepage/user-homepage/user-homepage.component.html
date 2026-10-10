@@ -1,53 +1,42 @@
-
-<div class="contrainer">
-  <div class="text-center">
-    <h1 [ngClass]="getTitleClasses()" (window:resize)="handleFontSizeEvent($event)">Homepage</h1>
-  </div>
-  @if (getChoice() === 0) {
-    <div class="choices m-5">
-      <mat-grid-list [cols]="breakpoint" rowHeight="2:1" [gutterSize]="'20px'" (window:resize)="handleSizeEvent($event)">
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="newOrder()">
-            Place A New Order
-          </button>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <button mat-raised-button color="primary" (click)="seeAllOrders()">
-            Monitor Previous Orders
-          </button>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </div>
-  }
-  @if (getChoice() === 1) {
-    <div class="choices">
-      <div class="goBack m-4">
-        <button mat-button (click)="goBack()">
-          <span><mat-icon class="inline-icon" svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon></span>
-          &nbsp;Go Back
+<div class="page">
+  @switch (view) {
+    @case ('menu') {
+      <h1 class="page__title">Where to next?</h1>
+      <p class="page__subtitle">Book a new trip or follow the orders you already placed.</p>
+      <div class="actions">
+        <button type="button" class="action-card" (click)="showBooking()">
+          <mat-icon class="action-card__icon" svgIcon="luggage" aria-hidden="true"></mat-icon>
+          <span class="action-card__title">Book your trip</span>
+          <span class="action-card__text">Pick a destination and tell us your dates and budget.</span>
+        </button>
+        <button type="button" class="action-card" (click)="showOrders()">
+          <mat-icon class="action-card__icon" svgIcon="calendar_today" aria-hidden="true"></mat-icon>
+          <span class="action-card__title">Manage bookings</span>
+          <span class="action-card__text">See which orders are pending and which are ready.</span>
         </button>
       </div>
-      <div class="container-fluid m-2">
-        <userRequests></userRequests>
-      </div>
-    </div>
-  }
-  @if (getChoice() === 2) {
-    <div class="choices">
-      <div class="goBack m-4">
-        <button mat-button (click)="goBack()">
-          <span><mat-icon class="inline-icon" svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon></span>
-          &nbsp;Go Back
-        </button>
-        <mat-tab-group animationDuration="0ms" [backgroundColor]="'primary'">
-          <mat-tab label="Pending Orders">
-            <order-status-list status="pending" (item)="selectedItem($event)"></order-status-list>
-          </mat-tab>
-          <mat-tab label="Finished Orders">
-            <order-status-list status="finished" (item)="selectedItem($event)"></order-status-list>
-          </mat-tab>
-        </mat-tab-group>
-      </div>
-    </div>
+    }
+    @case ('booking') {
+      <button mat-button class="back" type="button" (click)="showMenu()">
+        <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+        Back
+      </button>
+      <userRequests></userRequests>
+    }
+    @case ('orders') {
+      <button mat-button class="back" type="button" (click)="showMenu()">
+        <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+        Back
+      </button>
+      <h1 class="page__title">Your orders</h1>
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab label="Pending">
+          <order-status-list status="pending" (item)="selectedItem($event)"></order-status-list>
+        </mat-tab>
+        <mat-tab label="Finished">
+          <order-status-list status="finished" (item)="selectedItem($event)"></order-status-list>
+        </mat-tab>
+      </mat-tab-group>
+    }
   }
 </div>
