@@ -74,6 +74,16 @@
   gap: var(--space-4);
 }
 
+place-field {
+  display: block;
+}
+
+.booking__stars-label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-weight: 600;
+}
+
 .booking__search {
   width: 100%;
   max-width: 28rem;

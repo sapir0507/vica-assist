@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { dateRangeValidator, notInPastValidator, OrderRequest, passDetails } from '@vica-assist/shared';
-import { DESTINATIONS, Destination, SEARCHABLE_PLACES } from 'src/app/modules/shared/destinations/destinations';
-import { differentPlaces, notBlank } from '../validators';
+import { collapseSpaces, ConfigService, dateRangeValidator, notInPastValidator, OrderRequest, passDetails } from '@vica-assist/shared';
+import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
+import { differentPlaces, fullName, israeliId, knownPlace, notBlank, uniqueTravelerIds } from '../validators';
 
 @Component({
   standalone: false,
@@ -21,21 +21,22 @@ export class UserRequestsComponent implements OnInit {
   readonly destinations = DESTINATIONS;
   step = 0;
   orderID: string | null = null;
+  private limits = inject(ConfigService).config().limits;
   requestForm: FormGroup = this.fb.group({
 
     //do you want a hotel only or a flight too
     order:this.fb.control('both', [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     //details
-    origin: this.fb.control('', [Validators.required, notBlank]),
-    destination: this.fb.control('', [Validators.required, notBlank]),
-    passDetails: this.fb.array([] as passDetails[], [Validators.required]),
+    origin: this.fb.control('', [Validators.required, notBlank, knownPlace]),
+    destination: this.fb.control('', [Validators.required, notBlank, knownPlace]),
+    passDetails: this.fb.array([] as passDetails[], [Validators.required, uniqueTravelerIds('passID')]),
     Dates: new FormGroup({
       departureDate: this.fb.control('', [Validators.required, notInPastValidator()]),
       returnDate: this.fb.control('', [Validators.required])
     }, { validators: dateRangeValidator('departureDate', 'returnDate') }),
 
     hotel: this.fb.group({
-      stars: this.fb.control(''),
+      stars: this.fb.control<number | null>(3),
     }),
     price: this.fb.control('0', [Validators.required, Validators.min(1)])
 
@@ -90,11 +91,6 @@ export class UserRequestsComponent implements OnInit {
     return true;
   }
 
-  get suggestions(): string[] {
-    const typed = String(this.requestForm.value.destination ?? '').trim().toLowerCase();
-    return SEARCHABLE_PLACES.filter(place => place.toLowerCase().includes(typed)).slice(0, 8);
-  }
-
   isSelected(destination: Destination): boolean {
     return this.requestForm.value.destination?.trim().toLowerCase() === destination.name.toLowerCase();
   }
@@ -111,10 +107,27 @@ export class UserRequestsComponent implements OnInit {
     this.step--;
   }
 
+  get canAddTraveler(): boolean {
+    return this.passDetails.length < this.limits.maxTravelers;
+  }
+
+  get originControl(): FormControl {
+    return this.requestForm.controls['origin'] as FormControl;
+  }
+
+  get destinationControl(): FormControl {
+    return this.requestForm.controls['destination'] as FormControl;
+  }
+
+  get hotelIncluded(): boolean {
+    return this.order !== 'flight';
+  }
+
   addNewPass(): void{
+    if (!this.canAddTraveler) return;
     const newPass: FormGroup = this.fb.group({
-      fullName: this.fb.control('', [Validators.required, notBlank]),
-      passID: this.fb.control('', [Validators.required, Validators.min(1)])
+      fullName: this.fb.control('', [Validators.required, notBlank, fullName(this.limits.nameMaxLength)]),
+      passID: this.fb.control('', [Validators.required, israeliId])
     })
     this.passDetails.push(newPass)
   }
@@ -135,8 +148,11 @@ export class UserRequestsComponent implements OnInit {
         returnDate: this.Dates.get('returnDate')?.value,
         origin: this.requestForm.get('origin')?.value.trim(),
         destination: this.requestForm.get('destination')?.value.trim(),
-        passDetails: (this.requestForm.get('passDetails')?.value as passDetails[]).map(traveler => ({ ...traveler, fullName: traveler.fullName.trim() })),
-        stars: this.hotel.get('stars')?.value,
+        passDetails: (this.requestForm.get('passDetails')?.value as { fullName: string; passID: string }[]).map(traveler => ({
+          fullName: collapseSpaces(traveler.fullName),
+          passID: Number(traveler.passID)
+        })),
+        stars: this.hotelIncluded ? this.hotel.get('stars')?.value : undefined,
         priceRange: this.requestForm.get('price')?.value,
         customer: this.sessionStore.username(),
         createdAt: new Date().toISOString()

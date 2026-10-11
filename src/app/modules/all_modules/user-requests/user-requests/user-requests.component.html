@@ -20,18 +20,12 @@
     @switch (step) {
       @case (0) {
         <h2 class="booking__heading" id="destination-heading">Where do you want to go?</h2>
-        <mat-form-field class="booking__search">
-          <mat-label>Search for a destination</mat-label>
-          <input matInput type="text" formControlName="destination" autocomplete="off" [matAutocomplete]="places" />
-          <mat-autocomplete #places="matAutocomplete">
-            @for (place of suggestions; track place) {
-              <mat-option [value]="place">{{ place }}</mat-option>
-            }
-          </mat-autocomplete>
-          @if (requestForm.controls['destination'].hasError('blank')) {
-            <mat-error>Enter where you want to go.</mat-error>
-          }
-        </mat-form-field>
+        <place-field
+          class="booking__search"
+          label="Search for a destination"
+          blankMessage="Enter where you want to go."
+          [control]="destinationControl"
+        />
         <div class="destination-picker" role="radiogroup" aria-labelledby="destination-heading">
           @for (destination of destinations; track destination.name) {
             <destination-card
@@ -53,20 +47,25 @@
                 <input matInput type="text" formControlName="fullName" autocomplete="off" />
                 @if (passDetails.at(i).get('fullName')?.hasError('blank')) {
                   <mat-error>Enter the traveler's full name.</mat-error>
+                } @else if (passDetails.at(i).get('fullName')?.hasError('fullName')) {
+                  <mat-error>Enter a first and a last name, letters only.</mat-error>
                 }
               </mat-form-field>
               <mat-form-field>
                 <mat-label>ID</mat-label>
-                <input matInput type="number" min="1" formControlName="passID" autocomplete="off" />
-                @if (passDetails.at(i).get('passID')?.hasError('min')) {
-                  <mat-error>Enter a valid ID number.</mat-error>
+                <input matInput type="text" inputmode="numeric" maxlength="9" formControlName="passID" autocomplete="off" />
+                @if (passDetails.at(i).get('passID')?.hasError('israeliId')) {
+                  <mat-error>Enter a valid Israeli ID number.</mat-error>
                 }
               </mat-form-field>
               <button mat-button color="warn" type="button" (click)="deleteExistingPass(i)">Remove</button>
             </div>
           }
         </ng-container>
-        <button mat-stroked-button type="button" (click)="addNewPass()">
+        @if (passDetails.hasError('duplicateId')) {
+          <p class="form-field__error" role="alert">Two travelers cannot have the same ID.</p>
+        }
+        <button mat-stroked-button type="button" [disabled]="!canAddTraveler" (click)="addNewPass()">
           <mat-icon svgIcon="add" aria-hidden="true"></mat-icon>
           Add a traveler
         </button>
@@ -82,23 +81,19 @@
             </mat-radio-group>
           </div>
 
-          <mat-form-field>
-            <mat-label>Origin</mat-label>
-            <input matInput type="text" formControlName="origin" autocomplete="off" />
-            <mat-hint>Where you are travelling from</mat-hint>
-            @if (requestForm.controls['origin'].hasError('blank')) {
-              <mat-error>Enter where you are travelling from.</mat-error>
-            }
-          </mat-form-field>
+          <place-field
+            label="Origin"
+            hint="The country or city you are travelling from"
+            blankMessage="Enter where you are travelling from."
+            [control]="originControl"
+          />
 
-          <mat-form-field [formGroup]="hotel">
-            <mat-label>Hotel stars</mat-label>
-            <mat-select formControlName="stars">
-              @for (stars of [1, 2, 3, 4, 5]; track stars) {
-                <mat-option [value]="stars">{{ stars }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          @if (hotelIncluded) {
+            <div class="form-field">
+              <span class="booking__stars-label">Minimum hotel stars</span>
+              <star-rating label="Minimum hotel stars" [value]="stars.value" (valueChange)="stars.setValue($event)" />
+            </div>
+          }
 
           <ng-container [formGroup]="Dates">
             <div class="form-field">

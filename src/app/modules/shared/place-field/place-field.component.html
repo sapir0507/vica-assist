@@ -1,0 +1,17 @@
+<mat-form-field class="place-field">
+  <mat-label>{{ label() }}</mat-label>
+  <input matInput type="text" autocomplete="off" [formControl]="control()" [matAutocomplete]="places" (blur)="control().markAsTouched()" />
+  <mat-autocomplete #places="matAutocomplete">
+    @for (place of suggestions; track place) {
+      <mat-option [value]="place">{{ place }}</mat-option>
+    }
+  </mat-autocomplete>
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+  @if (control().hasError('blank')) {
+    <mat-error>{{ blankMessage() }}</mat-error>
+  } @else if (control().hasError('unknownPlace')) {
+    <mat-error>Pick a country or city from the list.</mat-error>
+  }
+</mat-form-field>

@@ -14,10 +14,3 @@ export const DESTINATIONS: readonly Destination[] = [
   { name: 'Barcelona', emoji: '⛪', description: 'Gaudí, tapas and the sea', fromPrice: 310, gradient: 'linear-gradient(135deg, #fb923c, #c2410c)' },
   { name: 'Singapore', emoji: '🦁', description: 'Gardens, food courts and skyline', fromPrice: 740, gradient: 'linear-gradient(135deg, #38bdf8, #4338ca)' }
 ];
-
-export const SEARCHABLE_PLACES: readonly string[] = [
-  ...DESTINATIONS.map(destination => destination.name),
-  'Amsterdam', 'Athens', 'Bangkok', 'Berlin', 'Budapest', 'Cairo', 'Cape Town', 'Copenhagen', 'Istanbul', 'Lisbon',
-  'London', 'Madrid', 'Marrakech', 'Mexico City', 'Miami', 'Milan', 'New York', 'Prague', 'Reykjavik', 'Rio de Janeiro',
-  'Rome', 'Santorini', 'Seoul', 'Sydney', 'Venice', 'Vienna'
-].sort((a, b) => a.localeCompare(b)).filter((name, index, all) => all.indexOf(name) === index);
