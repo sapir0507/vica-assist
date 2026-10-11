@@ -1,0 +1,25 @@
+<h2 id="inquiries-title" class="admin-section__title">Inquiries</h2>
+<p class="admin-section__lead">Questions from visitors. {{ newCount() }} new.</p>
+
+@if (error(); as message) {
+  <p class="admin-message admin-message--error" role="alert">{{ message }}</p>
+}
+
+<ul class="reviews">
+  @for (inquiry of inquiries(); track inquiry.id) {
+    <li class="review">
+      <p class="review__text">{{ inquiry.message }}</p>
+      <p class="review__meta">
+        {{ inquiry.name }} &middot; <a [href]="'mailto:' + inquiry.email">{{ inquiry.email }}</a> &middot; {{ inquiry.createdAt | date: 'd MMM y, HH:mm' }}
+        <span class="status">{{ inquiry.status }}</span>
+      </p>
+      <div class="admin-actions">
+        @if (inquiry.status !== 'read') { <button type="button" class="btn btn-outline-secondary btn-sm" (click)="mark(inquiry, 'read')">Mark as read</button> }
+        @if (inquiry.status !== 'answered') { <button type="button" class="btn btn-outline-secondary btn-sm" (click)="mark(inquiry, 'answered')">Mark as answered</button> }
+        @if (inquiry.status !== 'new') { <button type="button" class="btn btn-outline-secondary btn-sm" (click)="mark(inquiry, 'new')">Mark as new</button> }
+      </div>
+    </li>
+  } @empty {
+    <li class="muted">No inquiries yet.</li>
+  }
+</ul>

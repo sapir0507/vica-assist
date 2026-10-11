@@ -12,6 +12,13 @@ export const HOMEPAGE_ROUTES: Routes = [
   {
     path: '',
     canActivate: [authGuard],
+    canMatch: [roleMatch('admin')],
+    loadComponent: () =>
+      import('./admin-homepage/admin-homepage.component').then(m => m.AdminHomepageComponent)
+  },
+  {
+    path: '',
+    canActivate: [authGuard],
     canMatch: [roleMatch('agent')],
     loadComponent: () =>
       import('./agent-homepage/agent-homepage.component').then(m => m.AgentHomepageComponent)

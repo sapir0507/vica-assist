@@ -1,0 +1,51 @@
+<h2 id="requests-title" class="admin-section__title">Requests</h2>
+<p class="admin-section__lead">Every request, who has it, and how long it has waited. Move a waiting request to another agent when needed.</p>
+
+<div class="admin-actions">
+  <label for="request-filter">Show</label>
+  <select id="request-filter" class="form-control" [value]="filter()" (change)="select($any($event.target).value)">
+    @for (item of filters; track item.id) {
+      <option [value]="item.id">{{ item.label }}</option>
+    }
+  </select>
+</div>
+
+@if (error(); as message) {
+  <p class="admin-message admin-message--error" role="alert">{{ message }}</p>
+}
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <caption class="visually-hidden">All requests</caption>
+    <thead>
+      <tr><th>Ref</th><th>Customer</th><th>Trip</th><th>Status</th><th>Agent</th><th>Received</th><th>Move to</th></tr>
+    </thead>
+    <tbody>
+      @for (order of requests(); track order.id) {
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>{{ order.customer ?? 'unknown' }}</td>
+          <td>{{ order.origin }} &rarr; {{ order.destination }}</td>
+          <td>
+            <span class="status">{{ statusOf(order) }}</span>
+            @if (isLate(order)) { <span class="overdue">overdue</span> }
+          </td>
+          <td>{{ nameOf(order.agent) }}</td>
+          <td>{{ order.createdAt | date: 'd MMM y, HH:mm' }}</td>
+          <td>
+            @if (order.status === 'pending') {
+              <select class="form-control" [attr.aria-label]="'Move request ' + order.id + ' to'" (change)="reassign(order, $any($event.target).value)">
+                <option value="">Choose agent</option>
+                @for (agent of agents(); track agent.id) {
+                  <option [value]="agent.username" [disabled]="agent.username === order.agent">{{ agent.displayName }}</option>
+                }
+              </select>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="7">No requests to show.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

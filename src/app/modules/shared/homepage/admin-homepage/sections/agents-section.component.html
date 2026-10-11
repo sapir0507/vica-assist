@@ -1,0 +1,62 @@
+<h2 id="agents-title" class="admin-section__title">Agents</h2>
+<p class="admin-section__lead">Add agents and keep their profiles current. Agents cannot register themselves.</p>
+
+@if (created(); as account) {
+  <div class="admin-message" role="status">
+    <p><strong>{{ account.name }}</strong> can now sign in as <code>{{ account.username }}</code> with the one-time password <code>{{ account.password }}</code>. It is shown only now; pass it on safely.</p>
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="dismissPassword()">I have noted it</button>
+  </div>
+}
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <caption class="visually-hidden">Agents</caption>
+    <thead><tr><th>Agent</th><th>Title</th><th>Languages</th><th>Open requests</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      @for (agent of agents(); track agent.id) {
+        <tr>
+          <td>{{ agent.displayName }}<br /><span class="muted">{{ agent.username }}</span></td>
+          <td>{{ agent.title }}</td>
+          <td>{{ agent.languages.join(', ') }}</td>
+          <td>{{ openRequests(agent) }}</td>
+          <td><span class="status">{{ !agent.active ? 'inactive' : agent.available ? 'available' : 'away' }}</span></td>
+          <td class="admin-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="edit(agent)">Edit</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleActive(agent)">{{ agent.active ? 'Deactivate' : 'Reactivate' }}</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6">No agents yet.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<h3 class="admin-subtitle">{{ editing() ? 'Edit ' + editing()?.displayName : 'Add an agent' }}</h3>
+<form class="admin-card" [formGroup]="form" (ngSubmit)="save()">
+  <div class="admin-form">
+    <div class="form-field"><label for="agent-username">Username</label><input id="agent-username" class="form-control" formControlName="username" [attr.readonly]="editing() ? '' : null" autocomplete="off" /></div>
+    <div class="form-field"><label for="agent-name">Full name</label><input id="agent-name" class="form-control" formControlName="displayName" autocomplete="off" /></div>
+    <div class="form-field"><label for="agent-title">Title</label><input id="agent-title" class="form-control" formControlName="title" autocomplete="off" /></div>
+    <div class="form-field"><label for="agent-email">Email</label><input id="agent-email" class="form-control" type="email" formControlName="email" autocomplete="off" /></div>
+    <div class="form-field"><label for="agent-years">Years of experience</label><input id="agent-years" class="form-control" type="number" min="0" max="60" formControlName="yearsExperience" /></div>
+    <div class="form-field"><label for="agent-languages">Languages (comma separated)</label><input id="agent-languages" class="form-control" formControlName="languages" /></div>
+    <div class="form-field admin-form__full"><label for="agent-specialties">Specialties: destinations or hotel, flight, both (comma separated)</label><input id="agent-specialties" class="form-control" formControlName="specialties" /></div>
+    <div class="form-field admin-form__full"><label for="agent-bio">Short bio</label><textarea id="agent-bio" class="form-control" rows="3" formControlName="bio"></textarea></div>
+  </div>
+
+  @if (errors().length) {
+    <ul class="errors" role="alert">
+      @for (message of errors(); track message) {
+        <li>{{ message }}</li>
+      }
+    </ul>
+  }
+
+  <div class="admin-actions">
+    <button type="submit" class="btn btn-primary">{{ editing() ? 'Save changes' : 'Create agent' }}</button>
+    @if (editing()) {
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+    }
+  </div>
+</form>

@@ -1,0 +1,30 @@
+<header class="admin-hero">
+  <div class="admin-hero__inner">
+    <h1 class="admin-hero__title">Administration</h1>
+    <p class="admin-hero__lead">Requests, agents, airlines and settings in one place. Every change is written to the audit log.</p>
+  </div>
+</header>
+
+<nav class="admin-nav" aria-label="Sections of this page">
+  <div class="admin-nav__inner">
+    @for (section of sections; track section.id) {
+      <a
+        class="admin-nav__link"
+        [class.admin-nav__link--active]="active() === section.id"
+        [attr.aria-current]="active() === section.id ? 'location' : null"
+        [href]="'#admin-' + section.id"
+        (click)="go(section.id, $event)"
+      >{{ section.label }}</a>
+    }
+  </div>
+</nav>
+
+<div class="admin-page">
+  <section id="admin-overview" class="admin-section" data-section reveal aria-labelledby="overview-title"><admin-overview /></section>
+  <section id="admin-requests" class="admin-section" data-section reveal aria-labelledby="requests-title"><admin-requests /></section>
+  <section id="admin-agents" class="admin-section" data-section reveal aria-labelledby="agents-title"><admin-agents /></section>
+  <section id="admin-airlines" class="admin-section" data-section reveal aria-labelledby="airlines-title"><admin-airlines /></section>
+  <section id="admin-configuration" class="admin-section" data-section reveal aria-labelledby="configuration-title"><admin-configuration /></section>
+  <section id="admin-inquiries" class="admin-section" data-section reveal aria-labelledby="inquiries-title"><admin-inquiries /></section>
+  <section id="admin-audit" class="admin-section" data-section reveal aria-labelledby="audit-title"><admin-audit /></section>
+</div>

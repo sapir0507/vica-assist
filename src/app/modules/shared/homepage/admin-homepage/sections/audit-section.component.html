@@ -1,0 +1,26 @@
+<h2 id="audit-title" class="admin-section__title">Audit log</h2>
+<p class="admin-section__lead">What was changed, by whom and when. Entries can be read here, never edited or removed.</p>
+
+<div class="admin-actions">
+  <label for="audit-filter">Filter</label>
+  <input id="audit-filter" class="form-control" type="search" placeholder="Name, action or words in the description" [value]="text()" (input)="text.set($any($event.target).value)" />
+</div>
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <caption class="visually-hidden">Changes made by administrators</caption>
+    <thead><tr><th>When</th><th>Who</th><th>Action</th><th>What changed</th></tr></thead>
+    <tbody>
+      @for (entry of entries(); track entry.id) {
+        <tr>
+          <td>{{ entry.at | date: 'd MMM y, HH:mm' }}</td>
+          <td>{{ entry.actor }}</td>
+          <td><code>{{ entry.action }}</code></td>
+          <td>{{ entry.detail }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="4">Nothing has been changed yet.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

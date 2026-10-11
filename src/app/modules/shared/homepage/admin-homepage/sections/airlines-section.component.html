@@ -1,0 +1,54 @@
+<h2 id="airlines-title" class="admin-section__title">Airlines</h2>
+<p class="admin-section__lead">Customers and agents can only choose from the active airlines. Deactivated airlines disappear from the lists, but old flights keep their name.</p>
+
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <caption class="visually-hidden">Airlines</caption>
+    <thead><tr><th>Airline</th><th>Country and hub</th><th>Checked bag in economy</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      @for (airline of airlines(); track airline.id) {
+        <tr>
+          <td>
+            <span class="code" [style.background]="airline.brandColor">{{ airline.code }}</span>
+            {{ airline.name }}
+          </td>
+          <td>{{ airline.country }}, {{ airline.hub }}</td>
+          <td>{{ airline.baggage.checkedIncludedEconomy ? 'Included, ' + airline.baggage.weightKg + ' kg' : 'Not included' }}</td>
+          <td><span class="status">{{ airline.active ? 'active' : 'inactive' }}</span></td>
+          <td class="admin-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="edit(airline)">Edit</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleActive(airline)">{{ airline.active ? 'Deactivate' : 'Reactivate' }}</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<h3 class="admin-subtitle">{{ editing() ? 'Edit ' + editing()?.name : 'Add an airline' }}</h3>
+<form class="admin-card" [formGroup]="form" (ngSubmit)="save()">
+  <div class="admin-form">
+    <div class="form-field"><label for="airline-name">Name</label><input id="airline-name" class="form-control" formControlName="name" autocomplete="off" /></div>
+    <div class="form-field"><label for="airline-code">Code (2 or 3 letters or digits)</label><input id="airline-code" class="form-control" formControlName="code" maxlength="3" autocomplete="off" /></div>
+    <div class="form-field"><label for="airline-country">Country</label><input id="airline-country" class="form-control" formControlName="country" autocomplete="off" /></div>
+    <div class="form-field"><label for="airline-hub">Home hub</label><input id="airline-hub" class="form-control" formControlName="hub" autocomplete="off" /></div>
+    <div class="form-field"><label for="airline-color">Colour (white text must be readable on it)</label><input id="airline-color" class="form-control" type="color" formControlName="brandColor" /></div>
+    <div class="form-field"><label for="airline-weight">Checked bag weight (kg)</label><input id="airline-weight" class="form-control" type="number" min="0" max="50" formControlName="weightKg" /></div>
+    <label class="admin-form__full"><input type="checkbox" formControlName="checkedIncludedEconomy" /> A checked bag is included in economy</label>
+  </div>
+
+  @if (errors().length) {
+    <ul class="errors" role="alert">
+      @for (message of errors(); track message) {
+        <li>{{ message }}</li>
+      }
+    </ul>
+  }
+
+  <div class="admin-actions">
+    <button type="submit" class="btn btn-primary">{{ editing() ? 'Save changes' : 'Add airline' }}</button>
+    @if (editing()) {
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+    }
+  </div>
+</form>

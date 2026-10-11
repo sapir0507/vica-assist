@@ -1,0 +1,76 @@
+<h2 id="configuration-title" class="admin-section__title">Configuration</h2>
+<p class="admin-section__lead">
+  Everything the forms offer and every limit they enforce. Items are switched off, never deleted, so old requests keep their wording.
+  @if (customised()) { You are using your own saved settings. } @else { You are using the defaults that ship with the app. }
+</p>
+
+@if (problems().length) {
+  <ul class="errors" role="alert" aria-label="Problems with the settings">
+    @for (message of problems(); track message) {
+      <li>{{ message }}</li>
+    }
+  </ul>
+}
+@if (serverErrors().length) {
+  <ul class="errors" role="alert">
+    @for (message of serverErrors(); track message) {
+      <li>{{ message }}</li>
+    }
+  </ul>
+}
+@if (saved()) {
+  <p class="admin-message" role="status">The settings were saved.</p>
+}
+
+<div class="admin-actions">
+  <button type="button" class="btn btn-primary" [disabled]="!changed() || problems().length > 0" (click)="save()">Save settings</button>
+  <button type="button" class="btn btn-outline-secondary" [disabled]="!changed()" (click)="discard()">Discard changes</button>
+  <button type="button" class="btn btn-outline-secondary" [disabled]="!customised()" (click)="reset()">Reset to the defaults</button>
+</div>
+
+<h3 class="admin-subtitle">Limits</h3>
+<div class="admin-form admin-card">
+  @for (key of limitKeys; track key) {
+    <div class="form-field">
+      <label [for]="'limit-' + key">{{ limitTitle(key) }}</label>
+      <input [id]="'limit-' + key" class="form-control" type="number" [value]="draft().limits[key]" (input)="setLimit(key, $any($event.target).value)" />
+    </div>
+  }
+</div>
+
+<h3 class="admin-subtitle">Assignment and the public page</h3>
+<div class="admin-form admin-card">
+  <div class="form-field"><label for="assign-load">Weight of an agent's workload</label><input id="assign-load" class="form-control" type="number" step="0.1" min="0" [value]="draft().assignment.loadWeight" (input)="setAssignment('loadWeight', $any($event.target).value)" /></div>
+  <div class="form-field"><label for="assign-specialty">Head start for a specialist</label><input id="assign-specialty" class="form-control" type="number" step="0.1" min="0" [value]="draft().assignment.specialtyWeight" (input)="setAssignment('specialtyWeight', $any($event.target).value)" /></div>
+  <div class="form-field"><label for="assign-hours">Promised time to answer (hours)</label><input id="assign-hours" class="form-control" type="number" min="1" max="168" [value]="draft().assignment.responseHours" (input)="setAssignment('responseHours', $any($event.target).value)" /></div>
+  <div class="form-field"><label for="public-minimum">Bookings needed before public numbers show</label><input id="public-minimum" class="form-control" type="number" min="1" max="100" [value]="draft().publicMinimum" (input)="setPublicMinimum($any($event.target).value)" /></div>
+</div>
+
+@for (list of lists; track list.name) {
+  <h3 class="admin-subtitle">{{ list.title }}</h3>
+  <div class="admin-card">
+    @for (option of draft()[list.name]; track option.id; let index = $index) {
+      <div class="admin-actions option">
+        <input class="form-control" type="text" [attr.aria-label]="list.title + ' item ' + (index + 1)" [value]="option.label" (input)="setLabel(list.name, index, $any($event.target).value)" />
+        <label><input type="checkbox" [checked]="option.active" (change)="toggleOption(list.name, index)" /> Offered</label>
+      </div>
+    }
+    <div class="admin-actions option">
+      <input #added class="form-control" type="text" [attr.aria-label]="'New item for ' + list.title" placeholder="New item" />
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addOption(list.name, added.value); added.value = ''">Add</button>
+    </div>
+  </div>
+}
+
+<h3 class="admin-subtitle">Export and import</h3>
+<div class="admin-card">
+  <div class="admin-actions">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="showExport()">Show the current settings as JSON</button>
+  </div>
+  @if (exportText(); as json) {
+    <textarea class="form-control json" rows="10" readonly aria-label="Current settings as JSON" [value]="json"></textarea>
+  }
+  <label for="import-json" class="import-label">Paste settings to import (they are checked before they are applied)</label>
+  <textarea id="import-json" class="form-control json" rows="6" [value]="importText()" (input)="importText.set($any($event.target).value)"></textarea>
+  <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="!importText().trim()" (click)="importJson()">Import</button>
+</div>
