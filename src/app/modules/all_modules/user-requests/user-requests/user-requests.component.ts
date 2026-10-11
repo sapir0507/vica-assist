@@ -3,8 +3,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { dateRangeValidator, OrderRequest, passDetails } from '@vica-assist/shared';
+import { dateRangeValidator, notInPastValidator, OrderRequest, passDetails } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
+import { differentPlaces, notBlank } from '../validators';
 
 @Component({
   standalone: false,
@@ -25,20 +26,20 @@ export class UserRequestsComponent implements OnInit {
     //do you want a hotel only or a flight too
     order:this.fb.control('both', [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     //details
-    origin: this.fb.control('', [Validators.required]),
-    destination: this.fb.control('', Validators.required),
+    origin: this.fb.control('', [Validators.required, notBlank]),
+    destination: this.fb.control('', [Validators.required, notBlank]),
     passDetails: this.fb.array([] as passDetails[], [Validators.required]),
     Dates: new FormGroup({
-      departureDate: this.fb.control('', [Validators.required]),
+      departureDate: this.fb.control('', [Validators.required, notInPastValidator()]),
       returnDate: this.fb.control('', [Validators.required])
     }, { validators: dateRangeValidator('departureDate', 'returnDate') }),
 
     hotel: this.fb.group({
       stars: this.fb.control(''),
     }),
-    price: this.fb.control('0', [Validators.required])
+    price: this.fb.control('0', [Validators.required, Validators.min(1)])
 
-  })
+  }, { validators: differentPlaces('origin', 'destination') })
 
   get order(){
     return this.requestForm.get('order')?.value as string;
@@ -107,8 +108,8 @@ export class UserRequestsComponent implements OnInit {
 
   addNewPass(): void{
     const newPass: FormGroup = this.fb.group({
-      fullName: this.fb.control('', [Validators.required]),
-      passID: this.fb.control('', [Validators.required])
+      fullName: this.fb.control('', [Validators.required, notBlank]),
+      passID: this.fb.control('', [Validators.required, Validators.min(1)])
     })
     this.passDetails.push(newPass)
   }
@@ -127,9 +128,9 @@ export class UserRequestsComponent implements OnInit {
         status: 'pending',
         departureDate: this.Dates.get('departureDate')?.value,
         returnDate: this.Dates.get('returnDate')?.value,
-        origin: this.requestForm.get('origin')?.value,
-        destination: this.requestForm.get('destination')?.value,
-        passDetails: this.requestForm.get('passDetails')?.value,
+        origin: this.requestForm.get('origin')?.value.trim(),
+        destination: this.requestForm.get('destination')?.value.trim(),
+        passDetails: (this.requestForm.get('passDetails')?.value as passDetails[]).map(traveler => ({ ...traveler, fullName: traveler.fullName.trim() })),
         stars: this.hotel.get('stars')?.value,
         priceRange: this.requestForm.get('price')?.value,
         customer: this.sessionStore.username(),

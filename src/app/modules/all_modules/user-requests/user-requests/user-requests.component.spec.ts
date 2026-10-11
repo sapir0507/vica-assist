@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideAppIcons } from '@vica-assist/shared';
+import { ChangeDetectorRef } from '@angular/core';
+import { provideAppIcons, toDateInputValue } from '@vica-assist/shared';
 
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
@@ -10,6 +11,12 @@ import { SessionStore } from 'src/app/services/session/session.store';
 
 import { UserRequestsModule } from '../user-requests.module';
 import { UserRequestsComponent } from './user-requests.component';
+
+const daysFromToday = (days: number): string => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return toDateInputValue(date.toISOString());
+};
 
 describe('UserRequestsComponent', () => {
   let component: UserRequestsComponent;
@@ -102,20 +109,116 @@ describe('UserRequestsComponent', () => {
     patchState(unprotected(TestBed.inject(SessionStore)), { username: 'dana' });
     const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
     component.requestForm.patchValue({
-      origin: 'Tel Aviv',
-      destination: 'Paris',
-      Dates: { departureDate: '2026-06-10', returnDate: '2026-06-17' },
-      passDetails: [{ fullName: 'Dana Levi', passID: '123' }]
+      origin: ' Tel Aviv ',
+      destination: 'Paris ',
+      Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(12) },
+      passDetails: [{ fullName: '  Dana Levi ', passID: '123' }],
+      price: '900'
     });
 
     component.onSubmit();
 
     expect(addOrder).toHaveBeenCalledTimes(1);
-    expect(addOrder.mock.calls[0][0]).toMatchObject({ destination: 'Paris', origin: 'Tel Aviv', choice: 'both', status: 'pending', customer: 'dana' });
+    expect(addOrder.mock.calls[0][0]).toMatchObject({
+      destination: 'Paris',
+      origin: 'Tel Aviv',
+      passDetails: [{ fullName: 'Dana Levi', passID: '123' }],
+      choice: 'both',
+      status: 'pending',
+      customer: 'dana'
+    });
     expect(Number.isNaN(Date.parse(addOrder.mock.calls[0][0].createdAt as string))).toBe(false);
     expect(component.step).toBe(0);
     expect(component.requestForm.value.destination).toBeNull();
     expect(component.requestForm.valid).toBe(false);
+  });
+
+  describe('validation', () => {
+    const valid = () => component.requestForm.patchValue({
+      origin: 'Tel Aviv',
+      destination: 'Paris',
+      Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
+      passDetails: [{ fullName: 'Dana Levi', passID: '1' }],
+      price: '500'
+    });
+
+    it('accepts a complete request', () => {
+      valid();
+
+      expect(component.requestForm.valid).toBe(true);
+    });
+
+    it('rejects a departure in the past but accepts today', () => {
+      valid();
+      component.Dates.patchValue({ departureDate: daysFromToday(-1), returnDate: daysFromToday(3) });
+      expect(component.departureDate.hasError('pastDate')).toBe(true);
+      expect(component.requestForm.valid).toBe(false);
+
+      component.Dates.patchValue({ departureDate: daysFromToday(0) });
+      expect(component.departureDate.hasError('pastDate')).toBe(false);
+    });
+
+    it('rejects a budget of zero or less', () => {
+      valid();
+      component.requestForm.patchValue({ price: '0' });
+      expect(component.requestForm.valid).toBe(false);
+
+      component.requestForm.patchValue({ price: '-5' });
+      expect(component.requestForm.valid).toBe(false);
+    });
+
+    it('rejects blank text for the places and the traveler name', () => {
+      valid();
+      component.requestForm.patchValue({ origin: '   ' });
+      expect(component.requestForm.controls['origin'].hasError('blank')).toBe(true);
+
+      valid();
+      component.requestForm.patchValue({ destination: ' ' });
+      expect(component.requestForm.controls['destination'].hasError('blank')).toBe(true);
+
+      valid();
+      component.passDetails.at(0).patchValue({ fullName: '  ' });
+      expect(component.passDetails.valid).toBe(false);
+    });
+
+    it('rejects an ID that is not a positive number', () => {
+      valid();
+      component.passDetails.at(0).patchValue({ passID: '0' });
+
+      expect(component.passDetails.valid).toBe(false);
+    });
+
+    it('rejects the same origin and destination', () => {
+      valid();
+      component.requestForm.patchValue({ origin: 'paris', destination: 'Paris ' });
+
+      expect(component.requestForm.hasError('samePlace')).toBe(true);
+      expect(component.requestForm.valid).toBe(false);
+    });
+
+    it('does not send an invalid request', () => {
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+      valid();
+      component.requestForm.patchValue({ price: '0' });
+
+      component.onSubmit();
+
+      expect(addOrder).not.toHaveBeenCalled();
+    });
+
+    it('explains a past departure and the same place on the last step', () => {
+      valid();
+      component.requestForm.patchValue({ origin: 'Paris', destination: 'Paris' });
+      component.Dates.patchValue({ departureDate: daysFromToday(-2), returnDate: daysFromToday(3) });
+      component.departureDate.markAsDirty();
+      component.step = 2;
+      fixture.componentRef.injector.get(ChangeDetectorRef).markForCheck();
+      fixture.detectChanges();
+
+      expect(host().textContent).toContain('The departure date cannot be in the past.');
+      expect(host().textContent).toContain('The origin and the destination must be different.');
+      expect(buttonLabelled('Submit request')?.disabled).toBe(true);
+    });
   });
 
   it('rejects a return date before the departure date', () => {

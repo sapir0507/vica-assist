@@ -1,4 +1,4 @@
-import { ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -15,6 +15,14 @@ export function toDateInputValue(value: string | null | undefined): string {
 
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/** Control validator: a date that has already passed is not allowed; an empty value is left to `required`. */
+export function notInPastValidator(now: () => Date = () => new Date()): (control: AbstractControl) => ValidationErrors | null {
+  return control => {
+    const day = toDateInputValue(control.value);
+    return day && day < toDateInputValue(now().toISOString()) ? { pastDate: true } : null;
+  };
 }
 
 /** Group validator: the end date, when both are set, must not be before the start date. */
