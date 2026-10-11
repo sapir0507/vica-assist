@@ -147,6 +147,8 @@ describe('OrderStore', () => {
       deleteReq.flush({});
 
       httpMock.expectNone(`${url}/2`);
+      httpMock.expectOne(url).flush([other]);
+      expect(store.orders()).toEqual([other]);
     });
   });
 });

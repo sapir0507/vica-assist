@@ -2,15 +2,25 @@ import { Flights } from "./flight.interface";
 import { Hotel } from './hotel.interface';
 import { Order } from "./order.interface";
 
+export interface Feedback {
+    hotelRating?: number,
+    flightRating?: number,
+    review?: string,
+    ratedAt: string
+}
+
 export interface finalOrderRequest{
     hotel?: Hotel,
     flight?: Flights,
-    order?: Order
+    order?: Order,
+    bookedAt?: string
 }
 
 export interface finalOrder{
     id: number,
     hotel?: Hotel,
     flight?: Flights,
-    order?: Order
+    order?: Order,
+    bookedAt?: string,
+    feedback?: Feedback
 }

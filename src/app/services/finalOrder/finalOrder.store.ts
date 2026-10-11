@@ -29,7 +29,8 @@ export const FinalOrderStore = signalStore(
     const hotelService = inject(HotelsService);
     const finalUrl = environment.api + 'finalOrder';
 
-    const postFinalOrder = (request: FinalOrderState) => http.post(finalUrl, request).pipe();
+    const postFinalOrder = (request: FinalOrderState) =>
+      http.post(finalUrl, { ...request, bookedAt: new Date().toISOString() }).pipe();
 
     return {
       update(partial: Partial<FinalOrderState>) {

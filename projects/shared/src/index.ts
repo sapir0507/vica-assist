@@ -8,3 +8,4 @@ export * from './lib/interfaces/pass-array.interface';
 export * from './lib/icons/app-icons';
 export * from './lib/icons/provide-app-icons';
 export * from './lib/dates';
+export * from './lib/feedback';

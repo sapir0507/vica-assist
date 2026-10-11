@@ -88,7 +88,8 @@ describe('FinalOrderStore', () => {
 
       const req = httpMock.expectOne(finalUrl);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual(request);
+      expect(req.request.body).toEqual({ ...request, bookedAt: expect.any(String) });
+      expect(Number.isNaN(Date.parse(req.request.body.bookedAt))).toBe(false);
       req.flush(request);
     });
 

@@ -115,6 +115,384 @@
         "price": 350,
         "id": 1
       }
-    }
+    },
+      {
+        "id": 2,
+        "order": {
+          "choice": "both",
+          "orderID": "102",
+          "status": "finished",
+          "departureDate": "2026-03-10",
+          "returnDate": "2026-03-17",
+          "origin": "Tel Aviv",
+          "destination": "Paris",
+          "passDetails": [
+            {
+              "fullName": "Dana Levi",
+              "passID": 30000002
+            }
+          ],
+          "stars": 4,
+          "priceRange": 1500,
+          "customer": "sapir0507",
+          "createdAt": "2026-01-12T09:00:00.000Z",
+          "respondedAt": "2026-01-12T15:30:00.000Z",
+          "id": 2
+        },
+        "hotel": {
+          "orderID": "102",
+          "name": "Hotel Lumière",
+          "stars": 4,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 640,
+          "id": 2
+        },
+        "flight": {
+          "orderID": "102",
+          "dest": "Paris",
+          "org": "Tel Aviv",
+          "returnDate": "2026-03-17",
+          "departureDate": "2026-03-10",
+          "stops": "0",
+          "price": 420,
+          "id": 2
+        },
+        "bookedAt": "2026-01-14T18:00:00.000Z",
+        "feedback": {
+          "hotelRating": 5,
+          "flightRating": 4,
+          "review": "Perfect location, the agent nailed the hotel.",
+          "ratedAt": "2026-03-19T10:00:00.000Z"
+        }
+      },
+      {
+        "id": 3,
+        "order": {
+          "choice": "both",
+          "orderID": "103",
+          "status": "finished",
+          "departureDate": "2026-05-02",
+          "returnDate": "2026-05-14",
+          "origin": "Tel Aviv",
+          "destination": "Tokyo",
+          "passDetails": [
+            {
+              "fullName": "Dana Levi",
+              "passID": 30000003
+            }
+          ],
+          "stars": 5,
+          "priceRange": 2600,
+          "customer": "sapir0507",
+          "createdAt": "2026-03-01T08:00:00.000Z",
+          "respondedAt": "2026-03-02T11:00:00.000Z",
+          "id": 3
+        },
+        "hotel": {
+          "orderID": "103",
+          "name": "Shinjuku Garden",
+          "stars": 5,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 1100,
+          "id": 3
+        },
+        "flight": {
+          "orderID": "103",
+          "dest": "Tokyo",
+          "org": "Tel Aviv",
+          "returnDate": "2026-05-14",
+          "departureDate": "2026-05-02",
+          "stops": "0",
+          "price": 890,
+          "id": 3
+        },
+        "bookedAt": "2026-03-03T09:30:00.000Z",
+        "feedback": {
+          "hotelRating": 4,
+          "flightRating": 3,
+          "review": "Hotel was great, the flight had a long layover.",
+          "ratedAt": "2026-05-16T12:00:00.000Z"
+        }
+      },
+      {
+        "id": 4,
+        "order": {
+          "choice": "hotel",
+          "orderID": "104",
+          "status": "finished",
+          "departureDate": "2026-06-20",
+          "returnDate": "2026-06-30",
+          "origin": "Tel Aviv",
+          "destination": "Bali",
+          "passDetails": [
+            {
+              "fullName": "Noa Cohen",
+              "passID": 30000004
+            }
+          ],
+          "stars": 4,
+          "priceRange": 900,
+          "customer": "Blabla hotel",
+          "createdAt": "2026-04-20T07:45:00.000Z",
+          "respondedAt": "2026-04-20T13:00:00.000Z",
+          "id": 4
+        },
+        "hotel": {
+          "orderID": "104",
+          "name": "Ubud Villa",
+          "stars": 4,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 760,
+          "id": 4
+        },
+        "bookedAt": "2026-04-21T16:20:00.000Z",
+        "feedback": {
+          "hotelRating": 5,
+          "review": "Best villa we ever stayed in.",
+          "ratedAt": "2026-07-02T09:00:00.000Z"
+        }
+      },
+      {
+        "id": 5,
+        "order": {
+          "choice": "flight",
+          "orderID": "105",
+          "status": "finished",
+          "departureDate": "2026-07-04",
+          "returnDate": "2026-07-11",
+          "origin": "Tel Aviv",
+          "destination": "Dubai",
+          "passDetails": [
+            {
+              "fullName": "Dana Levi",
+              "passID": 30000005
+            }
+          ],
+          "stars": 3,
+          "priceRange": 500,
+          "customer": "sapir0507",
+          "createdAt": "2026-05-28T10:10:00.000Z",
+          "respondedAt": "2026-05-30T09:00:00.000Z",
+          "id": 5
+        },
+        "flight": {
+          "orderID": "105",
+          "dest": "Dubai",
+          "org": "Tel Aviv",
+          "returnDate": "2026-07-11",
+          "departureDate": "2026-07-04",
+          "stops": "0",
+          "price": 360,
+          "id": 5
+        },
+        "bookedAt": "2026-05-30T20:00:00.000Z",
+        "feedback": {
+          "flightRating": 2,
+          "review": "Flight times were inconvenient.",
+          "ratedAt": "2026-07-13T08:00:00.000Z"
+        }
+      },
+      {
+        "id": 6,
+        "order": {
+          "choice": "both",
+          "orderID": "106",
+          "status": "finished",
+          "departureDate": "2026-08-15",
+          "returnDate": "2026-08-22",
+          "origin": "Tel Aviv",
+          "destination": "Barcelona",
+          "passDetails": [
+            {
+              "fullName": "Noa Cohen",
+              "passID": 30000006
+            }
+          ],
+          "stars": 3,
+          "priceRange": 1300,
+          "customer": "Blabla hotel",
+          "createdAt": "2026-06-18T11:00:00.000Z",
+          "respondedAt": "2026-06-18T14:40:00.000Z",
+          "id": 6
+        },
+        "hotel": {
+          "orderID": "106",
+          "name": "Gràcia Boutique",
+          "stars": 3,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 520,
+          "id": 6
+        },
+        "flight": {
+          "orderID": "106",
+          "dest": "Barcelona",
+          "org": "Tel Aviv",
+          "returnDate": "2026-08-22",
+          "departureDate": "2026-08-15",
+          "stops": "0",
+          "price": 310,
+          "id": 6
+        },
+        "bookedAt": "2026-06-19T10:00:00.000Z",
+        "feedback": {
+          "hotelRating": 4,
+          "flightRating": 5,
+          "review": "Great value for money.",
+          "ratedAt": "2026-08-24T10:30:00.000Z"
+        }
+      },
+      {
+        "id": 7,
+        "order": {
+          "choice": "both",
+          "orderID": "107",
+          "status": "finished",
+          "departureDate": "2026-09-01",
+          "returnDate": "2026-09-09",
+          "origin": "Tel Aviv",
+          "destination": "Singapore",
+          "passDetails": [
+            {
+              "fullName": "Dana Levi",
+              "passID": 30000007
+            }
+          ],
+          "stars": 5,
+          "priceRange": 2200,
+          "customer": "sapir0507",
+          "createdAt": "2026-07-10T09:20:00.000Z",
+          "respondedAt": "2026-07-10T17:00:00.000Z",
+          "id": 7
+        },
+        "hotel": {
+          "orderID": "107",
+          "name": "Marina Bay Suites",
+          "stars": 5,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 980,
+          "id": 7
+        },
+        "flight": {
+          "orderID": "107",
+          "dest": "Singapore",
+          "org": "Tel Aviv",
+          "returnDate": "2026-09-09",
+          "departureDate": "2026-09-01",
+          "stops": "0",
+          "price": 740,
+          "id": 7
+        },
+        "bookedAt": "2026-07-12T08:00:00.000Z",
+        "feedback": {
+          "hotelRating": 5,
+          "flightRating": 5,
+          "review": "Smooth from start to finish.",
+          "ratedAt": "2026-09-11T09:00:00.000Z"
+        }
+      },
+      {
+        "id": 8,
+        "order": {
+          "choice": "hotel",
+          "orderID": "108",
+          "status": "finished",
+          "departureDate": "2026-10-01",
+          "returnDate": "2026-10-05",
+          "origin": "Tel Aviv",
+          "destination": "Rome",
+          "passDetails": [
+            {
+              "fullName": "Dana Levi",
+              "passID": 30000008
+            }
+          ],
+          "stars": 4,
+          "priceRange": 700,
+          "customer": "sapir0507",
+          "createdAt": "2026-08-25T12:00:00.000Z",
+          "respondedAt": "2026-08-26T08:30:00.000Z",
+          "id": 8
+        },
+        "hotel": {
+          "orderID": "108",
+          "name": "Trastevere Suites",
+          "stars": 4,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 540,
+          "id": 8
+        },
+        "bookedAt": "2026-08-26T19:00:00.000Z"
+      },
+      {
+        "id": 9,
+        "order": {
+          "choice": "both",
+          "orderID": "109",
+          "status": "finished",
+          "departureDate": "2026-11-10",
+          "returnDate": "2026-11-17",
+          "origin": "Tel Aviv",
+          "destination": "Lisbon",
+          "passDetails": [
+            {
+              "fullName": "Dana Levi",
+              "passID": 30000009
+            }
+          ],
+          "stars": 4,
+          "priceRange": 1400,
+          "customer": "sapir0507",
+          "createdAt": "2026-09-30T13:00:00.000Z",
+          "respondedAt": "2026-10-01T10:00:00.000Z",
+          "id": 9
+        },
+        "hotel": {
+          "orderID": "109",
+          "name": "Alfama Terrace",
+          "stars": 4,
+          "guests": 1,
+          "breakfast": true,
+          "bedType": "Queen Bed",
+          "image": "",
+          "moreInfo": "",
+          "price": 600,
+          "id": 9
+        },
+        "flight": {
+          "orderID": "109",
+          "dest": "Lisbon",
+          "org": "Tel Aviv",
+          "returnDate": "2026-11-17",
+          "departureDate": "2026-11-10",
+          "stops": "0",
+          "price": 390,
+          "id": 9
+        },
+        "bookedAt": "2026-10-02T09:00:00.000Z"
+      }
   ]
 }

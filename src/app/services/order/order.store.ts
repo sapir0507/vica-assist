@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { forkJoin, throwError } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Order, OrderRequest } from '@vica-assist/shared';
 
@@ -79,14 +79,10 @@ export const OrderStore = signalStore(
       /** Deletes every order record matching the given business `orderID` (not the entity `id`). */
       deleteByOrderID(orderID: string | number): void {
         this.get().pipe(
-          map(orders => {
-            orders.forEach(item => {
-              if (item.orderID === orderID) {
-                http.delete<Order>(`${url}/${item.id}`).subscribe();
-              }
-            });
-          })
-        ).subscribe();
+          switchMap(orders => forkJoin(
+            orders.filter(item => item.orderID === orderID).map(item => http.delete<Order>(`${url}/${item.id}`))
+          ))
+        ).subscribe(() => this.getAll().subscribe());
       }
     };
   }),
