@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MyFlightsModule } from '@vica-assist/my-flights';
@@ -23,43 +23,54 @@ import { OrdersListComponent } from '../orders-list/orders-list.component';
     MatIconModule
   ]
 })
-export class AgentHomepageComponent implements OnInit {
+export class AgentHomepageComponent {
   step: 'flight' | 'hotel' = 'flight';
   chosenID = 1;
   orderID: string | null = null;
-  nextID = 1;
-  maxID = 1;
+  private position = 0;
   private orderStore = inject(OrderStore);
+
+  get pending(): Order[] {
+    return this.orderStore.pendingOrders() ?? [];
+  }
+
+  get index(): number {
+    return Math.min(this.position, Math.max(this.pending.length - 1, 0));
+  }
+
+  get current(): Order | undefined {
+    return this.pending[this.index];
+  }
 
   get order(): Order | undefined {
     return this.orderStore.orders()?.find(order => order.orderID == this.orderID);
   }
 
-  ngOnInit(): void {/* empty*/}
   showStep(step: 'flight' | 'hotel'){
     this.step = step;
   }
 
-  onGetMaxIDs(maxIDs: number){    
-    this.maxID = maxIDs;
+  nextRequest(){
+    this.moveTo(this.index + 1);
   }
 
-  chosenIDNext(){
-    if(this.maxID >= this.nextID + 1) this.nextID++;
-  }
-
-  chosenIDPrev(){
-    if((this.nextID - 1) > 0 ) this.nextID--;
+  previousRequest(){
+    this.moveTo(this.index - 1);
   }
 
   onChosen2(item: Order){
     this.chosenID = item.id;
-    //this.orderID = item.orderID; //search
     this.orderID = item.id + ''; //gives all flights and hotels a common id that belongs to an order
   }
 
   updateState(){
-    if(this.orderID) this.orderStore.updateStatusByOrderID(this.orderID, 'finished') //search
+    if(!this.orderID) return;
+    this.orderStore.updateStatusByOrderID(this.orderID, 'finished');
+    this.orderID = null;
   }
 
+  private moveTo(position: number){
+    this.position = Math.min(Math.max(position, 0), Math.max(this.pending.length - 1, 0));
+    this.orderID = null;
+  }
 }

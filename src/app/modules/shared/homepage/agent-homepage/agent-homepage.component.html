@@ -1,28 +1,29 @@
 <div class="page">
-  <h1 class="page__title">Customer orders</h1>
-  <p class="page__subtitle">Open an order, add flights and hotels for the customer, then mark it as finished.</p>
+  <h1 class="page__title">Requests</h1>
+  <p class="page__subtitle">Open a request, add flights and hotels for the customer, then mark it as finished.</p>
 
-  <div class="navigator">
-    <button mat-icon-button type="button" aria-label="Previous order" (click)="chosenIDPrev()">
-      <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
-    </button>
-    <ordersList
-      class="navigator__card"
-      [requestID]="nextID"
-      [status]="'agent'"
-      (item)="onChosen2($event)"
-      (maxIDs)="onGetMaxIDs($event)"
-    ></ordersList>
-    <button mat-icon-button type="button" aria-label="Next order" (click)="chosenIDNext()">
-      <mat-icon svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon>
-    </button>
-  </div>
+  @if (current; as request) {
+    <div class="navigator">
+      <button mat-icon-button type="button" aria-label="Previous request" [disabled]="index === 0" (click)="previousRequest()">
+        <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+      </button>
+      <div class="navigator__card">
+        <p class="navigator__position" aria-live="polite">Request {{ index + 1 }} of {{ pending.length }}</p>
+        <ordersList [requestID]="request.id" [status]="'agent'" (item)="onChosen2($event)"></ordersList>
+      </div>
+      <button mat-icon-button type="button" aria-label="Next request" [disabled]="index === pending.length - 1" (click)="nextRequest()">
+        <mat-icon svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon>
+      </button>
+    </div>
+  } @else {
+    <p class="choice-grid__empty">No pending requests.</p>
+  }
 
   @if (orderID) {
     <div class="workspace">
       <userRequest-preview [orderID]="chosenID"></userRequest-preview>
 
-      <section class="workspace__forms" aria-label="Flights and hotels for this order">
+      <section class="workspace__forms" aria-label="Flights and hotels for this request">
         <div class="segmented" role="group" aria-label="What to add">
           <button
             type="button"
