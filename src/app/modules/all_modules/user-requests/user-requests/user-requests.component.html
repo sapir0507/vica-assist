@@ -132,6 +132,146 @@
           }
         </div>
       }
+      @case (3) {
+        <h2 class="booking__heading">What would you like?</h2>
+        <p class="page__subtitle">Everything here is optional. Your agent reads it and picks the airline, hotel and details for you.</p>
+
+        <div class="preferences" [formGroup]="preferenceForm">
+          @if (flightIncluded) {
+            <fieldset class="preferences__section" formGroupName="flight">
+              <legend>Flight</legend>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="pref-stops">Stops</label>
+                  <select id="pref-stops" class="form-control" formControlName="stops">
+                    @for (option of options.stops; track option.id) {
+                      <option [value]="option.id">{{ option.label }}</option>
+                    }
+                  </select>
+                </div>
+                @if (preferenceForm.get('flight.stops')?.value !== 'direct') {
+                  <div class="form-field">
+                    <label for="pref-layover">Longest layover (hours)</label>
+                    <input id="pref-layover" class="form-control" type="number" min="1" [max]="maxLayoverHours" formControlName="maxLayoverHours" />
+                    @if (preferenceForm.get('flight.maxLayoverHours')?.invalid) {
+                      <p class="form-field__error" role="alert">Use a number from 1 to {{ maxLayoverHours }}.</p>
+                    }
+                  </div>
+                }
+                <div class="form-field">
+                  <label for="pref-cabin">Cabin</label>
+                  <select id="pref-cabin" class="form-control" formControlName="cabin">
+                    @for (option of options.cabins; track option.id) {
+                      <option [value]="option.id">{{ option.label }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="pref-time">Departure time</label>
+                  <select id="pref-time" class="form-control" formControlName="departureTime">
+                    @for (option of options.departureTimes; track option.id) {
+                      <option [value]="option.id">{{ option.label }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="pref-flex">Flexible dates (days either side)</label>
+                  <input id="pref-flex" class="form-control" type="number" min="0" [max]="maxFlexibleDays" formControlName="flexibleDays" />
+                  @if (preferenceForm.get('flight.flexibleDays')?.invalid) {
+                    <p class="form-field__error" role="alert">Use a number from 0 to {{ maxFlexibleDays }}.</p>
+                  }
+                </div>
+                <label class="preferences__check form-grid__full">
+                  <input type="checkbox" formControlName="checkedBaggage" /> Checked baggage included
+                </label>
+              </div>
+              <div class="preferences__airlines" role="group" aria-labelledby="pref-airlines-label">
+                <span id="pref-airlines-label" class="preferences__label">Preferred airlines (leave empty for no preference)</span>
+                <div class="preferences__chips">
+                  @for (airline of options.airlines; track airline.id) {
+                    <label class="preferences__chip">
+                      <input type="checkbox" [checked]="isPreferredAirline(airline.id)" (change)="togglePreferredAirline(airline.id)" />
+                      {{ airline.name }}
+                    </label>
+                  }
+                </div>
+              </div>
+            </fieldset>
+          }
+
+          @if (hotelIncluded) {
+            <fieldset class="preferences__section" formGroupName="hotel">
+              <legend>Hotel</legend>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="pref-bed">Bed</label>
+                  <select id="pref-bed" class="form-control" formControlName="bedType">
+                    @for (option of options.bedTypes; track option.id) {
+                      <option [value]="option.id">{{ option.label }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="pref-area">Area</label>
+                  <select id="pref-area" class="form-control" formControlName="area">
+                    @for (option of options.hotelAreas; track option.id) {
+                      <option [value]="option.id">{{ option.label }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="pref-rooms">Rooms</label>
+                  <input id="pref-rooms" class="form-control" type="number" min="1" [max]="maxRooms" formControlName="rooms" />
+                  @if (preferenceForm.get('hotel.rooms')?.invalid) {
+                    <p class="form-field__error" role="alert">Use a number from 1 to {{ maxRooms }}.</p>
+                  }
+                </div>
+                <div class="preferences__checks form-grid__full">
+                  <label class="preferences__check"><input type="checkbox" formControlName="breakfast" /> Breakfast included</label>
+                  <label class="preferences__check"><input type="checkbox" formControlName="freeCancellation" /> Free cancellation</label>
+                </div>
+              </div>
+              @if (requestForm.hasError('tooManyRooms')) {
+                <p class="form-field__error" role="alert">You cannot ask for more rooms than travelers.</p>
+              }
+            </fieldset>
+          }
+
+          <fieldset class="preferences__section" formGroupName="needs">
+            <legend>Travel needs</legend>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="pref-meal">Meal</label>
+                <select id="pref-meal" class="form-control" formControlName="meal">
+                  @for (option of options.meals; track option.id) {
+                    <option [value]="option.id">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="pref-seat">Seat</label>
+                <select id="pref-seat" class="form-control" formControlName="seat">
+                  @for (option of options.seatTypes; track option.id) {
+                    <option [value]="option.id">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+              <label class="preferences__check form-grid__full">
+                <input type="checkbox" formControlName="wheelchairAssistance" /> Wheelchair assistance
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="form-field">
+            <label for="pref-notes">Anything else your agent should know</label>
+            <textarea id="pref-notes" class="form-control" rows="3" formControlName="notes" aria-describedby="pref-notes-count"></textarea>
+            <span id="pref-notes-count" class="form-hint">{{ notesLength }} / {{ notesMax }}</span>
+            @if (preferenceForm.get('notes')?.hasError('tooLong')) {
+              <p class="form-field__error" role="alert">Keep this to {{ notesMax }} characters or fewer.</p>
+            }
+          </div>
+        </div>
+      }
     }
 
     <div class="booking__actions">

@@ -3,9 +3,16 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { collapseSpaces, ConfigService, dateRangeValidator, notInPastValidator, OrderRequest, passDetails } from '@vica-assist/shared';
+import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, notInPastValidator, OrderRequest, passDetails, PreferencesFormValue, toPreferences } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
-import { differentPlaces, fullName, israeliId, knownPlace, notBlank, uniqueTravelerIds } from '../validators';
+import { differentPlaces, fullName, israeliId, knownPlace, maxTrimmed, notBlank, roomsFitTravelers, uniqueTravelerIds } from '../validators';
+
+const DEFAULT_PREFERENCES = {
+  flight: { stops: 'max2', maxLayoverHours: null, checkedBaggage: false, cabin: 'economy', departureTime: 'any', preferredAirlines: [] as string[], flexibleDays: 0 },
+  hotel: { breakfast: false, bedType: 'any', freeCancellation: false, rooms: 1, area: 'any' },
+  needs: { meal: 'none', seat: 'any', wheelchairAssistance: false },
+  notes: ''
+};
 
 @Component({
   standalone: false,
@@ -17,11 +24,12 @@ import { differentPlaces, fullName, israeliId, knownPlace, notBlank, uniqueTrave
 })
 export class UserRequestsComponent implements OnInit {
 
-  readonly steps = ['Destination', 'Travelers', 'Trip details'];
+  readonly steps = ['Destination', 'Travelers', 'Trip details', 'Preferences'];
   readonly destinations = DESTINATIONS;
   step = 0;
   orderID: string | null = null;
-  private limits = inject(ConfigService).config().limits;
+  private configService = inject(ConfigService);
+  private limits = this.configService.config().limits;
   requestForm: FormGroup = this.fb.group({
 
     //do you want a hotel only or a flight too
@@ -38,9 +46,34 @@ export class UserRequestsComponent implements OnInit {
     hotel: this.fb.group({
       stars: this.fb.control<number | null>(3),
     }),
-    price: this.fb.control('0', [Validators.required, Validators.min(1)])
+    price: this.fb.control('0', [Validators.required, Validators.min(1)]),
 
-  }, { validators: differentPlaces('origin', 'destination') })
+    preferences: this.fb.group({
+      flight: this.fb.group({
+        stops: this.fb.control('max2'),
+        maxLayoverHours: this.fb.control<number | null>(null, [Validators.min(1), Validators.max(this.limits.maxLayoverHours)]),
+        checkedBaggage: this.fb.control(false),
+        cabin: this.fb.control('economy'),
+        departureTime: this.fb.control('any'),
+        preferredAirlines: this.fb.control<string[]>([]),
+        flexibleDays: this.fb.control(0, [Validators.min(0), Validators.max(this.limits.maxFlexibleDays)])
+      }),
+      hotel: this.fb.group({
+        breakfast: this.fb.control(false),
+        bedType: this.fb.control('any'),
+        freeCancellation: this.fb.control(false),
+        rooms: this.fb.control(1, [Validators.required, Validators.min(1), Validators.max(this.limits.maxRooms)]),
+        area: this.fb.control('any')
+      }),
+      needs: this.fb.group({
+        meal: this.fb.control('none'),
+        seat: this.fb.control('any'),
+        wheelchairAssistance: this.fb.control(false)
+      }),
+      notes: this.fb.control('', [maxTrimmed(this.limits.notesMaxLength)])
+    })
+
+  }, { validators: [differentPlaces('origin', 'destination'), roomsFitTravelers] })
 
   get order(){
     return this.requestForm.get('order')?.value as string;
@@ -86,9 +119,65 @@ export class UserRequestsComponent implements OnInit {
   ngOnInit(): void {/* empty*/}
 
   get canContinue(): boolean {
-    if (this.step === 0) return this.requestForm.controls['destination'].valid;
+    const controls = this.requestForm.controls;
+    if (this.step === 0) return controls['destination'].valid;
     if (this.step === 1) return this.passDetails.valid;
+    if (this.step === 2) {
+      return controls['origin'].valid && controls['price'].valid && this.Dates.valid && !this.requestForm.hasError('samePlace');
+    }
     return true;
+  }
+
+  get flightIncluded(): boolean {
+    return this.order !== 'hotel';
+  }
+
+  get preferenceForm(): FormGroup {
+    return this.requestForm.controls['preferences'] as FormGroup;
+  }
+
+  get notesLength(): number {
+    return String(this.preferenceForm.get('notes')?.value ?? '').trim().length;
+  }
+
+  get notesMax(): number {
+    return this.limits.notesMaxLength;
+  }
+
+  get maxFlexibleDays(): number {
+    return this.limits.maxFlexibleDays;
+  }
+
+  get maxLayoverHours(): number {
+    return this.limits.maxLayoverHours;
+  }
+
+  get maxRooms(): number {
+    return Math.min(this.limits.maxRooms, Math.max(this.passDetails.length, 1));
+  }
+
+  get options() {
+    const config = this.configService.config();
+    return {
+      stops: activeOptions(config.stopsOptions),
+      cabins: activeOptions(config.cabins),
+      departureTimes: activeOptions(config.departureTimes),
+      bedTypes: activeOptions(config.bedTypes),
+      hotelAreas: activeOptions(config.hotelAreas),
+      meals: activeOptions(config.meals),
+      seatTypes: activeOptions(config.seatTypes),
+      airlines: config.airlines.filter(airline => airline.active)
+    };
+  }
+
+  isPreferredAirline(id: string): boolean {
+    return (this.preferenceForm.get('flight.preferredAirlines')?.value as string[]).includes(id);
+  }
+
+  togglePreferredAirline(id: string): void {
+    const control = this.preferenceForm.get('flight.preferredAirlines');
+    const chosen = control?.value as string[];
+    control?.setValue(chosen.includes(id) ? chosen.filter(item => item !== id) : [...chosen, id]);
   }
 
   isSelected(destination: Destination): boolean {
@@ -153,6 +242,7 @@ export class UserRequestsComponent implements OnInit {
           passID: Number(traveler.passID)
         })),
         stars: this.hotelIncluded ? this.hotel.get('stars')?.value : undefined,
+        preferences: toPreferences(this.order, this.preferenceForm.value as PreferencesFormValue),
         priceRange: this.requestForm.get('price')?.value,
         customer: this.sessionStore.username(),
         createdAt: new Date().toISOString()
@@ -160,7 +250,7 @@ export class UserRequestsComponent implements OnInit {
     console.log(newOrder)
     this.orderStore.addOrder(newOrder);
     this.openSnackBar("Order added!")
-    this.requestForm.reset({ order: 'both', price: '0' });
+    this.requestForm.reset({ order: 'both', price: '0', hotel: { stars: 3 }, preferences: structuredClone(DEFAULT_PREFERENCES) });
     this.step = 0;
   }
   }

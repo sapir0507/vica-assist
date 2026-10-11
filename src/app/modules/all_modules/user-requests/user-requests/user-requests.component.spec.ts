@@ -46,9 +46,9 @@ describe('UserRequestsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('starts with the destination picker and a "1 of 3" indicator', () => {
+  it('starts with the destination picker and a "1 of 4" indicator', () => {
     expect(host().querySelectorAll('destination-card')).toHaveLength(6);
-    expect(host().textContent).toContain('Step 1 of 3');
+    expect(host().textContent).toContain('Step 1 of 4');
   });
 
   it('fills the destination from a card and marks that card as selected', () => {
@@ -85,7 +85,7 @@ describe('UserRequestsComponent', () => {
     expect(buttonLabelled('Next')?.disabled).toBe(false);
 
     click('Next');
-    expect(host().textContent).toContain('Step 2 of 3');
+    expect(host().textContent).toContain('Step 2 of 4');
     expect(buttonLabelled('Next')?.disabled).toBe(true);
 
     fillTraveler();
@@ -110,7 +110,7 @@ describe('UserRequestsComponent', () => {
     click('Next');
     click('Back');
 
-    expect(host().textContent).toContain('Step 1 of 3');
+    expect(host().textContent).toContain('Step 1 of 4');
     expect(component.requestForm.value.destination).toBe('Bali');
   });
 
@@ -294,7 +294,121 @@ describe('UserRequestsComponent', () => {
 
       expect(host().textContent).toContain('The departure date cannot be in the past.');
       expect(host().textContent).toContain('The origin and the destination must be different.');
-      expect(buttonLabelled('Submit request')?.disabled).toBe(true);
+      expect(buttonLabelled('Next')?.disabled).toBe(true);
+    });
+
+    describe('preferences step', () => {
+      const showPreferences = () => {
+        component.step = 3;
+        fixture.componentRef.injector.get(ChangeDetectorRef).markForCheck();
+        fixture.detectChanges();
+      };
+
+      it('offers flight, hotel and needs sections for a flight and hotel trip, all optional', () => {
+        valid();
+        showPreferences();
+
+        expect(Array.from(host().querySelectorAll('legend')).map(l => l.textContent)).toEqual(['Flight', 'Hotel', 'Travel needs']);
+        expect(buttonLabelled('Submit request')?.disabled).toBe(false);
+      });
+
+      it('offers only what the trip type needs', () => {
+        valid();
+        component.requestForm.patchValue({ order: 'flight' });
+        showPreferences();
+        expect(Array.from(host().querySelectorAll('legend')).map(l => l.textContent)).toEqual(['Flight', 'Travel needs']);
+
+        component.requestForm.patchValue({ order: 'hotel' });
+        showPreferences();
+        expect(Array.from(host().querySelectorAll('legend')).map(l => l.textContent)).toEqual(['Hotel', 'Travel needs']);
+      });
+
+      it('lists the options and airlines from the configuration', () => {
+        valid();
+        showPreferences();
+
+        expect(host().querySelectorAll('#pref-cabin option')).toHaveLength(3);
+        expect(host().querySelectorAll('#pref-stops option')).toHaveLength(3);
+        expect(host().querySelectorAll('.preferences__chip')).toHaveLength(12);
+      });
+
+      it('hides the layover field for a direct flight', () => {
+        valid();
+        showPreferences();
+        expect(host().querySelector('#pref-layover')).not.toBeNull();
+
+        component.preferenceForm.get('flight.stops')?.setValue('direct');
+        showPreferences();
+        expect(host().querySelector('#pref-layover')).toBeNull();
+      });
+
+      it('toggles preferred airlines', () => {
+        component.togglePreferredAirline('ly');
+        component.togglePreferredAirline('af');
+        component.togglePreferredAirline('ly');
+
+        expect(component.preferenceForm.get('flight.preferredAirlines')?.value).toEqual(['af']);
+        expect(component.isPreferredAirline('af')).toBe(true);
+        expect(component.isPreferredAirline('ly')).toBe(false);
+      });
+
+      it('rejects more rooms than travelers and rooms above the limit', () => {
+        valid();
+        component.preferenceForm.get('hotel.rooms')?.setValue(2);
+        expect(component.requestForm.hasError('tooManyRooms')).toBe(true);
+        expect(component.requestForm.valid).toBe(false);
+
+        component.preferenceForm.get('hotel.rooms')?.setValue(6);
+        expect(component.preferenceForm.get('hotel.rooms')?.hasError('max')).toBe(true);
+
+        component.requestForm.patchValue({ order: 'flight' });
+        component.preferenceForm.get('hotel.rooms')?.setValue(1);
+        expect(component.requestForm.hasError('tooManyRooms')).toBe(false);
+      });
+
+      it('rejects out-of-range layover and flexible days and notes that are too long', () => {
+        valid();
+        component.preferenceForm.get('flight.maxLayoverHours')?.setValue(30);
+        component.preferenceForm.get('flight.flexibleDays')?.setValue(9);
+        component.preferenceForm.get('notes')?.setValue('a'.repeat(501));
+
+        expect(component.preferenceForm.get('flight.maxLayoverHours')?.invalid).toBe(true);
+        expect(component.preferenceForm.get('flight.flexibleDays')?.invalid).toBe(true);
+        expect(component.preferenceForm.get('notes')?.hasError('tooLong')).toBe(true);
+        expect(component.requestForm.valid).toBe(false);
+
+        component.preferenceForm.get('notes')?.setValue(` ${'a'.repeat(500)} `);
+        expect(component.preferenceForm.get('notes')?.valid).toBe(true);
+      });
+
+      it('sends the wishes with the order, only for the parts that were asked for', () => {
+        const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+        valid();
+        component.requestForm.patchValue({ order: 'flight' });
+        component.preferenceForm.get('flight')?.patchValue({ stops: 'direct', checkedBaggage: true, cabin: 'business' });
+        component.preferenceForm.get('notes')?.setValue('  Window seat  ');
+
+        component.onSubmit();
+
+        const { preferences } = addOrder.mock.calls[0][0];
+        expect(preferences?.flight).toMatchObject({ stops: 'direct', checkedBaggage: true, cabin: 'business', flexibleDays: 0 });
+        expect(preferences?.hotel).toBeUndefined();
+        expect(preferences?.notes).toBe('Window seat');
+      });
+
+      it('goes back to the defaults after a submit', () => {
+        vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+        valid();
+        component.preferenceForm.get('flight.cabin')?.setValue('business');
+        component.preferenceForm.get('notes')?.setValue('x');
+
+        component.onSubmit();
+
+        expect(component.preferenceForm.get('flight.cabin')?.value).toBe('economy');
+        expect(component.preferenceForm.get('flight.stops')?.value).toBe('max2');
+        expect(component.preferenceForm.get('notes')?.value).toBe('');
+        expect(component.hotel.get('stars')?.value).toBe(3);
+      });
     });
   });
 
