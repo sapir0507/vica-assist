@@ -3,7 +3,7 @@ import { ItemType } from '@vica-assist/item';
 import { HotelsService } from '@vica-assist/my-hotels';
 // import { HotelsService } from 'projects/all-services/src/lib/hotels.service';
 import { Observable } from 'rxjs';
-import { Hotel } from '@vica-assist/shared';
+import { Hotel, Order } from '@vica-assist/shared';
 
 
 @Component({
@@ -14,6 +14,7 @@ import { Hotel } from '@vica-assist/shared';
 })
 export class ChooseHotelComponent implements OnInit {
     readonly ItemType = ItemType;
+  @Input() order?: Order | null; //the customer's request, to compare the offers with
   @Input() orderID: string | null = null; //to find all flights with coresponding orderIDs
   _allHotels$: Observable<Hotel[]> | null = null
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();

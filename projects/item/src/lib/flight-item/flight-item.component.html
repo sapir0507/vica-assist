@@ -9,8 +9,23 @@
             <mat-icon class="inline-icon" svgIcon="arrow_forward" aria-label="to"></mat-icon>
             {{ flight.dest }}
           </span>
+          @if (flight.airline) {
+            <span class="airline" [style.background]="airlineColor">{{ flight.airline }}</span>
+          }
         </mat-panel-title>
       </mat-expansion-panel-header>
+      @if (differences; as problems) {
+        @if (problems.length === 0) {
+          <p class="match match--ok">Matches your request</p>
+        } @else {
+          <p class="match match--differs">Differs from your request:</p>
+          <ul class="match-list">
+            @for (problem of problems; track problem) {
+              <li>{{ problem }}</li>
+            }
+          </ul>
+        }
+      }
       <dl class="detail-list">
         <dt><mat-icon class="inline-icon" svgIcon="flight_takeoff" aria-hidden="true"></mat-icon> Takeoff</dt>
         <dd>{{ flight.departureDate | date }}, {{ flight.departureHour }}</dd>
@@ -18,7 +33,7 @@
         <dd>{{ flight.returnDate | date }}, {{ flight.returnHour }}</dd>
         <dt><mat-icon class="inline-icon" svgIcon="timer" aria-hidden="true"></mat-icon> Stops</dt>
         <dd>
-          {{ flight.stops }}
+          {{ stopsLabel }}
           @if (flight.stopDuration) {
             <span class="muted">({{ flight.stopDuration }})</span>
           }
@@ -68,7 +83,11 @@
       </mat-expansion-panel-header>
       <dl class="detail-list">
         <dt><mat-icon class="inline-icon" svgIcon="luggage" aria-hidden="true"></mat-icon> Baggage</dt>
-        <dd>{{ flight.bagage ? 'Baggage included' : 'Baggage not included' }}</dd>
+        <dd>{{ baggageIncluded ? 'Baggage included' : 'Baggage not included' }}</dd>
+        @if (cabinLabel) {
+          <dt><mat-icon class="inline-icon" svgIcon="person" aria-hidden="true"></mat-icon> Cabin</dt>
+          <dd>{{ cabinLabel }}</dd>
+        }
         @if (flight.moreInfo) {
           <dt><mat-icon class="inline-icon" svgIcon="info" aria-hidden="true"></mat-icon> More information</dt>
           <dd class="note">{{ flight.moreInfo }}</dd>

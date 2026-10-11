@@ -69,7 +69,7 @@
           @if (step === 'flight') {
             <lib-myFlights [orderID]="orderID" [order]="order"></lib-myFlights>
           } @else {
-            <my-hotels [orderID]="orderID"></my-hotels>
+            <my-hotels [orderID]="orderID" [order]="order"></my-hotels>
           }
 
           <div class="workspace__actions">

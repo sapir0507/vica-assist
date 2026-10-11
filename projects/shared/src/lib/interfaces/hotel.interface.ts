@@ -9,6 +9,7 @@ export interface Hotel {
     image?: string,
     images?: FormData,
     moreInfo?: string,
+    cancelation?: string,
     price?: number
   }
   
@@ -22,6 +23,7 @@ export interface Hotel {
     image?: string,
     images?: FormData,
     moreInfo?: string,
+    cancelation?: string,
     price?: number
   }
   

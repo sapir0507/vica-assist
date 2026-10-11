@@ -61,3 +61,11 @@
 .order-details__id {
   color: var(--color-text-muted);
 }
+
+.order-details__wishes dd {
+  font-weight: 400;
+}
+
+.order-details__notes {
+  overflow-wrap: anywhere;
+}

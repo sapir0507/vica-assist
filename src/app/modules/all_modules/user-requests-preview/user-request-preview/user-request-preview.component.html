@@ -23,6 +23,16 @@
       }
     </dl>
 
+    @if (hasWishes) {
+      <h3 class="order-details__subtitle">The customer asked for</h3>
+      <dl class="order-details__list order-details__wishes">
+        @if (wishes.flight.length) { <dt>Flight</dt><dd>{{ wishes.flight.join(' · ') }}</dd> }
+        @if (wishes.hotel.length) { <dt>Hotel</dt><dd>{{ wishes.hotel.join(' · ') }}</dd> }
+        @if (wishes.needs.length) { <dt>Needs</dt><dd>{{ wishes.needs.join(' · ') }}</dd> }
+        @if (wishes.notes) { <dt>Notes</dt><dd class="order-details__notes">{{ wishes.notes }}</dd> }
+      </dl>
+    }
+
     <h3 class="order-details__subtitle">Travelers</h3>
     <ul class="order-details__travelers">
       @for (traveler of order.passDetails; track $index) {

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
-import { Flights } from '@vica-assist/shared';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { checkFlight, ConfigService, Flights, labelOf, Order } from '@vica-assist/shared';
 
 @Component({
   standalone: false,
@@ -13,13 +13,41 @@ export class FlightItemComponent implements OnInit {
 
 
   @Input() flight: Flights | null = null;
+  @Input() order?: Order | null;
   @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
 
   private static readonly LAST_STEP = 2;
 
   step = 0;
 
+  private configService = inject(ConfigService);
+
   constructor() { /* empty */}
+
+  get airlineColor(): string | undefined {
+    return this.configService.config().airlines.find(airline => airline.id === this.flight?.airlineId)?.brandColor;
+  }
+
+  get cabinLabel(): string {
+    return this.flight?.cabin ? labelOf(this.configService.config().cabins, this.flight.cabin) : '';
+  }
+
+  get stopsLabel(): string {
+    const stops = this.flight?.stops;
+    if (stops === '0') return 'Direct';
+    if (stops === '1') return '1 stop';
+    return /^\d+$/.test(stops ?? '') ? `${stops} stops` : (stops ?? '');
+  }
+
+  get baggageIncluded(): boolean {
+    return ['true', 'yes'].includes(String(this.flight?.bagage));
+  }
+
+  /** What differs from the customer's request; `null` when the customer asked for nothing specific to compare. */
+  get differences(): string[] | null {
+    if (!this.flight || !this.order) return null;
+    return checkFlight(this.order, this.flight, this.configService.config());
+  }
 
   ngOnInit(): void {/* empty */}
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { Flights, Hotel } from '@vica-assist/shared';
+import { Flights, Hotel, Order } from '@vica-assist/shared';
 
 export enum ItemType {
   Flight = "flight",
@@ -21,6 +21,8 @@ export class ItemComponent implements OnInit {
   // flight
   @Input() flight?: Flights;
   @Input() hotel?: Hotel;
+  /** The customer's request, so the card can say how the offer compares with it. */
+  @Input() order?: Order | null;
 
   @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
   @Output() chosenHotel: EventEmitter<Hotel> = new EventEmitter();

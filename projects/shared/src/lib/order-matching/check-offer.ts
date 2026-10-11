@@ -16,6 +16,7 @@ export interface HotelOffer {
   stars?: number | string;
   breakfast?: boolean | string;
   bedType?: string;
+  cancelation?: string;
   price?: number | string;
 }
 
@@ -78,6 +79,9 @@ export function checkHotel(order: Order | undefined, offer: HotelOffer, config: 
   if (wishes) {
     if (wishes.breakfast && offer.breakfast !== undefined && !isYes(offer.breakfast)) {
       problems.push('Breakfast is not included; the customer wants it.');
+    }
+    if (wishes.freeCancellation && offer.cancelation && offer.cancelation !== 'included') {
+      problems.push('Free cancellation is not included; the customer wants it.');
     }
     if (wishes.bedType !== 'any' && offer.bedType && offer.bedType !== wishes.bedType) {
       problems.push(`The bed is ${labelOf(config.bedTypes, offer.bedType).toLowerCase()}; the customer asked for ${labelOf(config.bedTypes, wishes.bedType).toLowerCase()}.`);

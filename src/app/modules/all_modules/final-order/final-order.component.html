@@ -7,12 +7,14 @@
       <app-choose-hotel
         (chosenHotel)="onChosenHotel($event)"
         [orderID]="myParam"
+        [order]="finalOrderStore.order()"
       ></app-choose-hotel>
     </mat-tab>
     <mat-tab label="Flight">
       <app-choose-flight
         (chosenFlight)="onChosenFlight($event)"
         [orderID]="myParam"
+        [order]="finalOrderStore.order()"
       ></app-choose-flight>
     </mat-tab>
   </mat-tab-group>

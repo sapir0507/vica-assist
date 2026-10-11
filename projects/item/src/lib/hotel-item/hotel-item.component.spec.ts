@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Hotel, provideAppIcons } from '@vica-assist/shared';
+import { Hotel, Order, provideAppIcons } from '@vica-assist/shared';
 
 import { ItemModule } from '../item.module';
 import { HotelItemComponent } from './hotel-item.component';
@@ -83,5 +83,69 @@ describe('HotelItemComponent', () => {
     select?.click();
 
     expect(emitted).toEqual([hotel]);
+  });
+
+  describe('cancellation and the customer\'s request', () => {
+    const order = {
+      id: 1,
+      orderID: '1',
+      choice: 'hotel',
+      status: 'finished',
+      origin: 'tel aviv',
+      destination: 'paris',
+      departureDate: '2026-06-09',
+      returnDate: '2026-06-16',
+      passDetails: [],
+      priceRange: 1000,
+      stars: 4,
+      preferences: { hotel: { breakfast: true, bedType: 'king', freeCancellation: true, rooms: 1, area: 'any' } }
+    } as unknown as Order;
+
+    const showWith = (value: Hotel, customer?: Order) => {
+      fixture.componentRef.setInput('hotel', value);
+      if (customer) fixture.componentRef.setInput('order', customer);
+      fixture.detectChanges();
+    };
+
+    it('only promises free cancellation when the agent said it is included', () => {
+      showWith({ ...hotel, cancelation: 'included' });
+      expect(host().textContent).toContain('Free cancellation');
+      expect(host().textContent).not.toContain('No free cancellation');
+
+      showWith({ ...hotel, cancelation: 'not included' });
+      expect(host().textContent).toContain('No free cancellation');
+    });
+
+    it('says breakfast is not included when the agent saved "false" (it is a text value)', () => {
+      showWith({ ...hotel, breakfast: 'false' as unknown as boolean });
+
+      expect(host().textContent).toContain('Breakfast not included');
+    });
+
+    it('shows the bed by its label', () => {
+      showWith({ ...hotel, bedType: 'king' });
+
+      expect(host().textContent).toContain('King bed');
+    });
+
+    it('says the hotel matches the request', () => {
+      showWith({ ...hotel, breakfast: true, bedType: 'king', cancelation: 'included', price: 300 }, order);
+
+      expect(host().textContent).toContain('Matches your request');
+    });
+
+    it('lists how the hotel differs from the request', () => {
+      showWith({ ...hotel, stars: 3, breakfast: false, bedType: 'twin', cancelation: 'not included', price: 300 }, order);
+
+      expect(host().textContent).toContain('Differs from your request');
+      expect(host().textContent).toContain('3 stars; the customer asked for at least 4.');
+      expect(host().textContent).toContain('Free cancellation is not included');
+    });
+
+    it('does not compare without a request', () => {
+      showWith(hotel);
+
+      expect(component.differences).toBeNull();
+    });
   });
 });

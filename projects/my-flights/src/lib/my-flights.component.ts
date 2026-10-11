@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MyFlightsService } from './my-flights.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { dateRangeValidator, FlightsRequest, Order, toDateInputValue } from '@vica-assist/shared';
+import { activeOptions, checkFlight, ConfigService, dateRangeValidator, describePreferences, FlightsRequest, fullName, israeliId, Order, toDateInputValue } from '@vica-assist/shared';
 
 @Component({
   standalone: false,
@@ -16,7 +16,7 @@ import { dateRangeValidator, FlightsRequest, Order, toDateInputValue } from '@vi
 export class MyFlightsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion?: MatAccordion;
-  private NameValidator = '[a-zA-Z]*[ ]+[a-zA-Z]*[ ]+[a-zA-Z]*'
+  private configService = inject(ConfigService);
   private CountryValidator = '[a-zA-Z ]*'
 
   private HourValidator = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
@@ -31,8 +31,8 @@ export class MyFlightsComponent implements OnInit {
   hide = true;
 
   newFlightForm: FormGroup = this.fb.group({
-    fullName: ['', [Validators.required, Validators.pattern(this.NameValidator)]],
-    myID: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(9), Validators.pattern('[0-9]*')]],
+    fullName: ['', [Validators.required, fullName(this.configService.config().limits.nameMaxLength)]],
+    myID: ['', [Validators.required, israeliId]],
     dest: ['', [Validators.required, Validators.pattern(this.CountryValidator)]],
     org: ['', [Validators.required, Validators.pattern(this.CountryValidator)]],
     passangersFullName: this.fb.array([]),
@@ -40,12 +40,43 @@ export class MyFlightsComponent implements OnInit {
     returnDate: ['', [Validators.required]],
     departureHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
     returnHour: ['', [Validators.required, Validators.pattern(this.HourValidator)]],
+    airlineId: ['', Validators.required],
+    cabin: ['economy', Validators.required],
     stops: ['', Validators.required],
     stopDuration: ['', [Validators.pattern(this.HourValidator)]],
     bagage: ['', Validators.required],
     moreInfo: [''],
     price: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(4), Validators.pattern('[1-9][0-9]*')]]
   }, { validators: dateRangeValidator('departureDate', 'returnDate') })
+
+  get airlines() {
+    return this.configService.config().airlines.filter(airline => airline.active);
+  }
+
+  get cabins() {
+    return activeOptions(this.configService.config().cabins);
+  }
+
+  get stopChoices(): number[] {
+    return Array.from({ length: this.configService.config().limits.maxStops + 1 }, (_, stops) => stops);
+  }
+
+  get wishes(): string[] {
+    return describePreferences(this.order?.preferences, this.configService.config()).flight;
+  }
+
+  get warnings(): string[] {
+    const value = this.newFlightForm.value;
+    return checkFlight(this.order, {
+      stops: value.stops,
+      stopDuration: value.stopDuration,
+      airlineId: value.airlineId,
+      cabin: value.cabin,
+      bagage: value.bagage,
+      departureHour: value.departureHour,
+      price: value.price
+    }, this.configService.config());
+  }
 
   get passangersFullName() {
     return (this.newFlightForm.controls['passangersFullName']) as FormArray;
@@ -66,7 +97,8 @@ export class MyFlightsComponent implements OnInit {
       departureDate: toDateInputValue(this.order?.departureDate),
       returnDate: toDateInputValue(this.order?.returnDate),
       fullName: this.order?.passDetails[0].fullName,
-      myID: this.order?.passDetails[0].passID
+      myID: this.order?.passDetails[0].passID,
+      cabin: this.order?.preferences?.flight?.cabin ?? 'economy'
     })
 
   }
@@ -81,7 +113,8 @@ export class MyFlightsComponent implements OnInit {
       departureDate: toDateInputValue(this.order?.departureDate),
       returnDate: toDateInputValue(this.order?.returnDate),
       fullName: this.order?.passDetails[0].fullName,
-      myID: this.order?.passDetails[0].passID
+      myID: this.order?.passDetails[0].passID,
+      cabin: this.order?.preferences?.flight?.cabin ?? 'economy'
     })
   }
 
@@ -129,7 +162,7 @@ export class MyFlightsComponent implements OnInit {
   }
 
   onSelectionChange() : void {
-    this._hasStop = this.newFlightForm.get('stops')?.value === '1';
+    this._hasStop = Number(this.newFlightForm.get('stops')?.value) > 0;
     const stopDuration = this.newFlightForm.get('stopDuration');
     if (this._hasStop) stopDuration?.addValidators(Validators.required);
     else stopDuration?.removeValidators(Validators.required);
@@ -157,6 +190,9 @@ export class MyFlightsComponent implements OnInit {
         departureDate: this.newFlightForm.get('departureDate')?.value,
         returnHour: this.newFlightForm.get('returnHour')?.value,
         departureHour: this.newFlightForm.get('departureHour')?.value,
+        airlineId: this.newFlightForm.get('airlineId')?.value,
+        airline: this.airlines.find(airline => airline.id === this.newFlightForm.get('airlineId')?.value)?.name,
+        cabin: this.newFlightForm.get('cabin')?.value,
         stops: this.newFlightForm.get('stops')?.value,
         stopDuration: this.newFlightForm.get('stopDuration')?.value,
         bagage: this.newFlightForm.get('bagage')?.value,

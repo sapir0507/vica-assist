@@ -114,6 +114,15 @@ describe('checkHotel', () => {
     expect(checkHotel(open, { ...goodHotel, bedType: 'twin' }, config)).toEqual([]);
   });
 
+  it('flags free cancellation that is not included, when the customer wants it', () => {
+    const wishes = order().preferences!.hotel!;
+    const wanted = order({ preferences: { hotel: { ...wishes, freeCancellation: true } } });
+
+    expect(checkHotel(wanted, { ...goodHotel, cancelation: 'not included' }, config)).toEqual(['Free cancellation is not included; the customer wants it.']);
+    expect(checkHotel(wanted, { ...goodHotel, cancelation: 'included' }, config)).toEqual([]);
+    expect(checkHotel(order(), { ...goodHotel, cancelation: 'not included' }, config)).toEqual([]);
+  });
+
   it('flags a price above the budget', () => {
     expect(checkHotel(order(), { ...goodHotel, price: 1200 }, config)).toEqual(['The price is above the customer\'s budget.']);
   });

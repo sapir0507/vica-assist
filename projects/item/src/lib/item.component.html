@@ -3,6 +3,7 @@
   <div>
     <flight-item
       [flight]="flight"
+      [order]="order"
       (chosenFlight)="onChosenFlight($event)"
     ></flight-item>
   </div>
@@ -12,6 +13,7 @@
   <div>
     <hotel-item
       [hotel]="hotel"
+      [order]="order"
       (chosenHotel)="onChosenHotel($event)"
     ></hotel-item>
   </div>

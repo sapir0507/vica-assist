@@ -1,4 +1,7 @@
 <div class="add-new-flight">
+  @if (wishes.length) {
+    <p class="wishes" role="note"><strong>The customer asked for:</strong> {{ wishes.join(' · ') }}</p>
+  }
   <form [formGroup]="newFlightForm" class="newFlightForm" (ngSubmit)="addFlight()">
 
     <mat-accordion>
@@ -140,8 +143,9 @@
         <mat-form-field color="primary">
           <mat-label>Stops</mat-label>
           <mat-select formControlName="stops" (selectionChange)="onSelectionChange()">
-            <mat-option value="0">No Stops</mat-option>
-            <mat-option value="1">One Stop</mat-option>
+            @for (stops of stopChoices; track stops) {
+              <mat-option [value]="'' + stops">{{ stops === 0 ? 'No stops' : stops === 1 ? 'One stop' : stops + ' stops' }}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -152,6 +156,24 @@
           </mat-form-field>
         }
 
+
+        <mat-form-field color="primary">
+          <mat-label>Airline</mat-label>
+          <mat-select formControlName="airlineId">
+            @for (airline of airlines; track airline.id) {
+              <mat-option [value]="airline.id">{{ airline.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field color="primary">
+          <mat-label>Cabin</mat-label>
+          <mat-select formControlName="cabin">
+            @for (cabin of cabins; track cabin.id) {
+              <mat-option [value]="cabin.id">{{ cabin.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
         <mat-divider class="form-grid__full"></mat-divider>
 
@@ -207,6 +229,12 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-
+    @if (warnings.length) {
+      <ul class="warnings" role="status" aria-label="Differences from the customer's request">
+        @for (warning of warnings; track warning) {
+          <li>{{ warning }}</li>
+        }
+      </ul>
+    }
   </form>
 </div>

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Flights, provideAppIcons } from '@vica-assist/shared';
+import { Flights, Order, provideAppIcons } from '@vica-assist/shared';
 
 import { ItemModule } from '../item.module';
 import { FlightItemComponent } from './flight-item.component';
@@ -96,5 +96,71 @@ describe('FlightItemComponent', () => {
     select?.click();
 
     expect(emitted).toEqual([flight]);
+  });
+
+  describe('airline, baggage and the customer\'s request', () => {
+    const order = {
+      id: 1,
+      orderID: '1',
+      choice: 'flight',
+      status: 'finished',
+      origin: 'tel aviv',
+      destination: 'paris',
+      departureDate: '2026-06-09',
+      returnDate: '2026-06-16',
+      passDetails: [],
+      priceRange: 1000,
+      preferences: { flight: { stops: 'direct', checkedBaggage: true, cabin: 'economy', departureTime: 'any', preferredAirlines: [], flexibleDays: 0 } }
+    } as unknown as Order;
+
+    const show = (value: Flights, customer?: Order) => {
+      fixture.componentRef.setInput('flight', value);
+      if (customer) fixture.componentRef.setInput('order', customer);
+      fixture.detectChanges();
+    };
+
+    it('names the airline and the cabin', () => {
+      show({ ...flight, airlineId: 'ly', airline: 'El Al', cabin: 'business', stops: '0' });
+
+      expect(text()).toContain('El Al');
+      expect(text()).toContain('Business');
+      expect(text()).toContain('Direct');
+      expect(component.airlineColor).toBe('#0b3d91');
+    });
+
+    it('says baggage is not included when the agent saved "false" (it is a text value)', () => {
+      show({ ...flight, bagage: 'false' });
+
+      expect(text()).toContain('Baggage not included');
+    });
+
+    it('writes the number of stops in words', () => {
+      show({ ...flight, stops: '1' });
+      expect(text()).toContain('1 stop');
+
+      show({ ...flight, stops: '2' });
+      expect(component.stopsLabel).toBe('2 stops');
+    });
+
+    it('says the flight matches the request', () => {
+      show({ ...flight, stops: '0', bagage: 'true', price: 400 }, order);
+
+      expect(text()).toContain('Matches your request');
+    });
+
+    it('lists how the flight differs from the request', () => {
+      show({ ...flight, stops: '1', bagage: 'false', price: 400 }, order);
+
+      expect(text()).toContain('Differs from your request');
+      expect(text()).toContain('Has 1 stop; the customer asked for direct only.');
+      expect(text()).toContain('Checked baggage is not included');
+    });
+
+    it('does not compare without a request', () => {
+      show(flight);
+
+      expect(component.differences).toBeNull();
+      expect(text()).not.toContain('your request');
+    });
   });
 });

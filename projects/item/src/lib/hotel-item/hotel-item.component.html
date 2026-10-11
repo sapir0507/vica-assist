@@ -22,14 +22,29 @@
     </mat-card-header>
 
     <mat-card-content>
+      @if (differences; as problems) {
+        @if (problems.length === 0) {
+          <p class="match match--ok">Matches your request</p>
+        } @else {
+          <p class="match match--differs">Differs from your request:</p>
+          <ul class="match-list">
+            @for (problem of problems; track problem) {
+              <li>{{ problem }}</li>
+            }
+          </ul>
+        }
+      }
       <ul class="facts">
         <li><mat-icon class="inline-icon" svgIcon="group" aria-hidden="true"></mat-icon> {{ hotel.guests }} guests</li>
-        <li><mat-icon class="inline-icon" svgIcon="free_cancellation" aria-hidden="true"></mat-icon> Free cancellation</li>
+        <li>
+          <mat-icon class="inline-icon" svgIcon="free_cancellation" aria-hidden="true"></mat-icon>
+          {{ cancellationIncluded ? 'Free cancellation' : 'No free cancellation' }}
+        </li>
         <li>
           <mat-icon class="inline-icon" svgIcon="restaurant" aria-hidden="true"></mat-icon>
-          {{ hotel.breakfast ? 'Breakfast included' : 'Breakfast not included' }}
+          {{ breakfastIncluded ? 'Breakfast included' : 'Breakfast not included' }}
         </li>
-        <li><mat-icon class="inline-icon" svgIcon="bed" aria-hidden="true"></mat-icon> {{ hotel.bedType }}</li>
+        <li><mat-icon class="inline-icon" svgIcon="bed" aria-hidden="true"></mat-icon> {{ bedLabel }}</li>
         <li><mat-icon class="inline-icon" svgIcon="sell" aria-hidden="true"></mat-icon> {{ hotel.price | currency }}</li>
       </ul>
       @if (hotel.moreInfo) {

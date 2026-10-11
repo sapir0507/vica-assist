@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { ItemType } from '@vica-assist/item';
 // import { MyFlightsService } from '@vica-assist/my-flights';
 import { Observable } from 'rxjs';
-import { Flights } from '@vica-assist/shared';
+import { Flights, Order } from '@vica-assist/shared';
 import { SflightService } from 'src/app/services/flight/sflight.service';
 
 @Component({
@@ -13,6 +13,7 @@ import { SflightService } from 'src/app/services/flight/sflight.service';
 })
 export class ChooseFlightComponent implements OnInit {
     readonly ItemType = ItemType;
+  @Input() order?: Order | null; //the customer's request, to compare the offers with
     @Output() chosenFlight: EventEmitter<Flights> = new EventEmitter();
     @Input() orderID: string | null = null; //to find all flights with coresponding orderIDs
     _ALLFlights$: Observable<Flights[]> | null= null;

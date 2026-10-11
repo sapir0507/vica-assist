@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, Input } from '@angular/core';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Order } from '@vica-assist/shared';
+import { ConfigService, describePreferences, Order, PreferenceLines } from '@vica-assist/shared';
 
 @Component({
   standalone: false,
@@ -12,9 +12,19 @@ import { Order } from '@vica-assist/shared';
 export class UserRequestPreviewComponent implements OnInit {
 
   protected orderStore = inject(OrderStore);
+  private configService = inject(ConfigService);
 
   myOrder?: Order;
   @Input() orderID = 1;
+
+  get wishes(): PreferenceLines {
+    return describePreferences(this.selectedOrder?.preferences, this.configService.config());
+  }
+
+  get hasWishes(): boolean {
+    const { flight, hotel, needs, notes } = this.wishes;
+    return flight.length + hotel.length + needs.length > 0 || notes !== '';
+  }
 
   get selectedOrder(): Order | undefined {
     return this.orderStore.orders()?.find(order => order.id === this.orderID);

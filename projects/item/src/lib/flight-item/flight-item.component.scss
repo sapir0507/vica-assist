@@ -61,3 +61,30 @@
   list-style: none;
   text-transform: capitalize;
 }
+
+.match {
+  margin: 0 0 var(--space-2);
+  font-weight: 600;
+}
+
+.match--ok {
+  color: var(--color-success);
+}
+
+.match--differs {
+  color: var(--color-warning);
+}
+
+.match-list {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-6);
+  color: var(--color-text-secondary);
+}
+
+.airline {
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}

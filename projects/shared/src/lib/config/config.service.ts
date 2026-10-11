@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, Injector, inject, signal } from '@angular/core';
 import { Observable, catchError, firstValueFrom, of, switchMap, tap, throwError, timeout } from 'rxjs';
 
 import { API_URL } from '../api-url.token';
@@ -23,14 +23,22 @@ export class ConfigInvalidError extends Error {
  */
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-  private http = inject(HttpClient);
-  private url = inject(API_URL) + 'settings';
+  // Resolved on first use, so components that only read the configuration do not need HTTP in their tests.
+  private injector = inject(Injector);
 
   private effective = signal<TripConfig>(TRIP_CONFIG_DEFAULTS);
   private customised = signal(false);
 
   readonly config = this.effective.asReadonly();
   readonly isCustomised = this.customised.asReadonly();
+
+  private get http(): HttpClient {
+    return this.injector.get(HttpClient);
+  }
+
+  private get url(): string {
+    return this.injector.get(API_URL) + 'settings';
+  }
 
   load(): Promise<void> {
     return firstValueFrom(
