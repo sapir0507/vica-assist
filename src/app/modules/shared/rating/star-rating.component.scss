@@ -1,0 +1,26 @@
+:host {
+  display: inline-block;
+}
+
+.stars {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.stars__button {
+  display: grid;
+  place-items: center;
+  padding: var(--space-1);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.stars__star {
+  color: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
+}
+
+.stars__star--on {
+  color: var(--color-warning);
+}
