@@ -411,6 +411,30 @@ app-register {
   text-align: center;
 }
 
+// A pill-shaped switch between a few views of the same page.
+.segmented {
+  display: inline-flex;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+
+.segmented__option {
+  padding: var(--space-2) var(--space-6);
+  font: inherit;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.segmented__option--active {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
 // Forms shared by the booking form and the agent forms.
 .form-grid {
   display: grid;

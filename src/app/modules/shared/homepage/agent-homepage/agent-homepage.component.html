@@ -1,56 +1,82 @@
 <div class="page">
-  <h1 class="page__title">Requests</h1>
-  <p class="page__subtitle">Open a request, add flights and hotels for the customer, then mark it as finished.</p>
+  <h1 class="page__title">Agent dashboard</h1>
 
-  @if (current; as request) {
-    <div class="navigator">
-      <button mat-icon-button type="button" aria-label="Previous request" [disabled]="index === 0" (click)="previousRequest()">
-        <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
-      </button>
-      <div class="navigator__card">
-        <p class="navigator__position" aria-live="polite">Request {{ index + 1 }} of {{ pending.length }}</p>
-        <ordersList [requestID]="request.id" [status]="'agent'" (item)="onChosen2($event)"></ordersList>
-      </div>
-      <button mat-icon-button type="button" aria-label="Next request" [disabled]="index === pending.length - 1" (click)="nextRequest()">
-        <mat-icon svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon>
-      </button>
-    </div>
+  <div class="segmented" role="group" aria-label="Dashboard view">
+    <button
+      type="button"
+      class="segmented__option"
+      [class.segmented__option--active]="view === 'requests'"
+      [attr.aria-pressed]="view === 'requests'"
+      (click)="showView('requests')"
+    >Requests @if (pending.length) { ({{ pending.length }}) }</button>
+    <button
+      type="button"
+      class="segmented__option"
+      [class.segmented__option--active]="view === 'insights'"
+      [attr.aria-pressed]="view === 'insights'"
+      (click)="showView('insights')"
+    >Insights</button>
+  </div>
+
+  @if (view === 'insights') {
+    @defer {
+      <agent-insights />
+    } @placeholder {
+      <p class="choice-grid__empty">Loading insights...</p>
+    }
   } @else {
-    <p class="choice-grid__empty">No pending requests.</p>
-  }
+    <p class="page__subtitle">Open a request, add flights and hotels for the customer, then mark it as finished.</p>
 
-  @if (orderID) {
-    <div class="workspace">
-      <userRequest-preview [orderID]="chosenID"></userRequest-preview>
-
-      <section class="workspace__forms" aria-label="Flights and hotels for this request">
-        <div class="segmented" role="group" aria-label="What to add">
-          <button
-            type="button"
-            class="segmented__option"
-            [class.segmented__option--active]="step === 'flight'"
-            [attr.aria-pressed]="step === 'flight'"
-            (click)="showStep('flight')"
-          >Flights</button>
-          <button
-            type="button"
-            class="segmented__option"
-            [class.segmented__option--active]="step === 'hotel'"
-            [attr.aria-pressed]="step === 'hotel'"
-            (click)="showStep('hotel')"
-          >Hotels</button>
+    @if (current; as request) {
+      <div class="navigator">
+        <button mat-icon-button type="button" aria-label="Previous request" [disabled]="index === 0" (click)="previousRequest()">
+          <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+        </button>
+        <div class="navigator__card">
+          <p class="navigator__position" aria-live="polite">Request {{ index + 1 }} of {{ pending.length }}</p>
+          <ordersList [requestID]="request.id" [status]="'agent'" (item)="onChosen2($event)"></ordersList>
         </div>
+        <button mat-icon-button type="button" aria-label="Next request" [disabled]="index === pending.length - 1" (click)="nextRequest()">
+          <mat-icon svgIcon="arrow_circle_right" aria-hidden="true"></mat-icon>
+        </button>
+      </div>
+    } @else {
+      <p class="choice-grid__empty">No pending requests.</p>
+    }
 
-        @if (step === 'flight') {
-          <lib-myFlights [orderID]="orderID" [order]="order"></lib-myFlights>
-        } @else {
-          <my-hotels [orderID]="orderID"></my-hotels>
-        }
+    @if (orderID) {
+      <div class="workspace">
+        <userRequest-preview [orderID]="chosenID"></userRequest-preview>
 
-        <div class="workspace__actions">
-          <button mat-flat-button type="button" (click)="updateState()">Set order as finished</button>
-        </div>
-      </section>
-    </div>
+        <section class="workspace__forms" aria-label="Flights and hotels for this request">
+          <div class="segmented" role="group" aria-label="What to add">
+            <button
+              type="button"
+              class="segmented__option"
+              [class.segmented__option--active]="step === 'flight'"
+              [attr.aria-pressed]="step === 'flight'"
+              (click)="showStep('flight')"
+            >Flights</button>
+            <button
+              type="button"
+              class="segmented__option"
+              [class.segmented__option--active]="step === 'hotel'"
+              [attr.aria-pressed]="step === 'hotel'"
+              (click)="showStep('hotel')"
+            >Hotels</button>
+          </div>
+
+          @if (step === 'flight') {
+            <lib-myFlights [orderID]="orderID" [order]="order"></lib-myFlights>
+          } @else {
+            <my-hotels [orderID]="orderID"></my-hotels>
+          }
+
+          <div class="workspace__actions">
+            <button mat-flat-button type="button" (click)="updateState()">Set order as finished</button>
+          </div>
+        </section>
+      </div>
+    }
   }
 </div>

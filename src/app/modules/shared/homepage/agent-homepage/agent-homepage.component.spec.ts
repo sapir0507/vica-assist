@@ -59,6 +59,28 @@ describe('AgentHomepageComponent', () => {
     fixture.detectChanges();
   });
 
+  it('starts on the requests and counts the pending ones in the switch', () => {
+    withOrders(order(2), order(3), order(4, 'finished'));
+
+    expect(button('Requests')?.textContent).toContain('(2)');
+    expect(button('Requests')?.getAttribute('aria-pressed')).toBe('true');
+    expect(host().querySelector('agent-insights')).toBeNull();
+  });
+
+  it('switches to the insights and back', async () => {
+    withOrders(order(2));
+
+    click(button('Insights'));
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(host().querySelector('agent-insights')).not.toBeNull();
+    expect(host().querySelector('ordersList')).toBeNull();
+
+    click(button('Requests'));
+    expect(host().querySelector('ordersList')).not.toBeNull();
+  });
+
   it('says so when no request is waiting', () => {
     withOrders(order(1, 'finished'));
 

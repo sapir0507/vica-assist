@@ -1,0 +1,89 @@
+@if (bookingStore.bookings() === undefined) {
+  <p class="choice-grid__empty">Loading insights...</p>
+} @else {
+  @let data = insights();
+
+  <section aria-labelledby="funnel-title">
+    <h2 id="funnel-title" class="insights__title">Requests</h2>
+    <div class="stats">
+      <div class="stat"><span class="stat__value">{{ data.funnel.received }}</span><span class="stat__label">Received</span></div>
+      <div class="stat"><span class="stat__value">{{ data.funnel.awaiting }}</span><span class="stat__label">Awaiting your answer</span></div>
+      <div class="stat"><span class="stat__value">{{ data.funnel.waitingForCustomer }}</span><span class="stat__label">Waiting for the customer</span></div>
+      <div class="stat">
+        <span class="stat__value">{{ data.funnel.booked }}</span>
+        <span class="stat__label">Booked @if (data.funnel.bookingRate !== null) { ({{ data.funnel.bookingRate }}% of requests) }</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="satisfaction-title">
+    <h2 id="satisfaction-title" class="insights__title">Customer satisfaction</h2>
+    <p class="insights__note">
+      @if (data.satisfaction.responseRate !== null) {
+        {{ data.satisfaction.reviewedEligible }} of {{ data.satisfaction.eligible }} completed trips were reviewed ({{ data.satisfaction.responseRate }}%).
+      } @else {
+        No trip has ended yet, so there is nothing to review.
+      }
+    </p>
+    <div class="panels">
+      @for (part of parts(); track part.title) {
+        <article class="panel">
+          <h3 class="panel__title">{{ part.title }}</h3>
+          @if (part.data.average !== null) {
+            <p class="panel__headline">
+              <span class="panel__big">{{ part.data.average }}</span> / 5
+              <star-rating [label]="part.label" [readonly]="true" [value]="rounded(part.data.average)" />
+            </p>
+            <p class="panel__text"><strong>{{ part.data.satisfiedPercent }}%</strong> were pleased (4 or 5 stars), from {{ part.data.count }} {{ part.data.count === 1 ? 'rating' : 'ratings' }}.</p>
+            <bar-list [items]="distribution(part.data)" />
+          } @else {
+            <p class="panel__text">No ratings yet.</p>
+          }
+        </article>
+      }
+    </div>
+
+    <h3 class="insights__subtitle">Latest reviews</h3>
+    <ul class="reviews">
+      @for (review of data.satisfaction.latestReviews; track review.ratedAt + review.destination) {
+        <li class="review">
+          <p class="review__text">{{ review.review }}</p>
+          <p class="review__meta">
+            {{ review.destination }}
+            @if (review.hotelRating) { &middot; hotel {{ review.hotelRating }}/5 }
+            @if (review.flightRating) { &middot; flight {{ review.flightRating }}/5 }
+          </p>
+        </li>
+      } @empty {
+        <li class="panel__text">No written reviews yet.</li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="business-title">
+    <h2 id="business-title" class="insights__title">Business</h2>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat__value">{{ responseTime(data.business.averageResponseHours) }}</span>
+        <span class="stat__label">Average time to answer a request @if (data.business.responseSample) { ({{ data.business.responseSample }} requests) }</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value">{{ data.business.totalBookedValue | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+        <span class="stat__label">Total booked</span>
+      </div>
+      <div class="stat">
+        <span class="stat__value">{{ data.business.averageBudgetUsedPercent === null ? 'n/a' : data.business.averageBudgetUsedPercent + '%' }}</span>
+        <span class="stat__label">Of the customer's budget used on average</span>
+      </div>
+    </div>
+    <div class="panels">
+      <article class="panel"><h3 class="panel__title">Top destinations</h3><bar-list [items]="data.business.topDestinations" /></article>
+      <article class="panel"><h3 class="panel__title">Trip types</h3><bar-list [items]="data.business.tripTypes" /></article>
+      <article class="panel"><h3 class="panel__title">Bookings per month</h3><bar-list [items]="months()" /></article>
+    </div>
+  </section>
+
+  @if (data.ignored > 0) {
+    <p class="insights__note">{{ data.ignored }} {{ data.ignored === 1 ? 'booking has' : 'bookings have' }} incomplete data and {{ data.ignored === 1 ? 'is' : 'are' }} left out of the statistics that need it.</p>
+  }
+}

@@ -7,6 +7,7 @@ import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requ
 import { OrderStore } from 'src/app/services/order/order.store';
 import { Order } from '@vica-assist/shared';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
+import { InsightsComponent } from './insights/insights.component';
 
 @Component({
   standalone: true,
@@ -20,10 +21,12 @@ import { OrdersListComponent } from '../orders-list/orders-list.component';
     MyHotelsModule,
     OrdersListComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    InsightsComponent
   ]
 })
 export class AgentHomepageComponent {
+  view: 'requests' | 'insights' = 'requests';
   step: 'flight' | 'hotel' = 'flight';
   chosenID = 1;
   orderID: string | null = null;
@@ -44,6 +47,10 @@ export class AgentHomepageComponent {
 
   get order(): Order | undefined {
     return this.orderStore.orders()?.find(order => order.orderID == this.orderID);
+  }
+
+  showView(view: 'requests' | 'insights'){
+    this.view = view;
   }
 
   showStep(step: 'flight' | 'hotel'){

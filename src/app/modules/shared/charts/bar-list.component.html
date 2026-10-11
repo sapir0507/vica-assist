@@ -1,0 +1,11 @@
+<ul class="bars">
+  @for (item of items(); track item.label) {
+    <li class="bars__row">
+      <span class="bars__label">{{ item.label }}</span>
+      <span class="bars__track" aria-hidden="true"><span class="bars__fill" [style.width.%]="share(item)"></span></span>
+      <span class="bars__value">{{ item.count }}</span>
+    </li>
+  } @empty {
+    <li class="bars__empty">No data yet.</li>
+  }
+</ul>
