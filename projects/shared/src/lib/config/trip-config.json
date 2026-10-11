@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "airlines": [
+    { "id": "ly", "code": "LY", "name": "El Al", "country": "Israel", "hub": "Tel Aviv", "brandColor": "#0b3d91", "baggage": { "checkedIncludedEconomy": true, "weightKg": 23 }, "active": true },
+    { "id": "6h", "code": "6H", "name": "Israir", "country": "Israel", "hub": "Tel Aviv", "brandColor": "#005a9c", "baggage": { "checkedIncludedEconomy": false, "weightKg": 20 }, "active": true },
+    { "id": "ia", "code": "IZ", "name": "Arkia", "country": "Israel", "hub": "Tel Aviv", "brandColor": "#7a1f5c", "baggage": { "checkedIncludedEconomy": false, "weightKg": 20 }, "active": true },
+    { "id": "lh", "code": "LH", "name": "Lufthansa", "country": "Germany", "hub": "Frankfurt", "brandColor": "#05164d", "baggage": { "checkedIncludedEconomy": true, "weightKg": 23 }, "active": true },
+    { "id": "af", "code": "AF", "name": "Air France", "country": "France", "hub": "Paris", "brandColor": "#002157", "baggage": { "checkedIncludedEconomy": true, "weightKg": 23 }, "active": true },
+    { "id": "tk", "code": "TK", "name": "Turkish Airlines", "country": "Turkey", "hub": "Istanbul", "brandColor": "#a6192e", "baggage": { "checkedIncludedEconomy": true, "weightKg": 20 }, "active": true },
+    { "id": "ek", "code": "EK", "name": "Emirates", "country": "United Arab Emirates", "hub": "Dubai", "brandColor": "#8b1a1a", "baggage": { "checkedIncludedEconomy": true, "weightKg": 30 }, "active": true },
+    { "id": "ba", "code": "BA", "name": "British Airways", "country": "United Kingdom", "hub": "London", "brandColor": "#1d3f7a", "baggage": { "checkedIncludedEconomy": true, "weightKg": 23 }, "active": true },
+    { "id": "u2", "code": "U2", "name": "easyJet", "country": "United Kingdom", "hub": "London", "brandColor": "#9a4a00", "baggage": { "checkedIncludedEconomy": false, "weightKg": 23 }, "active": true },
+    { "id": "w6", "code": "W6", "name": "Wizz Air", "country": "Hungary", "hub": "Budapest", "brandColor": "#8a0f5e", "baggage": { "checkedIncludedEconomy": false, "weightKg": 20 }, "active": true },
+    { "id": "sq", "code": "SQ", "name": "Singapore Airlines", "country": "Singapore", "hub": "Singapore", "brandColor": "#1a2a5e", "baggage": { "checkedIncludedEconomy": true, "weightKg": 25 }, "active": true },
+    { "id": "ua", "code": "UA", "name": "United Airlines", "country": "United States", "hub": "Newark", "brandColor": "#0a3a6b", "baggage": { "checkedIncludedEconomy": false, "weightKg": 23 }, "active": true }
+  ],
+  "cabins": [
+    { "id": "economy", "label": "Economy", "active": true },
+    { "id": "premium", "label": "Premium economy", "active": true },
+    { "id": "business", "label": "Business", "active": true }
+  ],
+  "stopsOptions": [
+    { "id": "direct", "label": "Direct only", "active": true },
+    { "id": "max1", "label": "Up to 1 stop", "active": true },
+    { "id": "max2", "label": "Up to 2 stops", "active": true }
+  ],
+  "departureTimes": [
+    { "id": "any", "label": "Any time", "active": true },
+    { "id": "morning", "label": "Morning", "active": true },
+    { "id": "afternoon", "label": "Afternoon", "active": true },
+    { "id": "evening", "label": "Evening", "active": true }
+  ],
+  "bedTypes": [
+    { "id": "any", "label": "No preference", "active": true },
+    { "id": "queen", "label": "Queen bed", "active": true },
+    { "id": "king", "label": "King bed", "active": true },
+    { "id": "twin", "label": "Twin beds", "active": true }
+  ],
+  "hotelAreas": [
+    { "id": "any", "label": "No preference", "active": true },
+    { "id": "center", "label": "City center", "active": true },
+    { "id": "beach", "label": "Near the beach", "active": true },
+    { "id": "quiet", "label": "Quiet area", "active": true }
+  ],
+  "meals": [
+    { "id": "none", "label": "No special meal", "active": true },
+    { "id": "vegetarian", "label": "Vegetarian", "active": true },
+    { "id": "vegan", "label": "Vegan", "active": true },
+    { "id": "kosher", "label": "Kosher", "active": true },
+    { "id": "halal", "label": "Halal", "active": true },
+    { "id": "gluten-free", "label": "Gluten free", "active": true }
+  ],
+  "seatTypes": [
+    { "id": "any", "label": "No preference", "active": true },
+    { "id": "window", "label": "Window", "active": true },
+    { "id": "aisle", "label": "Aisle", "active": true },
+    { "id": "extra-legroom", "label": "Extra legroom", "active": true }
+  ],
+  "limits": {
+    "maxTravelers": 9,
+    "maxRooms": 5,
+    "maxStops": 2,
+    "maxLayoverHours": 24,
+    "maxFlexibleDays": 3,
+    "nameMaxLength": 60,
+    "notesMaxLength": 500,
+    "messageMaxLength": 1000
+  },
+  "assignment": {
+    "loadWeight": 1,
+    "specialtyWeight": 0.5,
+    "responseHours": 24
+  },
+  "publicMinimum": 5
+}
