@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, Validators } from '@angular/forms';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
-import { knownPlace, notBlank } from 'src/app/modules/all_modules/user-requests/validators';
+import { knownPlace } from '@vica-assist/shared';
+import { notBlank } from 'src/app/modules/all_modules/user-requests/validators';
 import { PlaceFieldComponent } from './place-field.component';
 
 describe('PlaceFieldComponent', () => {

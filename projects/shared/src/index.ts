@@ -13,3 +13,4 @@ export * from './lib/feedback';
 export * from './lib/config/trip.config';
 export * from './lib/order-matching';
 export * from './lib/config/config.service';
+export * from './lib/form-validators';

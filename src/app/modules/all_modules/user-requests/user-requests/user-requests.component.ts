@@ -3,9 +3,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, notInPastValidator, OrderRequest, passDetails, PreferencesFormValue, toPreferences } from '@vica-assist/shared';
+import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, OrderRequest, passDetails, PreferencesFormValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
-import { differentPlaces, fullName, israeliId, knownPlace, maxTrimmed, notBlank, roomsFitTravelers, uniqueTravelerIds } from '../validators';
+import { differentPlaces, maxTrimmed, notBlank, roomsFitTravelers } from '../validators';
 
 const DEFAULT_PREFERENCES = {
   flight: { stops: 'max2', maxLayoverHours: null, checkedBaggage: false, cabin: 'economy', departureTime: 'any', preferredAirlines: [] as string[], flexibleDays: 0 },
