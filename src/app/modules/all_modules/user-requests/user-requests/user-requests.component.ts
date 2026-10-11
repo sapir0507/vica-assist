@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 import { dateRangeValidator, notInPastValidator, OrderRequest, passDetails } from '@vica-assist/shared';
-import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
+import { DESTINATIONS, Destination, SEARCHABLE_PLACES } from 'src/app/modules/shared/destinations/destinations';
 import { differentPlaces, notBlank } from '../validators';
 
 @Component({
@@ -88,6 +88,11 @@ export class UserRequestsComponent implements OnInit {
     if (this.step === 0) return this.requestForm.controls['destination'].valid;
     if (this.step === 1) return this.passDetails.valid;
     return true;
+  }
+
+  get suggestions(): string[] {
+    const typed = String(this.requestForm.value.destination ?? '').trim().toLowerCase();
+    return SEARCHABLE_PLACES.filter(place => place.toLowerCase().includes(typed)).slice(0, 8);
   }
 
   isSelected(destination: Destination): boolean {

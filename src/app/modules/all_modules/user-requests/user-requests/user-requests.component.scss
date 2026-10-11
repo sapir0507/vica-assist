@@ -72,12 +72,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
   gap: var(--space-4);
-  margin-bottom: var(--space-6);
 }
 
 .booking__search {
   width: 100%;
   max-width: 28rem;
+  margin-bottom: var(--space-4);
 }
 
 .traveler {

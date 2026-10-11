@@ -68,6 +68,21 @@ describe('UserRequestsComponent', () => {
     expect(host().querySelector('destination-card button[aria-checked="true"]')).toBeNull();
   });
 
+  it('puts the search above the cards and suggests matching places as you type', () => {
+    const search = host().querySelector('.booking__search') as HTMLElement;
+    const picker = host().querySelector('.destination-picker') as HTMLElement;
+    expect(search.compareDocumentPosition(picker) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+
+    component.requestForm.patchValue({ destination: 'lis' });
+    expect(component.suggestions).toEqual(['Lisbon']);
+
+    component.requestForm.patchValue({ destination: 'ROM' });
+    expect(component.suggestions).toContain('Rome');
+
+    component.requestForm.patchValue({ destination: '' });
+    expect(component.suggestions).toHaveLength(8);
+  });
+
   it('cannot continue without a destination or a complete traveler', () => {
     expect(buttonLabelled('Next')?.disabled).toBe(true);
 

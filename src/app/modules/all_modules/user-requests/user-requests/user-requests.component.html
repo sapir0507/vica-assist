@@ -20,6 +20,18 @@
     @switch (step) {
       @case (0) {
         <h2 class="booking__heading" id="destination-heading">Where do you want to go?</h2>
+        <mat-form-field class="booking__search">
+          <mat-label>Search for a destination</mat-label>
+          <input matInput type="text" formControlName="destination" autocomplete="off" [matAutocomplete]="places" />
+          <mat-autocomplete #places="matAutocomplete">
+            @for (place of suggestions; track place) {
+              <mat-option [value]="place">{{ place }}</mat-option>
+            }
+          </mat-autocomplete>
+          @if (requestForm.controls['destination'].hasError('blank')) {
+            <mat-error>Enter where you want to go.</mat-error>
+          }
+        </mat-form-field>
         <div class="destination-picker" role="radiogroup" aria-labelledby="destination-heading">
           @for (destination of destinations; track destination.name) {
             <destination-card
@@ -30,13 +42,6 @@
             />
           }
         </div>
-        <mat-form-field class="booking__search">
-          <mat-label>Or search for another destination</mat-label>
-          <input matInput type="text" formControlName="destination" autocomplete="off" />
-          @if (requestForm.controls['destination'].hasError('blank')) {
-            <mat-error>Enter where you want to go.</mat-error>
-          }
-        </mat-form-field>
       }
       @case (1) {
         <h2 class="booking__heading">Who is travelling?</h2>
