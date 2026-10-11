@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { Order, provideAppIcons } from '@vica-assist/shared';
 
 import { OrderListItemComponent } from './order-list-item.component';
@@ -23,7 +24,7 @@ describe('OrderListItemComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OrderListItemComponent],
-      providers: [provideAppIcons()]
+      providers: [provideAppIcons(), provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(OrderListItemComponent);
@@ -64,5 +65,22 @@ describe('OrderListItemComponent', () => {
     (fixture.nativeElement.querySelector('button') as HTMLButtonElement).click();
 
     expect(opened).toEqual([order]);
+  });
+
+  it('offers a link to the status page when asked to', () => {
+    fixture.componentRef.setInput('currentItem', order);
+    fixture.componentRef.setInput('trackLink', true);
+    fixture.detectChanges();
+
+    const link = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('a');
+    expect(link?.textContent).toContain('Track status');
+    expect(link?.getAttribute('href')).toBe('/my-request/7');
+  });
+
+  it('has no status link by default', () => {
+    fixture.componentRef.setInput('currentItem', order);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('a')).toBeNull();
   });
 });

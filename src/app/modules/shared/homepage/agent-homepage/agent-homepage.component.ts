@@ -9,6 +9,7 @@ import { Agent, ConfigService, isVisibleToAgent, Order } from '@vica-assist/shar
 import { AgentStore } from 'src/app/services/agent/agent.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
+import { MessageThreadComponent } from '../../message-thread/message-thread.component';
 import { InsightsComponent } from './insights/insights.component';
 
 @Component({
@@ -24,7 +25,8 @@ import { InsightsComponent } from './insights/insights.component';
     OrdersListComponent,
     MatButtonModule,
     MatIconModule,
-    InsightsComponent
+    InsightsComponent,
+    MessageThreadComponent
   ]
 })
 export class AgentHomepageComponent {

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 import { API_URL, Order, provideAppIcons } from '@vica-assist/shared';
@@ -29,7 +30,7 @@ describe('OrderStatusListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [{ provide: API_URL, useValue: 'http://localhost:3000/' }, provideAppIcons()],
+      providers: [{ provide: API_URL, useValue: 'http://localhost:3000/' }, provideAppIcons(), provideRouter([])],
       imports: [HttpClientTestingModule, OrderStatusListComponent]
     }).compileComponents();
 

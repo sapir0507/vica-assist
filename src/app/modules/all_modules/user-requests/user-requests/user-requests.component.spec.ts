@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ChangeDetectorRef } from '@angular/core';
+import { Router, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { API_URL, Agent, Order, provideAppIcons, toDateInputValue } from '@vica-assist/shared';
+import { API_URL, Agent, Message, Order, provideAppIcons, toDateInputValue } from '@vica-assist/shared';
 
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 
 import { OrderStore } from 'src/app/services/order/order.store';
 import { AgentStore } from 'src/app/services/agent/agent.store';
+import { MessageStore } from 'src/app/services/message/message.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 
 import { UserRequestsModule } from '../user-requests.module';
@@ -40,7 +42,7 @@ describe('UserRequestsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, UserRequestsModule],
-      providers: [provideAppIcons(), { provide: API_URL, useValue: 'http://localhost:3000/' }]
+      providers: [provideAppIcons(), provideRouter([]), { provide: API_URL, useValue: 'http://localhost:3000/' }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserRequestsComponent);
@@ -470,6 +472,117 @@ describe('UserRequestsComponent', () => {
 
       expect(component.requestForm.value.destination).toBe('Paris');
       expect(component.passDetails.at(0).value.fullName).toBe('Dana Levi');
+    });
+  });
+
+  describe('after the request is sent', () => {
+    const fill = () => component.requestForm.patchValue({
+      origin: 'Tel Aviv',
+      destination: 'Paris',
+      Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
+      passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
+      price: '500'
+    });
+
+    it('opens the status page of the new request', () => {
+      const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+      vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({ id: 12 } as Order));
+      fill();
+
+      component.onSubmit();
+
+      expect(navigate).toHaveBeenCalledWith(['/my-request', 12]);
+    });
+
+    it('stays on the form when the request could not be sent', () => {
+      const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+      vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(throwError(() => new Error('down')));
+      fill();
+
+      component.onSubmit();
+
+      expect(navigate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('changing a request that is waiting for its agent', () => {
+    const existing: Order = {
+      id: 5,
+      orderID: '5',
+      choice: 'flight',
+      status: 'pending',
+      departureDate: daysFromToday(10),
+      returnDate: daysFromToday(15),
+      origin: 'Tel Aviv',
+      destination: 'Rome',
+      passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }, { fullName: 'Noa Levi', passID: 987654324 }],
+      priceRange: 700,
+      customer: 'dana',
+      createdAt: '2026-10-01T09:00:00.000Z',
+      agent: 'noa',
+      preferences: { flight: { stops: 'direct', checkedBaggage: true, cabin: 'business', departureTime: 'morning', preferredAirlines: ['ly'], flexibleDays: 2 }, notes: 'Quiet please' }
+    };
+
+    beforeEach(() => {
+      component.editing = existing;
+      component.ngOnChanges();
+      fixture.componentRef.injector.get(ChangeDetectorRef).markForCheck();
+      fixture.detectChanges();
+    });
+
+    it('starts from what the customer asked for', () => {
+      expect(component.requestForm.value).toMatchObject({ order: 'flight', origin: 'Tel Aviv', destination: 'Rome', price: '700' });
+      expect(component.Dates.value.departureDate).toBe(existing.departureDate);
+      expect(component.passDetails.value).toEqual([{ fullName: 'Dana Levi', passID: '123456782' }, { fullName: 'Noa Levi', passID: '987654324' }]);
+      expect(component.preferenceForm.get('flight.cabin')?.value).toBe('business');
+      expect(component.preferenceForm.get('flight.preferredAirlines')?.value).toEqual(['ly']);
+      expect(component.preferenceForm.get('notes')?.value).toBe('Quiet please');
+      expect(component.preferenceForm.get('hotel.rooms')?.value).toBe(1);
+      expect(component.requestForm.valid).toBe(true);
+    });
+
+    it('says it is editing', () => {
+      expect(component.isEditing).toBe(true);
+      expect(host().textContent).toContain('Edit your request');
+    });
+
+    it('saves the changes without touching who made the request, when, its number or status', () => {
+      const updatePending = vi.spyOn(TestBed.inject(OrderStore), 'updatePending').mockReturnValue(of({ ...existing, destination: 'Lisbon' }));
+      const note = vi.spyOn(TestBed.inject(MessageStore), 'note').mockReturnValue(of({} as Message));
+      const saved: Order[] = [];
+      component.saved.subscribe(order => saved.push(order));
+      component.requestForm.patchValue({ destination: 'Lisbon' });
+
+      component.onSubmit();
+
+      const changes = updatePending.mock.calls[0][1] as Record<string, unknown>;
+      expect(updatePending.mock.calls[0][0]).toBe(5);
+      expect(changes['destination']).toBe('Lisbon');
+      expect(changes['passDetails']).toEqual([{ fullName: 'Dana Levi', passID: 123456782 }, { fullName: 'Noa Levi', passID: 987654324 }]);
+      ['customer', 'createdAt', 'orderID', 'status'].forEach(key => expect(changes).not.toHaveProperty(key));
+      expect(note).toHaveBeenCalledWith(5, 'The customer updated this request.');
+      expect(saved).toHaveLength(1);
+    });
+
+    it('does not create a new request or reset the form', () => {
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder');
+      vi.spyOn(TestBed.inject(OrderStore), 'updatePending').mockReturnValue(of(existing));
+      vi.spyOn(TestBed.inject(MessageStore), 'note').mockReturnValue(of({} as Message));
+
+      component.onSubmit();
+
+      expect(addOrder).not.toHaveBeenCalled();
+      expect(component.requestForm.value.destination).toBe('Rome');
+    });
+
+    it('does not announce a save that failed', () => {
+      vi.spyOn(TestBed.inject(OrderStore), 'updatePending').mockReturnValue(throwError(() => new Error('Only a request that is still waiting for an agent can be changed.')));
+      const saved: Order[] = [];
+      component.saved.subscribe(order => saved.push(order));
+
+      component.onSubmit();
+
+      expect(saved).toEqual([]);
     });
   });
 });

@@ -42,6 +42,18 @@ const routes: Routes = [
     loadChildren: () => import('./modules/all_modules/final-order/final-order.module').then(m => m.FinalOrderModule)
   },
   {
+    path: 'my-request/:id',
+    canActivate: [authGuard],
+    data: { expectedRole: 'customer' satisfies UserRole },
+    loadComponent: () => import('./modules/all_modules/my-request/request-status.component').then(m => m.RequestStatusComponent)
+  },
+  {
+    path: 'my-request/:id/edit',
+    canActivate: [authGuard],
+    data: { expectedRole: 'customer' satisfies UserRole },
+    loadComponent: () => import('./modules/all_modules/my-request/edit-request.component').then(m => m.EditRequestComponent)
+  },
+  {
     path: 'user-finished-order',
     loadChildren: () => import('./modules/all_modules/user-finished-order/user-finished-order.module').then(m => m.UserFinishedOrderModule)
   },

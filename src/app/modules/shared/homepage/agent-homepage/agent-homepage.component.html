@@ -79,6 +79,13 @@
             <my-hotels [orderID]="orderID" [order]="order"></my-hotels>
           }
 
+          @if (order; as request) {
+            <section class="workspace__messages" aria-labelledby="agent-messages-title">
+              <h2 id="agent-messages-title" class="workspace__heading">Messages with the customer</h2>
+              <message-thread [order]="request" role="agent" [author]="username" />
+            </section>
+          }
+
           <div class="workspace__actions">
             <button mat-flat-button type="button" (click)="updateState()">Set order as finished</button>
           </div>

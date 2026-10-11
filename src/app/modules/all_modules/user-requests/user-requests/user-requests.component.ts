@@ -1,10 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy, effect, inject } from '@angular/core';
+import { Component, OnChanges, OnInit, ChangeDetectionStrategy, EventEmitter, Input, Output, effect, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgentStore } from 'src/app/services/agent/agent.store';
+import { MessageStore } from 'src/app/services/message/message.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, OrderRequest, passDetails, pickAgent, PreferencesFormValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
+import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
 import { differentPlaces, maxTrimmed, notBlank, roomsFitTravelers } from '../validators';
 
@@ -23,7 +25,11 @@ const DEFAULT_PREFERENCES = {
   styleUrls: ['./user-requests.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserRequestsComponent implements OnInit {
+export class UserRequestsComponent implements OnInit, OnChanges {
+
+  /** Set to change a request that is still waiting for its agent, instead of making a new one. */
+  @Input() editing?: Order;
+  @Output() saved = new EventEmitter<Order>();
 
   readonly steps = ['Destination', 'Travelers', 'Trip details', 'Preferences'];
   readonly destinations = DESTINATIONS;
@@ -31,6 +37,8 @@ export class UserRequestsComponent implements OnInit {
   orderID: string | null = null;
   private configService = inject(ConfigService);
   private agentStore = inject(AgentStore);
+  private messageStore = inject(MessageStore);
+  private router = inject(Router);
   private limits = this.configService.config().limits;
   requestForm: FormGroup = this.fb.group({
 
@@ -120,6 +128,36 @@ export class UserRequestsComponent implements OnInit {
     }
 
   ngOnInit(): void {/* empty*/}
+
+  ngOnChanges(): void {
+    const order = this.editing;
+    if (!order) return;
+
+    this.passDetails.clear();
+    order.passDetails.forEach(traveler => {
+      this.addNewPass();
+      this.passDetails.at(this.passDetails.length - 1).patchValue({ fullName: traveler.fullName, passID: String(traveler.passID) });
+    });
+    const wishes = order.preferences;
+    this.requestForm.patchValue({
+      order: order.choice,
+      origin: order.origin,
+      destination: order.destination,
+      price: String(order.priceRange),
+      hotel: { stars: order.stars ?? 3 },
+      Dates: { departureDate: toDateInputValue(order.departureDate), returnDate: toDateInputValue(order.returnDate) },
+      preferences: {
+        flight: { ...DEFAULT_PREFERENCES.flight, ...wishes?.flight },
+        hotel: { ...DEFAULT_PREFERENCES.hotel, ...wishes?.hotel },
+        needs: { ...DEFAULT_PREFERENCES.needs, ...wishes?.needs },
+        notes: wishes?.notes ?? ''
+      }
+    });
+  }
+
+  get isEditing(): boolean {
+    return !!this.editing;
+  }
 
   get canContinue(): boolean {
     const controls = this.requestForm.controls;
@@ -250,6 +288,19 @@ export class UserRequestsComponent implements OnInit {
         customer: this.sessionStore.username(),
         createdAt: new Date().toISOString()
       }
+      if (this.editing) {
+        const unchanged = ['customer', 'createdAt', 'orderID', 'status'];
+        const changes = Object.fromEntries(Object.entries(newOrder).filter(([key]) => !unchanged.includes(key)));
+        this.orderStore.updatePending(this.editing.id, changes).subscribe({
+          next: updated => {
+            this.messageStore.note(this.editing?.id as number, 'The customer updated this request.').subscribe();
+            this.saved.emit(updated);
+          },
+          error: (error: Error) => this.openSnackBar(error.message)
+        });
+        return;
+      }
+
       const agent = pickAgent(
         this.agentStore.active(),
         this.orderStore.orders() ?? [],
@@ -263,10 +314,11 @@ export class UserRequestsComponent implements OnInit {
       }
 
       this.orderStore.addOrder(newOrder).subscribe({
-        next: () => {
+        next: created => {
           this.openSnackBar("Order added!");
           this.requestForm.reset({ order: 'both', price: '0', hotel: { stars: 3 }, preferences: structuredClone(DEFAULT_PREFERENCES) });
           this.step = 0;
+          if (created?.id !== undefined) this.router.navigate(['/my-request', created.id]);
         },
         error: () => this.openSnackBar("Your request could not be sent. Please try again.")
       });

@@ -228,4 +228,15 @@ describe('AgentHomepageComponent', () => {
       expect(reassign).toHaveBeenCalledWith([{ orderId: 1, from: 'dana', to: 'noa', reason: 'overdue' }]);
     });
   });
+
+  it('shows the conversation with the customer once a request is opened, written as the signed-in agent', () => {
+    patchState(unprotected(TestBed.inject(SessionStore)), { username: 'dana' });
+    withOrders({ ...order(2), agent: 'dana' });
+    expect(host().querySelector('message-thread')).toBeNull();
+
+    component.onChosen2(order(2));
+    refresh();
+
+    expect(host().querySelector('message-thread')).not.toBeNull();
+  });
 });

@@ -1,0 +1,133 @@
+<div class="page">
+  @if (!loaded()) {
+    <p class="choice-grid__empty">Loading your request...</p>
+  } @else if (order(); as request) {
+    <header class="status__header">
+      <div>
+        <h1 class="page__title">Your request to {{ request.destination | Capitalize }}</h1>
+        <p class="page__subtitle">
+          Reference {{ request.id }} &middot; {{ request.departureDate | date: 'd MMM y' }} &ndash; {{ request.returnDate | date: 'd MMM y' }}
+        </p>
+      </div>
+      <span class="chip" [class]="'chip status__chip status__chip--' + state()">{{ statusLabel() }}</span>
+    </header>
+
+    <ol class="timeline" aria-label="Progress of your request">
+      @for (step of timeline(); track step.key) {
+        <li class="timeline__step" [class.timeline__step--done]="step.done" [class.timeline__step--current]="step.current" [attr.aria-current]="step.current ? 'step' : null">
+          <span class="timeline__dot" aria-hidden="true"></span>
+          <span class="timeline__label">{{ step.label }}</span>
+          @if (step.at) {
+            <span class="timeline__time">{{ step.at | date: 'd MMM, HH:mm' }}</span>
+          }
+        </li>
+      }
+    </ol>
+
+    @if (reassignment(); as note) {
+      <p class="status__note" role="note">{{ note }}</p>
+    }
+
+    <div class="status__grid">
+      <div class="status__main">
+        <section class="card" aria-labelledby="next-title">
+          <h2 id="next-title" class="card__title">What happens next</h2>
+          <p>{{ nextStep() }}</p>
+          @if (state() === 'answered') {
+            <offer-summary [orderId]="request.id" [choice]="request.choice" />
+          }
+          <div class="card__actions">
+            @if (state() === 'answered') {
+              <button mat-flat-button type="button" (click)="choose()">Choose your hotel and flight</button>
+            }
+            @if (canRate()) {
+              <a mat-flat-button routerLink="/homepage">Rate your trip</a>
+            }
+            @if (state() === 'pending') {
+              <a mat-stroked-button [routerLink]="['/my-request', request.id, 'edit']">Edit request</a>
+              @if (!confirmingCancel()) {
+                <button mat-button color="warn" type="button" (click)="askToCancel()">Cancel request</button>
+              } @else {
+                <span class="card__confirm" role="alertdialog" aria-label="Confirm cancellation">
+                  Cancel this request?
+                  <button mat-flat-button color="warn" type="button" (click)="cancel()">Yes, cancel it</button>
+                  <button mat-button type="button" (click)="keep()">Keep it</button>
+                </span>
+              }
+            }
+            <button mat-button type="button" (click)="refresh()">Refresh status</button>
+          </div>
+          @if (error(); as message) {
+            <p class="form-field__error" role="alert">{{ message }}</p>
+          }
+        </section>
+
+        <section class="card" aria-labelledby="summary-title">
+          <h2 id="summary-title" class="card__title">Your request</h2>
+          <dl class="summary">
+            <dt>Trip type</dt><dd>{{ request.choice | Capitalize }}</dd>
+            <dt>Route</dt><dd>{{ request.origin | Capitalize }} &rarr; {{ request.destination | Capitalize }}</dd>
+            <dt>Travelers</dt><dd>{{ request.passDetails.length }}</dd>
+            <dt>Budget</dt><dd>{{ request.priceRange | currency }}</dd>
+            @if (request.stars) { <dt>Hotel stars</dt><dd>At least {{ request.stars }}</dd> }
+            @if (wishes().flight.length) { <dt>Flight</dt><dd>{{ wishes().flight.join(' · ') }}</dd> }
+            @if (wishes().hotel.length) { <dt>Hotel</dt><dd>{{ wishes().hotel.join(' · ') }}</dd> }
+            @if (wishes().needs.length) { <dt>Needs</dt><dd>{{ wishes().needs.join(' · ') }}</dd> }
+            @if (wishes().notes) { <dt>Notes</dt><dd class="summary__notes">{{ wishes().notes }}</dd> }
+          </dl>
+        </section>
+
+        @if (state() !== 'cancelled' && request.agent) {
+          <section class="card" aria-labelledby="messages-title">
+            <h2 id="messages-title" class="card__title">Messages</h2>
+            <message-thread [order]="request" role="customer" [author]="username()" />
+          </section>
+        }
+      </div>
+
+      <aside class="status__side" aria-labelledby="agent-title">
+        <section class="card">
+          <h2 id="agent-title" class="card__title">Your agent</h2>
+          @if (agent(); as profile) {
+            <div class="agent">
+              <span class="agent__avatar" aria-hidden="true">{{ initials(profile.displayName) }}</span>
+              <div>
+                <p class="agent__name">{{ profile.displayName }}</p>
+                <p class="agent__title">{{ profile.title }}</p>
+              </div>
+            </div>
+            <p class="agent__bio">{{ profile.bio }}</p>
+            <dl class="summary">
+              <dt>Experience</dt><dd>{{ profile.yearsExperience }} years</dd>
+              <dt>Languages</dt><dd>{{ profile.languages.join(', ') }}</dd>
+              <dt>Knows best</dt><dd>{{ profile.specialties.join(', ') }}</dd>
+              <dt>Status</dt><dd>{{ profile.available ? 'Available' : 'Away' }}</dd>
+              <dt>Usually answers</dt><dd>within {{ responseHours() }} hours</dd>
+            </dl>
+            @if (rating(); as stats) {
+              @if (stats.average !== null) {
+                <p class="agent__rating">
+                  <star-rating label="Agent rating" [readonly]="true" [value]="rounded(stats.average)" />
+                  {{ stats.average }} from {{ stats.reviews }} {{ stats.reviews === 1 ? 'review' : 'reviews' }}, {{ stats.pleasedPercent }}% pleased
+                </p>
+              } @else {
+                <p class="agent__rating">No reviews yet.</p>
+              }
+            }
+            <a class="agent__mail" [href]="'mailto:' + profile.email">Email {{ profile.displayName.split(' ')[0] }}</a>
+          } @else {
+            <p>An agent will be assigned to your request shortly.</p>
+          }
+        </section>
+      </aside>
+    </div>
+
+    <p class="status__back"><a routerLink="/homepage">Back to my bookings</a></p>
+  } @else {
+    <section class="card" aria-labelledby="missing-title">
+      <h1 id="missing-title" class="card__title">We could not find this request</h1>
+      <p>It may have been removed, or it belongs to another account.</p>
+      <a mat-flat-button routerLink="/homepage">Back to my bookings</a>
+    </section>
+  }
+</div>

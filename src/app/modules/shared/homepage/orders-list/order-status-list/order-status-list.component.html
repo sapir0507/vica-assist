@@ -1,6 +1,6 @@
 <div class="order-grid">
   @for (item of orders(); track item.id) {
-    <order-list-item [currentItem]="item" [showOffers]="status === 'finished'" (item)="selectedItem($event)"></order-list-item>
+    <order-list-item [currentItem]="item" [showOffers]="status === 'finished'" [trackLink]="true" (item)="selectedItem($event)"></order-list-item>
   } @empty {
     <p class="order-grid__empty">{{ status === 'pending' ? 'No requests are waiting for an agent.' : 'No agent answers to choose from yet.' }}</p>
   }

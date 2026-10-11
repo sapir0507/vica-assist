@@ -1,5 +1,5 @@
 <div class="booking">
-  <h1 class="page__title">Book your trip</h1>
+  <h1 class="page__title">{{ isEditing ? 'Edit your request' : 'Book your trip' }}</h1>
   <p class="page__subtitle">Step {{ step + 1 }} of {{ steps.length }}</p>
 
   <ol class="progress" aria-label="Booking steps">
@@ -281,7 +281,7 @@
       @if (step < steps.length - 1) {
         <button mat-flat-button type="button" [disabled]="!canContinue" (click)="nextStep()">Next</button>
       } @else {
-        <button mat-flat-button type="submit" [disabled]="requestForm.invalid">Submit request</button>
+        <button mat-flat-button type="submit" [disabled]="requestForm.invalid">{{ isEditing ? 'Save changes' : 'Submit request' }}</button>
       }
     </div>
   </form>
