@@ -5,6 +5,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { Order } from '@vica-assist/shared';
 import { OrderStatusListComponent } from '../orders-list/order-status-list/order-status-list.component';
+import { BookedListComponent } from '../../bookings/booked-list/booked-list.component';
 import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';
 
 type View = 'menu' | 'booking' | 'orders';
@@ -20,7 +21,8 @@ type View = 'menu' | 'booking' | 'orders';
     MatIconModule,
     MatTabsModule,
     UserRequestsModule,
-    OrderStatusListComponent
+    OrderStatusListComponent,
+    BookedListComponent
   ]
 })
 export class UserHomepageComponent {

@@ -15,6 +15,9 @@
       <dt>Dates</dt>
       <dd>{{ currentItem.departureDate | date: 'd MMM y' }} &ndash; {{ currentItem.returnDate | date: 'd MMM y' }}</dd>
     </dl>
+    @if (showOffers) {
+      <offer-summary [orderId]="currentItem.id" [choice]="currentItem.choice" />
+    }
     @if (currentItem.orderID) {
       <div class="order-card__actions">
         <button mat-raised-button color="primary" type="button" (click)="openOrder(currentItem)">

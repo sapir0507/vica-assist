@@ -63,7 +63,7 @@ describe('OrderStatusListComponent', () => {
     fixture.componentRef.setInput('status', 'finished');
     fixture.detectChanges();
 
-    expect(host().textContent).toContain('No finished orders yet.');
+    expect(host().textContent).toContain('No agent answers to choose from yet.');
   });
 
   it('remembers the opened order for the final-order flow and re-emits it', () => {

@@ -41,10 +41,11 @@ describe('UserHomepageComponent', () => {
     expect(host().querySelector('.action-card')).not.toBeNull();
   });
 
-  it('opens the order lists', () => {
+  it('opens the booking tabs: waiting, ready to choose and booked', () => {
     click('.action-card:nth-child(2)');
 
-    expect(host().querySelector('mat-tab-group')).not.toBeNull();
+    const labels = Array.from(host().querySelectorAll('.mdc-tab__text-label')).map(l => l.textContent?.trim());
+    expect(labels).toEqual(['Waiting for agent', 'Ready to choose', 'Booked']);
   });
 
   it('opens the final order page of a selected order', () => {

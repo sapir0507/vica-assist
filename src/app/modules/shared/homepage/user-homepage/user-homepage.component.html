@@ -28,13 +28,16 @@
         <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
         Back
       </button>
-      <h1 class="page__title">Your orders</h1>
+      <h1 class="page__title">Your bookings</h1>
       <mat-tab-group animationDuration="0ms">
-        <mat-tab label="Pending">
+        <mat-tab label="Waiting for agent">
           <order-status-list status="pending" (item)="selectedItem($event)"></order-status-list>
         </mat-tab>
-        <mat-tab label="Finished">
+        <mat-tab label="Ready to choose">
           <order-status-list status="finished" (item)="selectedItem($event)"></order-status-list>
+        </mat-tab>
+        <mat-tab label="Booked">
+          <booked-list></booked-list>
         </mat-tab>
       </mat-tab-group>
     }
