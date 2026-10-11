@@ -829,6 +829,23 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   posted and refreshed in parallel, and never refreshed after a status change or a cleanup. Initial bundle
   721 kB to 732 kB.
 
+- **Configuration, preferences, agents and an admin (`feature/roles-config-agents-admin`)**: a typed JSON
+  configuration (`trip-config.json`) defines airlines, every option list, limits and assignment rules, with an
+  admin-editable override saved as a `settings` document and checked by `validateConfig` (defaults used when the
+  document is missing, slow or invalid). The helper folder `order-matching` holds the pure functions: `pickAgent`,
+  `planReassignments`, `checkFlight`/`checkHotel`, `toPreferences`, `describePreferences`, `agentRating`,
+  `compareAgents`, the places list and the Israeli ID and name rules. The booking form gained a Preferences step
+  and strict validation; the agent forms gained an airline from the configuration, a cabin and warnings against
+  the customer's wishes; new requests are assigned to an agent, and the customer lands on a status page (timeline,
+  agent card, edit, cancel, messages). A fourth role, admin, has one long page (overview and agent comparison,
+  requests with manual reassignment, agents and accounts, airlines, configuration editor with export/import,
+  inquiries, audit log) with scroll-reveal and count-up effects that respect `prefers-reduced-motion`.
+  Registration is customer-only. Fixed on the way: the flight and hotel cards always said baggage, breakfast and
+  free cancellation were included (the saved values are text), the flight form's name rule needed three words,
+  the hotel form had no validation, the order store piled up duplicates and never refreshed, the booking form
+  logged passengers to the console, and a new request could reuse the number of a booked trip. Initial bundle
+  721 kB to 761 kB; the warning budget moved to 800 kB because the configuration code and defaults load at start.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend

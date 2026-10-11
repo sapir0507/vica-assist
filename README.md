@@ -23,13 +23,24 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
 | Role | Can do |
 |---|---|
 | Visitor (`unknown`) | Information only: read about the service, see trending destinations, log in or register. No booking |
-| Customer | Book a trip in three steps (destination, travelers, details), follow requests (waiting, ready to choose, booked), choose among the agent's hotels and flights, rate a finished trip |
-| Agent | Work through a queue of pending requests, add flights and hotels, mark a request answered, and read statistics (satisfaction, response time, destinations) on the Insights tab |
+| Customer | Book a trip in four steps (destination, travelers, details, preferences), land on a status page with their assigned agent, a timeline, what happens next, messages, and edit or cancel while the request waits; choose among the agent's hotels and flights; rate a finished trip |
+| Agent | Work through their own queue of pending requests (with the customer's wishes beside every field), choose airline, flight and hotel details, message the customer, switch availability, and read their own statistics on the Insights tab |
+| Admin | One long page: company-wide numbers and an agent comparison, every request with manual reassignment, agents and their accounts, airlines, a configuration editor, visitor inquiries, review moderation and an audit log |
 
 ## Key features
 
 - Role-based homepage: the route that loads depends on the signed-in user's role.
 - Agents add flights (`add-flight`) and hotels (`add-hotel`) to a customer's order.
+- The booking form validates travelers (Israeli ID check digit, first and last name, no duplicates), the origin and
+  destination (a known country or city, with autocomplete), dates and budget, and collects the customer's
+  **preferences** (stops or direct, checked baggage, cabin, departure time, preferred airlines, flexible dates,
+  hotel breakfast, bed, area, rooms, meals, seat, assistance, notes) for the agent.
+- Each request is **assigned to an agent** automatically (`pickAgent`: least open requests, a head start for a
+  specialist, skipping agents who are away); a request nobody answers within the promised time (24 h by default)
+  is handed to another agent once, and the customer is told.
+- Agents choose the real offer (airline from the configured list, cabin, stops, baggage, hotel, price); the form
+  warns, without blocking, when an offer differs from what the customer asked for, and the customer's cards say
+  how each offer compares.
 - Customers file requests (`user-requests`) and follow them in three tabs: waiting for an agent, ready to choose
   (with how many hotels and flights the agent added) and booked.
 - After a trip has ended the customer rates the hotel and the flight (1 to 5 stars) and can write a review.
@@ -73,9 +84,9 @@ on the mock backend and, on a match, stores the username and role. A failed logi
 
 | Piece | File | Behaviour |
 |---|---|---|
-| Roles | `session.store.ts` | `agent`, `customer`, or `unknown` (the logged-out default) |
+| Roles | `session.store.ts` | `admin`, `agent`, `customer`, or `unknown` (the logged-out default) |
 | `authGuard` | `services/auth-guard/auth.guard.ts` | Redirects to `/login` when logged out, and to `/homepage` when the route's `expectedRole` does not match |
-| `roleMatch(role)` | `services/auth-guard/role.match.ts` | A `canMatch` guard used by the homepage routes to pick one of three components for the same `''` path |
+| `roleMatch(role)` | `services/auth-guard/role.match.ts` | A `canMatch` guard used by the homepage routes to pick one of four components for the same `''` path |
 | Header links | `link.store.ts` | Switch between login/register and logout when the session changes |
 
 **This is not real security.** See [Security considerations](#security-considerations).
@@ -117,10 +128,13 @@ Flights and hotels are tied to an order through the order's id; `HttpResourceSer
 src/app/
   modules/all_modules/   feature modules (add flight/hotel, final-order, user requests, ...)
   modules/shared/        header, homepage (+ role-specific pages), destinations, login, register, footer
-  services/              session, order, finalOrder, links stores · auth guards · window-resize service
+  services/              session, order, finalOrder, booking, agent, message, audit, inquiry, links stores · admin
+                         service · auth guards · window-resize service
   data/data.json         json-server database
 projects/
   shared · my-flights · my-hotels · item · my-pipes
+  shared/src/lib/config        trip-config.json (defaults) and the typed config
+  shared/src/lib/order-matching  pure helpers: pickAgent, planReassignments, checkOffer, validateConfig, places, ...
 docs/
   development.md                  how to work on the project
   DEPENDENCY_UPGRADE_ROADMAP.md   what was upgraded, in which order, and what broke
@@ -175,8 +189,13 @@ This is a demo backed by a mock API, and several things would be unacceptable in
   and registration `POST`s the password as-is.
 - **Guards are UX, not security.** `authGuard` and `roleMatch` only hide routes in the browser. Any client can
   call the mock API directly, and nothing on the server checks roles.
-- **Self-selected role.** Registration is a free-text field (`agent/customer`), so anyone can sign up as an
-  agent; anything else becomes `customer`.
+- **Roles are no longer self-selected.** Registration only creates customers; the admin creates agent accounts
+  (with a one-time password, stored in plaintext because the mock backend cannot hash).
+- **Everything the admin, an agent or a customer is allowed to do is enforced in the browser** (`AdminService`
+  refuses non-admins, stores refuse other people's requests, ratings and messages), and the mock API accepts any
+  request from anyone. A real backend must repeat every one of those checks.
+- **Assignment, reassignment and the audit log are written by whichever client notices.** In a real system they
+  belong to server jobs; the audit log can only be appended to through the app, but nothing stops a direct call.
 - **JWT packages are wired but unused.** `JwtModule` is configured with an undefined `tokenGetter`, and no
   token is issued or stored; the session is in memory only and is lost on reload.
 - The client never copies the backend's password into the session store after login.
@@ -263,9 +282,12 @@ high-severity dev-only finding (see below).
   150 to 240 kB of it Angular Material and CDK. Replacing more Material parts with native elements is the next lever.
 - **Unchosen options are deleted at booking**, so the dashboard cannot say how many options an agent offered per
   request or whether the first one was accepted.
-- **Ids are inconsistent.** A request's `orderID` is the order count plus one, while the agent attaches flights and
-  hotels using the entity `id`; the two only agree while no order has been deleted, and the cleanup after a booking
-  deletes by `orderID`.
+- **Request numbers are chosen by the browser.** A new request takes a number above every open request and every
+  booking, because the backend would reuse the number of an order deleted at booking; two browsers submitting at
+  the same moment could still pick the same number. The id and the reference are now the same number.
+- **The list of places is bundled and not exhaustive.** Countries and about 150 major cities are accepted;
+  streets and small towns are not.
+- **No real notifications.** Messages and status changes appear when a page is opened or refreshed.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
 
