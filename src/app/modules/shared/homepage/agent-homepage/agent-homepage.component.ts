@@ -1,11 +1,13 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, effect, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MyFlightsModule } from '@vica-assist/my-flights';
 import { MyHotelsModule } from '@vica-assist/my-hotels';
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Order } from '@vica-assist/shared';
+import { Agent, ConfigService, isVisibleToAgent, Order, planReassignments } from '@vica-assist/shared';
+import { AgentStore } from 'src/app/services/agent/agent.store';
+import { SessionStore } from 'src/app/services/session/session.store';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
 import { InsightsComponent } from './insights/insights.component';
 
@@ -32,9 +34,42 @@ export class AgentHomepageComponent {
   orderID: string | null = null;
   private position = 0;
   private orderStore = inject(OrderStore);
+  private agentStore = inject(AgentStore);
+  private sessionStore = inject(SessionStore);
+  private configService = inject(ConfigService);
+  private checkedOverdue = false;
+
+  constructor() {
+    this.agentStore.load();
+    effect(() => {
+      if (this.checkedOverdue || !this.agentStore.agents() || !this.orderStore.orders()) return;
+      this.checkedOverdue = true;
+      this.moveRequests();
+    });
+  }
+
+  get username(): string {
+    return this.sessionStore.username();
+  }
+
+  get profile(): Agent | undefined {
+    return this.agentStore.byUsername(this.username);
+  }
 
   get pending(): Order[] {
-    return this.orderStore.pendingOrders() ?? [];
+    return (this.orderStore.pendingOrders() ?? []).filter(order => isVisibleToAgent(order, this.username));
+  }
+
+  setAvailability(available: boolean){
+    this.agentStore.setAvailability(this.username, available).subscribe(() => {
+      if (!available) this.moveRequests();
+    });
+  }
+
+  /** Hands over requests that are overdue or belong to an agent who is away. */
+  private moveRequests(){
+    const plans = planReassignments(this.orderStore.orders() ?? [], this.agentStore.agents() ?? [], new Date(), this.configService.config().assignment);
+    this.orderStore.reassign(plans);
   }
 
   get index(): number {

@@ -9,6 +9,9 @@
       <div class="stat"><span class="stat__value">{{ data.funnel.received }}</span><span class="stat__label">Received</span></div>
       <div class="stat"><span class="stat__value">{{ data.funnel.awaiting }}</span><span class="stat__label">Awaiting your answer</span></div>
       <div class="stat"><span class="stat__value">{{ data.funnel.waitingForCustomer }}</span><span class="stat__label">Waiting for the customer</span></div>
+      @if (data.funnel.cancelled) {
+        <div class="stat"><span class="stat__value">{{ data.funnel.cancelled }}</span><span class="stat__label">Cancelled by the customer</span></div>
+      }
       <div class="stat">
         <span class="stat__value">{{ data.funnel.booked }}</span>
         <span class="stat__label">Booked @if (data.funnel.bookingRate !== null) { ({{ data.funnel.bookingRate }}% of requests) }</span>

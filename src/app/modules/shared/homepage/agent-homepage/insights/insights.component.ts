@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 
+import { isVisibleToAgent } from '@vica-assist/shared';
 import { BookingStore } from 'src/app/services/booking/booking.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { BarListComponent } from '../../../charts/bar-list.component';
@@ -19,7 +20,17 @@ export class InsightsComponent implements OnInit {
   protected bookingStore = inject(BookingStore);
   private orderStore = inject(OrderStore);
 
-  readonly insights = computed(() => computeInsights(this.orderStore.orders() ?? [], this.bookingStore.bookings() ?? []));
+  /** Username of the agent whose numbers to show; leave empty for the whole company. */
+  agent = input<string | null>(null);
+
+  readonly insights = computed(() => {
+    const agent = this.agent();
+    const orders = this.orderStore.orders() ?? [];
+    const bookings = this.bookingStore.bookings() ?? [];
+    return agent === null
+      ? computeInsights(orders, bookings)
+      : computeInsights(orders.filter(order => isVisibleToAgent(order, agent)), bookings.filter(booking => isVisibleToAgent(booking.order, agent)));
+  });
 
   readonly parts = computed(() => [
     { title: 'Hotels', label: 'Average hotel rating', data: this.insights().satisfaction.hotel },

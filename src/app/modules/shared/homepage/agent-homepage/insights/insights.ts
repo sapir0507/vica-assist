@@ -22,7 +22,7 @@ export interface Count {
 }
 
 export interface Insights {
-  funnel: { received: number; awaiting: number; waitingForCustomer: number; booked: number; bookingRate: number | null };
+  funnel: { received: number; awaiting: number; waitingForCustomer: number; booked: number; cancelled: number; bookingRate: number | null };
   satisfaction: {
     eligible: number;
     reviewedEligible: number;
@@ -89,8 +89,9 @@ function hasProblem(booking: finalOrder): boolean {
 /** Turns the orders and bookings the agent can see into the numbers on the Insights tab. Never throws on bad records. */
 export function computeInsights(orders: Order[], bookings: finalOrder[], now = new Date()): Insights {
   const usable = bookings.filter(booking => booking.order);
-  const awaiting = orders.filter(order => order.status !== 'finished').length;
-  const waitingForCustomer = orders.length - awaiting;
+  const cancelled = orders.filter(order => order.status === 'cancelled').length;
+  const waitingForCustomer = orders.filter(order => order.status === 'finished').length;
+  const awaiting = orders.length - cancelled - waitingForCustomer;
   const received = orders.length + usable.length;
 
   const eligible = usable.filter(booking => hasTripEnded(booking.order?.returnDate, now));
@@ -132,7 +133,7 @@ export function computeInsights(orders: Order[], bookings: finalOrder[], now = n
   const allChoices = [...orders, ...usable.map(booking => booking.order as Order)].map(order => order.choice);
 
   return {
-    funnel: { received, awaiting, waitingForCustomer, booked: usable.length, bookingRate: percent(usable.length, received) },
+    funnel: { received, awaiting, waitingForCustomer, booked: usable.length, cancelled, bookingRate: percent(usable.length, received) },
     satisfaction: {
       eligible: eligible.length,
       reviewedEligible: reviewedEligible.length,

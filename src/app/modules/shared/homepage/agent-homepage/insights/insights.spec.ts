@@ -43,7 +43,7 @@ describe('computeInsights', () => {
     const insights = computeInsights([], [], NOW);
 
     it('reports zeros and no percentages instead of NaN', () => {
-      expect(insights.funnel).toEqual({ received: 0, awaiting: 0, waitingForCustomer: 0, booked: 0, bookingRate: null });
+      expect(insights.funnel).toEqual({ received: 0, awaiting: 0, waitingForCustomer: 0, booked: 0, cancelled: 0, bookingRate: null });
       expect(insights.satisfaction.hotel).toEqual({ count: 0, average: null, satisfiedPercent: null, distribution: [0, 0, 0, 0, 0] });
       expect(insights.satisfaction.responseRate).toBeNull();
       expect(insights.business.averageResponseHours).toBeNull();
@@ -62,7 +62,13 @@ describe('computeInsights', () => {
         NOW
       );
 
-      expect(funnel).toEqual({ received: 5, awaiting: 2, waitingForCustomer: 1, booked: 2, bookingRate: 40 });
+      expect(funnel).toEqual({ received: 5, awaiting: 2, waitingForCustomer: 1, booked: 2, cancelled: 0, bookingRate: 40 });
+    });
+
+    it('counts cancelled requests on their own, not as waiting for an agent', () => {
+      const { funnel } = computeInsights([order(1), order(2, { status: 'cancelled' })], [], NOW);
+
+      expect(funnel).toMatchObject({ received: 2, awaiting: 1, cancelled: 1 });
     });
   });
 

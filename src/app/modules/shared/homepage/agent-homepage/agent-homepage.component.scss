@@ -39,3 +39,11 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.availability {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
+}

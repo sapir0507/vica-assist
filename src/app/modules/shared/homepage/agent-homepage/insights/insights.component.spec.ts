@@ -3,6 +3,9 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { finalOrder, Order, provideAppIcons } from '@vica-assist/shared';
 
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
+
 import { environment } from 'src/environments/environment';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { InsightsComponent } from './insights.component';
@@ -109,5 +112,29 @@ describe('InsightsComponent', () => {
     expect(component.responseTime(0.5)).toBe('30 minutes');
     expect(component.responseTime(4.5)).toBe('4.5 hours');
     expect(component.responseTime(72)).toBe('3 days');
+  });
+
+  it('shows only one agent\'s numbers when asked to, including requests nobody was given', () => {
+    fixture.componentRef.setInput('agent', 'dana');
+    fixture.detectChanges();
+    patchState(unprotected(TestBed.inject(OrderStore)), {
+      orders: [{ ...order(1), agent: 'dana' }, { ...order(2), agent: 'noa' }, order(3)]
+    });
+    httpMock.expectOne(url).flush([
+      { ...booking(4), order: { ...order(4, { status: 'finished' }), agent: 'dana' } },
+      { ...booking(5), order: { ...order(5, { status: 'finished' }), agent: 'noa' } }
+    ]);
+    fixture.detectChanges();
+
+    expect(stat('Received')).toBe('3');
+    expect(stat('Booked')).toBe('1');
+  });
+
+  it('shows the cancelled requests when there are some', () => {
+    patchState(unprotected(TestBed.inject(OrderStore)), { orders: [order(1), order(2, { status: 'cancelled' })] });
+    load();
+
+    expect(stat('Cancelled')).toBe('1');
+    expect(stat('Awaiting your answer')).toBe('1');
   });
 });

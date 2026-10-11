@@ -18,9 +18,16 @@
     >Insights</button>
   </div>
 
+  @if (profile; as me) {
+    <label class="availability">
+      <input type="checkbox" [checked]="me.available" (change)="setAvailability($any($event.target).checked)" />
+      {{ me.available ? 'Available for new requests' : 'Away: you receive no new requests' }}
+    </label>
+  }
+
   @if (view === 'insights') {
     @defer {
-      <agent-insights />
+      <agent-insights [agent]="username" />
     } @placeholder {
       <p class="choice-grid__empty">Loading insights...</p>
     }
