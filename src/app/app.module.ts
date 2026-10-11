@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -10,7 +10,7 @@ import { FooterComponent } from './modules/shared/footer/footer.component';
 import { environment } from '../environments/environment';
 import { JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
 import { SflightService } from './services/flight/sflight.service';
-import { API_URL, provideAppIcons } from '@vica-assist/shared';
+import { API_URL, ConfigService, provideAppIcons } from '@vica-assist/shared';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -47,7 +47,8 @@ const JWT_Module_Options: JwtModuleOptions = {
   providers: [
     SflightService,
     { provide: API_URL, useValue: environment.api },
-    provideAppIcons()
+    provideAppIcons(),
+    provideAppInitializer(() => inject(ConfigService).load())
   ],
   bootstrap: [AppComponent]
 })
