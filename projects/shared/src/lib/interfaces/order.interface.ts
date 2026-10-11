@@ -1,3 +1,5 @@
+import { OrderPreferences } from './preferences.interface';
+
 export interface passDetails{
     fullName: string,
     passID: number
@@ -18,7 +20,8 @@ export interface Order {
     finalPrice?: number,
     customer?: string,
     createdAt?: string,
-    respondedAt?: string
+    respondedAt?: string,
+    preferences?: OrderPreferences
   }
 
   export function isPending(order: Order, isAgent: boolean): boolean {
@@ -41,7 +44,8 @@ export interface Order {
     priceRange: number,
     finalPrice?: number,
     customer?: string,
-    createdAt?: string
+    createdAt?: string,
+    preferences?: OrderPreferences
 
   }
   

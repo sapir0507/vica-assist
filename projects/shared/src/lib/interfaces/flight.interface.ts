@@ -17,7 +17,10 @@ export interface Flights {
     stopDuration?: string,
     bagage?: string ,
     moreInfo?: string ,
-    price?: number
+    price?: number,
+    airlineId?: string,
+    airline?: string,
+    cabin?: string
   }
 
   export interface FlightsRequest {
@@ -36,6 +39,9 @@ export interface Flights {
     stopDuration?: string,
     bagage?: string ,
     moreInfo?: string ,
-    price?: number 
+    price?: number,
+    airlineId?: string,
+    airline?: string,
+    cabin?: string
     
 }
