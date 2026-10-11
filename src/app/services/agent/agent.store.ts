@@ -33,6 +33,18 @@ export const AgentStore = signalStore(
         return store.agents()?.find(agent => agent.username === username);
       },
 
+      save(agent: Agent): Observable<Agent> {
+        return http.patch<Agent>(`${url}/${agent.id}`, agent).pipe(
+          tap(updated => patchState(store, { agents: store.agents()?.map(item => (item.id === updated.id ? updated : item)) }))
+        );
+      },
+
+      create(agent: Omit<Agent, 'id'>): Observable<Agent> {
+        return http.post<Agent>(url, agent).pipe(
+          tap(created => patchState(store, { agents: [...(store.agents() ?? []), created] }))
+        );
+      },
+
       setAvailability(username: string, available: boolean): Observable<Agent> {
         const agent = store.agents()?.find(item => item.username === username);
         if (!agent) return throwError(() => new Error('This agent does not exist.'));

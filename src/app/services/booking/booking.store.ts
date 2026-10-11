@@ -34,6 +34,15 @@ export const BookingStore = signalStore(
         http.get<finalOrder[]>(url).subscribe(bookings => patchState(store, { bookings }));
       },
 
+      /** Keeps a review off the public page, or puts it back; the rating itself still counts. */
+      setReviewHidden(bookingId: number, hidden: boolean): Observable<finalOrder> {
+        const booking = store.bookings()?.find(item => item.id === bookingId);
+        if (!booking?.feedback) return throwError(() => new Error('This booking has no review.'));
+        return http.patch<finalOrder>(`${url}/${bookingId}`, { feedback: { ...booking.feedback, hidden } }).pipe(
+          tap(updated => patchState(store, { bookings: store.bookings()?.map(item => (item.id === bookingId ? updated : item)) }))
+        );
+      },
+
       /**
        * Stores the signed-in customer's rating of a finished trip. The checks repeat what the form enforces,
        * because the form is not the only way to reach this method.

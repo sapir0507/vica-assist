@@ -4,7 +4,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-export type UserRole = 'agent' | 'customer' | 'unknown';
+export type UserRole = 'admin' | 'agent' | 'customer' | 'unknown';
 
 const experationDate = new Date().getDate() + 30;
 

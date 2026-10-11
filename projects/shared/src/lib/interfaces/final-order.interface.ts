@@ -6,7 +6,9 @@ export interface Feedback {
     hotelRating?: number,
     flightRating?: number,
     review?: string,
-    ratedAt: string
+    ratedAt: string,
+    /** Set by the admin to keep a review off the public page. */
+    hidden?: boolean
 }
 
 export interface finalOrderRequest{

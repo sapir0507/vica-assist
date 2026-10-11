@@ -55,4 +55,29 @@ describe('AgentStore', () => {
 
     expect(message).toBe('This agent does not exist.');
   });
+
+  it('saves a changed profile and updates the store', () => {
+    store.load();
+    httpMock.expectOne(url).flush([agent(1, 'dana')]);
+
+    store.save({ ...agent(1, 'dana'), title: 'Director' }).subscribe();
+
+    const req = httpMock.expectOne(`${url}/1`);
+    expect(req.request.method).toBe('PATCH');
+    req.flush({ ...agent(1, 'dana'), title: 'Director' });
+    expect(store.byUsername('dana')?.title).toBe('Director');
+  });
+
+  it('adds a new agent to the store', () => {
+    store.load();
+    httpMock.expectOne(url).flush([agent(1, 'dana')]);
+    const { id: _id, ...profile } = agent(2, 'noa');
+
+    store.create(profile).subscribe();
+
+    const req = httpMock.expectOne(url);
+    expect(req.request.method).toBe('POST');
+    req.flush(agent(2, 'noa'));
+    expect(store.agents()?.map(a => a.username)).toEqual(['dana', 'noa']);
+  });
 });

@@ -106,4 +106,27 @@ describe('BookingStore', () => {
       req.flush(booking(1));
     });
   });
+
+  describe('setReviewHidden', () => {
+    it('hides and shows a review, keeping what the customer wrote', () => {
+      load({ ...booking(1), feedback: { hotelRating: 5, review: 'Lovely', ratedAt: 'x' } });
+
+      store.setReviewHidden(1, true).subscribe();
+
+      const req = httpMock.expectOne(`${url}/1`);
+      expect(req.request.method).toBe('PATCH');
+      expect(req.request.body.feedback).toEqual({ hotelRating: 5, review: 'Lovely', ratedAt: 'x', hidden: true });
+      req.flush({ ...booking(1), feedback: req.request.body.feedback });
+      expect(store.bookings()?.[0].feedback?.hidden).toBe(true);
+    });
+
+    it('refuses a booking without a review', () => {
+      load(booking(1));
+      let message = '';
+
+      store.setReviewHidden(1, true).subscribe({ error: (e: Error) => (message = e.message) });
+
+      expect(message).toBe('This booking has no review.');
+    });
+  });
 });
