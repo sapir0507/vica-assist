@@ -50,13 +50,14 @@ export class RequestStatusComponent {
   readonly loaded = computed(() => this.orderStore.orders() !== undefined && this.bookingStore.bookings() !== undefined);
 
   /** Only the customer's own request is ever shown, so another customer's id looks the same as a missing one. */
-  readonly booking = computed<finalOrder | undefined>(() =>
-    this.bookingStore.mine().find(booking => booking.order?.id === this.id)
+  private readonly live = computed<Order | undefined>(() =>
+    this.orderStore.orders()?.find(order => order.id === this.id && order.customer === this.username())
   );
-  readonly order = computed<Order | undefined>(() => {
-    const live = this.orderStore.orders()?.find(order => order.id === this.id && order.customer === this.username());
-    return live ?? this.booking()?.order;
-  });
+  /** A booking only counts when no open request has the number: older bookings may carry a number that was reused. */
+  readonly booking = computed<finalOrder | undefined>(() =>
+    this.live() ? undefined : this.bookingStore.mine().find(booking => booking.order?.id === this.id)
+  );
+  readonly order = computed<Order | undefined>(() => this.live() ?? this.booking()?.order);
   readonly state = computed(() => stateOf(this.order(), this.booking()));
   readonly statusLabel = computed(() => (this.state() ? STATE_LABELS[this.state() as RequestState] : ''));
   readonly timeline = computed(() => {

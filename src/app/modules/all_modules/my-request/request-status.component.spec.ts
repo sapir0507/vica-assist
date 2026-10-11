@@ -86,7 +86,7 @@ describe('RequestStatusComponent', () => {
     beforeEach(() => setUp([order()]));
 
     it('shows the destination, reference, dates and status', () => {
-      expect(text()).toContain('Your request to Paris');
+      expect(text()).toContain('Your request to paris');
       expect(text()).toContain('Reference 7');
       expect(text()).toContain('1 Dec 2026');
       expect(host().querySelector('.status__chip')?.textContent).toContain('Waiting for your agent');
@@ -255,5 +255,13 @@ describe('RequestStatusComponent', () => {
     setUp([order()]);
 
     expect(host().querySelector('.agent__avatar')?.textContent).toBe('MC');
+  });
+
+  it('shows the open request, not an older booking that happens to share its number', () => {
+    const oldTrip: finalOrder = { id: 1, order: order({ status: 'finished', destination: 'rome' }), bookedAt: '2026-01-14T18:00:00.000Z' };
+    setUp([order()], [oldTrip]);
+
+    expect(text()).toContain('Your request to paris');
+    expect(host().querySelector('.status__chip')?.textContent).toContain('Waiting for your agent');
   });
 });

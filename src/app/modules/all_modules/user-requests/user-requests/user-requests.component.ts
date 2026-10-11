@@ -1,8 +1,9 @@
-import { Component, OnChanges, OnInit, ChangeDetectionStrategy, EventEmitter, Input, Output, effect, inject } from '@angular/core';
+import { Component, OnChanges, OnInit, ChangeDetectionStrategy, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgentStore } from 'src/app/services/agent/agent.store';
+import { BookingStore } from 'src/app/services/booking/booking.store';
 import { MessageStore } from 'src/app/services/message/message.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
@@ -34,10 +35,10 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   readonly steps = ['Destination', 'Travelers', 'Trip details', 'Preferences'];
   readonly destinations = DESTINATIONS;
   step = 0;
-  orderID: string | null = null;
   private configService = inject(ConfigService);
   private agentStore = inject(AgentStore);
   private messageStore = inject(MessageStore);
+  private bookingStore = inject(BookingStore);
   private router = inject(Router);
   private limits = this.configService.config().limits;
   requestForm: FormGroup = this.fb.group({
@@ -120,11 +121,7 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   ) {
       this.addNewPass()
       this.agentStore.load();
-
-      effect(() => {
-        const orders = this.orderStore.orders();
-        if(orders) this.orderID = '' + (orders.length + 1) //*
-      });
+      this.bookingStore.load();
     }
 
   ngOnInit(): void {/* empty*/}
@@ -237,6 +234,18 @@ export class UserRequestsComponent implements OnInit, OnChanges {
     this.step--;
   }
 
+  /**
+   * One more than any id seen so far, in the open requests and in the bookings. Booking deletes the order, so
+   * the backend alone would hand its number out again and the new request would be mistaken for the old trip.
+   */
+  private nextOrderId(): number {
+    const taken = [
+      ...(this.orderStore.orders() ?? []).map(order => order.id),
+      ...(this.bookingStore.bookings() ?? []).map(booking => booking.order?.id ?? 0)
+    ];
+    return Math.max(0, ...taken) + 1;
+  }
+
   get canAddTraveler(): boolean {
     return this.passDetails.length < this.limits.maxTravelers;
   }
@@ -269,10 +278,11 @@ export class UserRequestsComponent implements OnInit, OnChanges {
 
   onSubmit(){
     if(this.requestForm.valid) {
-      this.orderID = this.orderID? this.orderID : '1';
+      const id = this.nextOrderId();
       const newOrder: OrderRequest = {
+        id,
         choice: this.order,
-        orderID: this.orderID,
+        orderID: String(id),
         status: 'pending',
         departureDate: this.Dates.get('departureDate')?.value,
         returnDate: this.Dates.get('returnDate')?.value,

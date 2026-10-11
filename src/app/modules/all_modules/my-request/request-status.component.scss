@@ -12,6 +12,7 @@
 
 .status__chip {
   font-size: var(--text-sm);
+  text-transform: none;
 }
 
 .status__chip--pending {

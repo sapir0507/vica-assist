@@ -52,8 +52,8 @@ describe('UserRequestPreviewComponent', () => {
 
     const text = host().textContent;
     expect(text).toContain('Order details');
-    expect(text).toContain('Rome');
-    expect(text).not.toContain('Paris');
+    expect(text).toContain('rome');
+    expect(text).not.toContain('paris');
     expect(text).toContain('9 Jun 2026');
     expect(text).toContain('$500.00');
     expect(host().querySelectorAll('.order-details__travelers li')).toHaveLength(2);

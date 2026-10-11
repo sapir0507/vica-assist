@@ -12,9 +12,9 @@
       <dt><mat-icon class="inline-icon" svgIcon="public" aria-hidden="true"></mat-icon> Trip type</dt>
       <dd>{{ order.choice | Capitalize }}</dd>
       <dt><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> From</dt>
-      <dd>{{ order.origin | Capitalize }}</dd>
+      <dd class="text-capitalize">{{ order.origin }}</dd>
       <dt><mat-icon class="inline-icon" svgIcon="location_on" aria-hidden="true"></mat-icon> To</dt>
-      <dd>{{ order.destination | Capitalize }}</dd>
+      <dd class="text-capitalize">{{ order.destination }}</dd>
       <dt><mat-icon class="inline-icon" svgIcon="payments" aria-hidden="true"></mat-icon> Maximum price</dt>
       <dd>{{ order.priceRange | currency }}</dd>
       @if (order.choice === 'both' || order.choice === 'hotel') {

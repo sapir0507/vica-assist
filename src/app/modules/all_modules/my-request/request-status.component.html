@@ -4,7 +4,7 @@
   } @else if (order(); as request) {
     <header class="status__header">
       <div>
-        <h1 class="page__title">Your request to {{ request.destination | Capitalize }}</h1>
+        <h1 class="page__title">Your request to <span class="text-capitalize">{{ request.destination }}</span></h1>
         <p class="page__subtitle">
           Reference {{ request.id }} &middot; {{ request.departureDate | date: 'd MMM y' }} &ndash; {{ request.returnDate | date: 'd MMM y' }}
         </p>
@@ -66,7 +66,7 @@
           <h2 id="summary-title" class="card__title">Your request</h2>
           <dl class="summary">
             <dt>Trip type</dt><dd>{{ request.choice | Capitalize }}</dd>
-            <dt>Route</dt><dd>{{ request.origin | Capitalize }} &rarr; {{ request.destination | Capitalize }}</dd>
+            <dt>Route</dt><dd class="text-capitalize">{{ request.origin }} &rarr; {{ request.destination }}</dd>
             <dt>Travelers</dt><dd>{{ request.passDetails.length }}</dd>
             <dt>Budget</dt><dd>{{ request.priceRange | currency }}</dd>
             @if (request.stars) { <dt>Hotel stars</dt><dd>At least {{ request.stars }}</dd> }

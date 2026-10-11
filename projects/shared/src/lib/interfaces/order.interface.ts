@@ -38,6 +38,7 @@ export interface Order {
   }
 
   export interface OrderRequest {
+    id?: number,
     orderID?: string,
     choice: string,
     status: string,

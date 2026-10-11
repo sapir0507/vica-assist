@@ -3,13 +3,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ChangeDetectorRef } from '@angular/core';
 import { Router, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { API_URL, Agent, Message, Order, provideAppIcons, toDateInputValue } from '@vica-assist/shared';
+import { API_URL, Agent, Message, Order, finalOrder, provideAppIcons, toDateInputValue } from '@vica-assist/shared';
 
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 
 import { OrderStore } from 'src/app/services/order/order.store';
 import { AgentStore } from 'src/app/services/agent/agent.store';
+import { BookingStore } from 'src/app/services/booking/booking.store';
 import { MessageStore } from 'src/app/services/message/message.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 
@@ -583,6 +584,38 @@ describe('UserRequestsComponent', () => {
       component.onSubmit();
 
       expect(saved).toEqual([]);
+    });
+  });
+
+  describe('the number of a new request', () => {
+    const send = () => {
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
+      component.requestForm.patchValue({
+        origin: 'Tel Aviv',
+        destination: 'Paris',
+        Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
+        passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
+        price: '500'
+      });
+      component.onSubmit();
+      return addOrder.mock.calls[0][0];
+    };
+
+    it('starts at 1 when there is nothing yet, using the same number for the id and the reference', () => {
+      const sent = send();
+
+      expect(sent.id).toBe(1);
+      expect(sent.orderID).toBe('1');
+    });
+
+    it('is above every open request and every booking, even one whose order was deleted', () => {
+      patchState(unprotected(TestBed.inject(OrderStore)), { orders: [{ id: 3 } as Order] });
+      patchState(unprotected(TestBed.inject(BookingStore)), { bookings: [{ id: 1, order: { id: 9 } } as finalOrder, { id: 2 } as finalOrder] });
+
+      const sent = send();
+
+      expect(sent.id).toBe(10);
+      expect(sent.orderID).toBe('10');
     });
   });
 });
