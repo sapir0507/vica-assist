@@ -1,0 +1,35 @@
+<form class="feedback" [formGroup]="form" (ngSubmit)="submit()">
+  @for (part of parts(); track part) {
+    <div class="feedback__rating">
+      <span class="feedback__label">{{ partLabels[part] }}</span>
+      <star-rating [label]="partLabels[part]" [value]="ratings[part]?.value ?? null" (valueChange)="setRating(part, $event)" />
+    </div>
+  }
+
+  <div class="form-field">
+    <label [for]="idPrefix() + '-review'">Review (optional)</label>
+    <textarea
+      class="form-control"
+      rows="3"
+      formControlName="review"
+      [id]="idPrefix() + '-review'"
+      [attr.aria-describedby]="idPrefix() + '-count'"
+      [attr.aria-invalid]="review.invalid"
+    ></textarea>
+    <span class="form-hint" [id]="idPrefix() + '-count'">{{ review.value.trim().length }} / {{ maxLength }}</span>
+    @if (review.hasError('reviewLength')) {
+      <p class="form-field__error" role="alert">Keep the review to {{ maxLength }} characters or fewer.</p>
+    }
+  </div>
+
+  @if (form.invalid && !review.hasError('reviewLength')) {
+    <p class="form-hint">Give every part of the trip 1 to 5 stars to send your review.</p>
+  }
+
+  <div class="feedback__actions">
+    @if (initial()) {
+      <button mat-button type="button" (click)="cancelled.emit()">Cancel</button>
+    }
+    <button mat-flat-button type="submit" [disabled]="form.invalid">Send review</button>
+  </div>
+</form>

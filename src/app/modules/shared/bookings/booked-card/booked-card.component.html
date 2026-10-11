@@ -1,0 +1,63 @@
+@if (booking().order; as order) {
+  <article class="order-card" [attr.aria-labelledby]="'booking-title-' + booking().id">
+    <header class="order-card__header">
+      <h3 class="order-card__title" [id]="'booking-title-' + booking().id">{{ order.destination | Capitalize }}</h3>
+      <span class="chip" [class]="ended() ? 'chip chip--finished' : 'chip chip--pending'">{{ ended() ? 'Completed' : 'Upcoming' }}</span>
+    </header>
+    <dl class="order-card__meta">
+      <dt>Trip type</dt>
+      <dd>{{ order.choice | Capitalize }}</dd>
+      <dt>Route</dt>
+      <dd>{{ order.origin }} &rarr; {{ order.destination }}</dd>
+      <dt>Dates</dt>
+      <dd>{{ order.departureDate | date: 'd MMM y' }} &ndash; {{ order.returnDate | date: 'd MMM y' }}</dd>
+      @if (booking().hotel; as hotel) {
+        <dt>Hotel</dt>
+        <dd>{{ hotel.name }}@if (hotel.stars) { ({{ hotel.stars }} stars) }</dd>
+      }
+      @if (booking().flight) {
+        <dt>Flight</dt>
+        <dd>{{ booking().flight?.org }} &rarr; {{ booking().flight?.dest }}</dd>
+      }
+      <dt>Total</dt>
+      <dd>{{ total() | currency }} <span class="booked__budget">of your {{ order.priceRange | currency }} budget</span></dd>
+    </dl>
+
+    <section class="booked__feedback" [attr.aria-labelledby]="'feedback-title-' + booking().id">
+      @if (booking().feedback; as feedback) {
+        @if (!editing()) {
+          <h4 class="booked__heading" [id]="'feedback-title-' + booking().id">Your review</h4>
+          @if (feedback.hotelRating) {
+            <star-rating label="Hotel" [readonly]="true" [value]="feedback.hotelRating" />
+          }
+          @if (feedback.flightRating) {
+            <star-rating label="Flight" [readonly]="true" [value]="feedback.flightRating" />
+          }
+          @if (feedback.review) {
+            <p class="booked__review">{{ feedback.review }}</p>
+          }
+          <div class="order-card__actions">
+            <button mat-button type="button" (click)="editing.set(true)">Edit review</button>
+          </div>
+        } @else {
+          <h4 class="booked__heading" [id]="'feedback-title-' + booking().id">Edit your review</h4>
+          <feedback-form
+            [parts]="parts()"
+            [initial]="feedback"
+            [idPrefix]="'feedback-' + booking().id"
+            (submitted)="rate($event)"
+            (cancelled)="editing.set(false)"
+          />
+        }
+      } @else if (ended()) {
+        <h4 class="booked__heading" [id]="'feedback-title-' + booking().id">Rate your trip</h4>
+        <feedback-form [parts]="parts()" [idPrefix]="'feedback-' + booking().id" (submitted)="rate($event)" />
+      } @else {
+        <p class="booked__heading" [id]="'feedback-title-' + booking().id">You can rate this trip after {{ order.returnDate | date: 'd MMM y' }}.</p>
+      }
+      @if (error(); as message) {
+        <p class="form-field__error" role="alert">{{ message }}</p>
+      }
+    </section>
+  </article>
+}

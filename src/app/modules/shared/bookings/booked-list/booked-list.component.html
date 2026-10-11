@@ -1,0 +1,11 @@
+@if (store.bookings() === undefined) {
+  <p class="order-grid__empty">Loading your bookings...</p>
+} @else {
+  <div class="order-grid">
+    @for (booking of bookings(); track booking.id) {
+      <booked-card [booking]="booking" />
+    } @empty {
+      <p class="order-grid__empty">No bookings yet. When you choose a hotel and flight, your booking appears here.</p>
+    }
+  </div>
+}
