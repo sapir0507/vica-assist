@@ -195,4 +195,77 @@ describe('OrderStore', () => {
       httpMock.expectNone(() => true);
     });
   });
+
+  describe('cancel', () => {
+    it('cancels a request that is waiting for an agent, and refreshes the lists', () => {
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([makeOrder({ id: 4, status: 'pending' })]);
+
+      store.cancel(4).subscribe();
+
+      const req = httpMock.expectOne(`${url}/4`);
+      expect(req.request.method).toBe('PATCH');
+      expect(req.request.body.status).toBe('cancelled');
+      expect(Number.isNaN(Date.parse(req.request.body.cancelledAt))).toBe(false);
+      req.flush({});
+      httpMock.expectOne(url).flush([makeOrder({ id: 4, status: 'cancelled' })]);
+      expect(store.cancelledOrders()).toHaveLength(1);
+      expect(store.pendingOrders()).toEqual([]);
+    });
+
+    it('refuses a request that was answered, cancelled already or does not exist, without calling the backend', () => {
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([makeOrder({ id: 1, status: 'finished' }), makeOrder({ id: 2, status: 'cancelled' })]);
+      const messages: string[] = [];
+
+      [1, 2, 99].forEach(id => store.cancel(id).subscribe({ error: (e: Error) => messages.push(e.message) }));
+
+      expect(messages).toHaveLength(3);
+      expect(messages[0]).toContain('still waiting for an agent');
+    });
+  });
+
+  describe('updatePending', () => {
+    it('saves the changes with the time they were made', () => {
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([makeOrder({ id: 4, status: 'pending' })]);
+
+      store.updatePending(4, { destination: 'Rome' }).subscribe();
+
+      const req = httpMock.expectOne(`${url}/4`);
+      expect(req.request.body).toMatchObject({ destination: 'Rome' });
+      expect(Number.isNaN(Date.parse(req.request.body.updatedAt))).toBe(false);
+      req.flush({});
+      httpMock.expectOne(url).flush([]);
+    });
+
+    it('refuses a request that is no longer waiting for an agent', () => {
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([makeOrder({ id: 1, status: 'finished' })]);
+      let message = '';
+
+      store.updatePending(1, { destination: 'Rome' }).subscribe({ error: (e: Error) => (message = e.message) });
+
+      expect(message).toContain('can be changed');
+    });
+  });
+
+  describe('runReassignments', () => {
+    it('moves the requests that are overdue', () => {
+      const late = makeOrder({ id: 1, status: 'pending', agent: 'dana', createdAt: new Date(Date.now() - 48 * 3_600_000).toISOString() });
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([late]);
+      const agents = ['dana', 'noa'].map((username, id) => ({
+        id, username, displayName: username, title: '', bio: '', languages: [], specialties: [], yearsExperience: 1, email: '', available: true, active: true
+      }));
+
+      store.runReassignments(agents, { loadWeight: 1, specialtyWeight: 0.5, responseHours: 24 });
+
+      const req = httpMock.expectOne(`${url}/1`);
+      expect(req.request.body.agent).toBe('noa');
+      expect(req.request.body.assignments[0].reason).toBe('overdue');
+      req.flush({});
+      httpMock.expectOne(url).flush([]);
+    });
+  });
 });

@@ -5,7 +5,7 @@ import { MyFlightsModule } from '@vica-assist/my-flights';
 import { MyHotelsModule } from '@vica-assist/my-hotels';
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Agent, ConfigService, isVisibleToAgent, Order, planReassignments } from '@vica-assist/shared';
+import { Agent, ConfigService, isVisibleToAgent, Order } from '@vica-assist/shared';
 import { AgentStore } from 'src/app/services/agent/agent.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
@@ -68,8 +68,7 @@ export class AgentHomepageComponent {
 
   /** Hands over requests that are overdue or belong to an agent who is away. */
   private moveRequests(){
-    const plans = planReassignments(this.orderStore.orders() ?? [], this.agentStore.agents() ?? [], new Date(), this.configService.config().assignment);
-    this.orderStore.reassign(plans);
+    this.orderStore.runReassignments(this.agentStore.agents() ?? [], this.configService.config().assignment);
   }
 
   get index(): number {

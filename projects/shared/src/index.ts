@@ -4,6 +4,7 @@ export * from './lib/interfaces/agent.interface';
 export * from './lib/interfaces/final-order.interface';
 export * from './lib/interfaces/flight.interface';
 export * from './lib/interfaces/hotel.interface';
+export * from './lib/interfaces/message.interface';
 export * from './lib/interfaces/order.interface';
 export * from './lib/interfaces/pass-array.interface';
 export * from './lib/interfaces/preferences.interface';

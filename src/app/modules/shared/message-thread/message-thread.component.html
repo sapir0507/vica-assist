@@ -1,0 +1,30 @@
+<section class="thread" aria-label="Messages about this request">
+  <ul class="thread__list" aria-live="polite">
+    @for (message of messages(); track message.id) {
+      <li class="message" [class.message--mine]="message.from === role()" [class.message--system]="message.from === 'system'">
+        <p class="message__text">{{ message.text }}</p>
+        <p class="message__meta">
+          @if (message.from !== 'system') { {{ message.from === role() ? 'You' : message.author }} &middot; }
+          {{ message.sentAt | date: 'd MMM, HH:mm' }}
+        </p>
+      </li>
+    } @empty {
+      <li class="thread__empty">No messages yet.</li>
+    }
+  </ul>
+
+  <form class="thread__form" (submit)="$event.preventDefault(); send()">
+    <label class="thread__label" for="message-text">Write a message</label>
+    <textarea id="message-text" class="form-control" rows="2" [value]="text()" (input)="text.set($any($event.target).value)" aria-describedby="message-count"></textarea>
+    <div class="thread__footer">
+      <span id="message-count" class="form-hint">{{ length() }} / {{ maxLength() }}</span>
+      <button mat-flat-button type="submit" [disabled]="!canSend()">Send</button>
+    </div>
+    @if (length() > maxLength()) {
+      <p class="form-field__error" role="alert">Keep the message to {{ maxLength() }} characters or fewer.</p>
+    }
+    @if (error(); as message) {
+      <p class="form-field__error" role="alert">{{ message }}</p>
+    }
+  </form>
+</section>

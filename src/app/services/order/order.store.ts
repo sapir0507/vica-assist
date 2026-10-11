@@ -4,7 +4,7 @@ import { patchState, signalStore, withHooks, withMethods, withState } from '@ngr
 import { Observable, forkJoin, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AssignmentReason, Order, OrderRequest } from '@vica-assist/shared';
+import { Agent, AssignmentReason, AssignmentRules, Order, OrderRequest, planReassignments } from '@vica-assist/shared';
 
 export interface OrderState {
   orders: Order[] | undefined;
@@ -67,6 +67,31 @@ export const OrderStore = signalStore(
       /** Creates a new order on the backend, then refreshes the local pending/finished buckets. */
       addOrder(newOrder: OrderRequest): Observable<Order> {
         return postOrder(newOrder).pipe(tap(() => this.getAll().subscribe()));
+      },
+
+      /** Cancels a request that is still waiting for its agent. */
+      cancel(id: number): Observable<Order> {
+        if (store.orders()?.find(order => order.id === id)?.status !== 'pending') {
+          return throwError(() => new Error('Only a request that is still waiting for an agent can be cancelled.'));
+        }
+        return http.patch<Order>(`${url}/${id}`, { status: 'cancelled', cancelledAt: new Date().toISOString() }).pipe(
+          tap(() => this.getAll().subscribe())
+        );
+      },
+
+      /** Saves the customer's changes to a request that is still waiting for its agent. */
+      updatePending(id: number, changes: Partial<OrderRequest>): Observable<Order> {
+        if (store.orders()?.find(order => order.id === id)?.status !== 'pending') {
+          return throwError(() => new Error('Only a request that is still waiting for an agent can be changed.'));
+        }
+        return http.patch<Order>(`${url}/${id}`, { ...changes, updatedAt: new Date().toISOString() }).pipe(
+          tap(() => this.getAll().subscribe())
+        );
+      },
+
+      /** Hands over the requests that are overdue or belong to an agent who is away. */
+      runReassignments(agents: Agent[], rules: AssignmentRules): void {
+        this.reassign(planReassignments(store.orders() ?? [], agents, new Date(), rules));
       },
 
       /** Moves requests to other agents and keeps the history of who had them and why. */
