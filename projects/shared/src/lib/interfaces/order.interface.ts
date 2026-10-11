@@ -1,3 +1,4 @@
+import { Assignment } from './agent.interface';
 import { OrderPreferences } from './preferences.interface';
 
 export interface passDetails{
@@ -21,6 +22,11 @@ export interface Order {
     customer?: string,
     createdAt?: string,
     respondedAt?: string,
+    updatedAt?: string,
+    cancelledAt?: string,
+    agent?: string,
+    assignedAt?: string,
+    assignments?: Assignment[],
     preferences?: OrderPreferences
   }
 
@@ -45,6 +51,9 @@ export interface Order {
     finalPrice?: number,
     customer?: string,
     createdAt?: string,
+    agent?: string,
+    assignedAt?: string,
+    assignments?: Assignment[],
     preferences?: OrderPreferences
 
   }
