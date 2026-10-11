@@ -49,13 +49,7 @@
         }
       </div>
 
-      <fieldset class="auth-choice">
-        <legend>I am a</legend>
-        <input id="register-role-customer" type="radio" formControlName="role" value="customer" />
-        <label for="register-role-customer">Customer</label>
-        <input id="register-role-agent" type="radio" formControlName="role" value="agent" />
-        <label for="register-role-agent">Agent</label>
-      </fieldset>
+      <p class="form-hint auth-form__full">Agents are added by the administrator, so this form creates a customer account.</p>
 
       <button class="btn btn-primary auth-form__full" type="submit">Create account</button>
     </form>

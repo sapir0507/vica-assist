@@ -29,7 +29,7 @@
       "username": "admin",
       "password": "1234",
       "email": "admin@gmail.com",
-      "role": "agent",
+      "role": "admin",
       "id": 4
     },
     {
@@ -631,6 +631,25 @@
       "email": "noam@vica-assist.example",
       "available": true,
       "active": true
+    }
+  ],
+  "auditLog": [],
+  "inquiries": [
+    {
+      "id": 1,
+      "name": "Lior",
+      "email": "lior@example.com",
+      "message": "Do you arrange trips for groups of ten or more?",
+      "createdAt": "2026-10-08T09:30:00.000Z",
+      "status": "new"
+    },
+    {
+      "id": 2,
+      "name": "Tamar Katz",
+      "email": "tamar@example.com",
+      "message": "Can an agent help with a wheelchair accessible hotel in Rome?",
+      "createdAt": "2026-10-05T14:10:00.000Z",
+      "status": "read"
     }
   ]
 }

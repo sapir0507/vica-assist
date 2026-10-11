@@ -19,7 +19,6 @@ export class RegisterComponent implements OnInit {
 
   formGroup = new FormGroup({
     username: new FormControl<string | undefined>(undefined, [Validators.required]),
-    role: new FormControl<string | undefined>('customer', [Validators.required]),
     password: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
     email: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.email]))
   });
@@ -36,12 +35,12 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const { username, password, email, role } = this.formGroup.value;
+    const { username, password, email } = this.formGroup.value;
     this.registerRequest = {
       username: username ?? undefined,
       password: password ?? undefined,
       email: email ?? undefined,
-      role: role === 'agent' || role === 'customer' ? role : 'customer'
+      role: 'customer'
     };
     this.registerService.addRegister(this.registerRequest);
   }

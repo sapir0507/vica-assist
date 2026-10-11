@@ -1,4 +1,5 @@
 export * from './admin-rules';
+export * from './agent-comparison';
 export * from './agent-queue';
 export * from './agent-rating';
 export * from './check-offer';

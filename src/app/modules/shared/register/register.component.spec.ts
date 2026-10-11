@@ -57,7 +57,7 @@ describe('RegisterComponent', () => {
     httpMock.expectNone(registerUrl);
   });
 
-  it('registers a customer by default and an agent when chosen', () => {
+  it('always registers a customer: there is no way to ask for another role', () => {
     component.formGroup.patchValue({ username: 'new-user', email: 'new@example.com', password: 'pass1234' });
 
     submit();
@@ -68,8 +68,7 @@ describe('RegisterComponent', () => {
       role: 'customer'
     });
 
-    component.formGroup.patchValue({ role: 'agent' });
-    submit();
-    expect(httpMock.expectOne(registerUrl).request.body.role).toBe('agent');
+    expect(component.formGroup.controls).not.toHaveProperty('role');
+    expect(host().querySelector('input[type="radio"]')).toBeNull();
   });
 });
