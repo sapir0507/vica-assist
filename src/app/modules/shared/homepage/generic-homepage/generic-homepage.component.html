@@ -9,14 +9,14 @@
   />
   <div class="hero__content">
     <h1 class="hero__title">Your perfect vacation, planned for you</h1>
-    <p class="hero__lead">Tell us where you want to go. Our agents find the flights and hotels that fit your dates and budget.</p>
-    <a mat-flat-button class="hero__cta" routerLink="/register">Start here</a>
+    <p class="hero__lead">Customers describe a trip. Our agents find the flights and hotels that fit their dates and budget.</p>
+    <a mat-flat-button class="hero__cta" routerLink="/register">Create an account</a>
   </div>
 </section>
 
 <section class="section" aria-labelledby="trending-title">
   <h2 id="trending-title" class="section__title">Trending destinations</h2>
-  <p class="section__lead">Popular picks to get you started. Sign up to book any of them.</p>
+  <p class="section__lead">Where our customers travel most.</p>
   <div class="destination-grid">
     @for (destination of destinations; track destination.name) {
       <destination-card [destination]="destination" />

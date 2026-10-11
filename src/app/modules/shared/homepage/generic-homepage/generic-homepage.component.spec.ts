@@ -23,6 +23,12 @@ describe('GenericHomepageComponent', () => {
     const cta = host().querySelector<HTMLAnchorElement>('.hero__cta');
 
     expect(cta?.getAttribute('href')).toBe('/register');
+    expect(cta?.textContent).toContain('Create an account');
+  });
+
+  it('is information only: no booking wording, form or picker', () => {
+    expect(host().textContent).not.toMatch(/book/i);
+    expect(host().querySelector('form, input, [role="radio"]')).toBeNull();
   });
 
   it('shows a card for every trending destination', () => {
