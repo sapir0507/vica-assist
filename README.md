@@ -22,15 +22,20 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
 
 | Role | Can do |
 |---|---|
-| Visitor (`unknown`) | See the generic homepage, log in, register |
-| Customer | See their orders, start a new request, open a finished order |
-| Agent | See incoming orders, add flights and hotels to an order, mark it finished |
+| Visitor (`unknown`) | Information only: read about the service, see trending destinations, log in or register. No booking |
+| Customer | Book a trip in three steps (destination, travelers, details), follow requests (waiting, ready to choose, booked), choose among the agent's hotels and flights, rate a finished trip |
+| Agent | Work through a queue of pending requests, add flights and hotels, mark a request answered, and read statistics (satisfaction, response time, destinations) on the Insights tab |
 
 ## Key features
 
 - Role-based homepage: the route that loads depends on the signed-in user's role.
 - Agents add flights (`add-flight`) and hotels (`add-hotel`) to a customer's order.
-- Customers file requests (`user-requests`) and follow them (`user-finished-order`).
+- Customers file requests (`user-requests`) and follow them in three tabs: waiting for an agent, ready to choose
+  (with how many hotels and flights the agent added) and booked.
+- After a trip has ended the customer rates the hotel and the flight (1 to 5 stars) and can write a review.
+- The agent's Insights tab shows the request funnel, satisfaction (average, share of 4 to 5 star ratings, rating
+  distribution, latest reviews, response rate) and business numbers (time to answer, booked value, budget used,
+  top destinations, trip types, bookings per month), drawn with plain CSS.
 - `final-order` combines an order with its chosen flight and hotel into one finished booking.
 - Responsive header: a navbar on wide screens, an offcanvas sidebar with dropdowns on phones and tablets.
 
@@ -82,8 +87,11 @@ on the mock backend and, on a match, stores the username and role. A failed logi
 3. An agent logs in, opens the order from the order list, and adds a flight (`my-flights`) and a hotel
    (`my-hotels`) tied to that order's id.
 4. The agent marks the order finished (`updateStatusByOrderID`).
-5. `final-order` combines the order, flight and hotel into a `finalOrder` record, then deletes the now
+5. The customer opens the answered request (`final-order`) and picks a hotel and/or a flight. That
+   combines the order, flight and hotel into a `finalOrder` record (the customer's booking), then deletes the now
    redundant pending order, flight and hotel records.
+6. Once the return date has passed, the customer rates the booking; the rating is stored as `feedback` on the
+   `finalOrder` record and feeds the agent's Insights.
 
 Flights and hotels are tied to an order through the order's id; `HttpResourceService` implements the shared
 "list, filter by order id, create, delete" client both libraries extend.
@@ -172,6 +180,10 @@ This is a demo backed by a mock API, and several things would be unacceptable in
 - **JWT packages are wired but unused.** `JwtModule` is configured with an undefined `tokenGetter`, and no
   token is issued or stored; the session is in memory only and is lost on reload.
 - The client never copies the backend's password into the session store after login.
+- **Orders belong to a customer only by a `customer` field.** Customers see just their own orders and bookings,
+  but the filtering happens in the browser: the mock API returns every record to anyone. Likewise nothing on the
+  server stops someone from rating another customer's booking or rating twice; the store and form refuse it, a real
+  backend must as well.
 
 A production version needs a real backend that hashes passwords, issues short-lived tokens in an HTTP-only
 cookie or `Authorization` header, assigns roles server-side, and enforces authorization on every endpoint.
@@ -184,6 +196,13 @@ cookie or `Authorization` header, assigns roles server-side, and enforces author
 - `HttpResourceService` logs backend failures and rethrows a user-facing message; `SessionStore.siteLogin`
   turns an HTTP error into a failed login rather than throwing.
 - Invalid login shows an inline message; success and failure of agent actions use snack bars.
+- **Booking form:** the departure cannot be in the past, the return not before the departure, the budget must be
+  above 0, places and names must not be blank, IDs must be positive and the origin must differ from the
+  destination. Values are trimmed before they are sent.
+- **Ratings:** each booked part needs a whole number from 1 to 5, the review is trimmed and limited to 500
+  characters, and `BookingStore.rate` refuses other customers' bookings and trips that have not ended.
+- **Statistics read data defensively:** `computeInsights` skips records with missing orders, ratings outside 1 to
+  5, negative prices or unreadable dates, and the tab says how many bookings were left out.
 
 ## Testing
 
@@ -242,6 +261,11 @@ high-severity dev-only finding (see below).
 - **Material dominates the lazy routes.** The initial bundle is about 0.72 MB raw (174 kB transferred), inside its
   750 kB budget, but the agent homepage, user homepage and final-order routes each add 0.33 to 0.43 MB of JS, roughly
   150 to 240 kB of it Angular Material and CDK. Replacing more Material parts with native elements is the next lever.
+- **Unchosen options are deleted at booking**, so the dashboard cannot say how many options an agent offered per
+  request or whether the first one was accepted.
+- **Ids are inconsistent.** A request's `orderID` is the order count plus one, while the agent attaches flights and
+  hotels using the entity `id`; the two only agree while no order has been deleted, and the cleanup after a booking
+  deletes by `orderID`.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
 

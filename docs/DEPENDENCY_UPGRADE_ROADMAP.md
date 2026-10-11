@@ -818,6 +818,17 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   Also fixed: the booking form kept its values after a submit, so pressing submit again placed a duplicate order;
   it now starts over at step 1.
 
+- **Roles and insights (`feature/roles-and-insights`)**: the three homepages got distinct jobs. The visitor page
+  is information only. Orders now carry `customer`, `createdAt` and `respondedAt`, and customers only see their
+  own (before this, every customer saw every order and its passenger IDs). The final-order record keeps the
+  booking, so customers get a Booked tab and, once the trip is over, rate the hotel and flight with 1 to 5 stars
+  and a review (`feedback` on the `finalOrder` record, `BookingStore`, shared validation helpers). The agent works
+  from a queue of pending requests and has an Insights tab (`computeInsights`, a pure function that skips
+  malformed records; deferred, about 18 kB). The booking form gained validation (no past departure, budget above
+  0, different places, no blank names). Fixed on the way: `OrderStore` accumulated duplicates on every refresh,
+  posted and refreshed in parallel, and never refreshed after a status change or a cleanup. Initial bundle
+  721 kB to 732 kB.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend

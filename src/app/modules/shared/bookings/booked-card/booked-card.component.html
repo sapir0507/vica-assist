@@ -28,10 +28,10 @@
         @if (!editing()) {
           <h4 class="booked__heading" [id]="'feedback-title-' + booking().id">Your review</h4>
           @if (feedback.hotelRating) {
-            <star-rating label="Hotel" [readonly]="true" [value]="feedback.hotelRating" />
+            <div class="booked__rating"><span>Hotel</span><star-rating label="Hotel" [readonly]="true" [value]="feedback.hotelRating" /></div>
           }
           @if (feedback.flightRating) {
-            <star-rating label="Flight" [readonly]="true" [value]="feedback.flightRating" />
+            <div class="booked__rating"><span>Flight</span><star-rating label="Flight" [readonly]="true" [value]="feedback.flightRating" /></div>
           }
           @if (feedback.review) {
             <p class="booked__review">{{ feedback.review }}</p>
