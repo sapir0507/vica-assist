@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, effect, inject } from '@ang
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderStore } from 'src/app/services/order/order.store';
+import { SessionStore } from 'src/app/services/session/session.store';
 import { dateRangeValidator, OrderRequest, passDetails } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
 
@@ -66,6 +67,7 @@ export class UserRequestsComponent implements OnInit {
   }
 
   private orderStore = inject(OrderStore);
+  private sessionStore = inject(SessionStore);
 
   constructor(
     private fb: FormBuilder,
@@ -129,7 +131,9 @@ export class UserRequestsComponent implements OnInit {
         destination: this.requestForm.get('destination')?.value,
         passDetails: this.requestForm.get('passDetails')?.value,
         stars: this.hotel.get('stars')?.value,
-        priceRange: this.requestForm.get('price')?.value 
+        priceRange: this.requestForm.get('price')?.value,
+        customer: this.sessionStore.username(),
+        createdAt: new Date().toISOString()
       }
     console.log(newOrder)
     this.orderStore.addOrder(newOrder);

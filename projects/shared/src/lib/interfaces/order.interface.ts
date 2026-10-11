@@ -15,7 +15,10 @@ export interface Order {
     passDetails: passDetails[],
     stars?: number,
     priceRange: number ,
-    finalPrice?: number
+    finalPrice?: number,
+    customer?: string,
+    createdAt?: string,
+    respondedAt?: string
   }
 
   export function isPending(order: Order, isAgent: boolean): boolean {
@@ -36,7 +39,9 @@ export interface Order {
     passDetails: passDetails[],
     stars?: number,
     priceRange: number,
-    finalPrice?: number
+    finalPrice?: number,
+    customer?: string,
+    createdAt?: string
 
   }
   

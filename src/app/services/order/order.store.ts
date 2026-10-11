@@ -24,8 +24,6 @@ export const OrderStore = signalStore(
   withMethods((store) => {
     const http = inject(HttpClient);
     const url = environment.api + 'orders';
-    let pending: Order[] = [];
-    let finished: Order[] = [];
 
     function handleError(error: HttpErrorResponse, methodName?: string, obj?: unknown) {
       if (error.status === 0) {
@@ -41,19 +39,12 @@ export const OrderStore = signalStore(
     );
 
     return {
-      /**
-       * Rebuilds pending/finished as fresh arrays rather than pushing into the
-       * existing ones - Akita used to deep-freeze arrays once written to
-       * state, so pushing onto an already-frozen array would throw. Kept as
-       * the safe pattern even though @ngrx/signals doesn't freeze by default.
-       */
+      /** Replaces the pending/finished buckets with what the backend holds now. */
       getAll() {
         return http.get<Order[]>(url).pipe(
           tap(orders => {
-            const newFinished = orders.filter(order => order.status === 'finished');
-            const newPending = orders.filter(order => order.status !== 'finished');
-            finished = [...finished, ...newFinished];
-            pending = [...pending, ...newPending];
+            const pending = orders.filter(order => order.status !== 'finished');
+            const finished = orders.filter(order => order.status === 'finished');
             patchState(store, {
               orders: pending.concat(finished),
               pendingOrders: pending,
@@ -71,19 +62,13 @@ export const OrderStore = signalStore(
 
       /** Creates a new order on the backend, then refreshes the local pending/finished buckets. */
       addOrder(newOrder: OrderRequest): void {
-        pending = [];
-        finished = [];
-        postOrder(newOrder).subscribe();
-        this.getAll().subscribe();
+        postOrder(newOrder).subscribe(() => this.getAll().subscribe());
       },
 
-      /** Updates the `status` field of the order with the given id. */
+      /** Updates the `status` of the order with the given id, stamping `respondedAt` when the agent answers it. */
       updateStatusByOrderID(id: string | number, status: string): void {
-        this.get(id).pipe(
-          map(() => {
-            http.patch<Order>(`${url}/${id}`, { status }).subscribe();
-          })
-        ).subscribe();
+        const changes = status === 'finished' ? { status, respondedAt: new Date().toISOString() } : { status };
+        http.patch<Order>(`${url}/${id}`, changes).subscribe(() => this.getAll().subscribe());
       },
 
       // since mock json server can't delete by the following url (as far as I know):

@@ -62,17 +62,16 @@ describe('OrderStore', () => {
       expect(store.orders()).toEqual([pendingOrder, finishedOrder]);
     });
 
-    it('accumulates across repeated calls without throwing (regression: Akita used to freeze stored arrays)', () => {
+    it('replaces the lists on repeated calls instead of piling up duplicates', () => {
+      const order = makeOrder({ id: 1, status: 'pending' });
       store.getAll().subscribe();
-      httpMock.expectOne(url).flush([makeOrder({ id: 1, status: 'pending' })]);
+      httpMock.expectOne(url).flush([order]);
 
-      expect(() => {
-        store.getAll().subscribe();
-        httpMock.expectOne(url).flush([makeOrder({ id: 2, status: 'finished' })]);
-      }).not.toThrow();
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([order, makeOrder({ id: 2, status: 'finished' })]);
 
-      expect(store.pendingOrders()?.length).toBe(1);
-      expect(store.finishedOrders()?.length).toBe(1);
+      expect(store.pendingOrders()).toEqual([order]);
+      expect(store.finishedOrders()?.map(o => o.id)).toEqual([2]);
     });
   });
 
@@ -99,6 +98,7 @@ describe('OrderStore', () => {
 
       const postReq = httpMock.expectOne(r => r.url === url && r.method === 'POST');
       expect(postReq.request.body).toEqual(newOrder);
+      httpMock.expectNone(r => r.url === url && r.method === 'GET');
       postReq.flush(newOrder);
 
       const getReq = httpMock.expectOne(r => r.url === url && r.method === 'GET');
@@ -107,16 +107,28 @@ describe('OrderStore', () => {
   });
 
   describe('updateStatusByOrderID', () => {
-    it('fetches the order then patches its status', () => {
+    it('patches the status, stamps when the agent answered, and refreshes the lists', () => {
       store.updateStatusByOrderID(5, 'finished');
-
-      const getReq = httpMock.expectOne(`${url}/5`);
-      getReq.flush(makeOrder({ id: 5 }));
 
       const patchReq = httpMock.expectOne(`${url}/5`);
       expect(patchReq.request.method).toBe('PATCH');
-      expect(patchReq.request.body).toEqual({ status: 'finished' });
+      expect(patchReq.request.body.status).toBe('finished');
+      expect(Number.isNaN(Date.parse(patchReq.request.body.respondedAt))).toBe(false);
       patchReq.flush({});
+
+      const order = makeOrder({ id: 5, status: 'finished' });
+      httpMock.expectOne(url).flush([order]);
+      expect(store.finishedOrders()).toEqual([order]);
+      expect(store.pendingOrders()).toEqual([]);
+    });
+
+    it('does not stamp a response time for other statuses', () => {
+      store.updateStatusByOrderID(5, 'pending');
+
+      const patchReq = httpMock.expectOne(`${url}/5`);
+      expect(patchReq.request.body).toEqual({ status: 'pending' });
+      patchReq.flush({});
+      httpMock.expectOne(url).flush([]);
     });
   });
 

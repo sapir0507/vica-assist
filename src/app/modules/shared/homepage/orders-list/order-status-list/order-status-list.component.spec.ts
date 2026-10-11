@@ -6,10 +6,12 @@ import { API_URL, Order, provideAppIcons } from '@vica-assist/shared';
 
 import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderStore } from 'src/app/services/order/order.store';
+import { SessionStore } from 'src/app/services/session/session.store';
 import { OrderStatusListComponent } from './order-status-list.component';
 
-const order = (id: number, status: string): Order => ({
+const order = (id: number, status: string, customer = 'dana'): Order => ({
   id,
+  customer,
   orderID: `o-${id}`,
   choice: 'hotel',
   status,
@@ -31,6 +33,7 @@ describe('OrderStatusListComponent', () => {
       imports: [HttpClientTestingModule, OrderStatusListComponent]
     }).compileComponents();
 
+    patchState(unprotected(TestBed.inject(SessionStore)), { username: 'dana' });
     patchState(unprotected(TestBed.inject(OrderStore)), {
       pendingOrders: [order(1, 'pending'), order(2, 'pending')],
       finishedOrders: []
@@ -43,6 +46,17 @@ describe('OrderStatusListComponent', () => {
     fixture.detectChanges();
 
     expect(host().querySelectorAll('order-list-item')).toHaveLength(2);
+  });
+
+  it('shows a customer only their own orders', () => {
+    patchState(unprotected(TestBed.inject(OrderStore)), {
+      pendingOrders: [order(1, 'pending'), order(2, 'pending', 'noa'), { ...order(3, 'pending'), customer: undefined }]
+    });
+    fixture.componentRef.setInput('status', 'pending');
+    fixture.detectChanges();
+
+    expect(host().querySelectorAll('order-list-item')).toHaveLength(1);
+    expect(host().textContent).toContain('Order 1');
   });
 
   it('says so when there are no orders with that status', () => {
