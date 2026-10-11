@@ -1,9 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, effect, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AgentStore } from 'src/app/services/agent/agent.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, OrderRequest, passDetails, PreferencesFormValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
+import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, OrderRequest, passDetails, pickAgent, PreferencesFormValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
 import { differentPlaces, maxTrimmed, notBlank, roomsFitTravelers } from '../validators';
 
@@ -29,6 +30,7 @@ export class UserRequestsComponent implements OnInit {
   step = 0;
   orderID: string | null = null;
   private configService = inject(ConfigService);
+  private agentStore = inject(AgentStore);
   private limits = this.configService.config().limits;
   requestForm: FormGroup = this.fb.group({
 
@@ -109,6 +111,7 @@ export class UserRequestsComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {
       this.addNewPass()
+      this.agentStore.load();
 
       effect(() => {
         const orders = this.orderStore.orders();
@@ -247,12 +250,27 @@ export class UserRequestsComponent implements OnInit {
         customer: this.sessionStore.username(),
         createdAt: new Date().toISOString()
       }
-    console.log(newOrder)
-    this.orderStore.addOrder(newOrder);
-    this.openSnackBar("Order added!")
-    this.requestForm.reset({ order: 'both', price: '0', hotel: { stars: 3 }, preferences: structuredClone(DEFAULT_PREFERENCES) });
-    this.step = 0;
-  }
+      const agent = pickAgent(
+        this.agentStore.active(),
+        this.orderStore.orders() ?? [],
+        { destination: newOrder.destination, choice: newOrder.choice },
+        this.configService.config().assignment
+      );
+      if (agent) {
+        newOrder.agent = agent.username;
+        newOrder.assignedAt = newOrder.createdAt;
+        newOrder.assignments = [{ agent: agent.username, at: newOrder.createdAt as string, reason: 'initial' }];
+      }
+
+      this.orderStore.addOrder(newOrder).subscribe({
+        next: () => {
+          this.openSnackBar("Order added!");
+          this.requestForm.reset({ order: 'both', price: '0', hotel: { stars: 3 }, preferences: structuredClone(DEFAULT_PREFERENCES) });
+          this.step = 0;
+        },
+        error: () => this.openSnackBar("Your request could not be sent. Please try again.")
+      });
+    }
   }
 
   openSnackBar(message: string) {

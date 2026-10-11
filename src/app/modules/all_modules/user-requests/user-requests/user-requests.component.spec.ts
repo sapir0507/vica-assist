@@ -1,12 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ChangeDetectorRef } from '@angular/core';
-import { API_URL, provideAppIcons, toDateInputValue } from '@vica-assist/shared';
+import { of, throwError } from 'rxjs';
+import { API_URL, Agent, Order, provideAppIcons, toDateInputValue } from '@vica-assist/shared';
 
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 
 import { OrderStore } from 'src/app/services/order/order.store';
+import { AgentStore } from 'src/app/services/agent/agent.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 
 import { UserRequestsModule } from '../user-requests.module';
@@ -116,7 +118,7 @@ describe('UserRequestsComponent', () => {
 
   it('sends the order once and starts over, so it cannot be submitted twice', () => {
     patchState(unprotected(TestBed.inject(SessionStore)), { username: 'dana' });
-    const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+    const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
     component.requestForm.patchValue({
       origin: ' Tel Aviv ',
       destination: 'Paris ',
@@ -253,7 +255,7 @@ describe('UserRequestsComponent', () => {
     });
 
     it('sends the stars for a hotel trip and leaves them out for a flight-only trip', () => {
-      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
       valid();
       component.hotel.patchValue({ stars: 4 });
       component.onSubmit();
@@ -274,7 +276,7 @@ describe('UserRequestsComponent', () => {
     });
 
     it('does not send an invalid request', () => {
-      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
       valid();
       component.requestForm.patchValue({ price: '0' });
 
@@ -382,7 +384,7 @@ describe('UserRequestsComponent', () => {
       });
 
       it('sends the wishes with the order, only for the parts that were asked for', () => {
-        const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+        const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
         valid();
         component.requestForm.patchValue({ order: 'flight' });
         component.preferenceForm.get('flight')?.patchValue({ stops: 'direct', checkedBaggage: true, cabin: 'business' });
@@ -397,7 +399,7 @@ describe('UserRequestsComponent', () => {
       });
 
       it('goes back to the defaults after a submit', () => {
-        vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(undefined as never);
+        vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
         valid();
         component.preferenceForm.get('flight.cabin')?.setValue('business');
         component.preferenceForm.get('notes')?.setValue('x');
@@ -423,5 +425,51 @@ describe('UserRequestsComponent', () => {
     component.Dates.patchValue({ departureDate: '2026-06-10', returnDate: '2026-06-10' });
 
     expect(component.Dates.hasError('dateRange')).toBe(false);
+  });
+
+  describe('assigning an agent', () => {
+    const agentsOf = (...names: string[]): Agent[] =>
+      names.map((username, id) => ({ id, username, displayName: username, title: '', bio: '', languages: [], specialties: [], yearsExperience: 1, email: '', available: true, active: true }));
+
+    const submitValid = () => {
+      component.requestForm.patchValue({
+        origin: 'Tel Aviv',
+        destination: 'Paris',
+        Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
+        passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
+        price: '500'
+      });
+      component.onSubmit();
+    };
+
+    it('gives the request to the least busy agent and records why', () => {
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
+      patchState(unprotected(TestBed.inject(AgentStore)), { agents: agentsOf('dana', 'noa') });
+      patchState(unprotected(TestBed.inject(OrderStore)), { orders: [{ id: 1, agent: 'dana', status: 'pending' } as Order] });
+
+      submitValid();
+
+      const sent = addOrder.mock.calls[0][0];
+      expect(sent.agent).toBe('noa');
+      expect(sent.assignedAt).toBe(sent.createdAt);
+      expect(sent.assignments).toEqual([{ agent: 'noa', at: sent.createdAt, reason: 'initial' }]);
+    });
+
+    it('still sends the request when there are no agents to assign', () => {
+      const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
+
+      submitValid();
+
+      expect(addOrder.mock.calls[0][0].agent).toBeUndefined();
+    });
+
+    it('keeps what was typed when the request cannot be sent', () => {
+      vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(throwError(() => new Error('down')));
+
+      submitValid();
+
+      expect(component.requestForm.value.destination).toBe('Paris');
+      expect(component.passDetails.at(0).value.fullName).toBe('Dana Levi');
+    });
   });
 });

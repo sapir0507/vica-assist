@@ -1,3 +1,4 @@
+export * from './agent-queue';
 export * from './agent-rating';
 export * from './check-offer';
 export * from './describe-preferences';

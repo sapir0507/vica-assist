@@ -1,21 +1,23 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { forkJoin, throwError } from 'rxjs';
+import { Observable, forkJoin, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Order, OrderRequest } from '@vica-assist/shared';
+import { AssignmentReason, Order, OrderRequest } from '@vica-assist/shared';
 
 export interface OrderState {
   orders: Order[] | undefined;
   pendingOrders: Order[] | undefined;
   finishedOrders: Order[] | undefined;
+  cancelledOrders: Order[] | undefined;
 }
 
 const initialState: OrderState = {
   orders: undefined,
   pendingOrders: undefined,
-  finishedOrders: undefined
+  finishedOrders: undefined,
+  cancelledOrders: undefined
 };
 
 export const OrderStore = signalStore(
@@ -43,12 +45,14 @@ export const OrderStore = signalStore(
       getAll() {
         return http.get<Order[]>(url).pipe(
           tap(orders => {
-            const pending = orders.filter(order => order.status !== 'finished');
             const finished = orders.filter(order => order.status === 'finished');
+            const cancelled = orders.filter(order => order.status === 'cancelled');
+            const pending = orders.filter(order => order.status !== 'finished' && order.status !== 'cancelled');
             patchState(store, {
-              orders: pending.concat(finished),
+              orders: pending.concat(finished, cancelled),
               pendingOrders: pending,
-              finishedOrders: finished
+              finishedOrders: finished,
+              cancelledOrders: cancelled
             });
           })
         );
@@ -61,8 +65,22 @@ export const OrderStore = signalStore(
       },
 
       /** Creates a new order on the backend, then refreshes the local pending/finished buckets. */
-      addOrder(newOrder: OrderRequest): void {
-        postOrder(newOrder).subscribe(() => this.getAll().subscribe());
+      addOrder(newOrder: OrderRequest): Observable<Order> {
+        return postOrder(newOrder).pipe(tap(() => this.getAll().subscribe()));
+      },
+
+      /** Moves requests to other agents and keeps the history of who had them and why. */
+      reassign(moves: { orderId: number; to: string; reason: AssignmentReason }[]): void {
+        if (moves.length === 0) return;
+        const at = new Date().toISOString();
+        forkJoin(moves.map(move => {
+          const history = store.orders()?.find(order => order.id === move.orderId)?.assignments ?? [];
+          return http.patch<Order>(`${url}/${move.orderId}`, {
+            agent: move.to,
+            assignedAt: at,
+            assignments: [...history, { agent: move.to, at, reason: move.reason }]
+          });
+        })).subscribe(() => this.getAll().subscribe());
       },
 
       /** Updates the `status` of the order with the given id, stamping `respondedAt` when the agent answers it. */
