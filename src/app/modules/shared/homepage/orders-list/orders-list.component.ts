@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MyPipesModule } from '@vica-assist/my-pipes';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { isFinished, isPending, Order } from '@vica-assist/shared';
+import { isFinished, isPending, Order, requestNumber } from '@vica-assist/shared';
 
 @Component({
   standalone: true,
@@ -19,6 +19,7 @@ import { isFinished, isPending, Order } from '@vica-assist/shared';
   ]
 })
 export class OrdersListComponent implements OnInit {
+  protected readonly requestNumber = requestNumber;
 
   @Output() item: EventEmitter<Order> = new EventEmitter();
 

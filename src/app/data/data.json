@@ -71,6 +71,234 @@
           "reason": "initial"
         }
       ]
+    },
+    {
+      "choice": "hotel",
+      "orderID": "2",
+      "status": "booked",
+      "departureDate": "2022-06-16T21:00:00.000Z",
+      "returnDate": "2022-06-23T21:00:00.000Z",
+      "origin": "Italy",
+      "destination": "Israel",
+      "passDetails": [
+        {
+          "fullName": "Luffy D Monkey",
+          "passID": 12345678
+        }
+      ],
+      "stars": 5,
+      "priceRange": 350,
+      "id": 2
+    },
+    {
+      "choice": "both",
+      "orderID": "103",
+      "status": "booked",
+      "departureDate": "2026-05-02",
+      "returnDate": "2026-05-14",
+      "origin": "Tel Aviv",
+      "destination": "Tokyo",
+      "passDetails": [
+        {
+          "fullName": "Dana Levi",
+          "passID": 30000003
+        }
+      ],
+      "stars": 5,
+      "priceRange": 2600,
+      "customer": "sapir0507",
+      "createdAt": "2026-03-01T08:00:00.000Z",
+      "respondedAt": "2026-03-02T11:00:00.000Z",
+      "id": 3,
+      "agent": "agent.noam",
+      "assignedAt": "2026-03-01T08:00:00.000Z",
+      "assignments": [
+        {
+          "agent": "agent.noam",
+          "at": "2026-03-01T08:00:00.000Z",
+          "reason": "initial"
+        }
+      ]
+    },
+    {
+      "choice": "hotel",
+      "orderID": "104",
+      "status": "booked",
+      "departureDate": "2026-06-20",
+      "returnDate": "2026-06-30",
+      "origin": "Tel Aviv",
+      "destination": "Bali",
+      "passDetails": [
+        {
+          "fullName": "Noa Cohen",
+          "passID": 30000004
+        }
+      ],
+      "stars": 4,
+      "priceRange": 900,
+      "customer": "Blabla hotel",
+      "createdAt": "2026-04-20T07:45:00.000Z",
+      "respondedAt": "2026-04-20T13:00:00.000Z",
+      "id": 4,
+      "agent": "agent.noam",
+      "assignedAt": "2026-04-20T07:45:00.000Z",
+      "assignments": [
+        {
+          "agent": "agent.noam",
+          "at": "2026-04-20T07:45:00.000Z",
+          "reason": "initial"
+        }
+      ]
+    },
+    {
+      "choice": "flight",
+      "orderID": "105",
+      "status": "booked",
+      "departureDate": "2026-07-04",
+      "returnDate": "2026-07-11",
+      "origin": "Tel Aviv",
+      "destination": "Dubai",
+      "passDetails": [
+        {
+          "fullName": "Dana Levi",
+          "passID": 30000005
+        }
+      ],
+      "stars": 3,
+      "priceRange": 500,
+      "customer": "sapir0507",
+      "createdAt": "2026-05-28T10:10:00.000Z",
+      "respondedAt": "2026-05-30T09:00:00.000Z",
+      "id": 5,
+      "agent": "agent.noam",
+      "assignedAt": "2026-05-28T10:10:00.000Z",
+      "assignments": [
+        {
+          "agent": "agent.noam",
+          "at": "2026-05-28T10:10:00.000Z",
+          "reason": "initial"
+        }
+      ]
+    },
+    {
+      "choice": "both",
+      "orderID": "106",
+      "status": "booked",
+      "departureDate": "2026-08-15",
+      "returnDate": "2026-08-22",
+      "origin": "Tel Aviv",
+      "destination": "Barcelona",
+      "passDetails": [
+        {
+          "fullName": "Noa Cohen",
+          "passID": 30000006
+        }
+      ],
+      "stars": 3,
+      "priceRange": 1300,
+      "customer": "Blabla hotel",
+      "createdAt": "2026-06-18T11:00:00.000Z",
+      "respondedAt": "2026-06-18T14:40:00.000Z",
+      "id": 6,
+      "agent": "livetotell",
+      "assignedAt": "2026-06-18T11:00:00.000Z",
+      "assignments": [
+        {
+          "agent": "livetotell",
+          "at": "2026-06-18T11:00:00.000Z",
+          "reason": "initial"
+        }
+      ]
+    },
+    {
+      "choice": "both",
+      "orderID": "107",
+      "status": "booked",
+      "departureDate": "2026-09-01",
+      "returnDate": "2026-09-09",
+      "origin": "Tel Aviv",
+      "destination": "Singapore",
+      "passDetails": [
+        {
+          "fullName": "Dana Levi",
+          "passID": 30000007
+        }
+      ],
+      "stars": 5,
+      "priceRange": 2200,
+      "customer": "sapir0507",
+      "createdAt": "2026-07-10T09:20:00.000Z",
+      "respondedAt": "2026-07-10T17:00:00.000Z",
+      "id": 7,
+      "agent": "agent.noam",
+      "assignedAt": "2026-07-10T09:20:00.000Z",
+      "assignments": [
+        {
+          "agent": "agent.noam",
+          "at": "2026-07-10T09:20:00.000Z",
+          "reason": "initial"
+        }
+      ]
+    },
+    {
+      "choice": "hotel",
+      "orderID": "108",
+      "status": "booked",
+      "departureDate": "2026-10-01",
+      "returnDate": "2026-10-05",
+      "origin": "Tel Aviv",
+      "destination": "Rome",
+      "passDetails": [
+        {
+          "fullName": "Dana Levi",
+          "passID": 30000008
+        }
+      ],
+      "stars": 4,
+      "priceRange": 700,
+      "customer": "sapir0507",
+      "createdAt": "2026-08-25T12:00:00.000Z",
+      "respondedAt": "2026-08-26T08:30:00.000Z",
+      "id": 8,
+      "agent": "livetotell",
+      "assignedAt": "2026-08-25T12:00:00.000Z",
+      "assignments": [
+        {
+          "agent": "livetotell",
+          "at": "2026-08-25T12:00:00.000Z",
+          "reason": "initial"
+        }
+      ]
+    },
+    {
+      "choice": "both",
+      "orderID": "109",
+      "status": "booked",
+      "departureDate": "2026-11-10",
+      "returnDate": "2026-11-17",
+      "origin": "Tel Aviv",
+      "destination": "Lisbon",
+      "passDetails": [
+        {
+          "fullName": "Dana Levi",
+          "passID": 30000009
+        }
+      ],
+      "stars": 4,
+      "priceRange": 1400,
+      "customer": "sapir0507",
+      "createdAt": "2026-09-30T13:00:00.000Z",
+      "respondedAt": "2026-10-01T10:00:00.000Z",
+      "id": 9,
+      "agent": "livetotell",
+      "assignedAt": "2026-09-30T13:00:00.000Z",
+      "assignments": [
+        {
+          "agent": "livetotell",
+          "at": "2026-09-30T13:00:00.000Z",
+          "reason": "initial"
+        }
+      ]
     }
   ],
   "hotels": [],

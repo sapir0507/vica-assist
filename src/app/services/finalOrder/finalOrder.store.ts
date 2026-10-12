@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { MyFlightsService } from '@vica-assist/my-flights';
 import { HotelsService } from '@vica-assist/my-hotels';
-import { Flights, Hotel, Order } from '@vica-assist/shared';
+import { Flights, Hotel, Order, OrderStatus } from '@vica-assist/shared';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';
 import { PublicSummaryStore } from '../public-summary/public-summary.store';
@@ -41,14 +41,14 @@ export const FinalOrderStore = signalStore(
 
       /**
        * Persists a completed order (order + flight and/or hotel) as a final
-       * order, then deletes the pending order/flight/hotel records it was
-       * assembled from so they no longer appear as in-progress.
+       * order, marks the order it came from as booked (kept, so its id is never handed out again) and deletes the
+       * flight and hotel offers it was assembled from.
        */
       addFinalOrder(request: FinalOrderState): void {
         try {
           const orderID = request.order?.orderID;
           try {
-            if (orderID) orderStore.deleteByOrderID(orderID);
+            if (request.order?.id !== undefined) orderStore.updateStatusByOrderID(request.order.id, OrderStatus.Booked);
           } catch (error) {
             console.log('final order -> order service', error);
           }

@@ -120,7 +120,7 @@ describe('RequestsSectionComponent', () => {
   it('shows the newest request first', () => {
     const { host } = setUp(RequestsSectionComponent, { orders, agents });
 
-    expect(host.querySelector('tbody tr td')?.textContent).toBe('1');
+    expect(host.querySelector('tbody tr td')?.textContent).toBe('VA-000001');
   });
 
   it('filters by status', () => {

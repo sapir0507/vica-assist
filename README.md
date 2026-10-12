@@ -102,8 +102,8 @@ on the mock backend and, on a match, stores the username and role. A failed logi
    (`my-hotels`) tied to that order's id.
 4. The agent marks the order finished (`updateStatusByOrderID`).
 5. The customer opens the answered request (`final-order`) and picks a hotel and/or a flight. That
-   combines the order, flight and hotel into a `finalOrder` record (the customer's booking), then deletes the now
-   redundant pending order, flight and hotel records.
+   combines the order, flight and hotel into a `finalOrder` record (the customer's booking), marks the order
+   `booked` (it is kept, so its number is never handed out again) and deletes the redundant flight and hotel records.
 6. Once the return date has passed, the customer rates the booking; the rating is stored as `feedback` on the
    `finalOrder` record and feeds the agent's Insights.
 
@@ -292,9 +292,10 @@ high-severity dev-only finding (see below).
   150 to 240 kB of it Angular Material and CDK. Replacing more Material parts with native elements is the next lever.
 - **Unchosen options are deleted at booking**, so the dashboard cannot say how many options an agent offered per
   request or whether the first one was accepted.
-- **Request numbers are chosen by the browser.** A new request takes a number above every open request and every
-  booking, because the backend would reuse the number of an order deleted at booking; two browsers submitting at
-  the same moment could still pick the same number. The id and the reference are now the same number.
+- **`orderID` still duplicates `id`.** The backend assigns the request's `id`, so two browsers submitting together
+  cannot share a number, and the customer sees it as `VA-000012`. Flights, hotels and bookings still join on the
+  string `orderID`, which is set from `id` in a second request right after creation. Dropping it means migrating
+  those three collections and is left as its own change.
 - **The list of places is bundled and not exhaustive.** Countries and about 150 major cities are accepted;
   streets and small towns are not.
 - **No real notifications.** Messages and status changes appear when a page is opened or refreshed.

@@ -41,7 +41,7 @@ describe('OrderListItemComponent', () => {
     fixture.detectChanges();
 
     expect(text()).toContain('Order 7');
-    expect(text()).toContain('Order ID: o-7');
+    expect(text()).toContain('Request number: VA-000007');
     expect(text()).toContain('Jane Doe');
     expect(text()).toContain('Israel → Italy');
     expect(text()).toContain('9 Jun 2026');

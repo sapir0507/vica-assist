@@ -7,13 +7,13 @@ import { HotelsService } from '@vica-assist/my-hotels';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';
 import { PublicSummaryStore } from '../public-summary/public-summary.store';
-import { Flights, Hotel, Order } from '@vica-assist/shared';
+import { Flights, Hotel, Order, OrderStatus } from '@vica-assist/shared';
 import { FinalOrderState, FinalOrderStore } from './finalOrder.store';
 
 describe('FinalOrderStore', () => {
   let store: InstanceType<typeof FinalOrderStore>;
   let httpMock: HttpTestingController;
-  let orderStoreSpy: { deleteByOrderID: Mock };
+  let orderStoreSpy: { updateStatusByOrderID: Mock };
   let flightServiceSpy: { deleteFlightsByOrderID: Mock };
   let hotelServiceSpy: { deleteHotel: Mock };
   let refresh: Mock;
@@ -21,7 +21,7 @@ describe('FinalOrderStore', () => {
   const finalUrl = environment.api + 'finalOrder';
 
   beforeEach(() => {
-    orderStoreSpy = { deleteByOrderID: vi.fn() };
+    orderStoreSpy = { updateStatusByOrderID: vi.fn() };
     flightServiceSpy = { deleteFlightsByOrderID: vi.fn() };
     hotelServiceSpy = { deleteHotel: vi.fn() };
     refresh = vi.fn();
@@ -81,12 +81,12 @@ describe('FinalOrderStore', () => {
   });
 
   describe('addFinalOrder', () => {
-    it('cleans up the pending order, flight and hotel before posting the final order', () => {
-      const request = { order: { orderID: 'order-1' } } as FinalOrderState;
+    it('marks the order as booked and removes its flight and hotel offers before posting the final order', () => {
+      const request = { order: { id: 4, orderID: 'order-1' } } as FinalOrderState;
 
       store.addFinalOrder(request);
 
-      expect(orderStoreSpy.deleteByOrderID).toHaveBeenCalledWith('order-1');
+      expect(orderStoreSpy.updateStatusByOrderID).toHaveBeenCalledWith(4, OrderStatus.Booked);
       expect(hotelServiceSpy.deleteHotel).toHaveBeenCalledWith('order-1');
       expect(flightServiceSpy.deleteFlightsByOrderID).toHaveBeenCalledWith('order-1');
 
@@ -103,7 +103,7 @@ describe('FinalOrderStore', () => {
 
       store.addFinalOrder(request);
 
-      expect(orderStoreSpy.deleteByOrderID).not.toHaveBeenCalled();
+      expect(orderStoreSpy.updateStatusByOrderID).not.toHaveBeenCalled();
       expect(hotelServiceSpy.deleteHotel).not.toHaveBeenCalled();
       expect(flightServiceSpy.deleteFlightsByOrderID).not.toHaveBeenCalled();
 

@@ -4,7 +4,8 @@ import { OrderPreferences } from './preferences.interface';
 export enum OrderStatus {
   Pending = 'pending',
   Finished = 'finished',
-  Cancelled = 'cancelled'
+  Cancelled = 'cancelled',
+  Booked = 'booked'
 }
 
 export interface passDetails{

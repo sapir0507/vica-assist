@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ConfigService, isOverdue, Order, OrderStatus } from '@vica-assist/shared';
+import { ConfigService, isOverdue, Order, OrderStatus, requestNumber } from '@vica-assist/shared';
 
 import { AdminService } from 'src/app/services/admin/admin.service';
 import { AgentStore } from 'src/app/services/agent/agent.store';
@@ -17,6 +17,7 @@ type Filter = 'all' | 'pending' | 'finished' | 'cancelled';
   imports: [DatePipe]
 })
 export class RequestsSectionComponent {
+  protected readonly requestNumber = requestNumber;
   private orderStore = inject(OrderStore);
   private agentStore = inject(AgentStore);
   private config = inject(ConfigService);

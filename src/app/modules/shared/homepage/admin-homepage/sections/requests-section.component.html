@@ -23,7 +23,7 @@
     <tbody>
       @for (order of requests(); track order.id) {
         <tr>
-          <td>{{ order.id }}</td>
+          <td>{{ requestNumber(order) }}</td>
           <td>{{ order.customer ?? 'unknown' }}</td>
           <td>{{ order.origin }} &rarr; {{ order.destination }}</td>
           <td>

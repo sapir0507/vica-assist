@@ -49,6 +49,14 @@ describe('OrderStore', () => {
   });
 
   describe('getAll', () => {
+    it('leaves booked requests out of every list while keeping them on the backend', () => {
+      store.getAll().subscribe();
+      httpMock.expectOne(url).flush([makeOrder({ id: 1, status: 'booked' }), makeOrder({ id: 2, status: 'pending' })]);
+
+      expect(store.orders()?.map(order => order.id)).toEqual([2]);
+      expect(store.pendingOrders()?.map(order => order.id)).toEqual([2]);
+    });
+
     it('keeps cancelled requests out of the pending list but in the full list', () => {
       const cancelled = makeOrder({ id: 3, status: 'cancelled' });
       const pending = makeOrder({ id: 4, status: 'pending' });
@@ -105,18 +113,30 @@ describe('OrderStore', () => {
 
   describe('addOrder', () => {
     it('posts the new order, hands back what was created and refreshes the order list', () => {
-      const newOrder = makeOrder({ id: 3 });
+      const { id: _unsent, ...newOrder } = makeOrder({ id: 3 });
+      const stored = makeOrder({ id: 3, orderID: '3' });
       let created: Order | undefined;
       store.addOrder(newOrder).subscribe(order => (created = order));
 
       const postReq = httpMock.expectOne(r => r.url === url && r.method === 'POST');
       expect(postReq.request.body).toEqual(newOrder);
       httpMock.expectNone(r => r.url === url && r.method === 'GET');
-      postReq.flush(newOrder);
-      expect(created).toEqual(newOrder);
+      postReq.flush({ ...stored, orderID: undefined });
+      const patchReq = httpMock.expectOne(`${url}/3`);
+      expect(patchReq.request.method).toBe('PATCH');
+      expect(patchReq.request.body).toEqual({ orderID: '3' });
+      patchReq.flush(stored);
+      expect(created).toEqual(stored);
 
       const getReq = httpMock.expectOne(r => r.url === url && r.method === 'GET');
-      getReq.flush([newOrder]);
+      getReq.flush([stored]);
+    });
+
+    it('lets the backend choose the id, so simultaneous requests get different numbers', () => {
+      const { id: _unsent, ...newOrder } = makeOrder();
+      store.addOrder(newOrder).subscribe();
+
+      expect(httpMock.expectOne(r => r.url === url && r.method === 'POST').request.body).not.toHaveProperty('id');
     });
   });
 
@@ -143,26 +163,6 @@ describe('OrderStore', () => {
       expect(patchReq.request.body).toEqual({ status: 'pending' });
       patchReq.flush({});
       httpMock.expectOne(url).flush([]);
-    });
-  });
-
-  describe('deleteByOrderID', () => {
-    it('deletes only the order entities matching the given business orderID', () => {
-      const match = makeOrder({ id: 1, orderID: 'match' });
-      const other = makeOrder({ id: 2, orderID: 'other' });
-
-      store.deleteByOrderID('match');
-
-      const getReq = httpMock.expectOne(url);
-      getReq.flush([match, other]);
-
-      const deleteReq = httpMock.expectOne(`${url}/1`);
-      expect(deleteReq.request.method).toBe('DELETE');
-      deleteReq.flush({});
-
-      httpMock.expectNone(`${url}/2`);
-      httpMock.expectOne(url).flush([other]);
-      expect(store.orders()).toEqual([other]);
     });
   });
 

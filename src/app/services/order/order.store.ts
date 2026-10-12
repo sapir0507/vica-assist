@@ -37,6 +37,7 @@ export const OrderStore = signalStore(
     }
 
     const postOrder = (order: OrderRequest) => http.post<Order>(url, order).pipe(
+      switchMap(created => http.patch<Order>(`${url}/${created.id}`, { orderID: String(created.id) })),
       catchError(err => handleError(err, 'postOrder', order))
     );
 
@@ -47,7 +48,7 @@ export const OrderStore = signalStore(
           tap(orders => {
             const finished = orders.filter(order => order.status === OrderStatus.Finished);
             const cancelled = orders.filter(order => order.status === OrderStatus.Cancelled);
-            const pending = orders.filter(order => order.status !== OrderStatus.Finished && order.status !== OrderStatus.Cancelled);
+            const pending = orders.filter(order => ![OrderStatus.Finished, OrderStatus.Cancelled, OrderStatus.Booked].includes(order.status as OrderStatus));
             patchState(store, {
               orders: pending.concat(finished, cancelled),
               pendingOrders: pending,
@@ -64,7 +65,11 @@ export const OrderStore = signalStore(
         return http.get<Order[]>(getUrl);
       },
 
-      /** Creates a new order on the backend, then refreshes the local pending/finished buckets. */
+      /**
+       * Creates a new order on the backend, then refreshes the local pending/finished buckets. The backend picks the
+       * id, so two requests sent at the same moment cannot share a number; `orderID` (the key flights and hotels use)
+       * is set from it afterwards.
+       */
       addOrder(newOrder: OrderRequest): Observable<Order> {
         return postOrder(newOrder).pipe(tap(() => this.getAll().subscribe()));
       },
@@ -112,20 +117,6 @@ export const OrderStore = signalStore(
       updateStatusByOrderID(id: string | number, status: OrderStatus): void {
         const changes = status === OrderStatus.Finished ? { status, respondedAt: new Date().toISOString() } : { status };
         http.patch<Order>(`${url}/${id}`, changes).subscribe(() => this.getAll().subscribe());
-      },
-
-      // since mock json server can't delete by the following url (as far as I know):
-      // localhost:3000/orders?orderID=[number]
-      // I need to run over all the orders and delete those that match the correct orderID
-      // need to find a better way
-
-      /** Deletes every order record matching the given business `orderID` (not the entity `id`). */
-      deleteByOrderID(orderID: string | number): void {
-        this.get().pipe(
-          switchMap(orders => forkJoin(
-            orders.filter(item => item.orderID === orderID).map(item => http.delete<Order>(`${url}/${item.id}`))
-          ))
-        ).subscribe(() => this.getAll().subscribe());
       }
     };
   }),

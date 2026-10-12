@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgentStore } from 'src/app/services/agent/agent.store';
-import { BookingStore } from 'src/app/services/booking/booking.store';
 import { MessageStore } from 'src/app/services/message/message.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
@@ -40,7 +39,6 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   private configService = inject(ConfigService);
   private agentStore = inject(AgentStore);
   private messageStore = inject(MessageStore);
-  private bookingStore = inject(BookingStore);
   private router = inject(Router);
   private limits = this.configService.config().limits;
   requestForm: FormGroup = this.fb.group({
@@ -123,7 +121,6 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   ) {
       this.addNewPass()
       this.agentStore.load();
-      this.bookingStore.load();
     }
 
   ngOnInit(): void {
@@ -239,18 +236,6 @@ export class UserRequestsComponent implements OnInit, OnChanges {
     this.step--;
   }
 
-  /**
-   * One more than any id seen so far, in the open requests and in the bookings. Booking deletes the order, so
-   * the backend alone would hand its number out again and the new request would be mistaken for the old trip.
-   */
-  private nextOrderId(): number {
-    const taken = [
-      ...(this.orderStore.orders() ?? []).map(order => order.id),
-      ...(this.bookingStore.bookings() ?? []).map(booking => booking.order?.id ?? 0)
-    ];
-    return Math.max(0, ...taken) + 1;
-  }
-
   get canAddTraveler(): boolean {
     return this.passDetails.length < this.limits.maxTravelers;
   }
@@ -283,11 +268,8 @@ export class UserRequestsComponent implements OnInit, OnChanges {
 
   onSubmit(){
     if(this.requestForm.valid) {
-      const id = this.nextOrderId();
       const newOrder: OrderRequest = {
-        id,
         choice: this.order,
-        orderID: String(id),
         status: OrderStatus.Pending,
         departureDate: this.Dates.get('departureDate')?.value,
         returnDate: this.Dates.get('returnDate')?.value,
@@ -304,7 +286,7 @@ export class UserRequestsComponent implements OnInit, OnChanges {
         createdAt: new Date().toISOString()
       }
       if (this.editing) {
-        const unchanged = ['customer', 'createdAt', 'orderID', 'status'];
+        const unchanged = ['customer', 'createdAt', 'status'];
         const changes = Object.fromEntries(Object.entries(newOrder).filter(([key]) => !unchanged.includes(key)));
         this.orderStore.updatePending(this.editing.id, changes).subscribe({
           next: updated => {

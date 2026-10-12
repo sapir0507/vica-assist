@@ -9,5 +9,6 @@ export * from './pick-agent';
 export * from './places';
 export * from './public-summary';
 export * from './plan-reassignments';
+export * from './request-number';
 export * from './to-preferences';
 export * from './validate-config';

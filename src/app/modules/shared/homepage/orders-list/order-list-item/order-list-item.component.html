@@ -4,7 +4,7 @@
       <h3 class="order-card__title" [id]="'order-title-' + currentItem.id">Order {{ currentItem.id }}</h3>
       <span class="chip" [class]="'chip chip--' + currentItem.status">{{ currentItem.status }}</span>
     </header>
-    <p class="order-card__ref">Order ID: {{ currentItem.orderID }}</p>
+    <p class="order-card__ref">Request number: {{ requestNumber(currentItem) }}</p>
     <dl class="order-card__meta">
       <dt>Made by</dt>
       <dd class="text-capitalize">{{ currentItem.passDetails[0].fullName }}</dd>

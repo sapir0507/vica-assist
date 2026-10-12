@@ -4,7 +4,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MyPipesModule } from '@vica-assist/my-pipes';
-import { Order } from '@vica-assist/shared';
+import { Order, requestNumber } from '@vica-assist/shared';
 import { OfferSummaryComponent } from '../offer-summary/offer-summary.component';
 
 @Component({
@@ -15,6 +15,7 @@ import { OfferSummaryComponent } from '../offer-summary/offer-summary.component'
   imports: [DatePipe, RouterLink, MyPipesModule, MatButtonModule, MatIconModule, OfferSummaryComponent]
 })
 export class OrderListItemComponent implements OnInit {
+  protected readonly requestNumber = requestNumber;
 
   @Input() currentItem: Order | null = null;
   @Input() showOffers = false;
