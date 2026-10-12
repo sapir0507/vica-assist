@@ -846,6 +846,15 @@ First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-p
   logged passengers to the console, and a new request could reuse the number of a booked trip. Initial bundle
   721 kB to 761 kB; the warning budget moved to 800 kB because the configuration code and defaults load at start.
 
+- **The visitor homepage (`feature/visitor-homepage`)**: the page now explains how it works, shows the places
+  travelers actually chose (the sample six until there are three with bookings), and each card opens a native
+  `<dialog>` with static facts, real numbers and reviews for that place and a "Sign in to plan a trip to X"
+  button. The destination travels through login (`?destination=`, matched against the places list only) to a
+  booking form with it filled in for customers. Agents, airlines, live numbers, reviews, a FAQ and a question form
+  complete the page. Everything it shows comes from one `publicSummary` document that is rebuilt when a booking,
+  rating, agent, airline or hidden review changes (`buildPublicSummary`, seeded in `data.json`). Fixed on the way:
+  the final-order store logged the whole booking, names and IDs included, to the console.
+
 ## Out of scope
 
 - `json-server` 1.x is a ground-up rewrite; it's only the local mock backend

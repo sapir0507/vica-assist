@@ -256,3 +256,10 @@
   margin: var(--space-2) 0 0;
   color: var(--color-text-secondary);
 }
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+}

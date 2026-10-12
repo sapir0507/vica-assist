@@ -109,8 +109,8 @@
             <p class="review__text">{{ review.text }}</p>
             <p class="review__by">
               {{ review.firstName }}, {{ review.destination }}
-              @if (review.hotelRating) { &middot; hotel <star-rating label="Hotel rating" [readonly]="true" [value]="review.hotelRating" /> }
-              @if (review.flightRating) { &middot; flight <star-rating label="Flight rating" [readonly]="true" [value]="review.flightRating" /> }
+              @if (review.hotelRating) { <span class="rating">hotel <star-rating label="Hotel rating" [readonly]="true" [value]="review.hotelRating" /></span> }
+              @if (review.flightRating) { <span class="rating">flight <star-rating label="Flight rating" [readonly]="true" [value]="review.flightRating" /></span> }
             </p>
           </li>
         }

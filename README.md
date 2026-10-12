@@ -22,7 +22,7 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
 
 | Role | Can do |
 |---|---|
-| Visitor (`unknown`) | Information only: read about the service, see trending destinations, log in or register. No booking |
+| Visitor (`unknown`) | Information only: how it works, trending destinations (each opens a panel with facts, real numbers and reviews), the agents, the airlines, live service numbers, reviews, a FAQ and a question form. Choosing a destination leads to sign-in and, for a customer, to a booking form with it filled in. No booking on the page itself |
 | Customer | Book a trip in four steps (destination, travelers, details, preferences), land on a status page with their assigned agent, a timeline, what happens next, messages, and edit or cancel while the request waits; choose among the agent's hotels and flights; rate a finished trip |
 | Agent | Work through their own queue of pending requests (with the customer's wishes beside every field), choose airline, flight and hotel details, message the customer, switch availability, and read their own statistics on the Insights tab |
 | Admin | One long page: company-wide numbers and an agent comparison, every request with manual reassignment, agents and their accounts, airlines, a configuration editor, visitor inquiries, review moderation and an audit log |
@@ -31,6 +31,9 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
 
 - Role-based homepage: the route that loads depends on the signed-in user's role.
 - Agents add flights (`add-flight`) and hotels (`add-hotel`) to a customer's order.
+- The visitor page reads one document, `publicSummary`, made of aggregates (totals, averages, first names,
+  destinations). It is rebuilt whenever a booking, a rating, an agent, an airline or a hidden review changes, and
+  numbers and reviews stay hidden until enough bookings exist (5 by default) for nobody to be identifiable.
 - The booking form validates travelers (Israeli ID check digit, first and last name, no duplicates), the origin and
   destination (a known country or city, with autocomplete), dates and budget, and collects the customer's
   **preferences** (stops or direct, checked baggage, cabin, departure time, preferred airlines, flexible dates,
@@ -191,6 +194,13 @@ This is a demo backed by a mock API, and several things would be unacceptable in
   call the mock API directly, and nothing on the server checks roles.
 - **Roles are no longer self-selected.** Registration only creates customers; the admin creates agent accounts
   (with a one-time password, stored in plaintext because the mock backend cannot hash).
+- **The visitor page is public by design, so it never reads private data.** It requests only `publicSummary`
+  (a spec asserts this), and the summary builder is tested to leave out emails, bios, IDs, customer usernames and
+  single-booking prices. The mock API still serves every collection to anyone who asks for it.
+- **The question form is unauthenticated.** It has a hidden trap field and a one-per-minute limit kept in the
+  browser; both are courtesies, not protection. A real backend needs server-side rate limiting and spam control.
+- **A destination in the address is only ever matched against the list of known places** (`canonicalPlace`); text
+  that is not a known place is ignored, so the address cannot put words or links on the login page or redirect.
 - **Everything the admin, an agent or a customer is allowed to do is enforced in the browser** (`AdminService`
   refuses non-admins, stores refuse other people's requests, ratings and messages), and the mock API accepts any
   request from anyone. A real backend must repeat every one of those checks.
