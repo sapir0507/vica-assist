@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-import { Order } from '@vica-assist/shared';
+import { canonicalPlace, Order } from '@vica-assist/shared';
 import { OrderStatusListComponent } from '../orders-list/order-status-list/order-status-list.component';
 import { BookedListComponent } from '../../bookings/booked-list/booked-list.component';
 import { UserRequestsModule } from 'src/app/modules/all_modules/user-requests/user-requests.module';
@@ -26,7 +26,9 @@ type View = 'menu' | 'booking' | 'orders';
   ]
 })
 export class UserHomepageComponent {
-  view: View = 'menu';
+  /** A place the visitor chose before signing in; used only when it is a real place, never as an address. */
+  readonly plannedPlace = canonicalPlace(inject(ActivatedRoute).snapshot.queryParamMap.get('destination'));
+  view: View = this.plannedPlace ? 'booking' : 'menu';
 
   constructor(private router: Router) { }
 

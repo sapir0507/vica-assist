@@ -1,4 +1,4 @@
-import { isKnownPlace, KNOWN_PLACES, normalisePlace, suggestPlaces } from './places';
+import { canonicalPlace, isKnownPlace, KNOWN_PLACES, normalisePlace, suggestPlaces } from './places';
 
 describe('normalisePlace', () => {
   it('ignores case, accents and extra spaces', () => {
@@ -44,5 +44,19 @@ describe('suggestPlaces', () => {
 
   it('suggests nothing for gibberish', () => {
     expect(suggestPlaces('qqqq')).toEqual([]);
+  });
+});
+
+describe('canonicalPlace', () => {
+  it('gives the place as we spell it', () => {
+    expect(canonicalPlace('paris')).toBe('Paris');
+    expect(canonicalPlace(' ZURICH ')).toBe('Zürich');
+  });
+
+  it('gives nothing for text that is not a known place, however it looks', () => {
+    expect(canonicalPlace('Atlantis')).toBeNull();
+    expect(canonicalPlace('https://evil.example')).toBeNull();
+    expect(canonicalPlace('<script>alert(1)</script>')).toBeNull();
+    expect(canonicalPlace(null)).toBeNull();
   });
 });

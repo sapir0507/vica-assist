@@ -21,7 +21,7 @@
         <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
         Back
       </button>
-      <userRequests></userRequests>
+      <userRequests [initialDestination]="plannedPlace ?? undefined"></userRequests>
     }
     @case ('orders') {
       <button mat-button class="back" type="button" (click)="showMenu()">

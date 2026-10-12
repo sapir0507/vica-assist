@@ -47,6 +47,10 @@ export const KNOWN_PLACES: readonly string[] = /* @__PURE__ */ [...new Set([...C
 
 const KNOWN_NORMALISED = /* @__PURE__ */ new Set(KNOWN_PLACES.map(normalisePlace));
 
+/** The place as we spell it, when the text names a known country or city; otherwise `null`. */
+export const canonicalPlace = (value: unknown): string | null =>
+  KNOWN_PLACES.find(place => normalisePlace(place) === normalisePlace(value)) ?? null;
+
 export const isKnownPlace = (value: unknown): boolean => KNOWN_NORMALISED.has(normalisePlace(value));
 
 export function suggestPlaces(typed: unknown, limit = 8): string[] {

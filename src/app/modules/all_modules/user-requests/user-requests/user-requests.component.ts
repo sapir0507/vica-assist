@@ -7,7 +7,7 @@ import { BookingStore } from 'src/app/services/booking/booking.store';
 import { MessageStore } from 'src/app/services/message/message.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
+import { activeOptions, canonicalPlace, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
 import { differentPlaces, maxTrimmed, notBlank, roomsFitTravelers } from '../validators';
 
@@ -31,6 +31,8 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   /** Set to change a request that is still waiting for its agent, instead of making a new one. */
   @Input() editing?: Order;
   @Output() saved = new EventEmitter<Order>();
+  /** A place chosen earlier (on the homepage); starts a new request with it filled in. */
+  @Input() initialDestination?: string;
 
   readonly steps = ['Destination', 'Travelers', 'Trip details', 'Preferences'];
   readonly destinations = DESTINATIONS;
@@ -124,7 +126,10 @@ export class UserRequestsComponent implements OnInit, OnChanges {
       this.bookingStore.load();
     }
 
-  ngOnInit(): void {/* empty*/}
+  ngOnInit(): void {
+    const place = canonicalPlace(this.initialDestination);
+    if (place && !this.editing) this.requestForm.patchValue({ destination: place });
+  }
 
   ngOnChanges(): void {
     const order = this.editing;

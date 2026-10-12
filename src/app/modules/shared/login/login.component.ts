@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { canonicalPlace } from '@vica-assist/shared';
 import { LinkStore } from 'src/app/services/links/link.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 
@@ -26,6 +27,10 @@ export class LoginComponent implements OnInit {
   myError = signal(false);
   protected sessionStore = inject(SessionStore);
   private linkStore = inject(LinkStore);
+  private route = inject(ActivatedRoute);
+
+  /** The place a visitor chose on the homepage, if it is a real one: nothing else from the address is used. */
+  readonly plannedPlace = canonicalPlace(this.route.snapshot.queryParamMap.get('destination'));
 
   constructor(
     private router: Router

@@ -1,7 +1,11 @@
 <div class="auth-page">
   <div class="auth-card auth-card--wide">
     <h1 class="auth-card__title">Create your account</h1>
-    <p class="auth-card__subtitle">Plan trips as a customer, or put them together as an agent.</p>
+    <p class="auth-card__subtitle">Describe a trip and an agent plans it with you.</p>
+
+    @if (plannedPlace) {
+      <p class="auth-banner" role="status">Create an account to plan a trip to <strong>{{ plannedPlace }}</strong>, then log in.</p>
+    }
 
     <form class="auth-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()" novalidate>
       <div class="form-field">
@@ -55,7 +59,7 @@
     </form>
 
     <p class="auth-card__footer">
-      Already have an account? <a routerLink="/login">Log in</a>
+      Already have an account? <a routerLink="/login" [queryParams]="loginParams">Log in</a>
     </p>
   </div>
 </div>

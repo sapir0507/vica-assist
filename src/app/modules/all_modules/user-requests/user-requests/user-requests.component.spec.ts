@@ -618,4 +618,37 @@ describe('UserRequestsComponent', () => {
       expect(sent.orderID).toBe('10');
     });
   });
+
+  describe('a place chosen before the form opened', () => {
+    const open = (place: string | undefined) => {
+      fixture = TestBed.createComponent(UserRequestsComponent);
+      component = fixture.componentInstance;
+      component.initialDestination = place;
+      fixture.detectChanges();
+    };
+
+    it('fills in the destination, spelled the way we spell it', () => {
+      open('lisbon');
+
+      expect(component.requestForm.value.destination).toBe('Lisbon');
+      expect(buttonLabelled('Next')?.disabled).toBe(false);
+    });
+
+    it('leaves the destination empty for something that is not a real place', () => {
+      open('Atlantis');
+
+      expect(component.requestForm.value.destination).toBe('');
+    });
+
+    it('does not overwrite a request that is being edited', () => {
+      fixture = TestBed.createComponent(UserRequestsComponent);
+      component = fixture.componentInstance;
+      component.initialDestination = 'Lisbon';
+      component.editing = { id: 1, orderID: '1', choice: 'both', status: 'pending', departureDate: daysFromToday(5), returnDate: daysFromToday(9), origin: 'Tel Aviv', destination: 'Rome', passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }], priceRange: 500 };
+      fixture.detectChanges();
+      component.ngOnChanges();
+
+      expect(component.requestForm.value.destination).toBe('Rome');
+    });
+  });
 });

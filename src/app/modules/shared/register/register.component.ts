@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { canonicalPlace } from '@vica-assist/shared';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegisterRequest } from 'src/app/services/register/register.model';
 import { RegisterService } from 'src/app/services/register/register.service';
@@ -22,6 +24,12 @@ export class RegisterComponent implements OnInit {
     password: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.minLength(4)])),
     email: new FormControl<string | undefined>(undefined, Validators.compose([Validators.required, Validators.email]))
   });
+
+  private route = inject(ActivatedRoute);
+
+  /** The place a visitor chose on the homepage, if it is a real one: nothing else from the address is used. */
+  readonly plannedPlace = canonicalPlace(this.route.snapshot.queryParamMap.get('destination'));
+  readonly loginParams = this.plannedPlace ? { destination: this.plannedPlace } : {};
 
   constructor(
     private registerService: RegisterService

@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { API_URL, provideAppIcons } from '@vica-assist/shared';
 
+import { UserRequestsComponent } from 'src/app/modules/all_modules/user-requests/user-requests/user-requests.component';
 import { UserHomepageComponent } from './user-homepage.component';
 
 describe('UserHomepageComponent', () => {
@@ -54,5 +56,39 @@ describe('UserHomepageComponent', () => {
     component.selectedItem({ id: 7 } as never);
 
     expect(navigate).toHaveBeenCalledWith(['final-order', 7]);
+  });
+});
+
+describe('UserHomepageComponent with a destination chosen before signing in', () => {
+  const create = (destination: string | null) => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, UserHomepageComponent],
+      providers: [
+        { provide: API_URL, useValue: 'http://localhost:3000/' },
+        provideRouter([]),
+        provideAppIcons(),
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(destination ? { destination } : {}) } } }
+      ]
+    });
+    const fixture = TestBed.createComponent(UserHomepageComponent);
+    fixture.detectChanges();
+    return fixture;
+  };
+  const form = (fixture: ComponentFixture<UserHomepageComponent>) =>
+    fixture.debugElement.query(By.directive(UserRequestsComponent))?.componentInstance as UserRequestsComponent | undefined;
+
+  it('opens the booking form with that place filled in', () => {
+    const fixture = create('lisbon');
+
+    expect(form(fixture)?.requestForm.value.destination).toBe('Lisbon');
+  });
+
+  it('opens the usual menu without one, or with something that is not a place', () => {
+    expect((create(null).nativeElement as HTMLElement).querySelector('.action-card')).not.toBeNull();
+
+    TestBed.resetTestingModule();
+    const fixture = create('https://evil.example');
+    expect((fixture.nativeElement as HTMLElement).querySelector('.action-card')).not.toBeNull();
+    expect(form(fixture)).toBeUndefined();
   });
 });

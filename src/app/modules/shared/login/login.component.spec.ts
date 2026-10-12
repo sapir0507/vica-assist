@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { environment } from 'src/environments/environment';
@@ -64,5 +65,38 @@ describe('LoginComponent', () => {
 
     const alert = host().querySelector('[role="alert"]');
     expect(alert?.textContent).toContain("couldn't log you in");
+  });
+});
+
+describe('LoginComponent with a destination chosen on the homepage', () => {
+  const create = async (destination: string | null) => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule],
+      declarations: [LoginComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [{ provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(destination ? { destination } : {}) } } }]
+    }).compileComponents();
+    const fixture = TestBed.createComponent(LoginComponent);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  };
+
+  it('says which trip the visitor is signing in for', async () => {
+    const host = await create('paris');
+
+    expect(host.querySelector('.auth-banner')?.textContent).toContain('Paris');
+  });
+
+  it('shows no banner without a destination', async () => {
+    expect((await create(null)).querySelector('.auth-banner')).toBeNull();
+  });
+
+  it('ignores anything that is not a real place, so the address cannot put words or links on the page', async () => {
+    for (const bad of ['Atlantis', 'https://evil.example', '<img src=x onerror=alert(1)>']) {
+      TestBed.resetTestingModule();
+      const host = await create(bad);
+      expect(host.querySelector('.auth-banner')).toBeNull();
+      expect(host.innerHTML).not.toContain('evil.example');
+    }
   });
 });
