@@ -1,0 +1,49 @@
+@if (sent()) {
+  <div class="contact__thanks" role="status">
+    <h3 class="contact__thanks-title">Thank you, your message is on its way</h3>
+    <p>Someone from the team will reply by email, usually within {{ responseHours }} hours.</p>
+    <button type="button" mat-button (click)="writeAnother()">Write another message</button>
+  </div>
+} @else {
+  <form class="contact" [formGroup]="form" (ngSubmit)="submit()" novalidate aria-label="Ask us a question">
+    <div class="form-field">
+      <label for="contact-name">Your name</label>
+      <input id="contact-name" class="form-control" type="text" formControlName="name" autocomplete="name" maxlength="60" />
+      @if (form.controls.name.touched && form.controls.name.invalid) {
+        <p class="form-field__error" role="alert">Enter your name, using letters only.</p>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="contact-email">Email</label>
+      <input id="contact-email" class="form-control" type="email" formControlName="email" autocomplete="email" maxlength="254" />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <p class="form-field__error" role="alert">Enter a valid email address.</p>
+      }
+    </div>
+
+    <div class="form-field contact__full">
+      <label for="contact-message">Your question</label>
+      <textarea id="contact-message" class="form-control" rows="4" formControlName="message" aria-describedby="contact-count"></textarea>
+      <span id="contact-count" class="form-hint">{{ messageLength }} / {{ maxMessage }}</span>
+      @if (form.controls.message.touched && form.controls.message.invalid) {
+        <p class="form-field__error" role="alert">
+          @if (form.controls.message.hasError('tooLong')) { Keep your question to {{ maxMessage }} characters or fewer. } @else { Write at least 10 characters. }
+        </p>
+      }
+    </div>
+
+    <div class="contact__trap" aria-hidden="true">
+      <label for="contact-website">Leave this empty</label>
+      <input id="contact-website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+    </div>
+
+    @if (error(); as message) {
+      <p class="form-field__error contact__full" role="alert">{{ message }}</p>
+    }
+
+    <div class="contact__full">
+      <button mat-flat-button type="submit" [disabled]="sending()">Send question</button>
+    </div>
+  </form>
+}
