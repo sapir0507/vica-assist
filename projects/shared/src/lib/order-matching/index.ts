@@ -7,6 +7,7 @@ export * from './describe-preferences';
 export * from './id-and-name';
 export * from './pick-agent';
 export * from './places';
+export * from './public-summary';
 export * from './plan-reassignments';
 export * from './to-preferences';
 export * from './validate-config';
