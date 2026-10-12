@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Order } from '@vica-assist/shared';
+import { Order, OrderStatus } from '@vica-assist/shared';
 import { OrderStore } from './order.store';
 
 describe('OrderStore', () => {
@@ -122,7 +122,7 @@ describe('OrderStore', () => {
 
   describe('updateStatusByOrderID', () => {
     it('patches the status, stamps when the agent answered, and refreshes the lists', () => {
-      store.updateStatusByOrderID(5, 'finished');
+      store.updateStatusByOrderID(5, OrderStatus.Finished);
 
       const patchReq = httpMock.expectOne(`${url}/5`);
       expect(patchReq.request.method).toBe('PATCH');
@@ -137,7 +137,7 @@ describe('OrderStore', () => {
     });
 
     it('does not stamp a response time for other statuses', () => {
-      store.updateStatusByOrderID(5, 'pending');
+      store.updateStatusByOrderID(5, OrderStatus.Pending);
 
       const patchReq = httpMock.expectOne(`${url}/5`);
       expect(patchReq.request.body).toEqual({ status: 'pending' });

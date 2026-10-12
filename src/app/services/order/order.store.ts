@@ -4,7 +4,7 @@ import { patchState, signalStore, withHooks, withMethods, withState } from '@ngr
 import { Observable, forkJoin, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Agent, AssignmentReason, AssignmentRules, Order, OrderRequest, planReassignments } from '@vica-assist/shared';
+import { Agent, AssignmentReason, AssignmentRules, Order, OrderRequest, OrderStatus, planReassignments } from '@vica-assist/shared';
 
 export interface OrderState {
   orders: Order[] | undefined;
@@ -45,9 +45,9 @@ export const OrderStore = signalStore(
       getAll() {
         return http.get<Order[]>(url).pipe(
           tap(orders => {
-            const finished = orders.filter(order => order.status === 'finished');
-            const cancelled = orders.filter(order => order.status === 'cancelled');
-            const pending = orders.filter(order => order.status !== 'finished' && order.status !== 'cancelled');
+            const finished = orders.filter(order => order.status === OrderStatus.Finished);
+            const cancelled = orders.filter(order => order.status === OrderStatus.Cancelled);
+            const pending = orders.filter(order => order.status !== OrderStatus.Finished && order.status !== OrderStatus.Cancelled);
             patchState(store, {
               orders: pending.concat(finished, cancelled),
               pendingOrders: pending,
@@ -71,17 +71,17 @@ export const OrderStore = signalStore(
 
       /** Cancels a request that is still waiting for its agent. */
       cancel(id: number): Observable<Order> {
-        if (store.orders()?.find(order => order.id === id)?.status !== 'pending') {
+        if (store.orders()?.find(order => order.id === id)?.status !== OrderStatus.Pending) {
           return throwError(() => new Error('Only a request that is still waiting for an agent can be cancelled.'));
         }
-        return http.patch<Order>(`${url}/${id}`, { status: 'cancelled', cancelledAt: new Date().toISOString() }).pipe(
+        return http.patch<Order>(`${url}/${id}`, { status: OrderStatus.Cancelled, cancelledAt: new Date().toISOString() }).pipe(
           tap(() => this.getAll().subscribe())
         );
       },
 
       /** Saves the customer's changes to a request that is still waiting for its agent. */
       updatePending(id: number, changes: Partial<OrderRequest>): Observable<Order> {
-        if (store.orders()?.find(order => order.id === id)?.status !== 'pending') {
+        if (store.orders()?.find(order => order.id === id)?.status !== OrderStatus.Pending) {
           return throwError(() => new Error('Only a request that is still waiting for an agent can be changed.'));
         }
         return http.patch<Order>(`${url}/${id}`, { ...changes, updatedAt: new Date().toISOString() }).pipe(
@@ -109,8 +109,8 @@ export const OrderStore = signalStore(
       },
 
       /** Updates the `status` of the order with the given id, stamping `respondedAt` when the agent answers it. */
-      updateStatusByOrderID(id: string | number, status: string): void {
-        const changes = status === 'finished' ? { status, respondedAt: new Date().toISOString() } : { status };
+      updateStatusByOrderID(id: string | number, status: OrderStatus): void {
+        const changes = status === OrderStatus.Finished ? { status, respondedAt: new Date().toISOString() } : { status };
         http.patch<Order>(`${url}/${id}`, changes).subscribe(() => this.getAll().subscribe());
       },
 

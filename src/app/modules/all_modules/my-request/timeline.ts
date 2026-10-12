@@ -1,4 +1,4 @@
-import { finalOrder, Order } from '@vica-assist/shared';
+import { finalOrder, Order, OrderStatus } from '@vica-assist/shared';
 
 export type RequestState = 'pending' | 'answered' | 'booked' | 'cancelled';
 
@@ -14,8 +14,8 @@ export interface TimelineStep {
 export function stateOf(order: Order | undefined, booking: finalOrder | undefined): RequestState | undefined {
   if (booking) return 'booked';
   if (!order) return undefined;
-  if (order.status === 'cancelled') return 'cancelled';
-  return order.status === 'finished' ? 'answered' : 'pending';
+  if (order.status === OrderStatus.Cancelled) return 'cancelled';
+  return order.status === OrderStatus.Finished ? 'answered' : 'pending';
 }
 
 /** The steps a customer sees, each with the time it happened, and the first unfinished one marked as current. */

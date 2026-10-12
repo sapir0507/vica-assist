@@ -1,4 +1,4 @@
-import { bookedParts, finalOrder, hasTripEnded, isValidRating, Order, RatedPart } from '@vica-assist/shared';
+import { bookedParts, finalOrder, hasTripEnded, isValidRating, Order, OrderStatus, RatedPart } from '@vica-assist/shared';
 
 export interface PartSatisfaction {
   count: number;
@@ -89,8 +89,8 @@ function hasProblem(booking: finalOrder): boolean {
 /** Turns the orders and bookings the agent can see into the numbers on the Insights tab. Never throws on bad records. */
 export function computeInsights(orders: Order[], bookings: finalOrder[], now = new Date()): Insights {
   const usable = bookings.filter(booking => booking.order);
-  const cancelled = orders.filter(order => order.status === 'cancelled').length;
-  const waitingForCustomer = orders.filter(order => order.status === 'finished').length;
+  const cancelled = orders.filter(order => order.status === OrderStatus.Cancelled).length;
+  const waitingForCustomer = orders.filter(order => order.status === OrderStatus.Finished).length;
   const awaiting = orders.length - cancelled - waitingForCustomer;
   const received = orders.length + usable.length;
 

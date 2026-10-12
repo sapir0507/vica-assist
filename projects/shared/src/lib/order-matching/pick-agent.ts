@@ -1,11 +1,11 @@
 import { AssignmentRules } from '../config/trip.config';
 import { Agent } from '../interfaces/agent.interface';
-import { Order } from '../interfaces/order.interface';
+import { Order, OrderStatus } from '../interfaces/order.interface';
 import { normalisePlace } from './places';
 
 type Request = Pick<Order, 'destination' | 'choice'>;
 
-const isOpen = (order: Order): boolean => order.status === 'pending';
+const isOpen = (order: Order): boolean => order.status === OrderStatus.Pending;
 
 export const openRequestsOf = (agent: Agent, orders: Order[]): number =>
   orders.filter(order => isOpen(order) && order.agent === agent.username).length;

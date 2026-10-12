@@ -7,7 +7,7 @@ import { BookingStore } from 'src/app/services/booking/booking.store';
 import { MessageStore } from 'src/app/services/message/message.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { activeOptions, canonicalPlace, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
+import { activeOptions, canonicalPlace, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, OrderStatus, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
 import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
 import { differentPlaces, maxTrimmed, notBlank, roomsFitTravelers } from '../validators';
 
@@ -288,7 +288,7 @@ export class UserRequestsComponent implements OnInit, OnChanges {
         id,
         choice: this.order,
         orderID: String(id),
-        status: 'pending',
+        status: OrderStatus.Pending,
         departureDate: this.Dates.get('departureDate')?.value,
         returnDate: this.Dates.get('returnDate')?.value,
         origin: this.requestForm.get('origin')?.value.trim(),

@@ -1,6 +1,6 @@
 import { AssignmentRules } from '../config/trip.config';
 import { Agent, AssignmentReason } from '../interfaces/agent.interface';
-import { Order } from '../interfaces/order.interface';
+import { Order, OrderStatus } from '../interfaces/order.interface';
 import { pickAgent } from './pick-agent';
 
 export interface Reassignment {
@@ -27,7 +27,7 @@ export function planReassignments(orders: Order[], agents: Agent[], now: Date, r
   let working = orders;
 
   for (const order of orders) {
-    if (order.status !== 'pending' || !order.agent) continue;
+    if (order.status !== OrderStatus.Pending || !order.agent) continue;
 
     const owner = agents.find(agent => agent.username === order.agent);
     const away = !!owner && (!owner.available || !owner.active);

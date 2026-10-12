@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ConfigService, isOverdue, Order } from '@vica-assist/shared';
+import { ConfigService, isOverdue, Order, OrderStatus } from '@vica-assist/shared';
 
 import { AdminService } from 'src/app/services/admin/admin.service';
 import { AgentStore } from 'src/app/services/agent/agent.store';
@@ -47,7 +47,7 @@ export class RequestsSectionComponent {
   }
 
   isLate(order: Order): boolean {
-    return order.status === 'pending' && isOverdue(order, new Date(), this.config.config().assignment);
+    return order.status === OrderStatus.Pending && isOverdue(order, new Date(), this.config.config().assignment);
   }
 
   nameOf(username: string | undefined): string {
@@ -55,7 +55,7 @@ export class RequestsSectionComponent {
   }
 
   statusOf(order: Order): string {
-    return order.status === 'finished' ? 'answered' : order.status === 'pending' ? 'waiting' : order.status;
+    return order.status === OrderStatus.Finished ? 'answered' : order.status === OrderStatus.Pending ? 'waiting' : order.status;
   }
 
   reassign(order: Order, to: string): void {

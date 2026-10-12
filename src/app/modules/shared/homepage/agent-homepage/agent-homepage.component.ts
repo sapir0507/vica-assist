@@ -5,12 +5,15 @@ import { MyFlightsModule } from '@vica-assist/my-flights';
 import { MyHotelsModule } from '@vica-assist/my-hotels';
 import { UserRequestsPreviewModule } from 'src/app/modules/all_modules/user-requests-preview/user-requests-preview.module';
 import { OrderStore } from 'src/app/services/order/order.store';
-import { Agent, ConfigService, isVisibleToAgent, Order } from '@vica-assist/shared';
+import { Agent, ConfigService, isVisibleToAgent, Order, OrderStatus } from '@vica-assist/shared';
 import { AgentStore } from 'src/app/services/agent/agent.store';
 import { SessionStore } from 'src/app/services/session/session.store';
 import { OrdersListComponent } from '../orders-list/orders-list.component';
 import { MessageThreadComponent } from '../../message-thread/message-thread.component';
 import { InsightsComponent } from './insights/insights.component';
+
+type AgentView = 'requests' | 'insights';
+type OfferStep = 'flight' | 'hotel';
 
 @Component({
   standalone: true,
@@ -30,8 +33,8 @@ import { InsightsComponent } from './insights/insights.component';
   ]
 })
 export class AgentHomepageComponent {
-  view: 'requests' | 'insights' = 'requests';
-  step: 'flight' | 'hotel' = 'flight';
+  view: AgentView = 'requests';
+  step: OfferStep = 'flight';
   chosenID = 1;
   orderID: string | null = null;
   private position = 0;
@@ -85,11 +88,11 @@ export class AgentHomepageComponent {
     return this.orderStore.orders()?.find(order => order.orderID == this.orderID);
   }
 
-  showView(view: 'requests' | 'insights'){
+  showView(view: AgentView){
     this.view = view;
   }
 
-  showStep(step: 'flight' | 'hotel'){
+  showStep(step: OfferStep){
     this.step = step;
   }
 
@@ -108,7 +111,7 @@ export class AgentHomepageComponent {
 
   updateState(){
     if(!this.orderID) return;
-    this.orderStore.updateStatusByOrderID(this.orderID, 'finished');
+    this.orderStore.updateStatusByOrderID(this.orderID, OrderStatus.Finished);
     this.orderID = null;
   }
 

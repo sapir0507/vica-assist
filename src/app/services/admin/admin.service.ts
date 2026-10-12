@@ -8,6 +8,7 @@ import {
   ConfigService,
   describeConfigChange,
   finalOrder,
+  OrderStatus,
   TRIP_CONFIG_DEFAULTS,
   TripConfig,
   validateAgentProfile
@@ -126,7 +127,7 @@ export class AdminService {
     return this.guarded(() => {
       const order = this.orders.orders()?.find(item => item.id === orderId);
       const target = this.agents.byUsername(to);
-      if (!order || order.status !== 'pending') return throwError(() => new Error('Only a request that is waiting for an agent can be reassigned.'));
+      if (!order || order.status !== OrderStatus.Pending) return throwError(() => new Error('Only a request that is waiting for an agent can be reassigned.'));
       if (!target || !target.active) return throwError(() => new Error('Choose an active agent.'));
       this.orders.reassign([{ orderId, to, reason: 'manual' }]);
       return this.audit.record(this.actor, 'request.reassign', `moved request ${orderId} from ${order.agent ?? 'nobody'} to ${to}`).pipe(map(() => undefined));

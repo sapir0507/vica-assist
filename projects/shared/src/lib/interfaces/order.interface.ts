@@ -1,6 +1,12 @@
 import { Assignment } from './agent.interface';
 import { OrderPreferences } from './preferences.interface';
 
+export enum OrderStatus {
+  Pending = 'pending',
+  Finished = 'finished',
+  Cancelled = 'cancelled'
+}
+
 export interface passDetails{
     fullName: string,
     passID: number
@@ -31,10 +37,10 @@ export interface Order {
   }
 
   export function isPending(order: Order, isAgent: boolean): boolean {
-    return order.status === 'pending' && isAgent;
+    return order.status === OrderStatus.Pending && isAgent;
   }
   export function isFinished(order: Order, isAgent: boolean): boolean {
-    return order.status === 'finished' && !isAgent;
+    return order.status === OrderStatus.Finished && !isAgent;
   }
 
   export interface OrderRequest {

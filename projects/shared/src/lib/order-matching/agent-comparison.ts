@@ -1,7 +1,7 @@
 import { AssignmentRules } from '../config/trip.config';
 import { Agent } from '../interfaces/agent.interface';
 import { finalOrder } from '../interfaces/final-order.interface';
-import { Order } from '../interfaces/order.interface';
+import { Order, OrderStatus } from '../interfaces/order.interface';
 import { AgentRating, agentRating } from './agent-rating';
 import { isOverdue } from './plan-reassignments';
 
@@ -30,9 +30,9 @@ export function compareAgents(orders: Order[], bookings: finalOrder[], agents: A
 
       return {
         agent,
-        open: mine.filter(order => order.status === 'pending').length,
-        overdue: mine.filter(order => order.status === 'pending' && isOverdue(order, now, rules)).length,
-        waitingForCustomer: mine.filter(order => order.status === 'finished').length,
+        open: mine.filter(order => order.status === OrderStatus.Pending).length,
+        overdue: mine.filter(order => order.status === OrderStatus.Pending && isOverdue(order, now, rules)).length,
+        waitingForCustomer: mine.filter(order => order.status === OrderStatus.Finished).length,
         booked: booked.length,
         averageResponseHours: hours.length ? Math.round((hours.reduce((sum, value) => sum + value, 0) / hours.length) * 10) / 10 : null,
         rating: agentRating(bookings, agent.username)
