@@ -5,6 +5,7 @@ import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 import { finalOrder, Order } from '@vica-assist/shared';
 import { environment } from 'src/environments/environment';
+import { PublicSummaryStore } from '../public-summary/public-summary.store';
 import { SessionStore } from '../session/session.store';
 import { BookingStore } from './booking.store';
 
@@ -28,6 +29,8 @@ const booking = (id: number, overrides: Partial<Order> = {}): finalOrder => ({
   }
 });
 
+const refresh = vi.fn();
+
 describe('BookingStore', () => {
   let store: InstanceType<typeof BookingStore>;
   let httpMock: HttpTestingController;
@@ -43,7 +46,8 @@ describe('BookingStore', () => {
   };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), { provide: PublicSummaryStore, useValue: { refresh } }] });
+    refresh.mockClear();
     patchState(unprotected(TestBed.inject(SessionStore)), { username: 'dana' });
     store = TestBed.inject(BookingStore);
     httpMock = TestBed.inject(HttpTestingController);
@@ -73,6 +77,7 @@ describe('BookingStore', () => {
 
       expect(result).toEqual(saved);
       expect(store.bookings()?.[0].feedback?.hotelRating).toBe(5);
+      expect(refresh).toHaveBeenCalledTimes(1);
     });
 
     it('refuses someone else\'s booking and an unknown one without calling the backend', () => {

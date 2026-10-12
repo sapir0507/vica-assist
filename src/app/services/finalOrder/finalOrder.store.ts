@@ -6,6 +6,7 @@ import { HotelsService } from '@vica-assist/my-hotels';
 import { Flights, Hotel, Order } from '@vica-assist/shared';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';
+import { PublicSummaryStore } from '../public-summary/public-summary.store';
 
 export interface FinalOrderState {
   order: Order | undefined;
@@ -27,6 +28,7 @@ export const FinalOrderStore = signalStore(
     const orderStore = inject(OrderStore);
     const flightService = inject(MyFlightsService);
     const hotelService = inject(HotelsService);
+    const publicSummary = inject(PublicSummaryStore);
     const finalUrl = environment.api + 'finalOrder';
 
     const postFinalOrder = (request: FinalOrderState) =>
@@ -60,7 +62,7 @@ export const FinalOrderStore = signalStore(
           } catch (error) {
             console.log('final order -> hotels service', error);
           }
-          postFinalOrder(request).subscribe(data => console.log(data));
+          postFinalOrder(request).subscribe(() => publicSummary.refresh());
         } catch (error) {
           console.log(error);
           console.log('newRequest: ', request, 'type: ', typeof request);

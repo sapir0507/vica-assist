@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { bookedParts, FeedbackInput, finalOrder, hasTripEnded, toFeedback } from '@vica-assist/shared';
 import { environment } from 'src/environments/environment';
+import { PublicSummaryStore } from '../public-summary/public-summary.store';
 import { SessionStore } from '../session/session.store';
 
 export interface BookingState {
@@ -27,6 +28,7 @@ export const BookingStore = signalStore(
   withMethods((store) => {
     const http = inject(HttpClient);
     const session = inject(SessionStore);
+    const publicSummary = inject(PublicSummaryStore);
     const url = environment.api + 'finalOrder';
 
     return {
@@ -63,7 +65,8 @@ export const BookingStore = signalStore(
         return http.patch<finalOrder>(`${url}/${bookingId}`, { feedback }).pipe(
           tap(updated => patchState(store, {
             bookings: store.bookings()?.map(item => (item.id === bookingId ? updated : item))
-          }))
+          })),
+          tap(() => publicSummary.refresh())
         );
       }
     };

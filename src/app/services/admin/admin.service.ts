@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, switchMap, throwError } from 'rxjs';
+import { Observable, map, of, switchMap, throwError } from 'rxjs';
 import {
   Agent,
   AgentProfile,
@@ -18,6 +18,7 @@ import { AuditStore } from '../audit/audit.store';
 import { BookingStore } from '../booking/booking.store';
 import { InquiryStore } from '../inquiry/inquiry.store';
 import { OrderStore } from '../order/order.store';
+import { PublicSummaryStore } from '../public-summary/public-summary.store';
 import { SessionStore } from '../session/session.store';
 
 const PASSWORD_CHARS = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -42,6 +43,7 @@ export class AdminService {
   private bookings = inject(BookingStore);
   private inquiries = inject(InquiryStore);
   private audit = inject(AuditStore);
+  private publicSummary = inject(PublicSummaryStore);
 
   get isAdmin(): boolean {
     return this.session.role() === 'admin';
@@ -56,15 +58,19 @@ export class AdminService {
   }
 
   private logged<T>(action: string, detail: string): (source: Observable<T>) => Observable<T> {
-    return source => source.pipe(switchMap(result => this.audit.record(this.actor, action, detail).pipe(map(() => result))));
+    return source => source.pipe(switchMap(result => this.audit.record(this.actor, action, detail).pipe(map(() => {
+      if (/^(config|agent|review)\./.test(action)) this.publicSummary.refresh();
+      return result;
+    }))));
   }
 
   saveConfig(config: TripConfig): Observable<TripConfig> {
     return this.guarded(() => {
       const before = this.configService.config();
-      return this.configService.save(config, this.actor).pipe(switchMap(saved =>
-        this.audit.record(this.actor, 'config.save', describeConfigChange(before, saved)).pipe(map(() => saved))
-      ));
+      return this.configService.save(config, this.actor).pipe(
+        map(saved => ({ saved, detail: describeConfigChange(before, saved) })),
+        switchMap(({ saved, detail }) => of(saved).pipe(this.logged('config.save', detail)))
+      );
     });
   }
 

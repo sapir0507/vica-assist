@@ -6,6 +6,7 @@ import { MyFlightsService } from '@vica-assist/my-flights';
 import { HotelsService } from '@vica-assist/my-hotels';
 import { environment } from 'src/environments/environment';
 import { OrderStore } from '../order/order.store';
+import { PublicSummaryStore } from '../public-summary/public-summary.store';
 import { Flights, Hotel, Order } from '@vica-assist/shared';
 import { FinalOrderState, FinalOrderStore } from './finalOrder.store';
 
@@ -15,6 +16,7 @@ describe('FinalOrderStore', () => {
   let orderStoreSpy: { deleteByOrderID: Mock };
   let flightServiceSpy: { deleteFlightsByOrderID: Mock };
   let hotelServiceSpy: { deleteHotel: Mock };
+  let refresh: Mock;
 
   const finalUrl = environment.api + 'finalOrder';
 
@@ -22,6 +24,7 @@ describe('FinalOrderStore', () => {
     orderStoreSpy = { deleteByOrderID: vi.fn() };
     flightServiceSpy = { deleteFlightsByOrderID: vi.fn() };
     hotelServiceSpy = { deleteHotel: vi.fn() };
+    refresh = vi.fn();
 
     TestBed.configureTestingModule({
       providers: [
@@ -29,7 +32,8 @@ describe('FinalOrderStore', () => {
         provideHttpClientTesting(),
         { provide: OrderStore, useValue: orderStoreSpy },
         { provide: MyFlightsService, useValue: flightServiceSpy },
-        { provide: HotelsService, useValue: hotelServiceSpy }
+        { provide: HotelsService, useValue: hotelServiceSpy },
+        { provide: PublicSummaryStore, useValue: { refresh } }
       ]
     });
 
@@ -91,6 +95,7 @@ describe('FinalOrderStore', () => {
       expect(req.request.body).toEqual({ ...request, bookedAt: expect.any(String) });
       expect(Number.isNaN(Date.parse(req.request.body.bookedAt))).toBe(false);
       req.flush(request);
+      expect(refresh).toHaveBeenCalledTimes(1);
     });
 
     it('skips cleanup and still posts when there is no orderID', () => {

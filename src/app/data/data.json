@@ -651,5 +651,149 @@
       "createdAt": "2026-10-05T14:10:00.000Z",
       "status": "read"
     }
+  ],
+  "publicSummary": [
+    {
+      "updatedAt": "2026-10-11T22:00:00.000Z",
+      "bookings": 9,
+      "sufficient": true,
+      "agents": [
+        {
+          "name": "Maya Cohen",
+          "title": "Senior travel agent",
+          "languages": [
+            "Hebrew",
+            "English",
+            "French"
+          ],
+          "specialties": [
+            "Paris",
+            "France",
+            "Lisbon",
+            "Rome",
+            "Barcelona",
+            "hotel"
+          ],
+          "rating": 4.5,
+          "reviews": 2
+        },
+        {
+          "name": "Noam Peretz",
+          "title": "Long-haul and flights specialist",
+          "languages": [
+            "Hebrew",
+            "English",
+            "Russian"
+          ],
+          "specialties": [
+            "Tokyo",
+            "Singapore",
+            "Bali",
+            "Dubai",
+            "flight"
+          ],
+          "rating": 4,
+          "reviews": 4
+        }
+      ],
+      "airlines": [
+        "El Al",
+        "Israir",
+        "Arkia",
+        "Lufthansa",
+        "Air France",
+        "Turkish Airlines",
+        "Emirates",
+        "British Airways",
+        "easyJet",
+        "Wizz Air",
+        "Singapore Airlines",
+        "United Airlines"
+      ],
+      "averageRating": 4.2,
+      "pleasedPercent": 80,
+      "averageResponseHours": 17.3,
+      "topDestinations": [
+        {
+          "name": "Bali",
+          "count": 1,
+          "rating": 5,
+          "averagePrice": 760
+        },
+        {
+          "name": "Singapore",
+          "count": 1,
+          "rating": 5,
+          "averagePrice": 1720
+        },
+        {
+          "name": "Barcelona",
+          "count": 1,
+          "rating": 4.5,
+          "averagePrice": 830
+        },
+        {
+          "name": "Paris",
+          "count": 1,
+          "rating": 4.5,
+          "averagePrice": 1060
+        },
+        {
+          "name": "Tokyo",
+          "count": 1,
+          "rating": 3.5,
+          "averagePrice": 1990
+        },
+        {
+          "name": "Dubai",
+          "count": 1,
+          "rating": 2,
+          "averagePrice": 360
+        }
+      ],
+      "reviews": [
+        {
+          "firstName": "Dana",
+          "destination": "Singapore",
+          "hotelRating": 5,
+          "flightRating": 5,
+          "text": "Smooth from start to finish."
+        },
+        {
+          "firstName": "Noa",
+          "destination": "Barcelona",
+          "hotelRating": 4,
+          "flightRating": 5,
+          "text": "Great value for money."
+        },
+        {
+          "firstName": "Dana",
+          "destination": "Dubai",
+          "flightRating": 2,
+          "text": "Flight times were inconvenient."
+        },
+        {
+          "firstName": "Noa",
+          "destination": "Bali",
+          "hotelRating": 5,
+          "text": "Best villa we ever stayed in."
+        },
+        {
+          "firstName": "Dana",
+          "destination": "Tokyo",
+          "hotelRating": 4,
+          "flightRating": 3,
+          "text": "Hotel was great, the flight had a long layover."
+        },
+        {
+          "firstName": "Dana",
+          "destination": "Paris",
+          "hotelRating": 5,
+          "flightRating": 4,
+          "text": "Perfect location, the agent nailed the hotel."
+        }
+      ],
+      "id": 1
+    }
   ]
 }

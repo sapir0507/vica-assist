@@ -10,6 +10,7 @@ import { AgentStore } from '../agent/agent.store';
 import { AuditStore } from '../audit/audit.store';
 import { BookingStore } from '../booking/booking.store';
 import { OrderStore } from '../order/order.store';
+import { PublicSummaryStore } from '../public-summary/public-summary.store';
 import { SessionStore } from '../session/session.store';
 import { AdminService, generateTemporaryPassword } from './admin.service';
 
@@ -34,6 +35,7 @@ describe('generateTemporaryPassword', () => {
 describe('AdminService', () => {
   let service: AdminService;
   let httpMock: HttpTestingController;
+  const refresh = vi.fn();
   const errorOf = (observable: { subscribe: (observer: { error: (e: Error) => void }) => unknown }) => {
     let error: Error | undefined;
     observable.subscribe({ error: e => (error = e) });
@@ -43,7 +45,8 @@ describe('AdminService', () => {
   const answerAudit = () => httpMock.expectOne(api + 'auditLog').flush({ id: 1, at: 'x', actor: 'boss', action: 'a', detail: 'd' });
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), { provide: API_URL, useValue: api }] });
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), { provide: API_URL, useValue: api }, { provide: PublicSummaryStore, useValue: { refresh } }] });
+    refresh.mockClear();
     service = TestBed.inject(AdminService);
     httpMock = TestBed.inject(HttpTestingController);
     httpMock.expectOne(api + 'orders').flush([]);
@@ -239,5 +242,38 @@ describe('AdminService', () => {
 
   it('keeps the audit log append-only through the store it uses', () => {
     expect(TestBed.inject(AuditStore).record).toBeDefined();
+  });
+});
+
+describe('AdminService and the public summary', () => {
+  let service: AdminService;
+  let httpMock: HttpTestingController;
+  const refresh = vi.fn();
+
+  beforeEach(() => {
+    refresh.mockClear();
+    TestBed.configureTestingModule({ providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), { provide: API_URL, useValue: api }, { provide: PublicSummaryStore, useValue: { refresh } }] });
+    service = TestBed.inject(AdminService);
+    httpMock = TestBed.inject(HttpTestingController);
+    httpMock.expectOne(api + 'orders').flush([]);
+    patchState(unprotected(TestBed.inject(SessionStore)), { username: 'boss', role: 'admin' });
+  });
+
+  afterEach(() => httpMock.verify());
+
+  it('updates what visitors see after a change to the airlines, agents or reviews', () => {
+    service.resetConfig().subscribe();
+    httpMock.expectOne(api + 'settings/1').flush({});
+    httpMock.expectOne(api + 'auditLog').flush({ id: 1 });
+
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not touch the public summary for a change visitors cannot see', () => {
+    service.setInquiryStatus(2, 'read').subscribe();
+    httpMock.expectOne(api + 'inquiries/2').flush({ id: 2 });
+    httpMock.expectOne(api + 'auditLog').flush({ id: 1 });
+
+    expect(refresh).not.toHaveBeenCalled();
   });
 });

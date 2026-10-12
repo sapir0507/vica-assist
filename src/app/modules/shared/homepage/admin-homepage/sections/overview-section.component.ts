@@ -5,6 +5,7 @@ import { AdminService } from 'src/app/services/admin/admin.service';
 import { AgentStore } from 'src/app/services/agent/agent.store';
 import { BookingStore } from 'src/app/services/booking/booking.store';
 import { OrderStore } from 'src/app/services/order/order.store';
+import { PublicSummaryStore } from 'src/app/services/public-summary/public-summary.store';
 import { CountUpDirective } from '../../../effects/count-up.directive';
 import { StarRatingComponent } from '../../../rating/star-rating.component';
 import { computeInsights } from '../../agent-homepage/insights/insights';
@@ -24,6 +25,7 @@ export class OverviewSectionComponent {
   private bookings = inject(BookingStore);
   private config = inject(ConfigService);
   private admin = inject(AdminService);
+  private publicSummary = inject(PublicSummaryStore);
 
   readonly error = signal<string | null>(null);
 
@@ -46,6 +48,7 @@ export class OverviewSectionComponent {
   constructor() {
     this.agents.load();
     this.bookings.load();
+    this.publicSummary.refresh();
   }
 
   rounded(rating: number): number {
