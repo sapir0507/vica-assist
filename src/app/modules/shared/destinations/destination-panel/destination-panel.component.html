@@ -1,0 +1,46 @@
+<dialog #dialog class="panel" aria-labelledby="panel-title" (click)="onDialogClick($event)" (close)="closed.emit()">
+  @if (destination(); as place) {
+    <header class="panel__header" [style.background]="place.gradient">
+      <span class="panel__emoji" aria-hidden="true">{{ place.emoji }}</span>
+      <h2 id="panel-title" class="panel__title">{{ place.name }}</h2>
+      <button type="button" class="panel__close" aria-label="Close" (click)="close()">&times;</button>
+    </header>
+
+    <div class="panel__body">
+      <p class="panel__lead">{{ place.description }}</p>
+
+      @if (place.facts; as facts) {
+        <h3 class="panel__heading">Good to know</h3>
+        <dl class="panel__facts">
+          <dt>Best time to go</dt><dd>{{ facts.bestSeason }}</dd>
+          <dt>Flight from Tel Aviv</dt><dd>{{ facts.flightTime }}</dd>
+          <dt>Language</dt><dd>{{ facts.language }}</dd>
+          <dt>Currency</dt><dd>{{ facts.currency }}</dd>
+        </dl>
+      }
+
+      @if (stats(); as numbers) {
+        <h3 class="panel__heading">What travelers did</h3>
+        <dl class="panel__facts">
+          <dt>Trips arranged</dt><dd>{{ numbers.count }}</dd>
+          @if (numbers.rating !== null) { <dt>Average rating</dt><dd>{{ numbers.rating }} / 5</dd> }
+          @if (numbers.averagePrice !== null) { <dt>Average trip cost</dt><dd>{{ numbers.averagePrice | currency: 'USD' : 'symbol' : '1.0-0' }}</dd> }
+        </dl>
+      }
+
+      @if (reviews().length) {
+        <h3 class="panel__heading">What travelers say</h3>
+        <ul class="panel__reviews">
+          @for (review of reviews(); track review.text) {
+            <li><p>{{ review.text }}</p><p class="panel__by">{{ review.firstName }}</p></li>
+          }
+        </ul>
+      }
+
+      <div class="panel__actions">
+        <a class="btn btn-primary" routerLink="/login" [queryParams]="{ destination: place.name }">Sign in to plan a trip to {{ place.name }}</a>
+        <a class="panel__link" routerLink="/register" [queryParams]="{ destination: place.name }">Create an account</a>
+      </div>
+    </div>
+  }
+</dialog>

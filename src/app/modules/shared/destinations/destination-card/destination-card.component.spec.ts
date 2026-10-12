@@ -36,4 +36,28 @@ describe('DestinationCardComponent', () => {
     expect(button.getAttribute('aria-checked')).toBe('true');
     expect(chosen).toEqual([paris]);
   });
+
+  it('opens something without pretending to be a radio button', () => {
+    create({ opens: true });
+    const chosen: Destination[] = [];
+    fixture.componentInstance.chosen.subscribe(d => chosen.push(d));
+
+    const button = host().querySelector('button') as HTMLButtonElement;
+    button.click();
+
+    expect(button.getAttribute('role')).toBeNull();
+    expect(button.getAttribute('aria-checked')).toBeNull();
+    expect(button.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(chosen).toEqual([paris]);
+  });
+
+  it('shows the note instead of the flight price when it has one', () => {
+    create({});
+    expect(host().textContent).toContain('Flights from $420');
+
+    fixture.componentRef.setInput('destination', { ...paris, note: 'Chosen by 4 travelers' });
+    fixture.detectChanges();
+    expect(host().textContent).toContain('Chosen by 4 travelers');
+    expect(host().textContent).not.toContain('Flights from');
+  });
 });

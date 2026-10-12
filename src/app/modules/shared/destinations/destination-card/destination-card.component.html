@@ -1,10 +1,11 @@
-@if (selectable()) {
+@if (selectable() || opens()) {
   <button
     type="button"
     class="destination"
-    role="radio"
+    [attr.role]="selectable() ? 'radio' : null"
+    [attr.aria-haspopup]="opens() ? 'dialog' : null"
     [class.destination--selected]="selected()"
-    [attr.aria-checked]="selected()"
+    [attr.aria-checked]="selectable() ? selected() : null"
     (click)="choose()"
   >
     <ng-container *ngTemplateOutlet="content" />
@@ -20,6 +21,6 @@
   <span class="destination__body">
     <span class="destination__name">{{ destination().name }}</span>
     <span class="destination__description">{{ destination().description }}</span>
-    <span class="destination__price">Flights from {{ destination().fromPrice | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+    <span class="destination__price">{{ destination().note ?? 'Flights from ' + (destination().fromPrice | currency: 'USD' : 'symbol' : '1.0-0') }}</span>
   </span>
 </ng-template>

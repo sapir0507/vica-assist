@@ -14,10 +14,12 @@ import { Destination } from '../destinations';
 export class DestinationCardComponent {
   destination = input.required<Destination>();
   selectable = input(false);
+  /** Makes the card a button that opens something (a panel), without radio semantics. */
+  opens = input(false);
   selected = input(false);
   chosen = output<Destination>();
 
   choose(): void {
-    if (this.selectable()) this.chosen.emit(this.destination());
+    if (this.selectable() || this.opens()) this.chosen.emit(this.destination());
   }
 }
