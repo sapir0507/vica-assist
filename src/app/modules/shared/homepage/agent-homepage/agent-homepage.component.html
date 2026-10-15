@@ -20,7 +20,8 @@
 
   @if (profile; as me) {
     <label class="availability">
-      <input type="checkbox" [checked]="me.available" (change)="setAvailability($any($event.target).checked)" />
+      <input type="checkbox" role="switch" class="availability__switch" [checked]="me.available" (change)="setAvailability($any($event.target).checked)" />
+      <span class="availability__dot" [class.availability__dot--on]="me.available" aria-hidden="true"></span>
       {{ me.available ? 'Available for new requests' : 'Away: you receive no new requests' }}
     </label>
   }

@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
 import { API_URL, provideAppIcons, PublicSummary } from '@vica-assist/shared';
 
-import { DESTINATIONS } from '../../destinations/destinations';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
+import { DESTINATIONS } from '../../destinations/destinations.testing';
 import { GenericHomepageComponent } from './generic-homepage.component';
 
 const summary = (overrides: Partial<PublicSummary> = {}): PublicSummary => ({
@@ -14,11 +17,11 @@ const summary = (overrides: Partial<PublicSummary> = {}): PublicSummary => ({
   pleasedPercent: 90,
   averageResponseHours: 5.5,
   topDestinations: [
-    { name: 'Rome', count: 3, rating: 4.5, averagePrice: 900 },
-    { name: 'Paris', count: 2, rating: 4, averagePrice: 1100 },
-    { name: 'Lima', count: 1, rating: null, averagePrice: null }
+    { destinationId: 'rome', name: 'Rome', count: 3, rating: 4.5, averagePrice: 900 },
+    { destinationId: 'paris', name: 'Paris', count: 2, rating: 4, averagePrice: 1100 },
+    { destinationId: 'lima', name: 'Lima', count: 1, rating: null, averagePrice: null }
   ],
-  reviews: [{ firstName: 'Noa', destination: 'Rome', text: 'Loved <b>every</b> minute', hotelRating: 5, flightRating: 4 }],
+  reviews: [{ firstName: 'Noa', destination: 'Rome', destinationId: 'rome', text: 'Loved <b>every</b> minute', hotelRating: 5, flightRating: 4 }],
   agents: [{ name: 'Maya Cohen', title: 'Senior travel agent', languages: ['Hebrew', 'English'], specialties: ['Paris'], rating: 4.5, reviews: 3 }],
   airlines: ['El Al', 'Lufthansa'],
   ...overrides
@@ -36,6 +39,7 @@ describe('GenericHomepageComponent', () => {
       providers: [provideRouter([]), provideAppIcons(), { provide: API_URL, useValue: 'http://localhost:3000/' }]
     });
     httpMock = TestBed.inject(HttpTestingController);
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: [...DESTINATIONS] });
     fixture = TestBed.createComponent(GenericHomepageComponent);
     fixture.detectChanges();
     const request = httpMock.expectOne('http://localhost:3000/publicSummary/1');
@@ -74,6 +78,7 @@ describe('GenericHomepageComponent', () => {
       providers: [provideRouter([]), provideAppIcons(), { provide: API_URL, useValue: 'http://localhost:3000/' }]
     });
     httpMock = TestBed.inject(HttpTestingController);
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: [...DESTINATIONS] });
     fixture = TestBed.createComponent(GenericHomepageComponent);
     fixture.detectChanges();
 
@@ -113,7 +118,7 @@ describe('GenericHomepageComponent', () => {
       const dialog = host().querySelector('dialog') as HTMLDialogElement;
       expect(dialog.open).toBe(true);
       expect(dialog.textContent).toContain('Best time to go');
-      expect(dialog.querySelector('.panel__actions a')?.getAttribute('href')).toBe('/login?destination=Paris');
+      expect(dialog.querySelector('.panel__actions a')?.getAttribute('href')).toBe('/login?destination=paris');
       expect(host().querySelector('destination-card button')?.getAttribute('aria-haspopup')).toBe('dialog');
     });
 

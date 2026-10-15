@@ -19,7 +19,7 @@ const order = (id: number, status = 'pending'): Order => ({
   departureDate: '2026-06-09',
   returnDate: '2026-06-16',
   origin: 'Israel',
-  destination: 'Italy',
+  destination: 'Italy', destinationId: 'paris',
   passDetails: [{ fullName: 'Jane Doe', passID: 1 }],
   priceRange: 500
 });

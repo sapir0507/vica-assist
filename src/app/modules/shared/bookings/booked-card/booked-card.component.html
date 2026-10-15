@@ -1,28 +1,5 @@
 @if (booking().order; as order) {
-  <article class="order-card" [attr.aria-labelledby]="'booking-title-' + booking().id">
-    <header class="order-card__header">
-      <h3 class="order-card__title" [id]="'booking-title-' + booking().id">{{ order.destination | Capitalize }}</h3>
-      <span class="chip" [class]="ended() ? 'chip chip--finished' : 'chip chip--pending'">{{ ended() ? 'Completed' : 'Upcoming' }}</span>
-    </header>
-    <dl class="order-card__meta">
-      <dt>Trip type</dt>
-      <dd>{{ order.choice | Capitalize }}</dd>
-      <dt>Route</dt>
-      <dd>{{ order.origin }} &rarr; {{ order.destination }}</dd>
-      <dt>Dates</dt>
-      <dd>{{ order.departureDate | date: 'd MMM y' }} &ndash; {{ order.returnDate | date: 'd MMM y' }}</dd>
-      @if (booking().hotel; as hotel) {
-        <dt>Hotel</dt>
-        <dd>{{ hotel.name }}@if (hotel.stars) { ({{ hotel.stars }} stars) }</dd>
-      }
-      @if (booking().flight) {
-        <dt>Flight</dt>
-        <dd>{{ booking().flight?.org }} &rarr; {{ booking().flight?.dest }}</dd>
-      }
-      <dt>Total</dt>
-      <dd>{{ total() | currency }} <span class="booked__budget">of your {{ order.priceRange | currency }} budget</span></dd>
-    </dl>
-
+  <ng-template #review>
     <section class="booked__feedback" [attr.aria-labelledby]="'feedback-title-' + booking().id">
       @if (booking().feedback; as feedback) {
         @if (!editing()) {
@@ -36,7 +13,7 @@
           @if (feedback.review) {
             <p class="booked__review">{{ feedback.review }}</p>
           }
-          <div class="order-card__actions">
+          <div>
             <button mat-button type="button" (click)="editing.set(true)">Edit review</button>
           </div>
         } @else {
@@ -49,15 +26,110 @@
             (cancelled)="editing.set(false)"
           />
         }
-      } @else if (ended()) {
+      } @else {
         <h4 class="booked__heading" [id]="'feedback-title-' + booking().id">Rate your trip</h4>
         <feedback-form [parts]="parts()" [idPrefix]="'feedback-' + booking().id" (submitted)="rate($event)" />
-      } @else {
-        <p class="booked__heading" [id]="'feedback-title-' + booking().id">You can rate this trip after {{ order.returnDate | date: 'd MMM y' }}.</p>
       }
       @if (error(); as message) {
         <p class="form-field__error" role="alert">{{ message }}</p>
       }
     </section>
-  </article>
+  </ng-template>
+
+  @if (!ended()) {
+    <article class="trip trip--upcoming" [attr.aria-labelledby]="'booking-title-' + booking().id">
+      <div class="trip__main">
+        <header class="trip__head">
+          <destination-art [destinationId]="order.destinationId" />
+          <div class="trip__summary">
+            <h3 class="trip__title" [id]="'booking-title-' + booking().id">{{ order.destination | Capitalize }}</h3>
+            <p class="trip__sub">{{ order.departureDate | date: 'd MMM y' }} &ndash; {{ order.returnDate | date: 'd MMM y' }}</p>
+          </div>
+          <span class="chip chip--pending">Upcoming</span>
+        </header>
+        <div class="trip__route">
+          <span class="trip__place"><strong>{{ order.origin }}</strong><small>From</small></span>
+          <span class="trip__line" aria-hidden="true"><mat-icon svgIcon="flight_takeoff"></mat-icon></span>
+          <span class="trip__place trip__place--to"><strong>{{ order.destination | Capitalize }}</strong><small>To</small></span>
+        </div>
+        <dl class="trip__facts">
+          <div><dt>Trip type</dt><dd>{{ order.choice | Capitalize }}</dd></div>
+          @if (booking().hotel; as hotel) {
+            <div><dt>Hotel</dt><dd>{{ hotel.name }}@if (hotel.stars) { ({{ hotel.stars }} stars) }</dd></div>
+          }
+          @if (booking().flight; as flight) {
+            <div><dt>Flight</dt><dd>{{ flight.org }} &rarr; {{ flight.dest }}</dd></div>
+          }
+        </dl>
+      </div>
+      <aside class="trip__side">
+        <div class="trip__spend">
+          <span class="ring" [style.--pct]="budgetPercent()" aria-hidden="true"></span>
+          <div>
+            <p class="trip__price">{{ total() | currency }}</p>
+            <p class="trip__budget">of your {{ order.priceRange | currency }} budget</p>
+          </div>
+        </div>
+        <p class="trip__leaves">{{ departure() }}</p>
+        <p class="trip__note">You can rate this trip after {{ order.returnDate | date: 'd MMM y' }}.</p>
+      </aside>
+    </article>
+  } @else {
+    <article class="trip trip--past" [attr.aria-labelledby]="'booking-title-' + booking().id">
+      <!-- The whole row opens and closes the details; the chevron is the keyboard way to do the same. -->
+      <div class="trip__row" (click)="expanded.set(!expanded())">
+        <span class="trip__date"><small>{{ order.departureDate | date: 'MMM' | uppercase }}</small><strong>{{ order.departureDate | date: 'd' }}</strong></span>
+        <destination-art [destinationId]="order.destinationId" />
+        <div class="trip__summary">
+          <h3 class="trip__title" [id]="'booking-title-' + booking().id">
+            {{ order.destination | Capitalize }}
+            <span class="tag">{{ order.choice | Capitalize }}</span>
+          </h3>
+          <p class="trip__sub">
+            @if (booking().hotel; as hotel) { {{ hotel.name }}@if (hotel.stars) { ({{ hotel.stars }} stars) } · }
+            {{ order.origin }} &rarr; {{ order.destination }}
+          </p>
+        </div>
+        <div class="trip__cost">
+          <span><strong>{{ total() | currency }}</strong> / <span class="booked__budget">{{ order.priceRange | currency }} <span class="visually-hidden">budget</span></span></span>
+          <span class="meter" aria-hidden="true"><span class="meter__fill" [style.--pct]="budgetPercent()"></span></span>
+        </div>
+        @if (averageRating(); as average) {
+          <span class="rating-chip trip__status" [attr.aria-label]="'Rated ' + average + ' out of 5'">&#9733; {{ average | number: '1.1-1' }}</span>
+        } @else {
+          <button type="button" class="btn btn-primary btn-sm trip__status" (click)="expanded.set(true); $event.stopPropagation()">&#9733; Rate your trip</button>
+        }
+        <button
+          type="button"
+          class="trip__toggle"
+          [class.trip__toggle--open]="expanded()"
+          [attr.aria-expanded]="expanded()"
+          [attr.aria-label]="(expanded() ? 'Hide' : 'Show') + ' details of the trip to ' + order.destination"
+          (click)="expanded.set(!expanded()); $event.stopPropagation()"
+        ></button>
+      </div>
+
+      @if (expanded()) {
+        <div class="trip__details">
+          <dl class="trip__list">
+            <dt>Dates</dt>
+            <dd>{{ order.departureDate | date: 'd MMM y' }} &ndash; {{ order.returnDate | date: 'd MMM y' }}</dd>
+            <dt>Route</dt>
+            <dd>{{ order.origin }} &rarr; {{ order.destination }}</dd>
+            @if (booking().hotel; as hotel) {
+              <dt>Hotel</dt>
+              <dd>{{ hotel.name }}@if (hotel.stars) { ({{ hotel.stars }} stars) }</dd>
+            }
+            @if (booking().flight; as flight) {
+              <dt>Flight</dt>
+              <dd>{{ flight.org }} &rarr; {{ flight.dest }}</dd>
+            }
+          </dl>
+          <div class="trip__review">
+            <ng-container *ngTemplateOutlet="review" />
+          </div>
+        </div>
+      }
+    </article>
+  }
 }

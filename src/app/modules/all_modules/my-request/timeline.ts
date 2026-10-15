@@ -18,6 +18,16 @@ export function stateOf(order: Order | undefined, booking: finalOrder | undefine
   return order.status === OrderStatus.Finished ? 'answered' : 'pending';
 }
 
+export const ORDER_STAGES = ['Request sent', 'Agent choosing options', 'Ready to confirm', 'Booked'] as const;
+
+/** How far an open request has come, 1 to 4, for a progress bar: sent, agent assigned, options added, booked. */
+export function orderStage(order: Order, booking: finalOrder | undefined): number {
+  const state = stateOf(order, booking);
+  if (state === 'booked') return 4;
+  if (state === 'answered') return 3;
+  return order.agent ? 2 : 1;
+}
+
 /** The steps a customer sees, each with the time it happened, and the first unfinished one marked as current. */
 export function buildTimeline(order: Order, state: RequestState, bookedAt?: string): TimelineStep[] {
   if (state === 'cancelled') {

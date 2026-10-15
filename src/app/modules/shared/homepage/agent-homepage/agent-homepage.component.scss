@@ -40,12 +40,102 @@
   }
 }
 
+// Everything on the page rises in turn when it appears, and again when a tab brings it back; moving between
+// requests keeps the same elements, so it does not replay.
+.page > * {
+  animation: rise 0.4s ease-out backwards;
+}
+
+.page > :nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.page > :nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.page > :nth-child(4) {
+  animation-delay: 180ms;
+}
+
+.page > :nth-child(5) {
+  animation-delay: 240ms;
+}
+
 .availability {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  width: fit-content;
   margin-bottom: var(--space-4);
   color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.availability__switch {
+  position: relative;
+  flex: none;
+  width: 2.5rem;
+  height: 1.5rem;
+  margin: 0;
+  background: var(--color-border);
+  border: 0;
+  border-radius: var(--radius-pill);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.availability__switch::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--transition-base);
+}
+
+.availability__switch:checked {
+  background: var(--color-success);
+}
+
+.availability__switch:checked::before {
+  transform: translateX(1rem);
+}
+
+.availability__dot {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--color-text-muted);
+  border-radius: 50%;
+  transition: background-color var(--transition-base);
+}
+
+.availability__dot--on {
+  background: var(--color-success);
+  animation: availability-pulse 2.4s ease-out infinite;
+}
+
+@keyframes availability-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-success) 55%, transparent);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 0.5rem transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page > *,
+  .availability__dot--on {
+    animation: none;
+  }
 }
 
 .workspace__messages {

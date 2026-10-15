@@ -1,0 +1,41 @@
+<div class="page">
+  <a mat-button class="back" routerLink="/homepage">
+    <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+    Back
+  </a>
+  <h1 class="page__title">Messages</h1>
+  <p class="page__subtitle">Choose the request you want to talk to your agent about.</p>
+
+  @if (orders().length) {
+    <div class="messages">
+      <div class="messages__list" role="radiogroup" aria-label="Your requests">
+        @for (order of orders(); track order.id) {
+          <button
+            type="button"
+            class="messages__option"
+            role="radio"
+            [attr.aria-checked]="order.id === selectedId()"
+            [class.messages__option--selected]="order.id === selectedId()"
+            (click)="select(order)"
+          >
+            <span class="messages__destination">{{ order.destination }}</span>
+            <span class="messages__meta">{{ order.departureDate | date: 'MMM d' }} – {{ order.returnDate | date: 'MMM d' }} · with {{ agentName(order) }}</span>
+          </button>
+        }
+      </div>
+
+      <section class="messages__thread" aria-live="polite">
+        @if (selected(); as order) {
+          <h2 class="messages__heading">{{ order.destination }}, with {{ agentName(order) }}</h2>
+          <message-thread [order]="order" role="customer" [author]="username()" />
+        } @else {
+          <p class="messages__hint">Select a request to see the conversation and write to {{ orders().length === 1 ? agentName(orders()[0]) : 'your agent' }}.</p>
+        }
+      </section>
+    </div>
+  } @else {
+    <p class="messages__empty">
+      There is no conversation yet. An agent is assigned when you <a routerLink="/homepage/book">book a trip</a>, and you can write to them here.
+    </p>
+  }
+</div>

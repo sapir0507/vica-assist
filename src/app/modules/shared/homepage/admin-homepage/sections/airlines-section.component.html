@@ -45,8 +45,12 @@
     </ul>
   }
 
+  @if (form.invalid && form.dirty) {
+    <p class="form-hint">An airline needs a name, a code of 2 or 3 letters or digits, a country, a home hub and a bag weight from 0 to 50 kg.</p>
+  }
+
   <div class="admin-actions">
-    <button type="submit" class="btn btn-primary">{{ editing() ? 'Save changes' : 'Add airline' }}</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ editing() ? 'Save changes' : 'Add airline' }}</button>
     @if (editing()) {
       <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
     }

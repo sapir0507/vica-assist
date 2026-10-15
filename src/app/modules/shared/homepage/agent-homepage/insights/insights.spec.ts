@@ -12,7 +12,7 @@ const order = (id: number, overrides: Partial<Order> = {}): Order => ({
   departureDate: '2026-03-01',
   returnDate: '2026-03-08',
   origin: 'Tel Aviv',
-  destination: 'Paris',
+  destination: 'Paris', destinationId: 'paris',
   passDetails: [],
   priceRange: 1000,
   ...overrides

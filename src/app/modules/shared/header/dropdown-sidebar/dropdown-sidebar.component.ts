@@ -42,9 +42,4 @@ export class DropdownSidebarComponent implements OnInit {
     });
   }
 
-  OnLogout(){
-    this.sessionStore.logout()
-    this.linkStore.updateSharedLinks_WhenNotLoggedIn()
-  }
-
 }

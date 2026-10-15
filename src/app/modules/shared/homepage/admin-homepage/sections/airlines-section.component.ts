@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Airline, ConfigInvalidError, ConfigService } from '@vica-assist/shared';
 
 import { AdminService } from 'src/app/services/admin/admin.service';
@@ -21,13 +21,13 @@ export class AirlinesSectionComponent {
   readonly errors = signal<string[]>([]);
 
   readonly form = new FormGroup({
-    name: new FormControl('', { nonNullable: true }),
-    code: new FormControl('', { nonNullable: true }),
-    country: new FormControl('', { nonNullable: true }),
-    hub: new FormControl('', { nonNullable: true }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/\S.*\S/)] }),
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/^[A-Za-z0-9]{2,3}$/)] }),
+    country: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    hub: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     brandColor: new FormControl('#0b3d91', { nonNullable: true }),
     checkedIncludedEconomy: new FormControl(false, { nonNullable: true }),
-    weightKg: new FormControl(23, { nonNullable: true })
+    weightKg: new FormControl(23, { nonNullable: true, validators: [Validators.required, Validators.min(0), Validators.max(50)] })
   });
 
   edit(airline: Airline): void {

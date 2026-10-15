@@ -136,5 +136,25 @@ describe('motion effects', () => {
       pending?.(now);
       expect(number().textContent).toBe('$1,200k');
     });
+
+    it('waits at zero until the number scrolls into view, then counts once', () => {
+      reduceMotion(false);
+      fakeObserver();
+      const frames: ((time: number) => void)[] = [];
+      vi.stubGlobal('requestAnimationFrame', (callback: (time: number) => void) => { frames.push(callback); return 1; });
+      vi.stubGlobal('cancelAnimationFrame', () => undefined);
+      vi.spyOn(performance, 'now').mockReturnValue(0);
+      create();
+
+      const countObserver = observers[observers.length - 1];
+      expect(number().textContent).toBe('$0k');
+      expect(frames.length).toBe(0);
+
+      countObserver.callback([{ isIntersecting: true }]);
+      expect(frames.length).toBe(1);
+      frames[0](1000);
+      expect(number().textContent).toBe('$1,200k');
+      expect(countObserver.disconnected).toBe(true);
+    });
   });
 });

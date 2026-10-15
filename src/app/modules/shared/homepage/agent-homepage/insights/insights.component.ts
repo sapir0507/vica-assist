@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
 
 import { isVisibleToAgent } from '@vica-assist/shared';
 import { BookingStore } from 'src/app/services/booking/booking.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { BarListComponent } from '../../../charts/bar-list.component';
+import { CountUpDirective } from '../../../effects/count-up.directive';
 import { StarRatingComponent } from '../../../rating/star-rating.component';
 import { computeInsights, PartSatisfaction } from './insights';
 
@@ -14,7 +14,7 @@ import { computeInsights, PartSatisfaction } from './insights';
   templateUrl: './insights.component.html',
   styleUrls: ['./insights.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CurrencyPipe, BarListComponent, StarRatingComponent]
+  imports: [BarListComponent, CountUpDirective, StarRatingComponent]
 })
 export class InsightsComponent implements OnInit {
   protected bookingStore = inject(BookingStore);

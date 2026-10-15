@@ -75,6 +75,16 @@ describe('ContactFormComponent', () => {
     expect((host().querySelector('#contact-name') as HTMLInputElement).value).toBe('');
   });
 
+  it('keeps Send question disabled until the form is valid', () => {
+    const button = () => host().querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button().disabled).toBe(true);
+
+    fill();
+    fixture.detectChanges();
+
+    expect(button().disabled).toBe(false);
+  });
+
   it('asks for what is missing and sends nothing', () => {
     submit();
 

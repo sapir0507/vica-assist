@@ -26,7 +26,7 @@ const order = (overrides: Partial<Order> = {}): Order => ({
   departureDate: '2026-12-01',
   returnDate: '2026-12-08',
   origin: 'tel aviv',
-  destination: 'paris',
+  destination: 'paris', destinationId: 'paris',
   passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }],
   priceRange: 1500,
   stars: 4,
@@ -226,7 +226,7 @@ describe('RequestStatusComponent', () => {
       setUp([], [booked('2020-01-01')]);
 
       expect(text()).toContain('We hope you had a good trip');
-      expect(button('Rate your trip')?.getAttribute('href')).toBe('/homepage');
+      expect(button('Rate your trip')?.getAttribute('href')).toBe('/homepage/bookings');
     });
 
     it('does not ask again when the trip was rated', () => {
@@ -258,7 +258,7 @@ describe('RequestStatusComponent', () => {
   });
 
   it('shows the open request, not an older booking that happens to share its number', () => {
-    const oldTrip: finalOrder = { id: 1, order: order({ status: 'finished', destination: 'rome' }), bookedAt: '2026-01-14T18:00:00.000Z' };
+    const oldTrip: finalOrder = { id: 1, order: order({ status: 'finished', destination: 'rome', destinationId: 'paris' }), bookedAt: '2026-01-14T18:00:00.000Z' };
     setUp([order()], [oldTrip]);
 
     expect(text()).toContain('Your request to paris');

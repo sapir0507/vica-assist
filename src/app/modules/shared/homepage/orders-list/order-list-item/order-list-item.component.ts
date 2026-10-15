@@ -11,6 +11,7 @@ import { OfferSummaryComponent } from '../offer-summary/offer-summary.component'
   standalone: true,
   selector: 'order-list-item',
   templateUrl: './order-list-item.component.html',
+  styleUrl: './order-list-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DatePipe, RouterLink, MyPipesModule, MatButtonModule, MatIconModule, OfferSummaryComponent]
 })

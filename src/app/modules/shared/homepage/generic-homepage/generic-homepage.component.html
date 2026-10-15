@@ -18,7 +18,7 @@
   <h2 id="how-title" class="section__title">How it works</h2>
   <ol class="steps">
     @for (step of steps(); track step.title; let index = $index) {
-      <li class="steps__item">
+      <li class="steps__item" [style.--i]="index">
         <span class="steps__number" aria-hidden="true">{{ index + 1 }}</span>
         <h3 class="steps__title">{{ step.title }}</h3>
         <p class="steps__text">{{ step.text }}</p>
@@ -41,8 +41,8 @@
 <section class="section section--tinted" reveal aria-labelledby="trust-title">
   <h2 id="trust-title" class="section__title">What do we offer?</h2>
   <ul class="trust">
-    @for (point of trustPoints; track point.title) {
-      <li class="trust__item">
+    @for (point of trustPoints; track point.title; let index = $index) {
+      <li class="trust__item stagger-item" [style.--i]="index">
         <mat-icon class="trust__icon" [svgIcon]="point.icon" aria-hidden="true"></mat-icon>
         <h3 class="trust__title">{{ point.title }}</h3>
         <p class="trust__text">{{ point.text }}</p>
@@ -56,8 +56,8 @@
     <section class="section" reveal aria-labelledby="agents-title">
       <h2 id="agents-title" class="section__title">Meet our agents</h2>
       <ul class="agents">
-        @for (agent of data.agents; track agent.name) {
-          <li class="agent">
+        @for (agent of data.agents; track agent.name; let index = $index) {
+          <li class="agent stagger-item" [style.--i]="index">
             <span class="agent__avatar" aria-hidden="true">{{ initials(agent.name) }}</span>
             <h3 class="agent__name">{{ agent.name }}</h3>
             <p class="agent__title">{{ agent.title }}</p>
@@ -79,8 +79,8 @@
     <section class="section section--tinted" reveal aria-labelledby="airlines-title">
       <h2 id="airlines-title" class="section__title">Airlines we work with</h2>
       <ul class="airlines">
-        @for (airline of data.airlines; track airline) {
-          <li class="airlines__item">{{ airline }}</li>
+        @for (airline of data.airlines; track airline; let index = $index) {
+          <li class="airlines__item stagger-item" [style.--i]="index">{{ airline }}</li>
         }
       </ul>
     </section>
@@ -90,10 +90,10 @@
     <h2 id="stats-title" class="section__title">The service in numbers</h2>
     @if (data.sufficient) {
       <div class="stats">
-        <div class="stat"><span class="stat__value" [countUp]="data.bookings"></span><span class="stat__label">Trips arranged</span></div>
-        <div class="stat"><span class="stat__value" [countUp]="data.averageRating" [countUpDecimals]="1" countUpSuffix=" / 5"></span><span class="stat__label">Average rating</span></div>
-        <div class="stat"><span class="stat__value" [countUp]="data.pleasedPercent" countUpSuffix="%"></span><span class="stat__label">Of ratings are 4 or 5 stars</span></div>
-        <div class="stat"><span class="stat__value" [countUp]="data.averageResponseHours" [countUpDecimals]="1" countUpSuffix=" h"></span><span class="stat__label">Average time to answer</span></div>
+        <div class="stat stagger-item" style="--i: 0"><span class="stat__value" [countUp]="data.bookings"></span><span class="stat__label">Trips arranged</span></div>
+        <div class="stat stagger-item" style="--i: 1"><span class="stat__value" [countUp]="data.averageRating" [countUpDecimals]="1" countUpSuffix=" / 5"></span><span class="stat__label">Average rating</span></div>
+        <div class="stat stagger-item" style="--i: 2"><span class="stat__value" [countUp]="data.pleasedPercent" countUpSuffix="%"></span><span class="stat__label">Of ratings are 4 or 5 stars</span></div>
+        <div class="stat stagger-item" style="--i: 3"><span class="stat__value" [countUp]="data.averageResponseHours" [countUpDecimals]="1" countUpSuffix=" h"></span><span class="stat__label">Average time to answer</span></div>
       </div>
     } @else {
       <p class="section__lead">We are just getting started. Numbers from our travelers will appear here.</p>
@@ -104,8 +104,8 @@
     <section class="section section--tinted" reveal aria-labelledby="reviews-title">
       <h2 id="reviews-title" class="section__title">What travelers say</h2>
       <ul class="reviews">
-        @for (review of reviews(); track review.text) {
-          <li class="review">
+        @for (review of reviews(); track review.text; let index = $index) {
+          <li class="review stagger-item" [style.--i]="index">
             <p class="review__text">{{ review.text }}</p>
             <p class="review__by">
               {{ review.firstName }}, {{ review.destination }}

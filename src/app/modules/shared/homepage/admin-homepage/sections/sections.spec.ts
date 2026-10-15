@@ -27,7 +27,7 @@ const agent = (id: number, username: string, overrides: Partial<Agent> = {}): Ag
 });
 
 const order = (id: number, overrides: Partial<Order> = {}): Order => ({
-  id, orderID: `${id}`, choice: 'both', status: 'pending', departureDate: '2026-12-01', returnDate: '2026-12-08', origin: 'Tel Aviv', destination: 'Paris',
+  id, orderID: `${id}`, choice: 'both', status: 'pending', departureDate: '2026-12-01', returnDate: '2026-12-08', origin: 'Tel Aviv', destination: 'Paris', destinationId: 'paris',
   passDetails: [], priceRange: 1000, customer: 'dana', agent: 'maya', createdAt: new Date().toISOString(), ...overrides
 });
 
@@ -209,6 +209,25 @@ describe('AgentsSectionComponent', () => {
     expect(text()).not.toContain('Temp1234ab');
   });
 
+  it('keeps Create agent disabled until the profile is valid', () => {
+    const { fixture, host } = setUp(AgentsSectionComponent);
+    const button = () => host.querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button().disabled).toBe(true);
+
+    type(host, '#agent-username', 'noa.katz');
+    fixture.detectChanges();
+    expect(button().disabled).toBe(true);
+
+    fill(host);
+    fixture.detectChanges();
+    expect(button().disabled).toBe(false);
+
+    type(host, '#agent-email', 'not-an-email');
+    fixture.detectChanges();
+    expect(button().disabled).toBe(true);
+    expect(host.querySelector('.errors')?.textContent).toContain('valid email');
+  });
+
   it('lists what is wrong with an invalid profile without calling the service', () => {
     const { fixture, host, text } = setUp(AgentsSectionComponent);
     const create = vi.spyOn(TestBed.inject(AdminService), 'createAgent');
@@ -299,6 +318,24 @@ describe('AirlinesSectionComponent', () => {
     expect(text()).toContain('El Al');
     expect(text()).toContain('Included, 23 kg');
     expect((host.querySelector('.code') as HTMLElement).style.background).toContain('rgb');
+  });
+
+  it('keeps Add airline disabled until the name, code, country and hub are valid', () => {
+    const { fixture, host } = setUp(AirlinesSectionComponent);
+    const button = () => host.querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button().disabled).toBe(true);
+
+    type(host, '#airline-name', 'Test Air');
+    type(host, '#airline-code', 't');
+    type(host, '#airline-country', 'Cyprus');
+    type(host, '#airline-hub', 'Larnaca');
+    fixture.detectChanges();
+    expect(button().disabled).toBe(true);
+    expect(host.querySelector('.form-hint')?.textContent).toContain('code of 2 or 3');
+
+    type(host, '#airline-code', 'ta');
+    fixture.detectChanges();
+    expect(button().disabled).toBe(false);
   });
 
   it('adds an airline, with an id made from its code, through the admin service', () => {

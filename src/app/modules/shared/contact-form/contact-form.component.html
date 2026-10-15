@@ -43,7 +43,7 @@
     }
 
     <div class="contact__full">
-      <button mat-flat-button type="submit" [disabled]="sending()">Send question</button>
+      <button mat-flat-button type="submit" [disabled]="form.invalid || sending()">Send question</button>
     </div>
   </form>
 }

@@ -15,7 +15,7 @@ const order = (overrides: Partial<Order> = {}): Order => ({
   departureDate: '',
   returnDate: '',
   origin: '',
-  destination: '',
+  destination: '', destinationId: 'paris',
   passDetails: [],
   priceRange: 0,
   customer: 'dana',

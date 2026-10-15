@@ -1,11 +1,20 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Router, RouterModule } from '@angular/router';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
+import { roleMatch } from 'src/app/services/auth-guard/role.match';
 import { SessionStore } from 'src/app/services/session/session.store';
 import { LinksComponent } from './links.component';
+
+@Component({ standalone: true, template: 'generic homepage' })
+class GenericStub {}
+
+@Component({ standalone: true, template: 'agent homepage' })
+class AgentStub {}
 
 describe('LinksComponent', () => {
   let fixture: ComponentFixture<LinksComponent>;
@@ -19,7 +28,13 @@ describe('LinksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([{ path: 'homepage', children: [] }])],
+      imports: [RouterModule.forRoot([{
+        path: 'homepage',
+        children: [
+          { path: '', canMatch: [roleMatch('unknown')], component: GenericStub },
+          { path: '', canMatch: [roleMatch('agent')], component: AgentStub }
+        ]
+      }])],
       declarations: [LinksComponent],
       providers: [provideHttpClient(withXhr()), provideHttpClientTesting()]
     }).compileComponents();
@@ -46,5 +61,19 @@ describe('LinksComponent', () => {
     expect(session.isLoggedIn()).toBe(false);
     expect(session.role()).toBe('unknown');
     expect(TestBed.inject(Router).url).toBe('/homepage');
+  });
+
+  it('swaps the role homepage for the generic one when Logout is clicked on the homepage itself', async () => {
+    patchState(unprotected(session), { isLoggedIn: true, role: 'agent', username: 'agent-1' });
+    const harness = await RouterTestingHarness.create('/homepage');
+    expect(harness.routeNativeElement?.textContent).toContain('agent homepage');
+    fixture.componentRef.setInput('isLogout', true);
+    fixture.detectChanges();
+
+    anchors().find(a => a.textContent?.trim() === 'Logout')?.click();
+    await fixture.whenStable();
+    harness.detectChanges();
+
+    expect(harness.routeNativeElement?.textContent).toContain('generic homepage');
   });
 });

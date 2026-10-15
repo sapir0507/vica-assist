@@ -1,0 +1,35 @@
+<div class="page">
+  <a mat-button class="back" routerLink="/homepage">
+    <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
+    Back
+  </a>
+
+  <div class="bookings__header">
+    <h1 class="page__title">Your bookings</h1>
+    <div class="bookings__tabs" role="tablist" aria-label="Your bookings">
+      @for (item of tabs(); track item.id) {
+        <button
+          type="button"
+          role="tab"
+          class="bookings__tab"
+          [id]="'bookings-tab-' + item.id"
+          [attr.aria-selected]="tab() === item.id"
+          [attr.aria-controls]="'bookings-panel'"
+          [class.bookings__tab--active]="tab() === item.id"
+          (click)="tab.set(item.id)"
+        >
+          {{ item.label }}
+          <span class="bookings__count">{{ item.count }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div id="bookings-panel" role="tabpanel" [attr.aria-labelledby]="'bookings-tab-' + tab()">
+    @switch (tab()) {
+      @case ('pending') { <order-status-list status="pending" (item)="selectedItem($event)"></order-status-list> }
+      @case ('ready') { <order-status-list status="finished" (item)="selectedItem($event)"></order-status-list> }
+      @case ('booked') { <booked-list></booked-list> }
+    }
+  </div>
+</div>

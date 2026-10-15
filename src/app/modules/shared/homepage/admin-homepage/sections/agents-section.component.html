@@ -45,16 +45,16 @@
     <div class="form-field admin-form__full"><label for="agent-bio">Short bio</label><textarea id="agent-bio" class="form-control" rows="3" formControlName="bio"></textarea></div>
   </div>
 
-  @if (errors().length) {
+  @if (errors().length || problems().length) {
     <ul class="errors" role="alert">
-      @for (message of errors(); track message) {
+      @for (message of errors().length ? errors() : problems(); track message) {
         <li>{{ message }}</li>
       }
     </ul>
   }
 
   <div class="admin-actions">
-    <button type="submit" class="btn btn-primary">{{ editing() ? 'Save changes' : 'Create agent' }}</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ editing() ? 'Save changes' : 'Create agent' }}</button>
     @if (editing()) {
       <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
     }

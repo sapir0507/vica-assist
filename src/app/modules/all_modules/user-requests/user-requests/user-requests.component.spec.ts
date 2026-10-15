@@ -8,6 +8,8 @@ import { API_URL, Agent, Message, Order, provideAppIcons, toDateInputValue } fro
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 
+import { DESTINATIONS } from 'src/app/modules/shared/destinations/destinations.testing';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { AgentStore } from 'src/app/services/agent/agent.store';
 import { MessageStore } from 'src/app/services/message/message.store';
@@ -34,6 +36,10 @@ describe('UserRequestsComponent', () => {
     buttonLabelled(label)?.click();
     fixture.detectChanges();
   };
+  const chooseCard = (index: number) => {
+    host().querySelectorAll<HTMLButtonElement>('destination-card button')[index].click();
+    fixture.detectChanges();
+  };
   const fillTraveler = () => {
     component.passDetails.at(0).patchValue({ fullName: 'Dana Levi', passID: VALID_ID });
     fixture.detectChanges();
@@ -45,6 +51,7 @@ describe('UserRequestsComponent', () => {
       providers: [provideAppIcons(), provideRouter([]), { provide: API_URL, useValue: 'http://localhost:3000/' }]
     }).compileComponents();
 
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: [...DESTINATIONS] });
     fixture = TestBed.createComponent(UserRequestsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -60,32 +67,28 @@ describe('UserRequestsComponent', () => {
     tokyo.click();
     fixture.detectChanges();
 
-    expect(component.requestForm.value.destination).toBe('Tokyo');
+    expect(component.requestForm.value).toMatchObject({ destinationId: 'tokyo', destination: 'Tokyo' });
     expect(tokyo.getAttribute('aria-checked')).toBe('true');
   });
 
-  it('accepts a typed destination too', () => {
-    const input = host().querySelector<HTMLInputElement>('place-field input') as HTMLInputElement;
-    input.value = 'Lisbon';
-    input.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-
-    expect(component.requestForm.value.destination).toBe('Lisbon');
-    expect(host().querySelector('destination-card button[aria-checked="true"]')).toBeNull();
+  it('only offers the destinations we know, with no free text', () => {
+    expect(host().querySelector('place-field')).toBeNull();
+    expect(Array.from(host().querySelectorAll('destination-card')).map(card => card.textContent)).toEqual(
+      DESTINATIONS.map(place => expect.stringContaining(place.name))
+    );
   });
 
-  it('puts the place search above the cards', () => {
-    const search = host().querySelector('place-field.booking__search') as HTMLElement;
-    const picker = host().querySelector('.destination-picker') as HTMLElement;
+  it('leaves out a destination that is no longer offered', () => {
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: DESTINATIONS.map(place => ({ ...place, active: place.id !== 'bali' })) });
+    fixture.detectChanges();
 
-    expect(search.compareDocumentPosition(picker) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(host().querySelectorAll('destination-card')).toHaveLength(5);
   });
 
   it('cannot continue without a destination or a complete traveler', () => {
     expect(buttonLabelled('Next')?.disabled).toBe(true);
 
-    component.selectDestination(component.destinations[0]);
-    fixture.detectChanges();
+    chooseCard(0);
     expect(buttonLabelled('Next')?.disabled).toBe(false);
 
     click('Next');
@@ -97,8 +100,7 @@ describe('UserRequestsComponent', () => {
   });
 
   it('adds and removes travelers', () => {
-    component.selectDestination(component.destinations[0]);
-    fixture.detectChanges();
+    chooseCard(0);
     click('Next');
 
     click('Add a traveler');
@@ -109,8 +111,7 @@ describe('UserRequestsComponent', () => {
   });
 
   it('goes back a step without losing what was entered', () => {
-    component.selectDestination(component.destinations[2]);
-    fixture.detectChanges();
+    chooseCard(2);
     click('Next');
     click('Back');
 
@@ -123,7 +124,7 @@ describe('UserRequestsComponent', () => {
     const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
     component.requestForm.patchValue({
       origin: ' Tel Aviv ',
-      destination: 'Paris ',
+      destination: 'Paris ', destinationId: 'paris',
       Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(12) },
       passDetails: [{ fullName: '  Dana   Levi ', passID: VALID_ID }],
       price: '900'
@@ -133,7 +134,7 @@ describe('UserRequestsComponent', () => {
 
     expect(addOrder).toHaveBeenCalledTimes(1);
     expect(addOrder.mock.calls[0][0]).toMatchObject({
-      destination: 'Paris',
+      destination: 'Paris', destinationId: 'paris',
       origin: 'Tel Aviv',
       passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }],
       choice: 'both',
@@ -149,7 +150,7 @@ describe('UserRequestsComponent', () => {
   describe('validation', () => {
     const valid = () => component.requestForm.patchValue({
       origin: 'Tel Aviv',
-      destination: 'Paris',
+      destination: 'Paris', destinationId: 'paris',
       Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
       passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
       price: '500'
@@ -180,14 +181,10 @@ describe('UserRequestsComponent', () => {
       expect(component.requestForm.valid).toBe(false);
     });
 
-    it('rejects blank text for the places and the traveler name', () => {
+    it('rejects a blank origin and a blank traveler name', () => {
       valid();
       component.requestForm.patchValue({ origin: '   ' });
       expect(component.requestForm.controls['origin'].hasError('blank')).toBe(true);
-
-      valid();
-      component.requestForm.patchValue({ destination: ' ' });
-      expect(component.requestForm.controls['destination'].hasError('blank')).toBe(true);
 
       valid();
       component.passDetails.at(0).patchValue({ fullName: '  ' });
@@ -228,17 +225,17 @@ describe('UserRequestsComponent', () => {
       expect(component.canAddTraveler).toBe(false);
     });
 
-    it('rejects an origin or destination that is not a known country or city', () => {
+    it('rejects an origin that is not a known country or city, and needs a destination to be picked', () => {
       valid();
       component.requestForm.patchValue({ origin: 'Flat 5 Main Street' });
       expect(component.originControl.hasError('unknownPlace')).toBe(true);
 
       valid();
-      component.requestForm.patchValue({ destination: 'Atlantis' });
-      expect(component.destinationControl.hasError('unknownPlace')).toBe(true);
+      component.requestForm.patchValue({ destinationId: '' });
+      expect(component.requestForm.valid).toBe(false);
 
       valid();
-      component.requestForm.patchValue({ origin: 'zurich', destination: 'SAO PAULO' });
+      component.requestForm.patchValue({ origin: 'zurich' });
       expect(component.requestForm.valid).toBe(true);
     });
 
@@ -271,7 +268,7 @@ describe('UserRequestsComponent', () => {
 
     it('rejects the same origin and destination', () => {
       valid();
-      component.requestForm.patchValue({ origin: 'paris', destination: 'Paris ' });
+      component.requestForm.patchValue({ origin: 'paris', destination: 'Paris ', destinationId: 'paris' });
 
       expect(component.requestForm.hasError('samePlace')).toBe(true);
       expect(component.requestForm.valid).toBe(false);
@@ -289,7 +286,7 @@ describe('UserRequestsComponent', () => {
 
     it('explains a past departure and the same place on the last step', () => {
       valid();
-      component.requestForm.patchValue({ origin: 'Paris', destination: 'Paris' });
+      component.requestForm.patchValue({ origin: 'Paris', destination: 'Paris', destinationId: 'paris' });
       component.Dates.patchValue({ departureDate: daysFromToday(-2), returnDate: daysFromToday(3) });
       component.departureDate.markAsDirty();
       component.step = 2;
@@ -436,7 +433,7 @@ describe('UserRequestsComponent', () => {
     const submitValid = () => {
       component.requestForm.patchValue({
         origin: 'Tel Aviv',
-        destination: 'Paris',
+        destination: 'Paris', destinationId: 'paris',
         Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
         passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
         price: '500'
@@ -478,7 +475,7 @@ describe('UserRequestsComponent', () => {
   describe('after the request is sent', () => {
     const fill = () => component.requestForm.patchValue({
       origin: 'Tel Aviv',
-      destination: 'Paris',
+      destination: 'Paris', destinationId: 'paris',
       Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
       passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
       price: '500'
@@ -514,7 +511,7 @@ describe('UserRequestsComponent', () => {
       departureDate: daysFromToday(10),
       returnDate: daysFromToday(15),
       origin: 'Tel Aviv',
-      destination: 'Rome',
+      destination: 'Rome', destinationId: 'paris',
       passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }, { fullName: 'Noa Levi', passID: 987654324 }],
       priceRange: 700,
       customer: 'dana',
@@ -531,7 +528,7 @@ describe('UserRequestsComponent', () => {
     });
 
     it('starts from what the customer asked for', () => {
-      expect(component.requestForm.value).toMatchObject({ order: 'flight', origin: 'Tel Aviv', destination: 'Rome', price: '700' });
+      expect(component.requestForm.value).toMatchObject({ order: 'flight', origin: 'Tel Aviv', destination: 'Rome', destinationId: 'paris', price: '700' });
       expect(component.Dates.value.departureDate).toBe(existing.departureDate);
       expect(component.passDetails.value).toEqual([{ fullName: 'Dana Levi', passID: '123456782' }, { fullName: 'Noa Levi', passID: '987654324' }]);
       expect(component.preferenceForm.get('flight.cabin')?.value).toBe('business');
@@ -547,11 +544,11 @@ describe('UserRequestsComponent', () => {
     });
 
     it('saves the changes without touching who made the request, when, its number or status', () => {
-      const updatePending = vi.spyOn(TestBed.inject(OrderStore), 'updatePending').mockReturnValue(of({ ...existing, destination: 'Lisbon' }));
+      const updatePending = vi.spyOn(TestBed.inject(OrderStore), 'updatePending').mockReturnValue(of({ ...existing, destination: 'Lisbon', destinationId: 'paris' }));
       const note = vi.spyOn(TestBed.inject(MessageStore), 'note').mockReturnValue(of({} as Message));
       const saved: Order[] = [];
       component.saved.subscribe(order => saved.push(order));
-      component.requestForm.patchValue({ destination: 'Lisbon' });
+      component.requestForm.patchValue({ destination: 'Lisbon', destinationId: 'paris' });
 
       component.onSubmit();
 
@@ -591,7 +588,7 @@ describe('UserRequestsComponent', () => {
       const addOrder = vi.spyOn(TestBed.inject(OrderStore), 'addOrder').mockReturnValue(of({} as Order));
       component.requestForm.patchValue({
         origin: 'Tel Aviv',
-        destination: 'Paris',
+        destination: 'Paris', destinationId: 'paris',
         Dates: { departureDate: daysFromToday(5), returnDate: daysFromToday(9) },
         passDetails: [{ fullName: 'Dana Levi', passID: VALID_ID }],
         price: '500'
@@ -608,7 +605,7 @@ describe('UserRequestsComponent', () => {
     });
   });
 
-  describe('a place chosen before the form opened', () => {
+  describe('a destination chosen before the form opened', () => {
     const open = (place: string | undefined) => {
       fixture = TestBed.createComponent(UserRequestsComponent);
       component = fixture.componentInstance;
@@ -616,24 +613,24 @@ describe('UserRequestsComponent', () => {
       fixture.detectChanges();
     };
 
-    it('fills in the destination, spelled the way we spell it', () => {
-      open('lisbon');
+    it('selects that destination, with the name we give it', () => {
+      open('tokyo');
 
-      expect(component.requestForm.value.destination).toBe('Lisbon');
+      expect(component.requestForm.value).toMatchObject({ destinationId: 'tokyo', destination: 'Tokyo' });
       expect(buttonLabelled('Next')?.disabled).toBe(false);
     });
 
-    it('leaves the destination empty for something that is not a real place', () => {
-      open('Atlantis');
+    it('leaves the destination empty for something that is not one of ours', () => {
+      open('atlantis');
 
-      expect(component.requestForm.value.destination).toBe('');
+      expect(component.requestForm.value.destinationId).toBe('');
     });
 
     it('does not overwrite a request that is being edited', () => {
       fixture = TestBed.createComponent(UserRequestsComponent);
       component = fixture.componentInstance;
-      component.initialDestination = 'Lisbon';
-      component.editing = { id: 1, orderID: '1', choice: 'both', status: 'pending', departureDate: daysFromToday(5), returnDate: daysFromToday(9), origin: 'Tel Aviv', destination: 'Rome', passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }], priceRange: 500 };
+      component.initialDestination = 'tokyo';
+      component.editing = { id: 1, orderID: '1', choice: 'both', status: 'pending', departureDate: daysFromToday(5), returnDate: daysFromToday(9), origin: 'Tel Aviv', destination: 'Rome', destinationId: 'paris', passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }], priceRange: 500 };
       fixture.detectChanges();
       component.ngOnChanges();
 

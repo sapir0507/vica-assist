@@ -12,7 +12,7 @@ const order: Order = {
   departureDate: '2026-06-09T12:00:00.000Z',
   returnDate: '2026-06-16T12:00:00.000Z',
   origin: 'Israel',
-  destination: 'Italy',
+  destination: 'Italy', destinationId: 'paris',
   passDetails: [{ fullName: 'Jane Doe', passID: 12345678 }],
   priceRange: 500
 };
@@ -43,7 +43,8 @@ describe('OrderListItemComponent', () => {
     expect(text()).toContain('Order 7');
     expect(text()).toContain('Request number: VA-000007');
     expect(text()).toContain('Jane Doe');
-    expect(text()).toContain('Israel → Italy');
+    expect(text()).toContain('FromIsrael');
+    expect(text()).toContain('ToItaly');
     expect(text()).toContain('9 Jun 2026');
     expect(text()).toContain('16 Jun 2026');
     expect(fixture.nativeElement.querySelector('.chip--pending')?.textContent).toContain('pending');

@@ -9,7 +9,30 @@ import { bookedParts } from '@vica-assist/shared';
   standalone: true,
   selector: 'offer-summary',
   template: `@if (summary(); as text) { <p class="order-card__offers">{{ text }}</p> }`,
-  styles: `.order-card__offers { margin: 0 0 var(--space-3); font-weight: 600; color: var(--color-secondary-text); }`,
+  styles: `
+    .order-card__offers {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: 0 0 var(--space-4);
+      padding: var(--space-3);
+      color: var(--color-success);
+      background: color-mix(in srgb, var(--color-success) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--color-success) 30%, var(--color-border));
+      border-radius: var(--radius-md);
+    }
+    .order-card__offers::before {
+      content: '¹3';
+      display: grid;
+      flex: none;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      background: color-mix(in srgb, var(--color-success) 18%, transparent);
+      border-radius: var(--radius-sm);
+      font-weight: var(--weight-bold);
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OfferSummaryComponent {

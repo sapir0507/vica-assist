@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { Agent, AgentProfile, ConfigInvalidError, validateAgentProfile } from '@vica-assist/shared';
 
 import { AdminService } from 'src/app/services/admin/admin.service';
@@ -7,6 +7,25 @@ import { AgentStore } from 'src/app/services/agent/agent.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 
 const split = (text: string): string[] => text.split(',').map(item => item.trim()).filter(item => item !== '');
+
+type AgentFormValue = { username: string; displayName: string; title: string; bio: string; languages: string; specialties: string; yearsExperience: number; email: string };
+
+const toProfile = (value: AgentFormValue): AgentProfile => ({
+  username: value.username.trim(),
+  displayName: value.displayName.trim(),
+  title: value.title.trim(),
+  bio: value.bio.trim(),
+  languages: split(value.languages),
+  specialties: split(value.specialties),
+  yearsExperience: Number(value.yearsExperience),
+  email: value.email.trim()
+});
+
+/** Reuses the admin rules, so the form and the save check can never disagree. */
+const validProfile = (form: AbstractControl): ValidationErrors | null => {
+  const problems = validateAgentProfile(toProfile(form.getRawValue()));
+  return problems.length > 0 ? { profile: problems } : null;
+};
 
 @Component({
   standalone: true,
@@ -35,7 +54,7 @@ export class AgentsSectionComponent {
     specialties: new FormControl('', { nonNullable: true }),
     yearsExperience: new FormControl(0, { nonNullable: true }),
     email: new FormControl('', { nonNullable: true })
-  });
+  }, { validators: validProfile });
 
   constructor() {
     this.agentStore.load();
@@ -67,18 +86,9 @@ export class AgentsSectionComponent {
     this.form.reset({ yearsExperience: 0 });
   }
 
-  private profile(): AgentProfile {
-    const value = this.form.getRawValue();
-    return {
-      username: value.username.trim(),
-      displayName: value.displayName.trim(),
-      title: value.title.trim(),
-      bio: value.bio.trim(),
-      languages: split(value.languages),
-      specialties: split(value.specialties),
-      yearsExperience: Number(value.yearsExperience),
-      email: value.email.trim()
-    };
+  /** What is wrong with the form so far; nothing is said until the admin has started typing. */
+  problems(): string[] {
+    return this.form.dirty ? (this.form.errors?.['profile'] ?? []) : [];
   }
 
   private fail(error: unknown): void {
@@ -87,7 +97,7 @@ export class AgentsSectionComponent {
 
   save(): void {
     this.errors.set([]);
-    const profile = this.profile();
+    const profile = toProfile(this.form.getRawValue());
     const existing = this.editing();
 
     if (existing) {

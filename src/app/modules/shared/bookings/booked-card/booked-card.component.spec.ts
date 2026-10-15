@@ -16,7 +16,7 @@ const booking = (overrides: Partial<finalOrder> = {}, returnDate = '2020-06-16')
     departureDate: '2020-06-09',
     returnDate,
     origin: 'Tel Aviv',
-    destination: 'paris',
+    destination: 'paris', destinationId: 'paris',
     passDetails: [],
     priceRange: 1500,
     customer: 'dana'
@@ -59,13 +59,14 @@ describe('BookedCardComponent', () => {
 
   it('summarises the trip, what was chosen and what it cost against the budget', () => {
     show(booking());
+    expect(host().querySelector('destination-art')).not.toBeNull();
 
     const text = host().textContent;
     expect(text).toContain('Paris');
     expect(text).toContain('Hotel Lumière (4 stars)');
     expect(text).toContain('$1,060.00');
-    expect(text).toContain('$1,500.00 budget');
-    expect(text).toContain('Completed');
+    expect(text).toContain('$1,500.00');
+    expect(text).toContain('Rate your trip');
   });
 
   it('does not offer a rating before the trip has ended', () => {
@@ -76,16 +77,57 @@ describe('BookedCardComponent', () => {
     expect(host().textContent).toContain('Upcoming');
   });
 
-  it('offers a rating form for each booked part once the trip has ended', () => {
+  it('offers a rating form for each booked part once the trip has ended, after the row is opened', () => {
+    show(booking());
+    expect(host().querySelector('feedback-form')).toBeNull();
+
+    click(buttonLabelled('Rate your trip'));
+
+    expect(host().querySelectorAll('feedback-form star-rating')).toHaveLength(2);
+  });
+
+  it('shows how far ahead an upcoming trip is and how much of the budget it uses', () => {
+    show(booking({}, '2999-01-01'));
+
+    expect(host().querySelector('.trip__leaves')?.textContent).toBeTruthy();
+    expect(host().querySelector('.ring')).not.toBeNull();
+    expect(host().querySelector('.trip__line mat-icon')).not.toBeNull();
+  });
+
+  it('opens and closes the details when anywhere on the row is clicked', () => {
+    show(booking());
+    const row = () => host().querySelector<HTMLElement>('.trip__row');
+
+    click(row() ?? undefined);
+    expect(host().querySelector('.trip__details')).not.toBeNull();
+    click(row() ?? undefined);
+    expect(host().querySelector('.trip__details')).toBeNull();
+  });
+
+  it('keeps the row open when Rate your trip is clicked, instead of toggling it twice', () => {
     show(booking());
 
-    expect(host().textContent).toContain('Rate your trip');
-    expect(host().querySelectorAll('feedback-form star-rating')).toHaveLength(2);
+    click(buttonLabelled('Rate your trip'));
+
+    expect(host().querySelector('.trip__details')).not.toBeNull();
+  });
+
+  it('opens and closes the details of a past trip', () => {
+    show(booking());
+    const toggle = () => host().querySelector<HTMLButtonElement>('.trip__toggle');
+
+    expect(toggle()?.getAttribute('aria-expanded')).toBe('false');
+    click(toggle() ?? undefined);
+    expect(toggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(host().querySelector('.trip__details')).not.toBeNull();
+    click(toggle() ?? undefined);
+    expect(host().querySelector('.trip__details')).toBeNull();
   });
 
   it('sends the rating to the store and shows the review afterwards', () => {
     rate.mockImplementation(() => of({} as finalOrder));
     show(booking());
+    click(buttonLabelled('Rate your trip'));
 
     fillAndSend();
 
@@ -95,6 +137,7 @@ describe('BookedCardComponent', () => {
   it('shows the reason when the store refuses the rating', () => {
     rate.mockImplementation(() => throwError(() => new Error('You can rate a trip after it has ended.')));
     show(booking());
+    click(buttonLabelled('Rate your trip'));
 
     fillAndSend();
 
@@ -103,6 +146,8 @@ describe('BookedCardComponent', () => {
 
   it('shows an existing review read-only and lets it be edited and cancelled', () => {
     show(booking({ feedback: { hotelRating: 4, flightRating: 2, review: 'Nice <b>stay</b>', ratedAt: '2020-06-20T10:00:00.000Z' } }));
+    expect(host().querySelector('.rating-chip')?.textContent).toContain('3.0');
+    click(host().querySelector<HTMLButtonElement>('.trip__toggle') ?? undefined);
 
     expect(host().querySelectorAll('star-rating span[role="img"]')).toHaveLength(2);
     expect(host().querySelector('.booked__review')?.textContent).toBe('Nice <b>stay</b>');
@@ -118,6 +163,7 @@ describe('BookedCardComponent', () => {
 
   it('only asks about the hotel for a hotel-only booking', () => {
     show(booking({ flight: undefined, order: { ...booking().order!, choice: 'hotel' } }));
+    click(buttonLabelled('Rate your trip'));
 
     expect(host().querySelectorAll('feedback-form star-rating')).toHaveLength(1);
   });

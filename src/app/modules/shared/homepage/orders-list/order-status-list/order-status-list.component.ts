@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { FinalOrderStore } from 'src/app/services/finalOrder/finalOrder.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
@@ -10,7 +13,7 @@ import { OrderListItemComponent } from '../order-list-item/order-list-item.compo
   selector: 'order-status-list',
   templateUrl: './order-status-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [OrderListItemComponent]
+  imports: [RouterLink, MatButtonModule, MatIconModule, OrderListItemComponent]
 })
 export class OrderStatusListComponent {
   @Input({ required: true }) status!: 'pending' | 'finished';

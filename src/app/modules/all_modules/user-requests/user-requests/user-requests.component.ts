@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgentStore } from 'src/app/services/agent/agent.store';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
 import { MessageStore } from 'src/app/services/message/message.store';
 import { OrderStore } from 'src/app/services/order/order.store';
 import { SessionStore } from 'src/app/services/session/session.store';
-import { activeOptions, canonicalPlace, collapseSpaces, ConfigService, dateRangeValidator, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, OrderStatus, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
-import { DESTINATIONS, Destination } from 'src/app/modules/shared/destinations/destinations';
+import { activeOptions, collapseSpaces, ConfigService, dateRangeValidator, Destination, fullName, israeliId, knownPlace, notInPastValidator, Order, OrderRequest, OrderStatus, passDetails, pickAgent, PreferencesFormValue, toDateInputValue, toPreferences, uniqueTravelerIds } from '@vica-assist/shared';
 import { differentPlaces, maxTrimmed, notBlank, roomsFitTravelers } from '../validators';
 
 const DEFAULT_PREFERENCES = {
@@ -30,12 +30,13 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   /** Set to change a request that is still waiting for its agent, instead of making a new one. */
   @Input() editing?: Order;
   @Output() saved = new EventEmitter<Order>();
-  /** A place chosen earlier (on the homepage); starts a new request with it filled in. */
+  /** The id of a destination chosen earlier (on the homepage); starts a new request with it selected. */
   @Input() initialDestination?: string;
 
   readonly steps = ['Destination', 'Travelers', 'Trip details', 'Preferences'];
-  readonly destinations = DESTINATIONS;
   step = 0;
+  private destinationStore = inject(DestinationStore);
+  readonly destinations = this.destinationStore.active;
   private configService = inject(ConfigService);
   private agentStore = inject(AgentStore);
   private messageStore = inject(MessageStore);
@@ -47,7 +48,9 @@ export class UserRequestsComponent implements OnInit, OnChanges {
     order:this.fb.control('both', [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     //details
     origin: this.fb.control('', [Validators.required, notBlank, knownPlace]),
-    destination: this.fb.control('', [Validators.required, notBlank, knownPlace]),
+    // The destination is picked from the ones we offer: the id says which, the name is kept next to it.
+    destinationId: this.fb.control('', [Validators.required]),
+    destination: this.fb.control(''),
     passDetails: this.fb.array([] as passDetails[], [Validators.required, uniqueTravelerIds('passID')]),
     Dates: new FormGroup({
       departureDate: this.fb.control('', [Validators.required, notInPastValidator()]),
@@ -124,8 +127,8 @@ export class UserRequestsComponent implements OnInit, OnChanges {
     }
 
   ngOnInit(): void {
-    const place = canonicalPlace(this.initialDestination);
-    if (place && !this.editing) this.requestForm.patchValue({ destination: place });
+    const destination = this.destinationStore.bookable(this.initialDestination);
+    if (destination && !this.editing) this.selectDestination(destination);
   }
 
   ngOnChanges(): void {
@@ -141,6 +144,7 @@ export class UserRequestsComponent implements OnInit, OnChanges {
     this.requestForm.patchValue({
       order: order.choice,
       origin: order.origin,
+      destinationId: order.destinationId,
       destination: order.destination,
       price: String(order.priceRange),
       hotel: { stars: order.stars ?? 3 },
@@ -160,7 +164,7 @@ export class UserRequestsComponent implements OnInit, OnChanges {
 
   get canContinue(): boolean {
     const controls = this.requestForm.controls;
-    if (this.step === 0) return controls['destination'].valid;
+    if (this.step === 0) return controls['destinationId'].valid;
     if (this.step === 1) return this.passDetails.valid;
     if (this.step === 2) {
       return controls['origin'].valid && controls['price'].valid && this.Dates.valid && !this.requestForm.hasError('samePlace');
@@ -221,11 +225,11 @@ export class UserRequestsComponent implements OnInit, OnChanges {
   }
 
   isSelected(destination: Destination): boolean {
-    return this.requestForm.value.destination?.trim().toLowerCase() === destination.name.toLowerCase();
+    return this.requestForm.value.destinationId === destination.id;
   }
 
   selectDestination(destination: Destination) {
-    this.requestForm.patchValue({ destination: destination.name });
+    this.requestForm.patchValue({ destinationId: destination.id, destination: destination.name });
   }
 
   nextStep() {
@@ -242,10 +246,6 @@ export class UserRequestsComponent implements OnInit, OnChanges {
 
   get originControl(): FormControl {
     return this.requestForm.controls['origin'] as FormControl;
-  }
-
-  get destinationControl(): FormControl {
-    return this.requestForm.controls['destination'] as FormControl;
   }
 
   get hotelIncluded(): boolean {
@@ -275,6 +275,7 @@ export class UserRequestsComponent implements OnInit, OnChanges {
         returnDate: this.Dates.get('returnDate')?.value,
         origin: this.requestForm.get('origin')?.value.trim(),
         destination: this.requestForm.get('destination')?.value.trim(),
+        destinationId: this.requestForm.get('destinationId')?.value,
         passDetails: (this.requestForm.get('passDetails')?.value as { fullName: string; passID: string }[]).map(traveler => ({
           fullName: collapseSpaces(traveler.fullName),
           passID: Number(traveler.passID)

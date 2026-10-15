@@ -17,6 +17,7 @@ const order = (id: number, destination: string): Order => ({
   returnDate: '2026-06-16',
   origin: 'israel',
   destination,
+  destinationId: 'paris',
   passDetails: [{ fullName: 'dana levi', passID: 123 }, { fullName: 'noa levi', passID: 456 }],
   stars: 4,
   priceRange: 500

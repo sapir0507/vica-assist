@@ -21,7 +21,7 @@ const booking = (id: number, overrides: Partial<Order> = {}): finalOrder => ({
     departureDate: '2020-06-09',
     returnDate: '2020-06-16',
     origin: 'Israel',
-    destination: 'Italy',
+    destination: 'Italy', destinationId: 'paris',
     passDetails: [],
     priceRange: 500,
     customer: 'dana',

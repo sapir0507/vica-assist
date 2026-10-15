@@ -10,7 +10,7 @@ import { SessionStore } from 'src/app/services/session/session.store';
 import { EditRequestComponent } from './edit-request.component';
 
 const order = (overrides: Partial<Order> = {}): Order => ({
-  id: 7, orderID: '7', choice: 'both', status: 'pending', departureDate: '2026-12-01', returnDate: '2026-12-08', origin: 'Tel Aviv', destination: 'Paris',
+  id: 7, orderID: '7', choice: 'both', status: 'pending', departureDate: '2026-12-01', returnDate: '2026-12-08', origin: 'Tel Aviv', destination: 'Paris', destinationId: 'paris',
   passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }], priceRange: 1000, customer: 'dana', ...overrides
 });
 

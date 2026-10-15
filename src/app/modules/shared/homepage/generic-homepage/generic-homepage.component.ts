@@ -2,13 +2,14 @@ import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@a
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ConfigService } from '@vica-assist/shared';
+import { ConfigService, Destination } from '@vica-assist/shared';
 
+import { DestinationStore } from 'src/app/services/destination/destination.store';
 import { PublicSummaryStore } from 'src/app/services/public-summary/public-summary.store';
 import { ContactFormComponent } from '../../contact-form/contact-form.component';
 import { DestinationCardComponent } from '../../destinations/destination-card/destination-card.component';
 import { DestinationPanelComponent } from '../../destinations/destination-panel/destination-panel.component';
-import { Destination, trendingDestinations } from '../../destinations/destinations';
+import { trendingDestinations } from '../../destinations/destinations';
 import { CountUpDirective } from '../../effects/count-up.directive';
 import { RevealDirective } from '../../effects/reveal.directive';
 import { StarRatingComponent } from '../../rating/star-rating.component';
@@ -33,10 +34,11 @@ import { StarRatingComponent } from '../../rating/star-rating.component';
 })
 export class GenericHomepageComponent {
   private store = inject(PublicSummaryStore);
+  private destinationStore = inject(DestinationStore);
   private config = inject(ConfigService);
 
   readonly summary = this.store.summary;
-  readonly destinations = computed(() => trendingDestinations(this.summary()));
+  readonly destinations = computed(() => trendingDestinations(this.summary(), this.destinationStore.destinations()));
   readonly chosen = signal<Destination | null>(null);
   readonly reviews = computed(() => (this.summary()?.reviews ?? []).slice(0, 6));
   readonly hours = computed(() => this.config.config().assignment.responseHours);

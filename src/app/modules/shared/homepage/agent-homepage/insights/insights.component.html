@@ -6,14 +6,14 @@
   <section aria-labelledby="funnel-title">
     <h2 id="funnel-title" class="insights__title">Request funnel</h2>
     <div class="stats">
-      <div class="stat"><span class="stat__value">{{ data.funnel.received }}</span><span class="stat__label">Received</span></div>
-      <div class="stat"><span class="stat__value">{{ data.funnel.awaiting }}</span><span class="stat__label">Awaiting your answer</span></div>
-      <div class="stat"><span class="stat__value">{{ data.funnel.waitingForCustomer }}</span><span class="stat__label">Waiting for the customer</span></div>
+      <div class="stat"><span class="stat__value" [countUp]="data.funnel.received"></span><span class="stat__label">Received</span></div>
+      <div class="stat"><span class="stat__value" [countUp]="data.funnel.awaiting"></span><span class="stat__label">Awaiting your answer</span></div>
+      <div class="stat"><span class="stat__value" [countUp]="data.funnel.waitingForCustomer"></span><span class="stat__label">Waiting for the customer</span></div>
       @if (data.funnel.cancelled) {
-        <div class="stat"><span class="stat__value">{{ data.funnel.cancelled }}</span><span class="stat__label">Cancelled by the customer</span></div>
+        <div class="stat"><span class="stat__value" [countUp]="data.funnel.cancelled"></span><span class="stat__label">Cancelled by the customer</span></div>
       }
       <div class="stat">
-        <span class="stat__value">{{ data.funnel.booked }}</span>
+        <span class="stat__value" [countUp]="data.funnel.booked"></span>
         <span class="stat__label">Booked @if (data.funnel.bookingRate !== null) { ({{ data.funnel.bookingRate }}% of requests) }</span>
       </div>
     </div>
@@ -71,11 +71,11 @@
         <span class="stat__label">Average time to answer a request @if (data.business.responseSample) { ({{ data.business.responseSample }} requests) }</span>
       </div>
       <div class="stat">
-        <span class="stat__value">{{ data.business.totalBookedValue | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+        <span class="stat__value" [countUp]="data.business.totalBookedValue" countUpPrefix="$"></span>
         <span class="stat__label">Total booked</span>
       </div>
       <div class="stat">
-        <span class="stat__value">{{ data.business.averageBudgetUsedPercent === null ? 'n/a' : data.business.averageBudgetUsedPercent + '%' }}</span>
+        <span class="stat__value" [countUp]="data.business.averageBudgetUsedPercent" countUpSuffix="%"></span>
         <span class="stat__label">Of the customer's budget used on average</span>
       </div>
     </div>

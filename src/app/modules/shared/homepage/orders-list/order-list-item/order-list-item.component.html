@@ -5,31 +5,29 @@
       <span class="chip" [class]="'chip chip--' + currentItem.status">{{ currentItem.status }}</span>
     </header>
     <p class="order-card__ref">Request number: {{ requestNumber(currentItem) }}</p>
-    <dl class="order-card__meta">
-      <dt>Made by</dt>
-      <dd class="text-capitalize">{{ currentItem.passDetails[0].fullName }}</dd>
-      <dt>Trip type</dt>
-      <dd>{{ currentItem.choice | Capitalize }}</dd>
-      <dt>Route</dt>
-      <dd>{{ currentItem.origin }} &rarr; {{ currentItem.destination }}</dd>
-      <dt>Dates</dt>
-      <dd>{{ currentItem.departureDate | date: 'd MMM y' }} &ndash; {{ currentItem.returnDate | date: 'd MMM y' }}</dd>
+    <div class="route" aria-label="Route: {{ currentItem.origin }} to {{ currentItem.destination }}">
+      <span class="route__end"><small>From</small><strong>{{ currentItem.origin }}</strong></span>
+      <span class="route__line" aria-hidden="true"><mat-icon svgIcon="flight_takeoff"></mat-icon></span>
+      <span class="route__end route__end--to"><small>To</small><strong>{{ currentItem.destination }}</strong></span>
+    </div>
+    <dl class="facts">
+      <div><dt>Made by</dt><dd class="text-capitalize">{{ currentItem.passDetails[0].fullName }}</dd></div>
+      <div><dt>Trip type</dt><dd>{{ currentItem.choice | Capitalize }}</dd></div>
+      <div class="facts__wide"><dt>Dates</dt><dd>{{ currentItem.departureDate | date: 'd MMM y' }} &ndash; {{ currentItem.returnDate | date: 'd MMM y' }}</dd></div>
     </dl>
-    @if (trackLink) {
-      <div class="order-card__actions">
-        <a mat-stroked-button [routerLink]="['/my-request', currentItem.id]">Track status</a>
-      </div>
-    }
     @if (showOffers) {
       <offer-summary [orderId]="currentItem.id" [choice]="currentItem.choice" />
     }
-    @if (currentItem.orderID) {
-      <div class="order-card__actions">
+    <div class="order-card__actions">
+      @if (currentItem.orderID) {
         <button mat-raised-button color="primary" type="button" (click)="openOrder(currentItem)">
-          <mat-icon class="inline-icon" svgIcon="open_in_new" aria-hidden="true"></mat-icon>
           Open order
+          <mat-icon iconPositionEnd svgIcon="arrow_forward" aria-hidden="true"></mat-icon>
         </button>
-      </div>
-    }
+      }
+      @if (trackLink) {
+        <a mat-stroked-button [routerLink]="['/my-request', currentItem.id]">Track status</a>
+      }
+    </div>
   </article>
 }

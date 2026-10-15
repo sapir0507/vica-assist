@@ -1,45 +1,116 @@
 <div class="page">
-  @switch (view) {
-    @case ('menu') {
-      <h1 class="page__title">Where to next?</h1>
-      <p class="page__subtitle">Book a new trip or follow the orders you already placed.</p>
-      <div class="actions">
-        <button type="button" class="action-card" (click)="showBooking()">
-          <mat-icon class="action-card__icon" svgIcon="luggage" aria-hidden="true"></mat-icon>
-          <span class="action-card__title">Book your trip</span>
-          <span class="action-card__text">Pick a destination and tell us your dates and budget.</span>
-        </button>
-        <button type="button" class="action-card" (click)="showOrders()">
-          <mat-icon class="action-card__icon" svgIcon="calendar_today" aria-hidden="true"></mat-icon>
+  <section class="hero">
+    <img class="hero__image" src="assets/images/img/register-hero.jpg" width="1400" height="953" fetchpriority="high" alt="" />
+    <div class="hero__content">
+      <p class="hero__eyebrow">Welcome back, {{ firstName() }}</p>
+      <h1 class="hero__title">Where to next?</h1>
+      <p class="hero__lead">Book a new trip or follow the orders you already placed.</p>
+    </div>
+  </section>
+
+  <div class="actions">
+    <a class="action-card action-card--primary" routerLink="/homepage/book">
+      <span class="action-card__icon"><mat-icon svgIcon="luggage" aria-hidden="true"></mat-icon></span>
+      <span class="action-card__body">
+        <span class="action-card__head"><span class="action-card__title">Book your trip</span></span>
+        <span class="action-card__text">Pick a destination and tell us your dates and budget.</span>
+      </span>
+      <span class="action-card__go"><mat-icon svgIcon="arrow_forward" aria-hidden="true"></mat-icon></span>
+    </a>
+    <a class="action-card" routerLink="/homepage/bookings">
+      <span class="action-card__icon"><mat-icon svgIcon="calendar_today" aria-hidden="true"></mat-icon></span>
+      <span class="action-card__body">
+        <span class="action-card__head">
           <span class="action-card__title">Manage bookings</span>
-          <span class="action-card__text">See which orders are pending and which are ready.</span>
-        </button>
+          @if (pendingCount()) { <span class="chip chip--pending">{{ pendingCount() }} pending</span> }
+          @if (readyCount()) { <span class="chip chip--ready">{{ readyCount() }} ready</span> }
+        </span>
+        <span class="action-card__text">See which orders are pending and which are ready.</span>
+      </span>
+      <span class="action-card__go"><mat-icon svgIcon="arrow_forward" aria-hidden="true"></mat-icon></span>
+    </a>
+  </div>
+
+  <div class="dashboard">
+    <section class="dashboard__orders" reveal aria-labelledby="orders-title">
+      <div class="dashboard__heading">
+        <h2 id="orders-title" class="dashboard__title">Your orders</h2>
+        <a routerLink="/homepage/bookings">View all</a>
       </div>
+      <ul class="orders">
+        @for (row of rows(); track row.order.id; let index = $index) {
+          <li class="order stagger-item" [style.--i]="index">
+            <destination-art [destinationId]="row.order.destinationId" />
+            <div class="order__main">
+              <a class="order__title" [routerLink]="['/my-request', row.order.id]">{{ row.order.destination }}</a>
+              <p class="order__meta">
+                {{ choiceLabels[row.order.choice] ?? row.order.choice }} · {{ row.order.departureDate | date: 'MMM d' }} – {{ row.order.returnDate | date: 'MMM d' }} ·
+                {{ row.order.passDetails.length }} {{ row.order.passDetails.length === 1 ? 'traveler' : 'travelers' }}
+              </p>
+              <span
+                class="progress"
+                role="progressbar"
+                aria-valuemin="0"
+                aria-valuemax="4"
+                [attr.aria-valuenow]="row.stage"
+                [attr.aria-valuetext]="row.stageLabel"
+              >
+                <span class="progress__fill" [style.--ratio]="row.stage / 4"></span>
+              </span>
+            </div>
+            <div class="order__side">
+              <span class="chip" [class.chip--pending]="row.stage < 3" [class.chip--ready]="row.stage === 3" [class.chip--booked]="row.stage === 4">
+                {{ row.stageLabel }}
+              </span>
+              @if (row.ready) {
+                <button type="button" class="btn btn-primary btn-sm" (click)="confirm(row.order)">Confirm booking</button>
+              }
+            </div>
+          </li>
+        } @empty {
+          <li class="orders__empty">No orders yet. <a routerLink="/homepage/book">Book your first trip</a>.</li>
+        }
+      </ul>
+    </section>
+
+    @if (agent(); as agent) {
+      <section class="dashboard__agent" reveal aria-labelledby="agent-title">
+        <div class="dashboard__heading">
+          <h2 id="agent-title" class="dashboard__title">Your agent</h2>
+        </div>
+        <div class="agent-card">
+          <div class="agent-card__who">
+            <span class="agent-card__avatar" aria-hidden="true">
+              {{ agentInitials() }}
+              <span class="agent-card__dot" [class.agent-card__dot--away]="!agent.available"></span>
+            </span>
+            <div>
+              <p class="agent-card__name">{{ agent.displayName }}</p>
+              <p class="agent-card__title">{{ agent.title }} · {{ agent.available ? 'available' : 'away' }}</p>
+            </div>
+          </div>
+          <dl class="agent-card__facts">
+            @if (rating().average !== null) {
+              <div><dt>Rating</dt><dd>★ {{ rating().average }} from {{ rating().reviews }} {{ rating().reviews === 1 ? 'review' : 'reviews' }}</dd></div>
+            }
+            <div><dt>Speaks</dt><dd>{{ agent.languages.join(', ') }}</dd></div>
+            <div><dt>Usually answers</dt><dd>within {{ responseHours() }} hours</dd></div>
+          </dl>
+          <a class="btn btn-outline-primary agent-card__message" routerLink="/homepage/messages" [queryParams]="{ agent: agent.username }">Message {{ agentFirstName() }}</a>
+        </div>
+      </section>
     }
-    @case ('booking') {
-      <button mat-button class="back" type="button" (click)="showMenu()">
-        <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
-        Back
-      </button>
-      <userRequests [initialDestination]="plannedPlace ?? undefined"></userRequests>
-    }
-    @case ('orders') {
-      <button mat-button class="back" type="button" (click)="showMenu()">
-        <mat-icon svgIcon="arrow_circle_left" aria-hidden="true"></mat-icon>
-        Back
-      </button>
-      <h1 class="page__title">Your bookings</h1>
-      <mat-tab-group animationDuration="0ms">
-        <mat-tab label="Waiting for agent">
-          <order-status-list status="pending" (item)="selectedItem($event)"></order-status-list>
-        </mat-tab>
-        <mat-tab label="Ready to choose">
-          <order-status-list status="finished" (item)="selectedItem($event)"></order-status-list>
-        </mat-tab>
-        <mat-tab label="Booked">
-          <booked-list></booked-list>
-        </mat-tab>
-      </mat-tab-group>
-    }
-  }
+  </div>
+
+  <section class="hot" reveal aria-labelledby="hot-title">
+    <div class="dashboard__heading">
+      <h2 id="hot-title" class="dashboard__title">Hot right now</h2>
+      <a routerLink="/homepage/book">All destinations</a>
+    </div>
+    <div class="hot__grid">
+      @for (destination of destinations(); track destination.name; let index = $index) {
+        <destination-card class="stagger-item" [style.--i]="index" [destination]="destination" [opens]="true" (chosen)="book($event)" />
+      }
+    </div>
+  </section>
 </div>

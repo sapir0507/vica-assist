@@ -19,7 +19,7 @@ const order = (id: number, status: string, customer = 'dana'): Order => ({
   departureDate: '2026-06-09T12:00:00.000Z',
   returnDate: '2026-06-16T12:00:00.000Z',
   origin: 'Israel',
-  destination: 'Italy',
+  destination: 'Italy', destinationId: 'paris',
   passDetails: [{ fullName: 'Jane Doe', passID: 12345678 }],
   priceRange: 500
 });

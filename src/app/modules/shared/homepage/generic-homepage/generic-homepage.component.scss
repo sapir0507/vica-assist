@@ -30,6 +30,41 @@
   background: linear-gradient(90deg, rgb(17 24 39 / 80%) 0%, rgb(17 24 39 / 55%) 55%, transparent 100%);
 }
 
+// The picture settles in while the text rises one line after another. Only transform is animated on the
+// picture so it never delays the largest-contentful-paint element.
+.hero__image {
+  animation: hero-settle 1.4s ease-out both;
+}
+
+.hero__title,
+.hero__lead,
+.hero__cta {
+  animation: rise 0.7s ease-out both;
+}
+
+.hero__lead {
+  animation-delay: 120ms;
+}
+
+.hero__cta {
+  animation-delay: 240ms;
+}
+
+@keyframes hero-settle {
+  from {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__image,
+  .hero__title,
+  .hero__lead,
+  .hero__cta {
+    animation: none;
+  }
+}
+
 .hero__title {
   max-width: 18ch;
   margin: 0;
@@ -112,6 +147,15 @@
   list-style: none;
 }
 
+.steps__item {
+  position: relative;
+  transition: transform var(--transition-fast);
+}
+
+.steps__item:hover {
+  transform: translateY(-4px);
+}
+
 .steps__number {
   display: grid;
   place-items: center;
@@ -131,6 +175,77 @@
 .steps__text {
   margin: 0;
   color: var(--color-text-secondary);
+}
+
+.steps__number {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.steps__item:hover .steps__number {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+// A line links each number to the next one (only when the steps sit in one row). On reveal the steps
+// appear in turn, each number popping in, its line drawing across, then its text rising. `backwards`
+// fill keeps the hover styles above working once the animation has finished.
+@media (min-width: 64rem) {
+  .steps__item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 1.0625rem;
+    left: calc(2.25rem + var(--space-2));
+    right: calc(var(--space-2) - var(--space-6));
+    height: 2px;
+    background: var(--color-primary);
+    opacity: 0.5;
+    transform-origin: left;
+  }
+}
+
+.reveal--visible .steps__number {
+  animation: step-pop 0.35s ease-out backwards;
+  animation-delay: calc(var(--i, 0) * 180ms);
+}
+
+.reveal--visible .steps__item::after {
+  animation: step-draw 0.3s ease-out backwards;
+  animation-delay: calc(var(--i, 0) * 180ms + 250ms);
+}
+
+.reveal--visible .steps__title,
+.reveal--visible .steps__text {
+  animation: rise 0.4s ease-out backwards;
+  animation-delay: calc(var(--i, 0) * 180ms + 150ms);
+}
+
+.reveal--visible .steps__text {
+  animation-delay: calc(var(--i, 0) * 180ms + 250ms);
+}
+
+@keyframes step-pop {
+  from {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes step-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal--visible .steps__number,
+  .reveal--visible .steps__item::after,
+  .reveal--visible .steps__title,
+  .reveal--visible .steps__text {
+    animation: none;
+  }
 }
 
 .agents,
@@ -160,6 +275,25 @@
   background: var(--color-primary);
   color: var(--color-on-primary);
   font-weight: var(--weight-bold);
+}
+
+.reveal--visible .agent__avatar {
+  animation: step-pop 0.4s ease-out backwards;
+  animation-delay: calc(min(var(--i, 0), 8) * 70ms + 200ms);
+}
+
+.reveal--visible .agent__name,
+.reveal--visible .agent__title {
+  animation: rise 0.4s ease-out backwards;
+  animation-delay: calc(min(var(--i, 0), 8) * 70ms + 300ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal--visible .agent__avatar,
+  .reveal--visible .agent__name,
+  .reveal--visible .agent__title {
+    animation: none;
+  }
 }
 
 .agent__name {

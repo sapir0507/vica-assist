@@ -1,11 +1,32 @@
 @if (store.bookings() === undefined) {
-  <p class="order-grid__empty">Loading your bookings...</p>
-} @else {
-  <div class="order-grid">
-    @for (booking of bookings(); track booking.id) {
-      <booked-card [booking]="booking" />
-    } @empty {
-      <p class="order-grid__empty">No bookings yet. When you choose a hotel and flight, your booking appears here.</p>
-    }
+  <p class="booked-list__loading">Loading your bookings...</p>
+} @else if (!bookings().length) {
+  <div class="empty-state">
+    <span class="empty-state__icon" aria-hidden="true"><mat-icon svgIcon="flight_takeoff"></mat-icon></span>
+    <p class="empty-state__text">No bookings yet. When you choose a hotel and flight, your booking appears here.</p>
+    <a mat-raised-button color="primary" routerLink="/homepage/book">
+      Book your trip
+      <mat-icon iconPositionEnd svgIcon="arrow_forward" aria-hidden="true"></mat-icon>
+    </a>
   </div>
+} @else {
+  @if (upcoming().length) {
+    <h2 class="section-label">Upcoming</h2>
+    <div class="booked-list__upcoming">
+      @for (booking of upcoming(); track booking.id) {
+        <booked-card [booking]="booking" />
+      }
+    </div>
+  }
+  @if (past().length) {
+    <div class="booked-list__head">
+      <h2 class="section-label">Past trips</h2>
+      <span class="booked-list__total">{{ past().length }} {{ past().length === 1 ? 'trip' : 'trips' }} · {{ pastTotal() | currency }} total</span>
+    </div>
+    <div class="booked-list__past">
+      @for (booking of past(); track booking.id) {
+        <booked-card [booking]="booking" />
+      }
+    </div>
+  }
 }

@@ -9,7 +9,7 @@ import { MessageThreadComponent } from './message-thread.component';
 const url = environment.api + 'messages';
 
 const order: Order = {
-  id: 7, orderID: '7', choice: 'both', status: 'pending', departureDate: '', returnDate: '', origin: '', destination: '', passDetails: [], priceRange: 0,
+  id: 7, orderID: '7', choice: 'both', status: 'pending', departureDate: '', returnDate: '', origin: '', destination: '', destinationId: 'paris', passDetails: [], priceRange: 0,
   customer: 'dana', agent: 'noa'
 };
 

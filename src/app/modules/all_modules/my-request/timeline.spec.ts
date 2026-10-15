@@ -1,6 +1,6 @@
 import { finalOrder, Order } from '@vica-assist/shared';
 
-import { buildTimeline, stateOf } from './timeline';
+import { buildTimeline, orderStage, stateOf } from './timeline';
 
 const order = (overrides: Partial<Order> = {}): Order => ({
   id: 1,
@@ -10,7 +10,7 @@ const order = (overrides: Partial<Order> = {}): Order => ({
   departureDate: '2026-12-01',
   returnDate: '2026-12-08',
   origin: 'Tel Aviv',
-  destination: 'Paris',
+  destination: 'Paris', destinationId: 'paris',
   passDetails: [],
   priceRange: 1000,
   createdAt: '2026-10-01T09:00:00.000Z',
@@ -27,6 +27,15 @@ describe('stateOf', () => {
     expect(stateOf(undefined, { id: 1 } as finalOrder)).toBe('booked');
     expect(stateOf(order({ status: 'finished' }), { id: 1 } as finalOrder)).toBe('booked');
     expect(stateOf(undefined, undefined)).toBeUndefined();
+  });
+});
+
+describe('orderStage', () => {
+  it('moves from sent to agent choosing, ready to confirm and booked', () => {
+    expect(orderStage(order({ agent: undefined }), undefined)).toBe(1);
+    expect(orderStage(order(), undefined)).toBe(2);
+    expect(orderStage(order({ status: 'finished' }), undefined)).toBe(3);
+    expect(orderStage(order({ status: 'finished' }), { id: 1 } as finalOrder)).toBe(4);
   });
 });
 

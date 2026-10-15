@@ -41,7 +41,7 @@
               <button mat-flat-button type="button" (click)="choose()">Choose your hotel and flight</button>
             }
             @if (canRate()) {
-              <a mat-flat-button routerLink="/homepage">Rate your trip</a>
+              <a mat-flat-button routerLink="/homepage/bookings">Rate your trip</a>
             }
             @if (state() === 'pending') {
               <a mat-stroked-button [routerLink]="['/my-request', request.id, 'edit']">Edit request</a>
@@ -122,12 +122,12 @@
       </aside>
     </div>
 
-    <p class="status__back"><a routerLink="/homepage">Back to my bookings</a></p>
+    <p class="status__back"><a routerLink="/homepage/bookings">Back to my bookings</a></p>
   } @else {
     <section class="card" aria-labelledby="missing-title">
       <h1 id="missing-title" class="card__title">We could not find this request</h1>
       <p>It may have been removed, or it belongs to another account.</p>
-      <a mat-flat-button routerLink="/homepage">Back to my bookings</a>
+      <a mat-flat-button routerLink="/homepage/bookings">Back to my bookings</a>
     </section>
   }
 </div>

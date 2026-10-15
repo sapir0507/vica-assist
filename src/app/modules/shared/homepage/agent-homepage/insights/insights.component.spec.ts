@@ -20,7 +20,7 @@ const order = (id: number, overrides: Partial<Order> = {}): Order => ({
   departureDate: '2026-03-01',
   returnDate: '2026-03-08',
   origin: 'Tel Aviv',
-  destination: 'paris',
+  destination: 'paris', destinationId: 'paris',
   passDetails: [],
   priceRange: 1000,
   ...overrides
@@ -46,6 +46,7 @@ describe('InsightsComponent', () => {
       ?.querySelector('.stat__value')?.textContent;
 
   beforeEach(() => {
+    vi.stubGlobal('matchMedia', () => ({ matches: true }));
     TestBed.configureTestingModule({
       imports: [InsightsComponent],
       providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideAppIcons()]
@@ -57,7 +58,10 @@ describe('InsightsComponent', () => {
     fixture.detectChanges();
   });
 
-  afterEach(() => httpMock.verify());
+  afterEach(() => {
+    httpMock.verify();
+    vi.unstubAllGlobals();
+  });
 
   const load = (...bookings: finalOrder[]) => {
     httpMock.expectOne(url).flush(bookings);

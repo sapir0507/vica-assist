@@ -29,5 +29,28 @@ export const HOMEPAGE_ROUTES: Routes = [
     canMatch: [roleMatch('customer')],
     loadComponent: () =>
       import('./user-homepage/user-homepage.component').then(m => m.UserHomepageComponent)
-  }
+  },
+  {
+    path: 'book',
+    canActivate: [authGuard],
+    canMatch: [roleMatch('customer')],
+    loadComponent: () =>
+      import('./user-homepage/book-trip-page.component').then(m => m.BookTripPageComponent)
+  },
+  {
+    path: 'bookings',
+    canActivate: [authGuard],
+    canMatch: [roleMatch('customer')],
+    loadComponent: () =>
+      import('./user-homepage/bookings-page.component').then(m => m.BookingsPageComponent)
+  },
+  {
+    path: 'messages',
+    canActivate: [authGuard],
+    canMatch: [roleMatch('customer')],
+    loadComponent: () =>
+      import('./user-homepage/messages-page.component').then(m => m.MessagesPageComponent)
+  },
+  // Pages of another role's homepage: back to the one that fits the visitor.
+  { path: '**', redirectTo: '' }
 ];

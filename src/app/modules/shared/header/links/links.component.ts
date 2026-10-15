@@ -33,7 +33,8 @@ export class LinksComponent implements OnInit {
     event.preventDefault();
     this.sessionStore.logout();
     this.linkStore.updateSharedLinks_WhenNotLoggedIn();
-    this.router.navigateByUrl('/homepage');
+    // Already on /homepage, the URL does not change, so without `reload` the role-based homepage would stay.
+    this.router.navigateByUrl('/homepage', { onSameUrlNavigation: 'reload' });
   }
 
   
