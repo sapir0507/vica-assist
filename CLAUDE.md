@@ -3,18 +3,10 @@
 This project (vica-assist) is portfolio work used for job interviews and is hosted publicly on GitHub.
 Code quality, security, and clarity matter more here than speed — assume a reviewer (interviewer) will read the code and the git history.
 
-# Documentation
-
-- Do not write comments that explain WHAT the code does — names should already make that clear.
-- Only comment the WHY when it's non-obvious: a hidden constraint, a subtle invariant, a workaround for a specific bug, or behavior that would surprise a reader.
-- No multi-paragraph docstrings or decorative comment blocks.
-- Don't create standalone docs/markdown files unless explicitly asked.
-- update the readme.md file of the project when it needs it
-
 # Code best practices
-
+- function names, varible names, class names, etc... should already make WHAT the code does clear.
 - No premature abstractions — don't add helpers, config flags, or extensibility for hypothetical future needs. Three similar lines beat a speculative abstraction.
-- No dead code, no backwards-compatibility shims, no unused re-exports — if something is unused, delete it outright. ask before deleting.
+- Remove code proven obsolete within the task's scope. Preserve unrelated code, TODOs, comments, and public interfaces unless removal is explicitly approved.
 - Don't add error handling/validation for cases that can't happen; validate only at real boundaries (user input, external calls).
 - Keep changes scoped to the task — a bug fix shouldn't carry unrelated refactors or cleanup.
 
@@ -51,8 +43,7 @@ Improve the repository presentation.
 - Clear setup instructions
 
 # Security
-
-- If a vulnerability is spotted while working in an area of the code (even unrelated to the current task), flag it and fix it — don't leave known issues in place, since this is public, interview-facing code.
+- Fix directly encountered, clearly understood security vulnerabilities that can be safely addressed. For unrelated bugs, document the finding and propose a separate fix unless leaving it unfixed creates an immediate security risk. Avoid silently expanding the scope.
 
 # Bugs
 - If a bug is spotted while working in an area of the code (even unrelated to the current task), flag it and fix it — don't leave known issues in place, since this is public, interview-facing code.
@@ -154,29 +145,44 @@ docs/
 ├── architecture.md
 ├── authentication-and-authorization.md
 ├── application-flow.md
+├── design.md
 ├── development.md
 └── decisions.md
 
-#Development Guide
+# Documentation
+- Add a comment when what a section of the code does something not obvious: a hidden constraint, a subtle invariant, a workaround for a specific bug, or behavior that would surprise a reader.
+- yes multi-paragraph docstrings or decorative comment blocks.
+- update the readme.md file of the project when it needs it
+
+# Design System
+
+`docs/design.md` documents the visual design system; the source of truth is `src/assets/styles/design-system/`.
+
+- Read `docs/design.md` before any UI or styling change, and follow its tokens and component classes.
+- Use CSS custom properties (`var(--color-*)`, `var(--space-*)`, `var(--text-*)`); never hard-code colours or sizes.
+- Check both light and dark colour schemes for UI changes.
+- When a token or shared component class is added, changed or removed, update `docs/design.md` in the same change.
+
+# Development Guide
 
 Create:
 
-docs/development.md
+    docs/development.md
 
 Include:
 
-Prerequisites
-Node version
-Angular CLI requirements
-Installation
-Environment configuration
-Development server
-Production build
-Testing
-Linting
-Formatting
-Debugging
-Common development issues
+    Prerequisites
+    Node version
+    Angular CLI requirements
+    Installation
+    Environment configuration
+    Development server
+    Production build
+    Testing
+    Linting
+    Formatting
+    Debugging
+    Common development issues
 
 Derive commands from the repository.
 

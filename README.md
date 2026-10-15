@@ -23,7 +23,7 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
 | Role | Can do |
 |---|---|
 | Visitor (`unknown`) | Information only: how it works, trending destinations (each opens a panel with facts, real numbers and reviews), the agents, the airlines, live service numbers, reviews, a FAQ and a question form. Choosing a destination leads to sign-in and, for a customer, to a booking form with it filled in. No booking on the page itself |
-| Customer | Book a trip in four steps (destination, travelers, details, preferences), land on a status page with their assigned agent, a timeline, what happens next, messages, and edit or cancel while the request waits; choose among the agent's hotels and flights; rate a finished trip |
+| Customer | A dashboard with a photo hero, their open orders with a step progress bar and a Confirm booking button, their agent (rating, languages, answer time) and trending destinations; `/homepage/book`, `/homepage/bookings` (opens on "Ready to choose", with upcoming tickets and a past-trips list on the Booked tab) and `/homepage/messages` are real routes. Messages are kept per request, so the messages page asks which request to write about. Book a trip in four steps (destination, travelers, details, preferences), land on a status page with their assigned agent, a timeline, what happens next, messages, and edit or cancel while the request waits; choose among the agent's hotels and flights; rate a finished trip |
 | Agent | Work through their own queue of pending requests (with the customer's wishes beside every field), choose airline, flight and hotel details, message the customer, switch availability, and read their own statistics on the Insights tab |
 | Admin | One long page: company-wide numbers and an agent comparison, every request with manual reassignment, agents and their accounts, airlines, a configuration editor, visitor inquiries, review moderation and an audit log |
 
@@ -77,13 +77,24 @@ multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
   - `item` — presentational flight and hotel cards.
   - `my-pipes` — a small pipe library.
 - **Backend:** `environment.api` points at `http://localhost:3000/`. `json-server` serves
-  `src/app/data/data.json`, whose top-level keys (`login`, `orders`, `hotels`, `flights`, `finalOrder`)
-  become REST collections.
+  `src/app/data/data.json`, whose top-level keys (`login`, `destinations`, `orders`, `hotels`, `flights`,
+  `finalOrder`, ...) become REST collections.
 
 ## Authentication and authorization
 
 Session state lives in `SessionStore` (`services/session`). Login calls `GET /login?username=&password=`
 on the mock backend and, on a match, stores the username and role. A failed login resets the store.
+
+- **Remember me.** A successful login is saved as `{ username, role, expiresAt }` under `vica-session`: in
+  `localStorage` for 30 days when "Remember me" is ticked, otherwise in `sessionStorage` (it survives a reload but
+  ends with the tab). The password is never stored. An app initializer calls `SessionStore.restore()`, which drops
+  expired or malformed entries, and logout clears both.
+- **Forgot password.** `/forgot-password` asks for a username and `PasswordResetService` stores a single-use token
+  (30 minutes, one per account) in the `passwordResets` collection. There is no mail server, so the page shows the
+  "email" with its reset link, labelled as a demo; the answer is the same for unknown usernames. `/reset-password`
+  checks the token, changes the password and deletes the token.
+- **Show-password toggle and floating labels** are shared by login, register and the reset pages (see
+  [docs/design.md](docs/design.md)).
 
 | Piece | File | Behaviour |
 |---|---|---|
@@ -96,7 +107,7 @@ on the mock backend and, on a match, stores the username and role. A failed logi
 
 ## Application flow
 
-1. A customer registers and logs in. The `''` homepage route resolves to the user homepage.
+1. A customer registers and logs in. The `''` homepage route resolves to the customer dashboard; "Book your trip" and "Manage bookings" open `/homepage/book` and `/homepage/bookings`, and "Message <agent>" opens `/homepage/messages` to pick the request. Logging in with a destination chosen on the visitor homepage goes straight to `/homepage/book`.
 2. The customer files a request (`user-requests`), which creates a `pending` order.
 3. An agent logs in, opens the order from the order list, and adds a flight (`my-flights`) and a hotel
    (`my-hotels`) tied to that order's id.
@@ -130,8 +141,9 @@ Flights and hotels are tied to an order through the order's id; `HttpResourceSer
 ```
 src/app/
   modules/all_modules/   feature modules (add flight/hotel, final-order, user requests, ...)
-  modules/shared/        header, homepage (+ role-specific pages), destinations, login, register, footer
-  services/              session, order, finalOrder, booking, agent, message, audit, inquiry, links stores · admin
+  modules/shared/        header, homepage (+ role-specific pages), destinations, login, register, forgot/reset
+                         password, password toggle, footer
+  services/              session, order, finalOrder, booking, agent, destination, message, audit, inquiry, links stores · admin
                          service · auth guards · window-resize service
   data/data.json         json-server database
 projects/
@@ -140,6 +152,7 @@ projects/
   shared/src/lib/order-matching  pure helpers: pickAgent, planReassignments, checkOffer, validateConfig, places, ...
 docs/
   development.md                  how to work on the project
+  design.md                       design system: tokens, typography, components, accessibility
   DEPENDENCY_UPGRADE_ROADMAP.md   what was upgraded, in which order, and what broke
   BOOTSTRAP_ROADMAP.md            Bootstrap/ng-bootstrap, styling and build notes
 angular.json                      Angular CLI workspace (build, serve, test for every project)
@@ -148,10 +161,15 @@ project.json (per project)        Nx-only configuration (lint targets)
 
 ## Design and engineering decisions
 
-- **Destinations are static sample data.** The six trending destinations, their prices and the destination picker
-  in the booking form come from one typed constant (`modules/shared/destinations`), with gradient and emoji art
-  instead of photos: no request, no image weight, and the picker writes the same `destination` control as the
-  free-text field, so the order sent to the API is unchanged.
+- **Destinations are data, and orders point at them by id.** The places a trip can go to live in the
+  `destinations` collection (`id`, name, photo, emoji and gradient, description, facts, `active`), loaded at startup by
+  `DestinationStore`. An order carries `destinationId`, and `OrderStore` refuses an unknown or retired one, so only
+  known destinations can be booked; the booking form is a picker of the active ones. The order also keeps the
+  destination's name as it was when it was booked (so an old trip keeps its name and the pages that show it need no
+  lookup); the store always sets that name from the destination, never from what was typed. Agent matching still
+  compares names, because agent specialties are free text. The origin stays free text, checked against a bundled
+  list of countries and cities (`places.ts`). Visitors reach a destination through `?destination=<id>`; an id that is
+  not one of ours is ignored.
 - **The hero is a WebP `<img>`**, not a CSS background, so the browser can prioritise it (`fetchpriority="high"`)
   and reserve its space; it is 132 kB instead of a 239 kB JPG.
 - **Native date inputs instead of the Material date picker.** The picker cost about 126 kB of JS on every route with
@@ -181,7 +199,11 @@ project.json (per project)        Nx-only configuration (lint targets)
 - **Path aliases for libraries.** `@vica-assist/*` aliases resolve to source for the app and tests, and to
   `dist/` inside each library's `tsconfig.lib.json`, so libraries build as real packages.
 - **One `canMatch` + `canActivate` pairing for the homepage.** Three components share the `''` path;
-  `roleMatch` selects which loads and `authGuard` protects the two authenticated ones.
+  `roleMatch` selects which loads and `authGuard` protects the two authenticated ones. The customer pages
+  `book` and `bookings` carry the same pairing, and a `**` redirect sends everyone else back to `/homepage`.
+- **Customer pages are routes, not in-page views.** The booking form and the bookings list have their own URLs, so
+  the back button, reloads and links (for example "Back to my bookings") work, and the dashboard stays a pure
+  read of the stores.
 
 ## Security considerations
 
@@ -199,15 +221,20 @@ This is a demo backed by a mock API, and several things would be unacceptable in
   single-booking prices. The mock API still serves every collection to anyone who asks for it.
 - **The question form is unauthenticated.** It has a hidden trap field and a one-per-minute limit kept in the
   browser; both are courtesies, not protection. A real backend needs server-side rate limiting and spam control.
-- **A destination in the address is only ever matched against the list of known places** (`canonicalPlace`); text
-  that is not a known place is ignored, so the address cannot put words or links on the login page or redirect.
+- **A destination in the address is only ever matched against the destinations we offer** (`DestinationStore.bookable`);
+  an id that is not one of ours is ignored, so the address cannot put words or links on the login page or redirect.
 - **Everything the admin, an agent or a customer is allowed to do is enforced in the browser** (`AdminService`
   refuses non-admins, stores refuse other people's requests, ratings and messages), and the mock API accepts any
   request from anyone. A real backend must repeat every one of those checks.
 - **Assignment, reassignment and the audit log are written by whichever client notices.** In a real system they
   belong to server jobs; the audit log can only be appended to through the app, but nothing stops a direct call.
 - **JWT packages are wired but unused.** `JwtModule` is configured with an undefined `tokenGetter`, and no
-  token is issued or stored; the session is in memory only and is lost on reload.
+  token is issued. "Remember me" keeps the username and role in browser storage, so a user can edit them in
+  DevTools; like the guards, that is a convenience, not protection. A real backend would issue an HTTP-only
+  session cookie.
+- **The password reset is a demo.** The mock API is open and stores passwords in plaintext, so anyone can read
+  reset tokens or change a password directly. A real backend must hash passwords, store only a hash of each
+  single-use token and email the link instead of showing it.
 - The client never copies the backend's password into the session store after login.
 - **Orders belong to a customer only by a `customer` field.** Customers see just their own orders and bookings,
   but the filtering happens in the browser: the mock API returns every record to anyone. Likewise nothing on the
@@ -226,8 +253,8 @@ cookie or `Authorization` header, assigns roles server-side, and enforces author
   turns an HTTP error into a failed login rather than throwing.
 - Invalid login shows an inline message; success and failure of agent actions use snack bars.
 - **Booking form:** the departure cannot be in the past, the return not before the departure, the budget must be
-  above 0, places and names must not be blank, IDs must be positive and the origin must differ from the
-  destination. Values are trimmed before they are sent.
+  above 0, the origin and names must not be blank, IDs must be positive, a destination must be picked from the
+  ones we offer and the origin must differ from it. Values are trimmed before they are sent.
 - **Ratings:** each booked part needs a whole number from 1 to 5, the review is trimmed and limited to 500
   characters, and `BookingStore.rate` refuses other customers' bookings and trips that have not ended.
 - **Statistics read data defensively:** `computeInsights` skips records with missing orders, ratings outside 1 to
@@ -296,8 +323,9 @@ high-severity dev-only finding (see below).
   cannot share a number, and the customer sees it as `VA-000012`. Flights, hotels and bookings still join on the
   string `orderID`, which is set from `id` in a second request right after creation. Dropping it means migrating
   those three collections and is left as its own change.
-- **The list of places is bundled and not exhaustive.** Countries and about 150 major cities are accepted;
-  streets and small towns are not.
+- **The origin is a bundled list of places, and is not exhaustive.** Countries and about 150 major cities are
+  accepted; streets and small towns are not. Destinations are the six in `data.json`; there is no admin screen to add
+  or retire one yet, and agent specialties are matched to them by name.
 - **No real notifications.** Messages and status changes appear when a page is opened or refreshed.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
