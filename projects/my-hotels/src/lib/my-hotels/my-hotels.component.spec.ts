@@ -70,7 +70,7 @@ describe('MyHotelsComponent', () => {
       choice: 'both',
       status: 'pending',
       origin: 'Israel',
-      destination: 'France',
+      destination: 'Paris', destinationId: 'paris',
       departureDate: '2026-12-01',
       returnDate: '2026-12-08',
       passDetails: [],

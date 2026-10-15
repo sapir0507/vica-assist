@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, input, output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, input, output, signal, viewChild } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { normalisePlace, PublicSummary } from '@vica-assist/shared';
+import { Destination, PublicSummary } from '@vica-assist/shared';
 
-import { Destination } from '../destinations';
 
 /** What visitors can learn about a destination. The sign-in button is the only way on from here. */
 @Component({
@@ -18,19 +17,21 @@ export class DestinationPanelComponent {
   destination = input<Destination | null>(null);
   summary = input<PublicSummary | null | undefined>(null);
   closed = output<void>();
+  /** The photo that failed to load, so the emoji shows instead. */
+  readonly failedImage = signal<string | null>(null);
 
   private dialog = viewChild<ElementRef<HTMLDialogElement>>('dialog');
 
   readonly stats = computed(() => {
     const summary = this.summary();
-    const name = normalisePlace(this.destination()?.name);
-    return summary?.sufficient ? summary.topDestinations.find(place => normalisePlace(place.name) === name) : undefined;
+    const id = this.destination()?.id;
+    return summary?.sufficient ? summary.topDestinations.find(place => place.destinationId === id) : undefined;
   });
 
   readonly reviews = computed(() => {
     const summary = this.summary();
-    const name = normalisePlace(this.destination()?.name);
-    return summary?.sufficient ? summary.reviews.filter(review => normalisePlace(review.destination) === name) : [];
+    const id = this.destination()?.id;
+    return summary?.sufficient ? summary.reviews.filter(review => review.destinationId === id) : [];
   });
 
   constructor() {

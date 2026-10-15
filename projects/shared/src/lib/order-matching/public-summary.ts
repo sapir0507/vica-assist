@@ -3,9 +3,9 @@ import { isValidRating } from '../feedback';
 import { Agent } from '../interfaces/agent.interface';
 import { finalOrder } from '../interfaces/final-order.interface';
 import { agentRating } from './agent-rating';
-import { normalisePlace } from './places';
 
 export interface PublicDestination {
+  destinationId: string;
   name: string;
   count: number;
   rating: number | null;
@@ -14,6 +14,7 @@ export interface PublicDestination {
 
 export interface PublicReview {
   firstName: string;
+  destinationId: string;
   destination: string;
   hotelRating?: number;
   flightRating?: number;
@@ -93,7 +94,7 @@ export function buildPublicSummary(bookings: finalOrder[], agents: Agent[], conf
 
   const byPlace = new Map<string, finalOrder[]>();
   for (const booking of usable) {
-    const key = normalisePlace(booking.order?.destination);
+    const key = booking.order?.destinationId;
     if (key) byPlace.set(key, [...(byPlace.get(key) ?? []), booking]);
   }
   const topDestinations = [...byPlace.values()]
@@ -101,7 +102,8 @@ export function buildPublicSummary(bookings: finalOrder[], agents: Agent[], conf
       const rating = mean(group.flatMap(ratingsOf));
       const price = mean(group.map(priceOf).filter((value): value is number => value !== null));
       return {
-        name: capitalise(String(group[0].order?.destination).trim().toLowerCase()),
+        destinationId: String(group[0].order?.destinationId),
+        name: String(group[0].order?.destination).trim(),
         count: group.length,
         rating: rating === null ? null : round(rating),
         averagePrice: price === null ? null : Math.round(price)
@@ -116,7 +118,8 @@ export function buildPublicSummary(bookings: finalOrder[], agents: Agent[], conf
     .slice(0, MAX_REVIEWS)
     .map(booking => ({
       firstName: capitalise((booking.order?.passDetails[0]?.fullName ?? 'A traveler').trim().split(/\s+/)[0]),
-      destination: capitalise(String(booking.order?.destination).trim().toLowerCase()),
+      destinationId: String(booking.order?.destinationId),
+      destination: String(booking.order?.destination).trim(),
       hotelRating: isValidRating(booking.feedback?.hotelRating) ? booking.feedback?.hotelRating : undefined,
       flightRating: isValidRating(booking.feedback?.flightRating) ? booking.feedback?.flightRating : undefined,
       text: (booking.feedback?.review ?? '').trim()

@@ -11,10 +11,12 @@ const agent = (username: string, overrides: Partial<Agent> = {}): Agent => ({
   email: `${username}@private.example`, available: true, active: true, ...overrides
 });
 
-const booking = (id: number, destination: string, feedback?: Partial<Feedback>, extra: Partial<finalOrder> = {}, agentName = 'dana'): finalOrder => ({
+// The spelling of a place does not matter: bookings are grouped by destination id.
+const booking = (id: number, place: string, feedback?: Partial<Feedback>, extra: Partial<finalOrder> = {}, agentName = 'dana'): finalOrder => ({
   id,
   order: {
-    id, orderID: `${id}`, choice: 'both', status: 'finished', departureDate: '', returnDate: '', origin: 'Tel Aviv', destination, agent: agentName,
+    id, orderID: `${id}`, choice: 'both', status: 'finished', departureDate: '', returnDate: '', origin: 'Tel Aviv', agent: agentName,
+    destinationId: place.trim().toLowerCase(), destination: place.trim().charAt(0).toUpperCase() + place.trim().slice(1).toLowerCase(),
     passDetails: [{ fullName: 'noa levi', passID: 123456782 }], priceRange: 1500, customer: 'secret-username', createdAt: '2026-10-01T08:00:00.000Z', respondedAt: '2026-10-01T12:00:00.000Z'
   },
   hotel: { id, price: 600 },
@@ -39,13 +41,13 @@ describe('buildPublicSummary', () => {
   });
 
   it('ranks destinations by bookings, combining spellings, with the average rating and price', () => {
-    expect(summary.topDestinations[0]).toEqual({ name: 'Paris', count: 2, rating: 3.8, averagePrice: 1000 });
+    expect(summary.topDestinations[0]).toEqual({ destinationId: 'paris', name: 'Paris', count: 2, rating: 3.8, averagePrice: 1000 });
     expect(summary.topDestinations.map(d => d.name)).toEqual(['Paris', 'Rome', 'Tokyo']);
   });
 
   it('lists the written reviews newest first, by first name and destination, leaving out hidden ones', () => {
     expect(summary.reviews.map(r => r.text)).toEqual(['Long flight', 'Lovely hotel']);
-    expect(summary.reviews[0]).toEqual({ firstName: 'Noa', destination: 'Tokyo', hotelRating: 3, flightRating: 5, text: 'Long flight' });
+    expect(summary.reviews[0]).toEqual({ firstName: 'Noa', destinationId: 'tokyo', destination: 'Tokyo', hotelRating: 3, flightRating: 5, text: 'Long flight' });
   });
 
   it('lists active agents with their rating, and the active airlines', () => {
@@ -79,7 +81,7 @@ describe('buildPublicSummary', () => {
     ], [], config, NOW);
 
     expect(messy.bookings).toBe(4);
-    expect(messy.topDestinations.find(d => d.name === 'Lima')).toEqual({ name: 'Lima', count: 1, rating: null, averagePrice: null });
+    expect(messy.topDestinations.find(d => d.name === 'Lima')).toEqual({ destinationId: 'lima', name: 'Lima', count: 1, rating: null, averagePrice: null });
   });
 
   it('caps the lists', () => {

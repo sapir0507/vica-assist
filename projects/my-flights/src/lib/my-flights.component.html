@@ -23,11 +23,13 @@
           <mat-label>Full Name</mat-label>
           <input matInput type="text" placeholder="Full Name" formControlName="fullName">
           <mat-hint>Like in your passport</mat-hint>
+          <mat-error>Enter a first and a last name, letters only.</mat-error>
         </mat-form-field>
 
         <mat-form-field color="primary">
           <mat-label>Identification Card</mat-label>
           <input matInput type="number" placeholder="ID" formControlName="myID">
+          <mat-error>Enter a valid ID number.</mat-error>
         </mat-form-field>
 
         <div class="form-grid__full">
@@ -83,11 +85,13 @@
         <mat-form-field color="primary">
           <mat-label>Origin</mat-label>
           <input matInput type="text" formControlName="org">
+          <mat-error>Enter a place, letters only.</mat-error>
         </mat-form-field>
 
         <mat-form-field color="primary">
           <mat-label>Destination</mat-label>
           <input matInput type="text" formControlName="dest">
+          <mat-hint>Set by the customer's request</mat-hint>
         </mat-form-field>
 
         <mat-divider class="form-grid__full"></mat-divider>
@@ -153,6 +157,7 @@
           <mat-form-field color="primary">
             <mat-label>Stop Duration</mat-label>
             <input matInput type="text" placeholder="02:13" formControlName="stopDuration">
+            <mat-error>Use hours and minutes, like 02:13.</mat-error>
           </mat-form-field>
         }
 
@@ -181,11 +186,13 @@
         <mat-form-field color="primary">
           <mat-label>Departure time</mat-label>
           <input matInput type="text"  placeholder="02:13" formControlName="departureHour">
+          <mat-error>Use hours and minutes, like 02:13.</mat-error>
         </mat-form-field>
 
         <mat-form-field color="primary">
           <mat-label>Return time</mat-label>
           <input matInput type="text"  placeholder="02:13" formControlName="returnHour">
+          <mat-error>Use hours and minutes, like 02:13.</mat-error>
         </mat-form-field>
         </div>
 
@@ -218,12 +225,17 @@
           <mat-label>Price</mat-label>
           <input matInput type="number" class="" placeholder="0" formControlName="price">
           <span matPrefix>$&nbsp;</span>
+          <mat-error>Enter a whole price of up to 4 digits.</mat-error>
         </mat-form-field>
+
+        @if (newFlightForm.invalid) {
+          <p class="form-hint form-grid__full">Complete every step correctly to add the flight.</p>
+        }
         </div>
 
         <mat-action-row>
           <button mat-button color="primary" type="button" (click)="prevStep()">Previous</button>
-          <button mat-flat-button color="primary" type="submit">Add flight</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="newFlightForm.invalid">Add flight</button>
         </mat-action-row>
 
       </mat-expansion-panel>

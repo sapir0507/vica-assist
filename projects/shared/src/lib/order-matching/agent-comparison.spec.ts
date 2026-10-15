@@ -13,7 +13,7 @@ const agent = (username: string, displayName: string): Agent => ({
 });
 
 const order = (overrides: Partial<Order>): Order => ({
-  id: 1, orderID: '1', choice: 'both', status: 'pending', departureDate: '', returnDate: '', origin: '', destination: '', passDetails: [], priceRange: 0, ...overrides
+  id: 1, orderID: '1', choice: 'both', status: 'pending', departureDate: '', returnDate: '', origin: '', destination: '', destinationId: 'paris', passDetails: [], priceRange: 0, ...overrides
 });
 
 describe('compareAgents', () => {

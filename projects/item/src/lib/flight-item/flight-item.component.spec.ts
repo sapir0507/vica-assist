@@ -105,7 +105,7 @@ describe('FlightItemComponent', () => {
       choice: 'flight',
       status: 'finished',
       origin: 'tel aviv',
-      destination: 'paris',
+      destination: 'paris', destinationId: 'paris',
       departureDate: '2026-06-09',
       returnDate: '2026-06-16',
       passDetails: [],

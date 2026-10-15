@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { CurrencyPipe, NgTemplateOutlet } from '@angular/common';
 
-import { Destination } from '../destinations';
+import { Destination } from '@vica-assist/shared';
 
 @Component({
   standalone: true,
@@ -18,6 +18,8 @@ export class DestinationCardComponent {
   opens = input(false);
   selected = input(false);
   chosen = output<Destination>();
+  /** The photo that failed to load, so the emoji shows instead. */
+  readonly failedImage = signal<string | null>(null);
 
   choose(): void {
     if (this.selectable() || this.opens()) this.chosen.emit(this.destination());

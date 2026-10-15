@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DESTINATIONS, Destination } from '../destinations';
+import { Destination } from '@vica-assist/shared';
+
+import { DESTINATIONS } from '../destinations.testing';
 import { DestinationCardComponent } from './destination-card.component';
 
 describe('DestinationCardComponent', () => {
@@ -22,6 +24,19 @@ describe('DestinationCardComponent', () => {
 
     expect(host().querySelector('button')).toBeNull();
     expect(host().textContent).toContain('Paris');
+  });
+
+  it('shows the photo, and the emoji again when the photo cannot be loaded', () => {
+    create({});
+    const photo = host().querySelector('img') as HTMLImageElement;
+    expect(photo.getAttribute('src')).toBe(paris.imageSrc);
+    expect(host().querySelector('.destination__art')?.textContent).not.toContain(paris.emoji);
+
+    photo.dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+
+    expect(host().querySelector('img')).toBeNull();
+    expect(host().querySelector('.destination__art')?.textContent).toContain(paris.emoji);
   });
 
   it('emits the destination and reports its state when used as a picker', () => {

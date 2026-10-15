@@ -17,7 +17,13 @@
 }
 
 <ng-template #content>
-  <span class="destination__art" [style.background]="destination().gradient" aria-hidden="true">{{ destination().emoji }}</span>
+  <span class="destination__art" [style.background]="destination().gradient" aria-hidden="true">
+    @if (destination().imageSrc && failedImage() !== destination().imageSrc) {
+      <img class="destination__image" [src]="destination().imageSrc" alt="" loading="lazy" (error)="failedImage.set(destination().imageSrc ?? null)" />
+    } @else {
+      {{ destination().emoji }}
+    }
+  </span>
   <span class="destination__body">
     <span class="destination__name">{{ destination().name }}</span>
     <span class="destination__description">{{ destination().description }}</span>

@@ -33,7 +33,8 @@ export class MyFlightsComponent implements OnInit {
   newFlightForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, fullName(this.configService.config().limits.nameMaxLength)]],
     myID: ['', [Validators.required, israeliId]],
-    dest: ['', [Validators.required, Validators.pattern(this.CountryValidator)]],
+    // Set by the request: an offer is always for the trip's own destination.
+    dest: [{ value: '', disabled: true }],
     org: ['', [Validators.required, Validators.pattern(this.CountryValidator)]],
     passangersFullName: this.fb.array([]),
     departureDate: ['', [Validators.required]],
@@ -174,8 +175,6 @@ export class MyFlightsComponent implements OnInit {
   }
 
   addFlight() {
-    console.log('addFlight -> component', 'orderID:', this.orderID)
-
     if (this.newFlightForm.valid && this.orderID) {
       const passNum = this.passangersFullName.length + 1;
       this.NewFlight = {

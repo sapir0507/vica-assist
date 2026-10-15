@@ -42,7 +42,7 @@ describe('MyFlightsComponent', () => {
       choice: 'flight',
       status: 'pending',
       origin: 'Israel',
-      destination: 'Italy',
+      destination: 'Paris', destinationId: 'paris',
       departureDate: new Date(2026, 5, 9).toISOString(),
       returnDate: new Date(2026, 5, 16).toISOString(),
       passDetails: [{ fullName: 'Jane Doe', passID: 12345678 }],
@@ -80,7 +80,7 @@ describe('MyFlightsComponent', () => {
       choice: 'both',
       status: 'pending',
       origin: 'Israel',
-      destination: 'France',
+      destination: 'Paris', destinationId: 'paris',
       departureDate: '2026-12-01',
       returnDate: '2026-12-08',
       passDetails: [{ fullName: 'Dana Levi', passID: 123456782 }],
@@ -93,6 +93,11 @@ describe('MyFlightsComponent', () => {
     beforeEach(() => {
       fixture.componentRef.setInput('order', order);
       component.ngOnInit();
+    });
+
+    it('fills in the destination of the request and does not let the agent change it', () => {
+      expect(component.newFlightForm.get('dest')?.value).toBe('Paris');
+      expect(component.newFlightForm.get('dest')?.disabled).toBe(true);
     });
 
     it('lists what the customer asked for', () => {

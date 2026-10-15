@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { PublicSummary } from '@vica-assist/shared';
 
-import { DESTINATIONS } from '../destinations';
+import { DESTINATIONS } from '../destinations.testing';
 import { DestinationPanelComponent } from './destination-panel.component';
 
 const summary = (sufficient: boolean): PublicSummary => ({
@@ -12,8 +12,8 @@ const summary = (sufficient: boolean): PublicSummary => ({
   averageRating: 4.5,
   pleasedPercent: 90,
   averageResponseHours: 5,
-  topDestinations: [{ name: 'Paris', count: 4, rating: 4.6, averagePrice: 1020 }, { name: 'Rome', count: 2, rating: null, averagePrice: null }],
-  reviews: [{ firstName: 'Noa', destination: 'Paris', text: 'Loved <i>every</i> minute', hotelRating: 5 }, { firstName: 'Dan', destination: 'Rome', text: 'Quiet' }],
+  topDestinations: [{ destinationId: 'paris', name: 'Paris', count: 4, rating: 4.6, averagePrice: 1020 }, { destinationId: 'rome', name: 'Rome', count: 2, rating: null, averagePrice: null }],
+  reviews: [{ firstName: 'Noa', destination: 'Paris', destinationId: 'paris', text: 'Loved <i>every</i> minute', hotelRating: 5 }, { firstName: 'Dan', destination: 'Rome', destinationId: 'rome', text: 'Quiet' }],
   agents: [],
   airlines: []
 });
@@ -72,7 +72,7 @@ describe('DestinationPanelComponent', () => {
     expect(text()).not.toContain('Trips arranged');
     expect(text()).not.toContain('What travelers say');
 
-    show({ ...DESTINATIONS[0], name: 'Rome', facts: undefined }, summary(true));
+    show({ ...DESTINATIONS[0], id: 'rome', name: 'Rome', facts: undefined }, summary(true));
     expect(fact('Trips arranged')).toBe('2');
     expect(fact('Average rating')).toBeUndefined();
     expect(text()).not.toContain('Good to know');
@@ -83,8 +83,8 @@ describe('DestinationPanelComponent', () => {
 
     const links = Array.from(host().querySelectorAll<HTMLAnchorElement>('.panel__actions a'));
     expect(links[0].textContent?.trim()).toBe('Sign in to plan a trip to Paris');
-    expect(links[0].getAttribute('href')).toBe('/login?destination=Paris');
-    expect(links[1].getAttribute('href')).toBe('/register?destination=Paris');
+    expect(links[0].getAttribute('href')).toBe('/login?destination=paris');
+    expect(links[1].getAttribute('href')).toBe('/register?destination=paris');
   });
 
   it('closes with its button and with a click on the backdrop', () => {

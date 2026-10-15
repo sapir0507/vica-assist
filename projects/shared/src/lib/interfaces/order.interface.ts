@@ -21,7 +21,9 @@ export interface Order {
     departureDate: string,
     returnDate: string,
     origin: string,
+    /** The destination's name when the order was saved; `destinationId` says which destination it is. */
     destination: string,
+    destinationId: string,
     passDetails: passDetails[],
     stars?: number,
     priceRange: number ,
@@ -53,6 +55,7 @@ export interface Order {
     returnDate: string,
     origin: string,
     destination: string,
+    destinationId: string,
     passDetails: passDetails[],
     stars?: number,
     priceRange: number,

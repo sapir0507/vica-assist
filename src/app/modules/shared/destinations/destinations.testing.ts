@@ -1,0 +1,11 @@
+import { Destination } from '@vica-assist/shared';
+
+/** The sample destinations of `data.json`, for specs. */
+export const DESTINATIONS: readonly Destination[] = [
+  { id: 'paris', name: 'Paris', emoji: '🗼', imageSrc: 'assets/images/img/paris.jpg', description: 'Cafés, museums and the river Seine', fromPrice: 420, gradient: 'linear-gradient(135deg, #f472b6, #7c3aed)', active: true, facts: { bestSeason: 'April to June', flightTime: 'about 4.5 hours', language: 'French', currency: 'Euro' } },
+  { id: 'tokyo', name: 'Tokyo', emoji: '🗾', imageSrc: 'assets/images/img/tokyo.jpg', description: 'Neon nights and quiet temples', fromPrice: 780, gradient: 'linear-gradient(135deg, #fb7185, #be123c)', active: true, facts: { bestSeason: 'March to May and October to November', flightTime: 'about 12 hours with a stop', language: 'Japanese', currency: 'Yen' } },
+  { id: 'bali', name: 'Bali', emoji: '🌴', imageSrc: 'assets/images/img/bali.jpg', description: 'Rice terraces and surf beaches', fromPrice: 690, gradient: 'linear-gradient(135deg, #34d399, #0e7490)', active: true, facts: { bestSeason: 'April to October', flightTime: 'about 12 hours with a stop', language: 'Indonesian', currency: 'Rupiah' } },
+  { id: 'dubai', name: 'Dubai', emoji: '🏙️', imageSrc: 'assets/images/img/dubai.jpg', description: 'Skyscrapers, desert and souks', fromPrice: 360, gradient: 'linear-gradient(135deg, #fbbf24, #b45309)', active: true, facts: { bestSeason: 'November to March', flightTime: 'about 4.5 hours', language: 'Arabic and English', currency: 'Dirham' } },
+  { id: 'barcelona', name: 'Barcelona', emoji: '⛪', imageSrc: 'assets/images/img/barcelona.jpg', description: 'Gaudí, tapas and the sea', fromPrice: 310, gradient: 'linear-gradient(135deg, #fb923c, #c2410c)', active: true, facts: { bestSeason: 'May, June and September', flightTime: 'about 5 hours', language: 'Spanish and Catalan', currency: 'Euro' } },
+  { id: 'singapore', name: 'Singapore', emoji: '🦁', imageSrc: 'assets/images/img/singapore.jpg', description: 'Gardens, food courts and skyline', fromPrice: 740, gradient: 'linear-gradient(135deg, #38bdf8, #4338ca)', active: true, facts: { bestSeason: 'February to April', flightTime: 'about 9.5 hours', language: 'English, Malay, Mandarin and Tamil', currency: 'Singapore dollar' } }
+];

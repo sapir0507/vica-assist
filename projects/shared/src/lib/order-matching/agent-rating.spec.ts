@@ -4,7 +4,7 @@ import { agentRating } from './agent-rating';
 
 const booking = (agent: string | undefined, feedback?: Partial<Feedback>): finalOrder => ({
   id: 1,
-  order: { id: 1, orderID: '1', choice: 'both', status: 'finished', departureDate: '', returnDate: '', origin: '', destination: '', passDetails: [], priceRange: 0, agent },
+  order: { id: 1, orderID: '1', choice: 'both', status: 'finished', departureDate: '', returnDate: '', origin: '', destination: '', destinationId: 'paris', passDetails: [], priceRange: 0, agent },
   feedback: feedback ? { ratedAt: '2026-01-01T00:00:00.000Z', ...feedback } : undefined
 });
 

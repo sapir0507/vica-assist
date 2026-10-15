@@ -1,46 +1,68 @@
 <dialog #dialog class="panel" aria-labelledby="panel-title" (click)="onDialogClick($event)" (close)="closed.emit()">
   @if (destination(); as place) {
-    <header class="panel__header" [style.background]="place.gradient">
-      <span class="panel__emoji" aria-hidden="true">{{ place.emoji }}</span>
-      <h2 id="panel-title" class="panel__title">{{ place.name }}</h2>
+    <div class="panel__accent" [style.background]="place.gradient" aria-hidden="true"></div>
+
+    <header class="panel__header" [style.--art]="place.gradient">
+      <span class="panel__art" aria-hidden="true">
+        @if (place.imageSrc && failedImage() !== place.imageSrc) {
+          <img class="panel__image" [src]="place.imageSrc" alt="" (error)="failedImage.set(place.imageSrc)" />
+        } @else {
+          <span class="panel__emoji">{{ place.emoji }}</span>
+        }
+      </span>
+      <div>
+        <h2 id="panel-title" class="panel__title">{{ place.name }}</h2>
+        <p class="panel__lead">{{ place.description }}</p>
+      </div>
       <button type="button" class="panel__close" aria-label="Close" (click)="close()">&times;</button>
     </header>
 
     <div class="panel__body">
-      <p class="panel__lead">{{ place.description }}</p>
-
       @if (place.facts; as facts) {
-        <h3 class="panel__heading">Good to know</h3>
-        <dl class="panel__facts">
-          <dt>Best time to go</dt><dd>{{ facts.bestSeason }}</dd>
-          <dt>Flight from Tel Aviv</dt><dd>{{ facts.flightTime }}</dd>
-          <dt>Language</dt><dd>{{ facts.language }}</dd>
-          <dt>Currency</dt><dd>{{ facts.currency }}</dd>
-        </dl>
+        <section>
+          <h3 class="panel__heading">Good to know</h3>
+          <dl class="panel__facts">
+            <div class="panel__fact"><dt>Best time to go</dt><dd>{{ facts.bestSeason }}</dd></div>
+            <div class="panel__fact"><dt>Flight from Tel Aviv</dt><dd>{{ facts.flightTime }}</dd></div>
+            <div class="panel__fact"><dt>Language</dt><dd>{{ facts.language }}</dd></div>
+            <div class="panel__fact"><dt>Currency</dt><dd>{{ facts.currency }}</dd></div>
+          </dl>
+        </section>
       }
 
       @if (stats(); as numbers) {
-        <h3 class="panel__heading">What travelers did</h3>
-        <dl class="panel__facts">
-          <dt>Trips arranged</dt><dd>{{ numbers.count }}</dd>
-          @if (numbers.rating !== null) { <dt>Average rating</dt><dd>{{ numbers.rating }} / 5</dd> }
-          @if (numbers.averagePrice !== null) { <dt>Average trip cost</dt><dd>{{ numbers.averagePrice | currency: 'USD' : 'symbol' : '1.0-0' }}</dd> }
-        </dl>
+        <section>
+          <h3 class="panel__heading">What travelers did</h3>
+          <dl class="panel__stats">
+            <div class="panel__stat"><dt>Trips arranged</dt><dd>{{ numbers.count }}</dd></div>
+            @if (numbers.rating !== null) {
+              <div class="panel__stat"><dt>Average rating</dt><dd>{{ numbers.rating }} / 5</dd></div>
+            }
+            @if (numbers.averagePrice !== null) {
+              <div class="panel__stat"><dt>Average trip cost</dt><dd>{{ numbers.averagePrice | currency: 'USD' : 'symbol' : '1.0-0' }}</dd></div>
+            }
+          </dl>
+        </section>
       }
 
       @if (reviews().length) {
-        <h3 class="panel__heading">What travelers say</h3>
-        <ul class="panel__reviews">
-          @for (review of reviews(); track review.text) {
-            <li><p>{{ review.text }}</p><p class="panel__by">{{ review.firstName }}</p></li>
-          }
-        </ul>
+        <section>
+          <h3 class="panel__heading">What travelers say</h3>
+          <ul class="panel__reviews">
+            @for (review of reviews(); track review.text) {
+              <li>
+                <span class="panel__quote-mark" aria-hidden="true">&ldquo;</span>
+                <div><p>{{ review.text }}</p><p class="panel__by">{{ review.firstName }}</p></div>
+              </li>
+            }
+          </ul>
+        </section>
       }
-
-      <div class="panel__actions">
-        <a class="btn btn-primary" routerLink="/login" [queryParams]="{ destination: place.name }">Sign in to plan a trip to {{ place.name }}</a>
-        <a class="panel__link" routerLink="/register" [queryParams]="{ destination: place.name }">Create an account</a>
-      </div>
     </div>
+
+    <footer class="panel__actions">
+      <a class="btn btn-primary panel__cta" routerLink="/login" [queryParams]="{ destination: place.id }">Sign in to plan a trip to {{ place.name }}</a>
+      <p class="panel__new">New here? <a class="panel__link" routerLink="/register" [queryParams]="{ destination: place.id }">Create an account</a></p>
+    </footer>
   }
 </dialog>

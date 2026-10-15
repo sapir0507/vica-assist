@@ -4,6 +4,7 @@ import { patchState, signalStore, withHooks, withMethods, withState } from '@ngr
 import { Observable, forkJoin, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
 import { Agent, AssignmentReason, AssignmentRules, Order, OrderRequest, OrderStatus, planReassignments } from '@vica-assist/shared';
 
 export interface OrderState {
@@ -25,7 +26,15 @@ export const OrderStore = signalStore(
   withState(initialState),
   withMethods((store) => {
     const http = inject(HttpClient);
+    const destinations = inject(DestinationStore);
     const url = environment.api + 'orders';
+
+    /** An order can only go to a destination we offer; its name is always taken from the destination, never typed. */
+    const withKnownDestination = <T extends { destinationId?: string; destination?: string }>(order: T): T | null => {
+      const destination = destinations.bookable(order.destinationId);
+      return destination ? { ...order, destination: destination.name } : null;
+    };
+    const unknownDestination = () => throwError(() => new Error('Choose one of our destinations.'));
 
     function handleError(error: HttpErrorResponse, methodName?: string, obj?: unknown) {
       if (error.status === 0) {
@@ -71,7 +80,9 @@ export const OrderStore = signalStore(
        * is set from it afterwards.
        */
       addOrder(newOrder: OrderRequest): Observable<Order> {
-        return postOrder(newOrder).pipe(tap(() => this.getAll().subscribe()));
+        const known = withKnownDestination(newOrder);
+        if (!known) return unknownDestination();
+        return postOrder(known).pipe(tap(() => this.getAll().subscribe()));
       },
 
       /** Cancels a request that is still waiting for its agent. */
@@ -89,7 +100,9 @@ export const OrderStore = signalStore(
         if (store.orders()?.find(order => order.id === id)?.status !== OrderStatus.Pending) {
           return throwError(() => new Error('Only a request that is still waiting for an agent can be changed.'));
         }
-        return http.patch<Order>(`${url}/${id}`, { ...changes, updatedAt: new Date().toISOString() }).pipe(
+        const known = changes.destinationId === undefined ? changes : withKnownDestination(changes);
+        if (!known) return unknownDestination();
+        return http.patch<Order>(`${url}/${id}`, { ...known, updatedAt: new Date().toISOString() }).pipe(
           tap(() => this.getAll().subscribe())
         );
       },

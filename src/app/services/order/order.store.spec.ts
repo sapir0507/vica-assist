@@ -3,6 +3,10 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Order, OrderStatus } from '@vica-assist/shared';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
+import { DESTINATIONS } from 'src/app/modules/shared/destinations/destinations.testing';
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
 import { OrderStore } from './order.store';
 
 describe('OrderStore', () => {
@@ -19,7 +23,7 @@ describe('OrderStore', () => {
     departureDate: '2024-01-01',
     returnDate: '2024-01-05',
     origin: 'TLV',
-    destination: 'JFK',
+    destination: 'Paris', destinationId: 'paris',
     passDetails: [],
     priceRange: 100,
     ...overrides
@@ -30,6 +34,7 @@ describe('OrderStore', () => {
       providers: [provideHttpClient(withXhr()), provideHttpClientTesting()]
     });
 
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: [...DESTINATIONS] });
     store = TestBed.inject(OrderStore);
     httpMock = TestBed.inject(HttpTestingController);
 
@@ -132,6 +137,25 @@ describe('OrderStore', () => {
       getReq.flush([stored]);
     });
 
+    it('takes the destination name from the destination, whatever name was sent', () => {
+      const { id: _unsent, ...newOrder } = makeOrder({ destination: 'paris ', destinationId: 'tokyo' });
+      store.addOrder(newOrder).subscribe();
+
+      expect(httpMock.expectOne(r => r.url === url && r.method === 'POST').request.body).toMatchObject({ destinationId: 'tokyo', destination: 'Tokyo' });
+    });
+
+    it('refuses a destination we do not offer, or no longer offer, without sending anything', () => {
+      patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: DESTINATIONS.map(place => ({ ...place, active: place.id !== 'bali' })) });
+      const { id: _unsent, ...newOrder } = makeOrder();
+      const messages: string[] = [];
+
+      store.addOrder({ ...newOrder, destinationId: 'atlantis' }).subscribe({ error: (e: Error) => messages.push(e.message) });
+      store.addOrder({ ...newOrder, destinationId: 'bali' }).subscribe({ error: (e: Error) => messages.push(e.message) });
+
+      expect(messages).toEqual(['Choose one of our destinations.', 'Choose one of our destinations.']);
+      httpMock.expectNone(r => r.url === url && r.method === 'POST');
+    });
+
     it('lets the backend choose the id, so simultaneous requests get different numbers', () => {
       const { id: _unsent, ...newOrder } = makeOrder();
       store.addOrder(newOrder).subscribe();
@@ -230,10 +254,10 @@ describe('OrderStore', () => {
       store.getAll().subscribe();
       httpMock.expectOne(url).flush([makeOrder({ id: 4, status: 'pending' })]);
 
-      store.updatePending(4, { destination: 'Rome' }).subscribe();
+      store.updatePending(4, { destination: 'whatever', destinationId: 'tokyo' }).subscribe();
 
       const req = httpMock.expectOne(`${url}/4`);
-      expect(req.request.body).toMatchObject({ destination: 'Rome' });
+      expect(req.request.body).toMatchObject({ destination: 'Tokyo', destinationId: 'tokyo' });
       expect(Number.isNaN(Date.parse(req.request.body.updatedAt))).toBe(false);
       req.flush({});
       httpMock.expectOne(url).flush([]);
@@ -244,7 +268,7 @@ describe('OrderStore', () => {
       httpMock.expectOne(url).flush([makeOrder({ id: 1, status: 'finished' })]);
       let message = '';
 
-      store.updatePending(1, { destination: 'Rome' }).subscribe({ error: (e: Error) => (message = e.message) });
+      store.updatePending(1, { destination: 'Rome', destinationId: 'paris' }).subscribe({ error: (e: Error) => (message = e.message) });
 
       expect(message).toContain('can be changed');
     });

@@ -1,4 +1,102 @@
 {
+  "destinations": [
+    {
+      "id": "paris",
+      "name": "Paris",
+      "emoji": "🗼",
+      "imageSrc": "assets/images/img/paris.jpg",
+      "description": "Cafés, museums and the river Seine",
+      "fromPrice": 420,
+      "gradient": "linear-gradient(135deg, #f472b6, #7c3aed)",
+      "facts": {
+        "bestSeason": "April to June",
+        "flightTime": "about 4.5 hours",
+        "language": "French",
+        "currency": "Euro"
+      },
+      "active": true
+    },
+    {
+      "id": "tokyo",
+      "name": "Tokyo",
+      "emoji": "🗾",
+      "imageSrc": "assets/images/img/tokyo.jpg",
+      "description": "Neon nights and quiet temples",
+      "fromPrice": 780,
+      "gradient": "linear-gradient(135deg, #fb7185, #be123c)",
+      "facts": {
+        "bestSeason": "March to May and October to November",
+        "flightTime": "about 12 hours with a stop",
+        "language": "Japanese",
+        "currency": "Yen"
+      },
+      "active": true
+    },
+    {
+      "id": "bali",
+      "name": "Bali",
+      "emoji": "🌴",
+      "imageSrc": "assets/images/img/bali.jpg",
+      "description": "Rice terraces and surf beaches",
+      "fromPrice": 690,
+      "gradient": "linear-gradient(135deg, #34d399, #0e7490)",
+      "facts": {
+        "bestSeason": "April to October",
+        "flightTime": "about 12 hours with a stop",
+        "language": "Indonesian",
+        "currency": "Rupiah"
+      },
+      "active": true
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "emoji": "🏙️",
+      "imageSrc": "assets/images/img/dubai.jpg",
+      "description": "Skyscrapers, desert and souks",
+      "fromPrice": 360,
+      "gradient": "linear-gradient(135deg, #fbbf24, #b45309)",
+      "facts": {
+        "bestSeason": "November to March",
+        "flightTime": "about 4.5 hours",
+        "language": "Arabic and English",
+        "currency": "Dirham"
+      },
+      "active": true
+    },
+    {
+      "id": "barcelona",
+      "name": "Barcelona",
+      "emoji": "⛪",
+      "imageSrc": "assets/images/img/barcelona.jpg",
+      "description": "Gaudí, tapas and the sea",
+      "fromPrice": 310,
+      "gradient": "linear-gradient(135deg, #fb923c, #c2410c)",
+      "facts": {
+        "bestSeason": "May, June and September",
+        "flightTime": "about 5 hours",
+        "language": "Spanish and Catalan",
+        "currency": "Euro"
+      },
+      "active": true
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore",
+      "emoji": "🦁",
+      "imageSrc": "assets/images/img/singapore.jpg",
+      "description": "Gardens, food courts and skyline",
+      "fromPrice": 740,
+      "gradient": "linear-gradient(135deg, #38bdf8, #4338ca)",
+      "facts": {
+        "bestSeason": "February to April",
+        "flightTime": "about 9.5 hours",
+        "language": "English, Malay, Mandarin and Tamil",
+        "currency": "Singapore dollar"
+      },
+      "active": true
+    }
+  ],
   "login": [
     {
       "id": 1,
@@ -49,7 +147,8 @@
       "departureDate": "2022-06-09T21:00:00.000Z",
       "returnDate": "2022-06-16T21:00:00.000Z",
       "origin": "Israel",
-      "destination": "Italy",
+      "destination": "Barcelona",
+      "destinationId": "barcelona",
       "passDetails": [
         {
           "fullName": "Jane Doe",
@@ -79,7 +178,8 @@
       "departureDate": "2022-06-16T21:00:00.000Z",
       "returnDate": "2022-06-23T21:00:00.000Z",
       "origin": "Italy",
-      "destination": "Israel",
+      "destination": "Paris",
+      "destinationId": "paris",
       "passDetails": [
         {
           "fullName": "Luffy D Monkey",
@@ -98,6 +198,7 @@
       "returnDate": "2026-05-14",
       "origin": "Tel Aviv",
       "destination": "Tokyo",
+      "destinationId": "tokyo",
       "passDetails": [
         {
           "fullName": "Dana Levi",
@@ -128,6 +229,7 @@
       "returnDate": "2026-06-30",
       "origin": "Tel Aviv",
       "destination": "Bali",
+      "destinationId": "bali",
       "passDetails": [
         {
           "fullName": "Noa Cohen",
@@ -158,6 +260,7 @@
       "returnDate": "2026-07-11",
       "origin": "Tel Aviv",
       "destination": "Dubai",
+      "destinationId": "dubai",
       "passDetails": [
         {
           "fullName": "Dana Levi",
@@ -188,6 +291,7 @@
       "returnDate": "2026-08-22",
       "origin": "Tel Aviv",
       "destination": "Barcelona",
+      "destinationId": "barcelona",
       "passDetails": [
         {
           "fullName": "Noa Cohen",
@@ -218,6 +322,7 @@
       "returnDate": "2026-09-09",
       "origin": "Tel Aviv",
       "destination": "Singapore",
+      "destinationId": "singapore",
       "passDetails": [
         {
           "fullName": "Dana Levi",
@@ -247,7 +352,8 @@
       "departureDate": "2026-10-01",
       "returnDate": "2026-10-05",
       "origin": "Tel Aviv",
-      "destination": "Rome",
+      "destination": "Paris",
+      "destinationId": "paris",
       "passDetails": [
         {
           "fullName": "Dana Levi",
@@ -277,7 +383,8 @@
       "departureDate": "2026-11-10",
       "returnDate": "2026-11-17",
       "origin": "Tel Aviv",
-      "destination": "Lisbon",
+      "destination": "Barcelona",
+      "destinationId": "barcelona",
       "passDetails": [
         {
           "fullName": "Dana Levi",
@@ -305,12 +412,12 @@
   "flights": [
     {
       "orderID": "1",
-      "dest": "Italy",
+      "dest": "Barcelona",
       "passangers": 1,
       "fullName": "Jane Doe ",
       "passID": 12345678,
       "passArray": [],
-      "org": "Israel",
+      "org": "Tel Aviv",
       "returnDate": "2022-06-16T21:00:00.000Z",
       "departureDate": "2022-06-09T21:00:00.000Z",
       "returnHour": "18:20",
@@ -325,9 +432,6 @@
   ],
   "finalOrder": [
     {
-      "entities": {},
-      "ids": [],
-      "error": null,
       "id": 1,
       "order": {
         "choice": "hotel",
@@ -336,7 +440,8 @@
         "departureDate": "2022-06-16T21:00:00.000Z",
         "returnDate": "2022-06-23T21:00:00.000Z",
         "origin": "Italy",
-        "destination": "Israel",
+        "destination": "Paris",
+        "destinationId": "paris",
         "passDetails": [
           {
             "fullName": "Luffy D Monkey",
@@ -371,6 +476,7 @@
         "returnDate": "2026-03-17",
         "origin": "Tel Aviv",
         "destination": "Paris",
+        "destinationId": "paris",
         "passDetails": [
           {
             "fullName": "Dana Levi",
@@ -433,6 +539,7 @@
         "returnDate": "2026-05-14",
         "origin": "Tel Aviv",
         "destination": "Tokyo",
+        "destinationId": "tokyo",
         "passDetails": [
           {
             "fullName": "Dana Levi",
@@ -495,6 +602,7 @@
         "returnDate": "2026-06-30",
         "origin": "Tel Aviv",
         "destination": "Bali",
+        "destinationId": "bali",
         "passDetails": [
           {
             "fullName": "Noa Cohen",
@@ -546,6 +654,7 @@
         "returnDate": "2026-07-11",
         "origin": "Tel Aviv",
         "destination": "Dubai",
+        "destinationId": "dubai",
         "passDetails": [
           {
             "fullName": "Dana Levi",
@@ -595,6 +704,7 @@
         "returnDate": "2026-08-22",
         "origin": "Tel Aviv",
         "destination": "Barcelona",
+        "destinationId": "barcelona",
         "passDetails": [
           {
             "fullName": "Noa Cohen",
@@ -657,6 +767,7 @@
         "returnDate": "2026-09-09",
         "origin": "Tel Aviv",
         "destination": "Singapore",
+        "destinationId": "singapore",
         "passDetails": [
           {
             "fullName": "Dana Levi",
@@ -718,7 +829,8 @@
         "departureDate": "2026-10-01",
         "returnDate": "2026-10-05",
         "origin": "Tel Aviv",
-        "destination": "Rome",
+        "destination": "Paris",
+        "destinationId": "paris",
         "passDetails": [
           {
             "fullName": "Dana Levi",
@@ -743,7 +855,7 @@
       },
       "hotel": {
         "orderID": "108",
-        "name": "Trastevere Suites",
+        "name": "Montmartre Suites",
         "stars": 4,
         "guests": 1,
         "breakfast": true,
@@ -764,7 +876,8 @@
         "departureDate": "2026-11-10",
         "returnDate": "2026-11-17",
         "origin": "Tel Aviv",
-        "destination": "Lisbon",
+        "destination": "Barcelona",
+        "destinationId": "barcelona",
         "passDetails": [
           {
             "fullName": "Dana Levi",
@@ -789,7 +902,7 @@
       },
       "hotel": {
         "orderID": "109",
-        "name": "Alfama Terrace",
+        "name": "Eixample Terrace",
         "stars": 4,
         "guests": 1,
         "breakfast": true,
@@ -801,7 +914,7 @@
       },
       "flight": {
         "orderID": "109",
-        "dest": "Lisbon",
+        "dest": "Barcelona",
         "org": "Tel Aviv",
         "returnDate": "2026-11-17",
         "departureDate": "2026-11-10",
@@ -826,9 +939,6 @@
       ],
       "specialties": [
         "Paris",
-        "France",
-        "Lisbon",
-        "Rome",
         "Barcelona",
         "hotel"
       ],
@@ -862,6 +972,7 @@
     }
   ],
   "auditLog": [],
+  "passwordResets": [],
   "inquiries": [
     {
       "id": 1,
@@ -882,7 +993,7 @@
   ],
   "publicSummary": [
     {
-      "updatedAt": "2026-10-11T22:00:00.000Z",
+      "updatedAt": "2026-10-15T10:45:00.594Z",
       "bookings": 9,
       "sufficient": true,
       "agents": [
@@ -896,9 +1007,6 @@
           ],
           "specialties": [
             "Paris",
-            "France",
-            "Lisbon",
-            "Rome",
             "Barcelona",
             "hotel"
           ],
@@ -943,36 +1051,42 @@
       "averageResponseHours": 17.3,
       "topDestinations": [
         {
+          "destinationId": "paris",
+          "name": "Paris",
+          "count": 3,
+          "rating": 4.5,
+          "averagePrice": 650
+        },
+        {
+          "destinationId": "barcelona",
+          "name": "Barcelona",
+          "count": 2,
+          "rating": 4.5,
+          "averagePrice": 910
+        },
+        {
+          "destinationId": "bali",
           "name": "Bali",
           "count": 1,
           "rating": 5,
           "averagePrice": 760
         },
         {
+          "destinationId": "singapore",
           "name": "Singapore",
           "count": 1,
           "rating": 5,
           "averagePrice": 1720
         },
         {
-          "name": "Barcelona",
-          "count": 1,
-          "rating": 4.5,
-          "averagePrice": 830
-        },
-        {
-          "name": "Paris",
-          "count": 1,
-          "rating": 4.5,
-          "averagePrice": 1060
-        },
-        {
+          "destinationId": "tokyo",
           "name": "Tokyo",
           "count": 1,
           "rating": 3.5,
           "averagePrice": 1990
         },
         {
+          "destinationId": "dubai",
           "name": "Dubai",
           "count": 1,
           "rating": 2,
@@ -982,6 +1096,7 @@
       "reviews": [
         {
           "firstName": "Dana",
+          "destinationId": "singapore",
           "destination": "Singapore",
           "hotelRating": 5,
           "flightRating": 5,
@@ -989,6 +1104,7 @@
         },
         {
           "firstName": "Noa",
+          "destinationId": "barcelona",
           "destination": "Barcelona",
           "hotelRating": 4,
           "flightRating": 5,
@@ -996,18 +1112,21 @@
         },
         {
           "firstName": "Dana",
+          "destinationId": "dubai",
           "destination": "Dubai",
           "flightRating": 2,
           "text": "Flight times were inconvenient."
         },
         {
           "firstName": "Noa",
+          "destinationId": "bali",
           "destination": "Bali",
           "hotelRating": 5,
           "text": "Best villa we ever stayed in."
         },
         {
           "firstName": "Dana",
+          "destinationId": "tokyo",
           "destination": "Tokyo",
           "hotelRating": 4,
           "flightRating": 3,
@@ -1015,6 +1134,7 @@
         },
         {
           "firstName": "Dana",
+          "destinationId": "paris",
           "destination": "Paris",
           "hotelRating": 5,
           "flightRating": 4,
