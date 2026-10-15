@@ -2,10 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
+import { DESTINATIONS } from 'src/app/modules/shared/destinations/destinations.testing';
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { environment } from 'src/environments/environment';
+import { SessionStore } from 'src/app/services/session/session.store';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -31,7 +37,11 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
-  afterEach(() => httpMock.verify());
+  afterEach(() => {
+    httpMock.verify();
+    localStorage.clear();
+    sessionStorage.clear();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -57,7 +67,7 @@ describe('LoginComponent', () => {
   });
 
   it('shows an alert after a failed login', () => {
-    component.formGroup.setValue({ username: 'user', password: 'wrong-pass' });
+    component.formGroup.setValue({ username: 'user', password: 'wrong-pass', remember: false });
 
     component.onSubmit();
     httpMock.expectOne(r => r.url === loginUrl).flush([]);
@@ -65,6 +75,33 @@ describe('LoginComponent', () => {
 
     const alert = host().querySelector('[role="alert"]');
     expect(alert?.textContent).toContain("couldn't log you in");
+  });
+
+  it('disables Log in until both fields are valid, and while logging in', () => {
+    const button = () => host().querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button().disabled).toBe(true);
+
+    component.formGroup.patchValue({ username: 'user', password: 'abc' });
+    fixture.detectChanges();
+    expect(button().disabled).toBe(true);
+
+    component.formGroup.patchValue({ password: 'pass' });
+    fixture.detectChanges();
+    expect(button().disabled).toBe(false);
+  });
+
+  it('offers to remember the login and links to the password reset', () => {
+    expect(host().querySelector<HTMLInputElement>('input[type="checkbox"]')?.checked).toBe(false);
+    expect(host().querySelector('a[href="/forgot-password"]')).not.toBeNull();
+  });
+
+  it('keeps the login for later visits only when Remember me is ticked', () => {
+    component.formGroup.setValue({ username: 'user', password: 'pass', remember: true });
+    component.onSubmit();
+    httpMock.expectOne(r => r.url === loginUrl).flush([{ username: 'user', role: 'customer' }]);
+
+    expect(localStorage.getItem('vica-session')).toContain('"username":"user"');
+    expect(sessionStorage.getItem('vica-session')).toBeNull();
   });
 });
 
@@ -76,10 +113,27 @@ describe('LoginComponent with a destination chosen on the homepage', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [{ provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(destination ? { destination } : {}) } } }]
     }).compileComponents();
-    const fixture = TestBed.createComponent(LoginComponent);
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: [...DESTINATIONS] });
+    fixture = TestBed.createComponent(LoginComponent);
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;
   };
+  let fixture: ComponentFixture<LoginComponent>;
+
+  it('continues to the booking form after logging in with a chosen place, and to the homepage without one', async () => {
+    for (const [destination, target] of [['paris', '/homepage/book'], [null, '/homepage']] as const) {
+      TestBed.resetTestingModule();
+      await create(destination);
+      const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+      TestBed.inject(SessionStore).login = () => of([]) as never;
+      patchState(unprotected(TestBed.inject(SessionStore)), { isLoggedIn: true });
+
+      fixture.componentInstance.formGroup.patchValue({ username: 'user', password: 'pass' });
+      fixture.componentInstance.onSubmit();
+
+      expect(navigate.mock.calls[0][0]).toEqual([target]);
+    }
+  });
 
   it('says which trip the visitor is signing in for', async () => {
     const host = await create('paris');

@@ -2,6 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
+import { DESTINATIONS } from 'src/app/modules/shared/destinations/destinations.testing';
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -46,6 +50,19 @@ describe('RegisterComponent', () => {
     }
   });
 
+  it('keeps Create account disabled until the form is valid', () => {
+    const button = () => host().querySelector('button[type="submit"]') as HTMLButtonElement;
+    expect(button().disabled).toBe(true);
+
+    component.formGroup.patchValue({ username: 'new-user', email: 'new@example.com', password: 'pass1234' });
+    fixture.detectChanges();
+    expect(button().disabled).toBe(false);
+
+    component.formGroup.patchValue({ email: 'not-an-email' });
+    fixture.detectChanges();
+    expect(button().disabled).toBe(true);
+  });
+
   it('shows what is wrong and sends nothing when the form is incomplete', () => {
     component.formGroup.patchValue({ email: 'not-an-email' });
 
@@ -82,6 +99,7 @@ describe('RegisterComponent with a destination chosen on the homepage', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [{ provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(destination ? { destination } : {}) } } }]
     }).compileComponents();
+    patchState(unprotected(TestBed.inject(DestinationStore)), { destinations: [...DESTINATIONS] });
     const fixture = TestBed.createComponent(RegisterComponent);
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;

@@ -14,6 +14,9 @@ import { API_URL, ConfigService, provideAppIcons } from '@vica-assist/shared';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DestinationStore } from './services/destination/destination.store';
+import { LinkStore } from './services/links/link.store';
+import { SessionStore } from './services/session/session.store';
 
 
 
@@ -48,7 +51,11 @@ const JWT_Module_Options: JwtModuleOptions = {
     SflightService,
     { provide: API_URL, useValue: environment.api },
     provideAppIcons(),
-    provideAppInitializer(() => inject(ConfigService).load())
+    provideAppInitializer(() => inject(ConfigService).load()),
+    provideAppInitializer(() => inject(DestinationStore).load()),
+    provideAppInitializer(() => {
+      if (inject(SessionStore).restore()) inject(LinkStore).updateSharedLinks_AfterLogin();
+    })
   ],
   bootstrap: [AppComponent]
 })

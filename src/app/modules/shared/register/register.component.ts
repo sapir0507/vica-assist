@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { canonicalPlace } from '@vica-assist/shared';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DestinationStore } from 'src/app/services/destination/destination.store';
 import { RegisterRequest } from 'src/app/services/register/register.model';
 import { RegisterService } from 'src/app/services/register/register.service';
 
@@ -28,8 +28,9 @@ export class RegisterComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   /** The place a visitor chose on the homepage, if it is a real one: nothing else from the address is used. */
-  readonly plannedPlace = canonicalPlace(this.route.snapshot.queryParamMap.get('destination'));
-  readonly loginParams = this.plannedPlace ? { destination: this.plannedPlace } : {};
+  private readonly planned = inject(DestinationStore).bookable(this.route.snapshot.queryParamMap.get('destination'));
+  readonly plannedPlace = this.planned?.name ?? null;
+  readonly loginParams = this.planned ? { destination: this.planned.id } : {};
 
   constructor(
     private registerService: RegisterService

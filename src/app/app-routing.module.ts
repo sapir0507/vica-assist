@@ -33,6 +33,14 @@ const routes: Routes = [
     loadChildren: () => import('./modules/shared/login/login.module').then(m => m.LoginModule)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./modules/shared/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./modules/shared/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
     path: 'register',
     loadChildren: () => import('./modules/shared/register/register.module').then(m => m.RegisterModule)
   },

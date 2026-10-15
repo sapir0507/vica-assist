@@ -20,6 +20,8 @@ describe('SessionStore', () => {
 
   afterEach(() => {
     httpMock.verify();
+    localStorage.clear();
+    sessionStorage.clear();
   });
 
   it('starts logged out with the default role', () => {
@@ -89,6 +91,76 @@ describe('SessionStore', () => {
 
       expect(store.isLoggedIn()).toBeFalsy();
       expect(store.isLoading()).toBe(false);
+    });
+  });
+
+  describe('remember me', () => {
+    const logIn = (remember: boolean) => {
+      store.siteLogin('user', 'pass', remember).subscribe();
+      httpMock.expectOne(r => r.url === url).flush([{ username: 'user', password: 'pass', role: 'agent' }]);
+    };
+    const saved = (storage: Storage) => JSON.parse(storage.getItem('vica-session') ?? 'null');
+
+    it('keeps the login in localStorage for 30 days when ticked, without the password', () => {
+      logIn(true);
+
+      const days = (saved(localStorage).expiresAt - Date.now()) / (24 * 60 * 60 * 1000);
+      expect(days).toBeGreaterThan(29.9);
+      expect(days).toBeLessThanOrEqual(30);
+      expect(saved(localStorage)).toEqual(expect.objectContaining({ username: 'user', role: 'agent' }));
+      expect(localStorage.getItem('vica-session')).not.toContain('pass');
+      expect(sessionStorage.getItem('vica-session')).toBeNull();
+      expect(store.expiresAt()).toBe(saved(localStorage).expiresAt);
+    });
+
+    it('keeps it only for the tab when not ticked', () => {
+      logIn(false);
+
+      expect(saved(sessionStorage)).toEqual({ username: 'user', role: 'agent', expiresAt: null });
+      expect(localStorage.getItem('vica-session')).toBeNull();
+    });
+
+    it('restores a saved login after a reload', () => {
+      logIn(true);
+      store.logout();
+      localStorage.setItem('vica-session', JSON.stringify({ username: 'user', role: 'agent', expiresAt: Date.now() + 60_000 }));
+
+      expect(store.restore()).toBe(true);
+      expect(store.isLoggedIn()).toBe(true);
+      expect(store.role()).toBe('agent');
+      expect(store.username()).toBe('user');
+    });
+
+    it('restores a login saved for the tab', () => {
+      sessionStorage.setItem('vica-session', JSON.stringify({ username: 'user', role: 'customer', expiresAt: null }));
+
+      expect(store.restore()).toBe(true);
+      expect(store.role()).toBe('customer');
+    });
+
+    it('ignores and removes a login that has run out', () => {
+      localStorage.setItem('vica-session', JSON.stringify({ username: 'user', role: 'agent', expiresAt: Date.now() - 1 }));
+
+      expect(store.restore()).toBe(false);
+      expect(store.isLoggedIn()).toBe(false);
+      expect(localStorage.getItem('vica-session')).toBeNull();
+    });
+
+    it('ignores anything that is not a saved login, such as an edited role', () => {
+      for (const bad of ['not json', '{"username":"user","role":"superuser","expiresAt":null}', '{"role":"agent"}']) {
+        localStorage.setItem('vica-session', bad);
+        expect(store.restore()).toBe(false);
+      }
+      expect(store.isLoggedIn()).toBe(false);
+    });
+
+    it('forgets the saved login on logout', () => {
+      logIn(true);
+
+      store.logout();
+
+      expect(localStorage.getItem('vica-session')).toBeNull();
+      expect(sessionStorage.getItem('vica-session')).toBeNull();
     });
   });
 
