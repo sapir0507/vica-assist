@@ -63,6 +63,10 @@ the flow.
 - **Secure by default.** A fallback authorization policy requires a signed-in user on every endpoint. Public endpoints
   opt out with `[AllowAnonymous]`, so a new controller cannot be exposed by forgetting an attribute.
 - **Self-registration cannot choose a role.** `RegisterRequest` has no role field; the service sets `customer`.
+- **Usernames cannot contain `@`.** Sign-in accepts a username or an email, so a username such as `admin@example.com`
+  could be mistaken for another account's address. Usernames are limited to letters, digits, spaces, `.`, `_` and `-`.
+- **Password rules.** At least 8 characters (attribute), a letter and a digit, and not containing the username or the
+  email name. The same rules apply when a password is reset, checked before the reset token is used.
 - **Roles come from the token, signed by the server.** A forged token with `"role": "admin"` fails signature
   validation (there is a test for it). The policy is `AdminOnly` (`Policies.AdminOnly`); more are added when endpoints
   need them.

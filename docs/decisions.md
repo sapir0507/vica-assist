@@ -97,6 +97,24 @@ integration tests, which run several hosts in one process, from writing into eac
 such as `Serilog__MinimumLevel__Default`). The relative log path follows the working directory, which is the project
 folder under `dotnet run` and Visual Studio.
 
+## A validation service and a validator factory, on top of the attributes
+
+**Decision.** Rules that attributes cannot express are hand-written `IValidator<T>` classes in `Validators/`.
+`ValidationService` asks `ValidatorFactory` for the validator registered for the request type, runs it, and throws
+`ValidationFailedException`, which the exception handler turns into the same `400` problem-details shape MVC uses for
+attribute failures. The attributes stay; the service runs inside the use-case services, after them.
+
+**Why.** Attributes check one property at a time, with no access to the rest of the request or to data. The factory
+keeps the service closed to change: a new rule set is a validator class plus one registration line, and the services
+never name a concrete validator. The first rules close a real hole (a username shaped like an email address could
+shadow another account at sign-in) and apply the same password policy to registration, admin-created users and resets.
+Validation runs in `UserService` and `PasswordResetService`, not the controllers, so every entry point is covered once.
+
+**Given up.** FluentValidation would provide the rule syntax and built-ins; hand-written validators avoid a dependency
+for two small rule sets. "Username or email already taken" is deliberately not a validator rule: it must be atomic with
+the insert (a pre-check would race), and a conflict is a `409`, not malformed input, so it stays in
+`IUserRepository.TryAddAsync`.
+
 ## Folder layout by layer
 
 **Decision.** One project, with top-level folders by kind (`Controllers`, `Services`, `Interfaces`, `Repositories`,

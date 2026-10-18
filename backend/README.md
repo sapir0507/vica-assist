@@ -83,6 +83,23 @@ All under `/api/v1`. Everything needs a bearer token unless marked public.
 
 Errors use RFC 9457 problem details; validation failures list the offending fields.
 
+## Validation
+
+A request is checked twice, and both give the same `400` problem-details shape (`errors` keyed by field):
+
+1. **Attributes** on the request classes (`[Required]`, lengths, email format) run first, in MVC.
+2. **Validators** (`Validators/`) then run in the services for rules attributes cannot express. `IValidationService` asks
+   `IValidatorFactory` for the `IValidator<T>` registered for the request type, so a new rule set is one class and one
+   registration line in `ServiceCollectionExtensions`.
+
+| Request | Rules |
+|---|---|
+| `CreateUserRequest` (register and admin-create) | Username: 3+ characters after trimming; letters, digits, space, `.`, `_`, `-` only (no `@`, so a username cannot be mistaken for an email at sign-in). Password: a letter and a digit, and not containing the username or the part of the email before the `@` |
+| `ResetPasswordRequest` | The same password rules, without the identity check (the account is not known until the token is redeemed). Checked before the token is used |
+
+Whether a username or email is already taken is not a validator rule: the repository decides it atomically with the
+insert and the API answers `409 Conflict`.
+
 ## Layout
 
 ```
@@ -99,7 +116,8 @@ backend/
                      policy names
     Enums/           Role
     Authorization/   JWT bearer setup
-    Exceptions/      ApiException and its problem-details handler
+    Validators/      the rules beyond the attributes; the validation service and factory are in Services/
+    Exceptions/      ApiException, ValidationFailedException and their problem-details handler
     Extensions/      service registration, the OpenAPI bearer scheme and enum schemas
     Seed/            sample users
   tests/VicaAssist.Api.Tests/
