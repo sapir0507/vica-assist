@@ -98,7 +98,7 @@ filter by order id, create, delete" client both libraries extend.
 | Lint | ESLint 10, angular-eslint, typescript-eslint, driven through Nx |
 | Workspace | Nx 23 (graph and lint only), Angular CLI as the task runner |
 | Mock API | json-server 0.17 |
-| Replacement API | ASP.NET Core (.NET 10), JWT bearer authentication, xUnit integration tests |
+| Replacement API | ASP.NET Core (.NET 10), JWT bearer authentication, Newtonsoft.Json, Serilog, xUnit integration tests |
 
 ## Project structure
 

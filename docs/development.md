@@ -55,15 +55,17 @@ The settings, endpoints and layout are in [backend/README.md](../backend/README.
 
 ```bash
 cd backend/src/VicaAssist.Api
-cp .env.example .env      # set Jwt__SigningKey (32+ characters) and Seed__Password
-dotnet run                # http://localhost:5199, Swagger UI at /swagger
+cp .env.example .env      # secrets only: Jwt__SigningKey (32+ characters) and Seed__Password
+dotnet run                # http://localhost:5199, Swagger UI at /swagger; logs to the console and logs/
 
 cd backend
 dotnet test VicaAssist.slnx     # integration tests against a temporary JSON database
 dotnet build VicaAssist.slnx
 ```
 
-In Visual Studio, open `backend/VicaAssist.slnx` and run the `https` profile. `.env` and `App_Data/` are git-ignored.
+Settings come from `appsettings.json`, `appsettings.<Environment>.json`, `.env` and the real environment, in that
+order of precedence; see [backend/README.md](../backend/README.md#configuration). In Visual Studio, open
+`backend/VicaAssist.slnx` and run the `https` profile. `.env`, `App_Data/` and `logs/` are git-ignored.
 CI (`.github/workflows/backend.yml`) restores, builds and tests with the same commands.
 
 ## Production build

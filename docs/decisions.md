@@ -53,19 +53,55 @@ repository methods so the lock covers the check and the write.
 
 **Given up.** It is single-process and keeps expired tokens forever, which is acceptable for development.
 
-## Settings through typed, validated options
+## Settings through a ConfigurationService
 
-**Decision.** Every setting is an options class with data annotations, bound with `ValidateOnStart`. A small loader
-(`AddDotEnvFile`, about 40 lines) reads `.env`; real environment variables win over it.
+**Decision.** `ConfigurationService` reads `appsettings.json`, then `appsettings.<Environment>.json`, then `.env`, then
+real environment variables, into one typed `AppSettings` object and validates it (data annotations) when the app
+starts. Services depend on `IConfigurationService` instead of `IOptions<T>`. Defaults live in `appsettings.json`, not
+in C# initialisers; secrets live in `.env`.
 
-**Why.** A missing or weak signing key should stop the app at start-up with a clear message, not surface as a failed
-sign-in later. The loader avoids a dependency for a format this simple.
+**Why.** One class shows the whole story of where a value comes from, with the order written down and tested, and it
+is built from plain inputs (a directory, an environment name, a dictionary) so the tests exercise it without touching
+the machine's environment. A missing or weak signing key stops the app with a message naming every invalid setting
+(`Jwt:SigningKey`), instead of failing at the first sign-in.
+
+**Given up.** The framework's configuration system, which also offers reload-on-change, user-secrets and cloud
+providers. The framework still loads the same `appsettings` files for its own needs and for Serilog (below), so the
+files are read twice. Settings in the `Serilog` section are therefore not overridden by `.env`.
+
+## Newtonsoft.Json for all JSON
+
+**Decision.** The controllers, the JSON database file, the seed data and the settings loader use Newtonsoft.Json
+(`AddNewtonsoftJson`). Enums are written as their `[EnumMember]` names.
+
+**Why.** It was requested as the project's JSON library, and one library avoids two sets of attributes and
+conventions in the same code base.
+
+**Given up.** The built-in OpenAPI generator is System.Text.Json based, so `EnumSchemaTransformer` rewrites enum
+schemas to the names actually sent (a test checks the document). The framework's own problem-details writer for error
+responses stays on System.Text.Json; it carries no enums or custom shapes. Newtonsoft adds a dependency, which the
+project otherwise tries to avoid.
+
+## Serilog, configured in appsettings
+
+**Decision.** Serilog logs to the console and to a daily rolling file, with sinks, levels and path in the `Serilog`
+section of `appsettings.json`. Requests are logged one line each by `UseSerilogRequestLogging`. A console-only bootstrap
+logger covers failures before the configured one exists.
+
+**Why.** Structured logs with a file give something to read after the process has gone. The request line carries
+method, path, status and duration but never bodies or query strings, so credentials and tokens stay out of the log.
+Each host keeps its own logger (`preserveStaticLogger`) rather than the process-wide `Log.Logger`, which keeps the
+integration tests, which run several hosts in one process, from writing into each other's files.
+
+**Given up.** Serilog reads the framework's `IConfiguration`, so it ignores `.env` (use a real environment variable
+such as `Serilog__MinimumLevel__Default`). The relative log path follows the working directory, which is the project
+folder under `dotnet run` and Visual Studio.
 
 ## Folder layout by layer
 
 **Decision.** One project, with top-level folders by kind (`Controllers`, `Services`, `Interfaces`, `Repositories`,
 `Models`, `Enums`). A class that only holds data goes in `Models`, grouped by feature (`Auth`, `Users`, `PasswordReset`,
-`Data`): entities, request and response types, the settings classes (`JwtOptions`, `RateLimitOptions`, ...) and the
+`Data`, `Settings`): entities, request and response types, the settings classes (`JwtOptions`, `RateLimitOptions`, ...) and the
 constant policy names. Classes with behaviour stay in the folder for their layer.
 
 **Why.** It is the structure the author uses across .NET projects, and at this size a split into several assemblies
@@ -74,7 +110,8 @@ key is an extension method (`JwtOptionsExtensions`) rather than a method on `Jwt
 
 ## The reset token is delivered by a logging stand-in
 
-**Decision.** `LoggingPasswordResetNotifier` logs the token in Development and logs only a warning elsewhere.
+**Decision.** `LoggingPasswordResetNotifier` logs the token in Development (so it reaches the log file too) and logs
+only a warning elsewhere.
 
 **Why.** There is no email provider yet. Logging a reset token in production would put a credential in the logs, so the
 flow is deliberately unusable there until a real sender implements `IPasswordResetNotifier`.

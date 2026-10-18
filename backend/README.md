@@ -24,26 +24,46 @@ Or open `backend/VicaAssist.slnx` in Visual Studio and run the `https` profile. 
 To try a protected endpoint in Swagger: `POST /api/v1/auth/login`, copy the `accessToken`, choose **Authorize** and
 paste it.
 
-The password reset sends no email yet. In Development the reset token is written to the console log; in any other
-environment it is never logged, so the flow cannot be completed there until an email provider is added.
+The password reset sends no email yet. In Development the reset token is written to the log (console and file); in any
+other environment it is never logged, so the flow cannot be completed there until an email provider is added.
 
 ## Configuration
 
-Settings come from `appsettings.json`, then the `.env` file, then real environment variables (which win over `.env`).
-`__` stands for a section separator, so `Jwt__SigningKey` is `Jwt:SigningKey`. Invalid values stop the app at start-up.
+`ConfigurationService` reads the settings, each source overriding the one before it:
 
-| Key | Default | Meaning |
+1. `appsettings.json` (required) holds the defaults, with no secrets.
+2. `appsettings.<Environment>.json` (optional) holds the differences for that environment. `ASPNETCORE_ENVIRONMENT`
+   picks it; in Development `appsettings.Development.json` lengthens the access token to 60 minutes so Swagger
+   sessions last.
+3. `.env` (optional, next to `appsettings.json`) holds secrets. Copy `.env.example`.
+4. Real environment variables win over everything.
+
+`.env` and environment variables use `__` as the section separator, so `Jwt__SigningKey` is `Jwt:SigningKey`, and they
+can override any setting below. The app validates every setting at start-up and stops with a message listing each
+invalid one by name (for example `Jwt:SigningKey`).
+
+| Setting | Where | Meaning |
 |---|---|---|
-| `Jwt__SigningKey` | none, **required** | HMAC key, at least 32 characters |
-| `Seed__Password` | none | Password for the seeded users; required while the database has no users |
-| `Jwt__Issuer`, `Jwt__Audience` | `vica-assist-api`, `vica-assist-app` | Checked on every token |
-| `Jwt__AccessTokenMinutes` | 15 | Access token lifetime |
-| `Jwt__RefreshTokenDays` | 30 | Refresh token lifetime with "Remember me" |
-| `Jwt__SessionRefreshTokenHours` | 12 | Refresh token lifetime without it |
-| `Cors__AllowedOrigin` | `http://localhost:4200` | The one origin allowed to call the API from a browser |
-| `Data__FilePath` | `App_Data/database.json` | The JSON database, relative to the project directory |
-| `PasswordReset__TokenMinutes` | 60 | Reset token lifetime |
-| `RateLimit__AuthRequestsPerMinute` | 10 | Per client IP, on login, register and the reset endpoints |
+| `Jwt:SigningKey` | `.env`, **required** | HMAC key, at least 32 characters |
+| `Seed:Password` | `.env` | Password for the seeded users; required while the database has no users |
+| `Jwt:Issuer`, `Jwt:Audience` | `appsettings.json` | Checked on every token |
+| `Jwt:AccessTokenMinutes` | 15 (60 in Development) | Access token lifetime |
+| `Jwt:RefreshTokenDays` | 30 | Refresh token lifetime with "Remember me" |
+| `Jwt:SessionRefreshTokenHours` | 12 | Refresh token lifetime without it |
+| `Cors:AllowedOrigin` | `http://localhost:4200` | The one origin allowed to call the API from a browser |
+| `Data:FilePath` | `App_Data/database.json` | The JSON database, relative to the project directory |
+| `PasswordReset:TokenMinutes` | 60 | Reset token lifetime |
+| `RateLimit:AuthRequestsPerMinute` | 10 | Per client IP, on login, register and the reset endpoints |
+
+## Logging
+
+Serilog writes to the console and to a daily rolling file, `logs/vica-assist-<date>.log` under the project directory
+(14 files kept, git-ignored). Both sinks, the levels and the file path are the `Serilog` section of
+`appsettings.json`; Development lowers the minimum level to `Debug`. Each request is one line (method, path, status,
+duration); request bodies and query strings are never logged.
+
+Serilog reads the framework's configuration, which is `appsettings*.json` plus real environment variables
+(`Serilog__MinimumLevel__Default=Debug`), not `.env`.
 
 ## Endpoints
 
@@ -70,15 +90,17 @@ backend/
   VicaAssist.slnx
   src/VicaAssist.Api/
     Controllers/     thin HTTP layer
-    Services/        the use cases (sign-in, reset, user management) and the token and password helpers
+    Services/        the use cases (sign-in, reset, user management), ConfigurationService and the token, password
+                     and .env helpers
     Interfaces/      contracts for services and repositories
     Repositories/    JSON-file implementations of the repository interfaces
-    Models/          every class that only holds data, grouped by feature: Auth, Users, PasswordReset, Data.
-                     That covers entities, request/response types, settings (JwtOptions, ...) and policy names
+    Models/          every class that only holds data, grouped by feature: Auth, Users, PasswordReset, Data, Settings.
+                     That covers entities, request/response types, settings (JwtOptions, AppSettings, ...) and
+                     policy names
     Enums/           Role
     Authorization/   JWT bearer setup
     Exceptions/      ApiException and its problem-details handler
-    Extensions/      service registration, the .env loader, the OpenAPI bearer scheme
+    Extensions/      service registration, the OpenAPI bearer scheme and enum schemas
     Seed/            sample users
   tests/VicaAssist.Api.Tests/
 ```
@@ -90,6 +112,7 @@ cd backend
 dotnet test VicaAssist.slnx
 ```
 
-The tests start the real application against a temporary JSON file (`WebApplicationFactory`). Only the clock and the
-reset-email sender are replaced, so the whole pipeline is exercised: validation, JWT checks, role policies, rate
-limiting and persistence. CI runs the same command (`.github/workflows/backend.yml`).
+The tests start the real application against a temporary directory holding its own `appsettings.json` and JSON database
+(`WebApplicationFactory`). Only the clock and the reset-email sender are replaced, so the whole pipeline is exercised:
+settings loading, validation, JWT checks, role policies, rate limiting, logging and persistence. A real environment
+variable such as `Jwt__SigningKey` on your machine would override the test settings, so keep those unset when testing. CI runs the same command (`.github/workflows/backend.yml`).
