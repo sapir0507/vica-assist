@@ -1,8 +1,10 @@
 # VicaAssist
 
-An Angular travel-booking app for a small agency: **agents** publish flight and hotel listings, and
-**customers** assemble an order (flight and/or hotel) and confirm it as a finished booking. The app is
-backed by a local `json-server` mock, so it runs with no real backend.
+An Angular travel-booking app for a small agency. **Customers** pick one of the agency's destinations and describe a
+trip; the request is assigned to an **agent**, who adds flight and hotel offers; the customer chooses, books, messages
+the agent and rates the trip afterwards. **Admins** manage agents, airlines, configuration and an audit log, and
+**visitors** see a public page with live service numbers that never exposes anyone's details. The app is backed by a
+local `json-server` mock, so it runs with no real backend.
 
 This is a portfolio project. Besides the app itself, most of the history here is the modernisation of a
 multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
