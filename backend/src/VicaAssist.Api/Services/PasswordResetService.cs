@@ -9,6 +9,7 @@ public sealed class PasswordResetService(
     IPasswordResetTokenRepository resetTokens,
     IRefreshTokenRepository refreshTokens,
     IPasswordResetNotifier notifier,
+    IValidationService validation,
     PasswordService passwords,
     IConfigurationService configuration,
     TimeProvider timeProvider) : IPasswordResetService
@@ -33,6 +34,9 @@ public sealed class PasswordResetService(
 
     public async Task ResetPasswordAsync(ResetPasswordRequest request, CancellationToken cancellationToken)
     {
+        // Before the token is redeemed, so a rejected password does not use the token up.
+        await validation.ValidateAsync(request, cancellationToken);
+
         var now = timeProvider.GetUtcNow();
         var consumed = await resetTokens.TryConsumeAsync(OpaqueToken.Hash(request.Token), now, cancellationToken)
             ?? throw ApiException.BadRequest(InvalidToken);

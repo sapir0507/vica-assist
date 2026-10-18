@@ -10,8 +10,11 @@ using VicaAssist.Api.Enums;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.Auth;
+using VicaAssist.Api.Models.PasswordReset;
+using VicaAssist.Api.Models.Users;
 using VicaAssist.Api.Repositories;
 using VicaAssist.Api.Services;
+using VicaAssist.Api.Validators;
 
 namespace VicaAssist.Api.Extensions;
 
@@ -41,6 +44,11 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IUserRepository, JsonUserRepository>();
         services.AddSingleton<IRefreshTokenRepository, JsonRefreshTokenRepository>();
         services.AddSingleton<IPasswordResetTokenRepository, JsonPasswordResetTokenRepository>();
+
+        services.AddSingleton<IValidatorFactory, ValidatorFactory>();
+        services.AddSingleton<IValidationService, ValidationService>();
+        services.AddSingleton<IValidator<CreateUserRequest>, CreateUserRequestValidator>();
+        services.AddSingleton<IValidator<ResetPasswordRequest>, ResetPasswordRequestValidator>();
 
         services.AddSingleton<PasswordService>();
         services.AddSingleton<ITokenService, TokenService>();
