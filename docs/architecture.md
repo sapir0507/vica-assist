@@ -31,6 +31,9 @@ system; [design.md](design.md) covers the visual design system.
 - **`projects/`** holds five libraries (below).
 - **Backend:** `environment.api` points at `http://localhost:3000/`. `json-server` serves `src/app/data/data.json`,
   whose top-level keys become REST collections.
+- **Replacement backend (in progress):** `backend/` is an ASP.NET Core API that already implements real authentication
+  and role-based authorization ([authentication-and-authorization.md](authentication-and-authorization.md)). The
+  Angular app does not call it yet; the other collections move over in later milestones.
 
 ## Libraries
 
@@ -95,6 +98,7 @@ filter by order id, create, delete" client both libraries extend.
 | Lint | ESLint 10, angular-eslint, typescript-eslint, driven through Nx |
 | Workspace | Nx 23 (graph and lint only), Angular CLI as the task runner |
 | Mock API | json-server 0.17 |
+| Replacement API | ASP.NET Core (.NET 10), JWT bearer authentication, xUnit integration tests |
 
 ## Project structure
 
@@ -106,6 +110,7 @@ src/app/
   services/              session, order, finalOrder, booking, agent, destination, message, audit, inquiry, links stores · admin
                          service · auth guards · window-resize service
   data/data.json         json-server database
+backend/                          ASP.NET Core API and its tests (see backend/README.md)
 projects/
   shared · my-flights · my-hotels · item · my-pipes
   shared/src/lib/config        trip-config.json (defaults) and the typed config
@@ -115,6 +120,8 @@ docs/
   application-flow.md             roles and how a request moves through the system
   design.md                       design system: tokens, typography, components, accessibility
   development.md                  how to work on the project
+  authentication-and-authorization.md   how the backend authenticates users and enforces roles
+  decisions.md                    backend decisions and what each one gave up
   history/                        upgrade logs: DEPENDENCY_UPGRADE_ROADMAP.md, BOOTSTRAP_ROADMAP.md
 angular.json                      Angular CLI workspace (build, serve, test for every project)
 project.json (per project)        Nx-only configuration (lint targets)
@@ -182,7 +189,10 @@ This is a demo backed by a mock API, and several things would be unacceptable in
   well.
 
 A production version needs a real backend that hashes passwords, issues short-lived tokens in an HTTP-only cookie or
-`Authorization` header, assigns roles server-side, and enforces authorization on every endpoint.
+`Authorization` header, assigns roles server-side, and enforces authorization on every endpoint. The ASP.NET Core API in
+`backend/` does the first three for sign-in, registration and password reset; the frontend still has to be moved onto it,
+and the remaining collections need the same server-side checks (see
+[authentication-and-authorization.md](authentication-and-authorization.md)).
 
 ## Design and engineering decisions
 

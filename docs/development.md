@@ -12,6 +12,9 @@ UI changes should follow [design.md](design.md).
 | npm | the one shipped with Node (11.x was used) | `package-lock.json` is committed |
 | Angular CLI | `~22.2.2`, **local** | A dev dependency; use `npm run ng -- ...` or `npx ng ...`, no global install needed |
 
+The backend in `backend/` additionally needs the **.NET 10 SDK** (Visual Studio 2026 includes it); see
+[Backend](#backend-aspnet-core).
+
 TypeScript is `~6.0.3`. `@angular/build` and `ng-packagr` 22 only accept `>=6.0 <6.1`, so do not bump it
 independently.
 
@@ -44,6 +47,24 @@ npm start          # ng serve -o  →  http://localhost:4200
 
 `json-server` writes back to `src/app/data/data.json` when you create or delete records, so check
 `git status` before committing.
+
+## Backend (ASP.NET Core)
+
+`backend/` holds the API that will replace the mock. The Angular app does not use it yet, so the two run independently.
+The settings, endpoints and layout are in [backend/README.md](../backend/README.md).
+
+```bash
+cd backend/src/VicaAssist.Api
+cp .env.example .env      # set Jwt__SigningKey (32+ characters) and Seed__Password
+dotnet run                # http://localhost:5199, Swagger UI at /swagger
+
+cd backend
+dotnet test VicaAssist.slnx     # integration tests against a temporary JSON database
+dotnet build VicaAssist.slnx
+```
+
+In Visual Studio, open `backend/VicaAssist.slnx` and run the `https` profile. `.env` and `App_Data/` are git-ignored.
+CI (`.github/workflows/backend.yml`) restores, builds and tests with the same commands.
 
 ## Production build
 
@@ -123,3 +144,6 @@ editor apply it.
 | Stale Nx results after changing config | `npx nx reset` |
 | `ng serve` ignores an `angular.json` edit | Restart it; the workspace config is read at start-up |
 | Node version errors during `npm install` or `ng` | Use a Node version from the prerequisites table |
+| The backend stops at start-up with `SigningKey` or `Seed:Password` in the message | `.env` is missing or incomplete; copy `.env.example` and fill in `Jwt__SigningKey` (32+ characters) and `Seed__Password` (8+ characters) |
+| Backend sign-in fails for the sample users after changing `Seed__Password` | Seeding only runs on an empty database; delete `backend/src/VicaAssist.Api/App_Data/` to reseed |
+| The browser blocks calls to the backend | `Cors__AllowedOrigin` must match the origin the app is served from (default `http://localhost:4200`) |

@@ -4,7 +4,9 @@ An Angular travel-booking app for a small agency. **Customers** pick one of the 
 trip; the request is assigned to an **agent**, who adds flight and hotel offers; the customer chooses, books, messages
 the agent and rates the trip afterwards. **Admins** manage agents, airlines, configuration and an audit log, and
 **visitors** see a public page with live service numbers that never exposes anyone's details. The app is backed by a
-local `json-server` mock, so it runs with no real backend.
+local `json-server` mock, so it runs with no real backend. A real ASP.NET Core API is being built beside it in
+[`backend/`](backend/README.md); it already provides authentication and role-based authorization, and the Angular app
+moves onto it in later steps.
 
 This is a portfolio project. Besides the app itself, most of the history here is the modernisation of a
 multi-year-stale Angular 13 / Nx 14 codebase to Angular 22, written up in
@@ -53,6 +55,9 @@ The page that loads at `/homepage` depends on the signed-in user's role.
 | [docs/application-flow.md](docs/application-flow.md) | Roles in detail, how a request moves from booking to rating (with diagrams), assignment, validation and error handling |
 | [docs/design.md](docs/design.md) | Design tokens, typography, components, animation and accessibility |
 | [docs/development.md](docs/development.md) | Prerequisites, commands, testing, linting, debugging and common problems |
+| [docs/authentication-and-authorization.md](docs/authentication-and-authorization.md) | How the ASP.NET Core backend issues and checks tokens, resets passwords and enforces roles |
+| [docs/decisions.md](docs/decisions.md) | Backend decisions, why they were made and what each gave up |
+| [backend/README.md](backend/README.md) | Running the API, its settings, endpoints and tests |
 | [docs/history/](docs/history/) | The upgrade logs: [dependency upgrade](docs/history/DEPENDENCY_UPGRADE_ROADMAP.md) and [Bootstrap and styling](docs/history/BOOTSTRAP_ROADMAP.md) |
 
 ## Getting started
@@ -67,6 +72,10 @@ npm start          # terminal 2: ng serve -o  (http://localhost:4200)
 ```
 
 Sample users are in `src/app/data/data.json` (`login` collection).
+
+The ASP.NET Core backend is separate for now and needs the **.NET 10 SDK**. Set it up with
+`cd backend/src/VicaAssist.Api`, copy `.env.example` to `.env`, fill in the two secrets, then `dotnet run` and open
+`/swagger` ([details](backend/README.md)). Its tests: `cd backend && dotnet test VicaAssist.slnx`.
 
 | Task | Command |
 |---|---|
@@ -97,13 +106,18 @@ production builds). More in [docs/development.md](docs/development.md).
   accepted; streets and small towns are not. Destinations are the six in `data.json`; there is no admin screen to add
   or retire one yet, and agent specialties are matched to them by name.
 - **No real notifications.** Messages and status changes appear when a page is opened or refreshed.
+- **The Angular app does not use the new backend yet.** Until it does, sign-in in the app still goes through the mock,
+  with plaintext passwords and browser-side checks. The backend currently covers authentication and user management
+  only; orders, flights, hotels and the other collections are still served by `json-server`.
 - **Overlapping services from an earlier iteration:** `SflightService` (app) and `MyFlightsService` (library)
   both talk to the flights endpoint.
 
 ## Future improvements
 
-- A real authentication backend (see [Security considerations](docs/architecture.md#security-considerations)) and
-  persisting the session.
+- Move the Angular app onto the backend: a bearer-token interceptor, guards driven by the API, then the orders,
+  flights, hotels, bookings, messages and other collections with server-side ownership checks (see
+  [Security considerations](docs/architecture.md#security-considerations)), and a real database and email provider
+  behind it.
 - Move from NgModules to standalone components, and zoneless change detection now that every component is
   `OnPush`.
 - Extract the duplicated flight services into one.
