@@ -1,6 +1,8 @@
 # Development guide
 
-Every command below is taken from `package.json`, `angular.json` or `project.json`.
+Every command below is taken from `package.json`, `angular.json` or `project.json`. For how the code is organised, see
+[architecture.md](architecture.md); for how a request moves through the app, [application-flow.md](application-flow.md).
+UI changes should follow [design.md](design.md).
 
 ## Prerequisites
 
@@ -57,6 +59,8 @@ dependency must be built first. The app and the tests resolve the same imports t
 
 `npm run watch` rebuilds the app on change using the development configuration.
 
+`npm run int:extract` runs `ng xi18n`, which extracts translatable text; the app has no translations yet.
+
 ## Testing
 
 Tests run on Vitest through `@angular/build:unit-test`, with the `testing` build configuration (JIT) from
@@ -70,10 +74,15 @@ ng test --watch=false    # single run, as in CI
 
 Use `ng test`, not `nx test`: Nx's Angular adapter cannot run the Vitest builder.
 
+Tests are real: stores run against `HttpTestingController`, the services' HTTP contracts are asserted, and guards run in
+an injection context. A header spec checks the navbar/sidebar swap, and a login spec checks the invalid-credentials
+message. Several component specs are construction smoke tests only, because their templates need real Material form
+controls to render meaningfully.
+
 ## Linting
 
 ```bash
-npm run lint             # nx run-many -t lint → the app and all six libraries
+npm run lint             # nx run-many -t lint → the app and the five libraries
 ```
 
 Each project has an `@nx/eslint:lint` target in its `project.json`; the shared flat config is
@@ -110,7 +119,7 @@ editor apply it.
 | `ng build <library>` cannot find `@vica-assist/shared` (or another library) | The dependency has not been built; run `npm run build:libs` |
 | `nx test` fails with "Vitest failed to find the runner" | Expected; use `ng test <project>` |
 | `nx run <library>:build` reports the target does not exist | Library builds live in `angular.json`; use `ng build <library>` |
-| `ng update` fails with "Failed to parse package manager output" (seen on Windows with npm 11) | Bump versions in `package.json`, then run the schematics directly: `ng generate ./node_modules/<package>/<migrations file>:<name>` (see Phase 6 of the upgrade roadmap) |
+| `ng update` fails with "Failed to parse package manager output" (seen on Windows with npm 11) | Bump versions in `package.json`, then run the schematics directly: `ng generate ./node_modules/<package>/<migrations file>:<name>` (see Phase 6 of the [upgrade log](history/DEPENDENCY_UPGRADE_ROADMAP.md)) |
 | Stale Nx results after changing config | `npx nx reset` |
 | `ng serve` ignores an `angular.json` edit | Restart it; the workspace config is read at start-up |
 | Node version errors during `npm install` or `ng` | Use a Node version from the prerequisites table |

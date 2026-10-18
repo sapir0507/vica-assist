@@ -162,13 +162,14 @@ Guidelines:
 | `.form-control`, `.form-field`, `.form-grid`, `.form-hint` | Inputs and the two-column form layout shared by booking and agent forms |
 | `.auth-page`, `.auth-card`, `.auth-form`, `.auth-choice` | Login and register pages |
 | `.order-grid`, `.order-card` | Order lists on the customer homepage and request pages |
-| `.chip`, `.chip--pending`, `.chip--finished` | Status labels |
+| `.chip`, `.chip--pending`, `.chip--ready`, `.chip--booked`, `.chip--finished` | Status labels |
 | `.page`, `.page__title` | Routed page: centred column with a title |
 | `.choice-grid` | Cards to pick a hotel or flight |
 | `.segmented` | Pill-shaped switch between views of one page |
 | `.admin-section`, `.admin-table`, `.admin-card` | Admin dashboard building blocks |
+| `.empty-state` | A brand icon tile, one sentence and the way forward, for a list with nothing in it |
 
-Empty states use a dashed border (`.order-grid__empty`, `.choice-grid__empty`) rather than blank space.
+Smaller empty messages use a dashed border (`.order-grid__empty`, `.choice-grid__empty`) rather than blank space.
 
 ## Accessibility
 
@@ -186,3 +187,20 @@ Empty states use a dashed border (`.order-grid__empty`, `.choice-grid__empty`) r
    component's own `.scss`.
 3. Never hard-code a colour in a component. If a token is missing, add one.
 4. Check both colour schemes before committing (switch the OS or browser's emulated `prefers-color-scheme`).
+
+## Checklist for a UI change
+
+Before merging a change that touches the interface:
+
+- [ ] **Tokens only:** no hard-coded colours, sizes or font stacks; a missing value became a token.
+- [ ] **Both colour schemes:** checked light and dark; text keeps its contrast on every surface it sits on.
+- [ ] **Narrow width:** works at phone width with no horizontal page scroll, and touch targets are comfortably large.
+- [ ] **Keyboard and focus:** everything interactive is reachable in a sensible order and shows the focus ring; a
+      clickable area that is not a link or button also has a keyboard equivalent.
+- [ ] **Names for assistive technology:** icon-only buttons have an `aria-label`, decorative images use `alt=""` or
+      `aria-hidden`, status is never shown by colour alone.
+- [ ] **Motion:** animation only changes `opacity` or `transform`, plays once unless it is a status indicator, and has
+      a `prefers-reduced-motion` fallback that shows the final state.
+- [ ] **No false affordances:** something that is not clickable has no hover lift or pointer cursor.
+- [ ] **Empty, loading and error states** are designed, not blank.
+- [ ] **This document** is updated when a token or a shared class is added, changed or removed.

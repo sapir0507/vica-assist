@@ -693,7 +693,7 @@ modules are now unreferenced by routes, as their commented-out routes already im
 
 ## Phase 10 — Styling foundation (done, `style/foundation`)
 
-First stage of the restyle planned in `docs/BOOTSTRAP_ROADMAP.md`; the page-by-page restyle follows it.
+First stage of the restyle planned in [`BOOTSTRAP_ROADMAP.md`](BOOTSTRAP_ROADMAP.md); the page-by-page restyle follows it.
 
 | | Before | After |
 |---|---|---|
