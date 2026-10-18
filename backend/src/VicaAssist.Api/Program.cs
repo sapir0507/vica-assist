@@ -1,46 +1,76 @@
+using Serilog;
 using VicaAssist.Api.Extensions;
 using VicaAssist.Api.Interfaces;
 
-var builder = WebApplication.CreateBuilder(args);
+// Console-only logger for the moments before the configured one exists, so a broken Serilog section or a start-up
+// failure is still reported. The host replaces it once the settings have been read.
+Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 
-builder.Services
-    .AddConfigurationService()
-    .AddApiServices()
-    .AddJwtAuthentication()
-    .AddFrontendCors()
-    .AddAuthRateLimiting();
-builder.Services.AddControllers().AddNewtonsoftJson();
-builder.Services.AddOpenApi(options =>
+try
 {
-    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
-    options.AddSchemaTransformer<EnumSchemaTransformer>();
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+    // preserveStaticLogger keeps each host on its own logger instead of the process-wide Log.Logger, so several
+    // hosts in one process (the integration tests) cannot write into each other's files.
+    builder.Host.UseSerilog(
+        (context, services, logger) => logger
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services),
+        preserveStaticLogger: true);
 
-// Read and validate the settings now, so a missing or invalid value stops start-up instead of the first request.
-app.Services.GetRequiredService<IConfigurationService>();
+    builder.Services
+        .AddConfigurationService()
+        .AddApiServices()
+        .AddJwtAuthentication()
+        .AddFrontendCors()
+        .AddAuthRateLimiting();
+    builder.Services.AddControllers().AddNewtonsoftJson();
+    builder.Services.AddOpenApi(options =>
+    {
+        options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+        options.AddSchemaTransformer<EnumSchemaTransformer>();
+    });
 
-app.UseExceptionHandler();
+    var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi().AllowAnonymous();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "Vica Assist API v1"));
+    // Read and validate the settings now, so a missing or invalid value stops start-up instead of the first request.
+    app.Services.GetRequiredService<IConfigurationService>();
+
+    // From here on a start-up failure is reported to the configured sinks (the file too), not just the console.
+    var logger = app.Services.GetRequiredService<Serilog.ILogger>();
+    Log.Logger = logger;
+    app.UseSerilogRequestLogging(options => options.Logger = logger);
+    app.UseExceptionHandler();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi().AllowAnonymous();
+        app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "Vica Assist API v1"));
+    }
+    else
+    {
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseCors();
+    app.UseRateLimiter();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
+
+    app.Run();
 }
-else
+// HostAbortedException is how WebApplicationFactory (and design-time tools) stop the entry point on purpose.
+catch (Exception exception) when (exception is not HostAbortedException)
 {
-    app.UseHsts();
+    Log.Fatal(exception, "The API stopped during start-up");
+    throw;
 }
-
-app.UseHttpsRedirection();
-app.UseCors();
-app.UseRateLimiter();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-
-app.Run();
+finally
+{
+    Log.CloseAndFlush();
+}
 
 // Makes the entry point visible to WebApplicationFactory in the test project.
 public partial class Program;

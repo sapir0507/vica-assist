@@ -45,6 +45,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
 
     public int AuthRequestsPerMinute { get; init; } = 1000;
 
+    /// <summary>When set, Serilog writes a daily rolling file to this path (a name such as "api-.log"). Otherwise nothing is logged.</summary>
+    public string? LogFilePath { get; init; }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // The app reads its settings from files in the content root. Pointing that at a temporary directory with a
@@ -55,6 +58,14 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
             Path.Combine(_workingDirectory, "appsettings.json"),
             JsonConvert.SerializeObject(new
             {
+                Serilog = LogFilePath is null
+                    ? null
+                    : (object)new
+                    {
+                        Using = new[] { "Serilog.Sinks.File" },
+                        MinimumLevel = new { Default = "Information", Override = new Dictionary<string, string> { ["Microsoft.AspNetCore"] = "Warning" } },
+                        WriteTo = new[] { new { Name = "File", Args = new { path = LogFilePath, rollingInterval = "Day" } } }
+                    },
                 Jwt = new
                 {
                     SigningKey,

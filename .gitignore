@@ -47,6 +47,8 @@ backend/**/.vs/
 *.user
 backend/src/VicaAssist.Api/.env
 backend/src/VicaAssist.Api/App_Data/
+# Serilog's rolling files; relative to wherever the API was started from
+logs/
 
 # System files
 .DS_Store
