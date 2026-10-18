@@ -1,0 +1,23 @@
+name: Backend
+
+on:
+  push:
+    branches: [master]
+    paths: ['backend/**', '.github/workflows/backend.yml']
+  pull_request:
+    paths: ['backend/**', '.github/workflows/backend.yml']
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore VicaAssist.slnx
+      - run: dotnet build VicaAssist.slnx --no-restore --configuration Release
+      - run: dotnet test VicaAssist.slnx --no-build --configuration Release
