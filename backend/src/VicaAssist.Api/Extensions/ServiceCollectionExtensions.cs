@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -9,9 +10,6 @@ using VicaAssist.Api.Enums;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.Auth;
-using VicaAssist.Api.Models.Data;
-using VicaAssist.Api.Models.PasswordReset;
-using VicaAssist.Api.Models.Users;
 using VicaAssist.Api.Repositories;
 using VicaAssist.Api.Services;
 
@@ -19,22 +17,21 @@ namespace VicaAssist.Api.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    /// <summary>Binds every options class to its configuration section and fails startup if one is invalid.</summary>
-    public static IServiceCollection AddApiOptions(this IServiceCollection services, IConfiguration configuration)
+    /// <summary>
+    /// Registers the settings reader. It is created when first needed, from the host's content root and environment
+    /// name, so hosts that override either (such as the test host) are respected.
+    /// </summary>
+    public static IServiceCollection AddConfigurationService(this IServiceCollection services)
     {
-        AddValidatedOptions<JwtOptions>(JwtOptions.SectionName);
-        AddValidatedOptions<AllowedOriginOptions>(AllowedOriginOptions.SectionName);
-        AddValidatedOptions<DataOptions>(DataOptions.SectionName);
-        AddValidatedOptions<SeedOptions>(SeedOptions.SectionName);
-        AddValidatedOptions<PasswordResetOptions>(PasswordResetOptions.SectionName);
-        AddValidatedOptions<RateLimitOptions>(RateLimitOptions.SectionName);
+        services.AddSingleton<IConfigurationService>(provider =>
+        {
+            var environment = provider.GetRequiredService<IHostEnvironment>();
+            var environmentVariables = Environment.GetEnvironmentVariables()
+                .Cast<DictionaryEntry>()
+                .ToDictionary(entry => (string)entry.Key, entry => (string?)entry.Value);
+            return new ConfigurationService(environment.ContentRootPath, environment.EnvironmentName, environmentVariables);
+        });
         return services;
-
-        void AddValidatedOptions<T>(string sectionName) where T : class =>
-            services.AddOptions<T>()
-                .Bind(configuration.GetSection(sectionName))
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
     }
 
     public static IServiceCollection AddApiServices(this IServiceCollection services)
@@ -73,9 +70,9 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddFrontendCors(this IServiceCollection services)
     {
         services.AddCors();
-        services.AddOptions<CorsOptions>().Configure<IOptions<AllowedOriginOptions>>((cors, allowedOrigin) =>
+        services.AddOptions<CorsOptions>().Configure<IConfigurationService>((cors, configuration) =>
             cors.AddDefaultPolicy(policy => policy
-                .WithOrigins(allowedOrigin.Value.AllowedOrigin)
+                .WithOrigins(configuration.Settings.Cors.AllowedOrigin)
                 .AllowAnyHeader()
                 .AllowAnyMethod()));
         return services;
@@ -84,7 +81,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAuthRateLimiting(this IServiceCollection services)
     {
         services.AddRateLimiter();
-        services.AddOptions<RateLimiterOptions>().Configure<IOptions<RateLimitOptions>>((limiter, rateLimit) =>
+        services.AddOptions<RateLimiterOptions>().Configure<IConfigurationService>((limiter, configuration) =>
         {
             limiter.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             limiter.AddPolicy(RateLimitPolicies.Auth, httpContext =>
@@ -92,7 +89,7 @@ public static class ServiceCollectionExtensions
                     httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                     _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = rateLimit.Value.AuthRequestsPerMinute,
+                        PermitLimit = configuration.Settings.RateLimit.AuthRequestsPerMinute,
                         Window = TimeSpan.FromMinutes(1)
                     }));
         });

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
@@ -14,13 +13,13 @@ public sealed class AuthService(
     IRefreshTokenRepository refreshTokens,
     ITokenService tokenService,
     PasswordService passwords,
-    IOptions<JwtOptions> jwtOptions,
+    IConfigurationService configuration,
     TimeProvider timeProvider) : IAuthService
 {
     private const string InvalidCredentials = "Invalid username or password.";
     private const string InvalidRefreshToken = "The refresh token is invalid or has expired.";
 
-    private readonly JwtOptions _jwt = jwtOptions.Value;
+    private readonly JwtOptions _jwt = configuration.Settings.Jwt;
 
     public Task<UserResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken) =>
         // Self-registration always creates a customer; agents and admins are created by an admin.

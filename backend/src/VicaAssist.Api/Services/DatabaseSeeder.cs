@@ -1,8 +1,6 @@
 using System.Text.Json;
-using Microsoft.Extensions.Options;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Interfaces;
-using VicaAssist.Api.Models.Users;
 
 namespace VicaAssist.Api.Services;
 
@@ -10,7 +8,7 @@ namespace VicaAssist.Api.Services;
 public sealed class DatabaseSeeder(
     IUserRepository users,
     PasswordService passwords,
-    IOptions<SeedOptions> options,
+    IConfigurationService configuration,
     TimeProvider timeProvider,
     ILogger<DatabaseSeeder> logger) : IHostedService
 {
@@ -23,7 +21,7 @@ public sealed class DatabaseSeeder(
             return;
         }
 
-        var password = options.Value.Password
+        var password = configuration.Settings.Seed.Password
             ?? throw new InvalidOperationException(
                 "The database has no users. Set Seed:Password (Seed__Password) so the sample users can be created.");
 

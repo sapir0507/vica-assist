@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using VicaAssist.Api.Extensions;
-using VicaAssist.Api.Models.Auth;
+using VicaAssist.Api.Interfaces;
 
 namespace VicaAssist.Api.Authorization;
 
-/// <summary>Reads <see cref="JwtOptions"/> when the options are first used, so the signing key is validated and bound once.</summary>
-public sealed class ConfigureJwtBearerOptions(IOptions<JwtOptions> jwtOptions) : IConfigureNamedOptions<JwtBearerOptions>
+/// <summary>Applies the JWT settings to the bearer handler the first time it is used.</summary>
+public sealed class ConfigureJwtBearerOptions(IConfigurationService configuration) : IConfigureNamedOptions<JwtBearerOptions>
 {
     public void Configure(string? name, JwtBearerOptions options)
     {
@@ -16,7 +16,7 @@ public sealed class ConfigureJwtBearerOptions(IOptions<JwtOptions> jwtOptions) :
             return;
         }
 
-        var jwt = jwtOptions.Value;
+        var jwt = configuration.Settings.Jwt;
 
         // Keep the claim names the token was written with ("sub", "role") instead of the legacy WS-Federation URIs.
         options.MapInboundClaims = false;

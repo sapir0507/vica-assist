@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Options;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.PasswordReset;
@@ -11,7 +10,7 @@ public sealed class PasswordResetService(
     IRefreshTokenRepository refreshTokens,
     IPasswordResetNotifier notifier,
     PasswordService passwords,
-    IOptions<PasswordResetOptions> options,
+    IConfigurationService configuration,
     TimeProvider timeProvider) : IPasswordResetService
 {
     private const string InvalidToken = "The reset link is invalid or has expired.";
@@ -25,7 +24,7 @@ public sealed class PasswordResetService(
         }
 
         var token = OpaqueToken.Generate();
-        var expiresAt = timeProvider.GetUtcNow().AddMinutes(options.Value.TokenMinutes);
+        var expiresAt = timeProvider.GetUtcNow().AddMinutes(configuration.Settings.PasswordReset.TokenMinutes);
         await resetTokens.ReplaceForUserAsync(
             new PasswordResetToken(OpaqueToken.Hash(token), user.Id, expiresAt, UsedAt: null),
             cancellationToken);

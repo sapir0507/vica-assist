@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Options;
 using VicaAssist.Api.Tests.Support;
 
 namespace VicaAssist.Api.Tests;
@@ -45,9 +44,9 @@ public sealed class StartupAndPersistenceTests
     {
         using var factory = new ApiFactory { SigningKey = "too-short" };
 
-        var failure = Assert.Throws<OptionsValidationException>(() => factory.CreateClient());
+        var failure = Assert.Throws<InvalidOperationException>(() => factory.CreateClient());
 
-        Assert.Contains("SigningKey", failure.Message);
+        Assert.Contains("Jwt:SigningKey", failure.Message);
     }
 
     [Fact]

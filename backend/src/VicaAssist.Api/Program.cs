@@ -1,11 +1,10 @@
 using VicaAssist.Api.Extensions;
+using VicaAssist.Api.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddDotEnvFile(Path.Combine(builder.Environment.ContentRootPath, ".env"));
-
 builder.Services
-    .AddApiOptions(builder.Configuration)
+    .AddConfigurationService()
     .AddApiServices()
     .AddJwtAuthentication()
     .AddFrontendCors()
@@ -14,6 +13,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 
 var app = builder.Build();
+
+// Read and validate the settings now, so a missing or invalid value stops start-up instead of the first request.
+app.Services.GetRequiredService<IConfigurationService>();
 
 app.UseExceptionHandler();
 

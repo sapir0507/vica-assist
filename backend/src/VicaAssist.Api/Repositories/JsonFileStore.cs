@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Microsoft.Extensions.Options;
+using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.Data;
 
 namespace VicaAssist.Api.Repositories;
@@ -8,11 +8,11 @@ namespace VicaAssist.Api.Repositories;
 /// Keeps the database in memory and writes it to one JSON file after every change.
 /// One lock serialises all access, so a read-then-write inside <see cref="WriteAsync{T}"/> is atomic.
 /// </summary>
-public sealed class JsonFileStore(IOptions<DataOptions> options, IHostEnvironment environment)
+public sealed class JsonFileStore(IConfigurationService configuration, IHostEnvironment environment)
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true };
 
-    private readonly string _path = Path.GetFullPath(options.Value.FilePath, environment.ContentRootPath);
+    private readonly string _path = Path.GetFullPath(configuration.Settings.Data.FilePath, environment.ContentRootPath);
     private readonly SemaphoreSlim _lock = new(1, 1);
     private JsonDatabase? _database;
 

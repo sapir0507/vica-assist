@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Time.Testing;
+using Newtonsoft.Json;
 using VicaAssist.Api.Interfaces;
 
 namespace VicaAssist.Api.Tests.Support;
@@ -46,15 +47,29 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        // A developer's own .env sits in the project directory; a separate content root keeps it out of the tests.
+        // The app reads its settings from files in the content root. Pointing that at a temporary directory with a
+        // real appsettings.json exercises the production loading path and keeps a developer's own .env out of the tests.
+        // (Real environment variables such as Jwt__SigningKey would still override these values.)
         builder.UseContentRoot(_workingDirectory);
-        builder.UseSetting("Jwt:SigningKey", SigningKey);
-        builder.UseSetting("Data:FilePath", _dataFilePath);
-        builder.UseSetting("RateLimit:AuthRequestsPerMinute", AuthRequestsPerMinute.ToString());
-        if (SeedPasswordSetting is not null)
-        {
-            builder.UseSetting("Seed:Password", SeedPasswordSetting);
-        }
+        File.WriteAllText(
+            Path.Combine(_workingDirectory, "appsettings.json"),
+            JsonConvert.SerializeObject(new
+            {
+                Jwt = new
+                {
+                    SigningKey,
+                    Issuer = "vica-assist-api",
+                    Audience = "vica-assist-app",
+                    AccessTokenMinutes = 15,
+                    RefreshTokenDays = 30,
+                    SessionRefreshTokenHours = 12
+                },
+                Cors = new { AllowedOrigin = "http://localhost:4200" },
+                Data = new { FilePath = _dataFilePath },
+                Seed = new { Password = SeedPasswordSetting },
+                PasswordReset = new { TokenMinutes = 60 },
+                RateLimit = new { AuthRequestsPerMinute }
+            }));
 
         builder.ConfigureServices(services =>
         {
