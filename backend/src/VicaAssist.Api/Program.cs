@@ -9,8 +9,12 @@ builder.Services
     .AddJwtAuthentication()
     .AddFrontendCors()
     .AddAuthRateLimiting();
-builder.Services.AddControllers();
-builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
+builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddSchemaTransformer<EnumSchemaTransformer>();
+});
 
 var app = builder.Build();
 

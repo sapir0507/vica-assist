@@ -1,4 +1,5 @@
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.Data;
 
@@ -10,7 +11,11 @@ namespace VicaAssist.Api.Repositories;
 /// </summary>
 public sealed class JsonFileStore(IConfigurationService configuration, IHostEnvironment environment)
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true };
+    private static readonly JsonSerializerSettings JsonSettings = new()
+    {
+        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+        Formatting = Formatting.Indented
+    };
 
     private readonly string _path = Path.GetFullPath(configuration.Settings.Data.FilePath, environment.ContentRootPath);
     private readonly SemaphoreSlim _lock = new(1, 1);
@@ -63,9 +68,8 @@ public sealed class JsonFileStore(IConfigurationService configuration, IHostEnvi
             return _database = new JsonDatabase();
         }
 
-        await using var stream = File.OpenRead(_path);
-        _database = await JsonSerializer.DeserializeAsync<JsonDatabase>(stream, JsonOptions, cancellationToken)
-            ?? new JsonDatabase();
+        var json = await File.ReadAllTextAsync(_path, cancellationToken);
+        _database = JsonConvert.DeserializeObject<JsonDatabase>(json, JsonSettings) ?? new JsonDatabase();
         return _database;
     }
 
@@ -75,10 +79,7 @@ public sealed class JsonFileStore(IConfigurationService configuration, IHostEnvi
 
         // Write beside the target and move it into place, so a crash mid-write cannot leave a half-written database.
         var temporaryPath = _path + ".tmp";
-        await using (var stream = File.Create(temporaryPath))
-        {
-            await JsonSerializer.SerializeAsync(stream, database, JsonOptions, cancellationToken);
-        }
+        await File.WriteAllTextAsync(temporaryPath, JsonConvert.SerializeObject(database, JsonSettings), cancellationToken);
 
         File.Move(temporaryPath, _path, overwrite: true);
     }

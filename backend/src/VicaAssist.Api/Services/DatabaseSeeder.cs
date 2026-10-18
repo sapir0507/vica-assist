@@ -1,4 +1,4 @@
-using System.Text.Json;
+using Newtonsoft.Json;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Interfaces;
 
@@ -26,8 +26,8 @@ public sealed class DatabaseSeeder(
                 "The database has no users. Set Seed:Password (Seed__Password) so the sample users can be created.");
 
         var seedPath = Path.Combine(AppContext.BaseDirectory, "Seed", "seed-users.json");
-        var seedUsers = JsonSerializer.Deserialize<List<SeedUser>>(
-            await File.ReadAllTextAsync(seedPath, cancellationToken), JsonSerializerOptions.Web) ?? [];
+        var seedUsers = JsonConvert.DeserializeObject<List<SeedUser>>(
+            await File.ReadAllTextAsync(seedPath, cancellationToken)) ?? [];
 
         foreach (var seedUser in seedUsers)
         {

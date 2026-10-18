@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using VicaAssist.Api.Tests.Support;
 
 namespace VicaAssist.Api.Tests;
@@ -70,6 +70,17 @@ public sealed class SecurityTests(ApiFactory factory) : IClassFixture<ApiFactory
 
         Assert.Contains("\"bearer\"", document);
         Assert.Contains("/api/v1/auth/login", document);
+    }
+
+    [Fact]
+    public async Task The_openapi_document_describes_roles_as_the_strings_the_api_sends()
+    {
+        var document = JObject.Parse(await factory.CreateClient().GetStringAsync("/openapi/v1.json"));
+
+        var role = document.SelectToken("components.schemas.Role");
+
+        Assert.Equal("string", (string?)role?["type"]);
+        Assert.Equal(["customer", "agent", "admin"], role?["enum"]?.Select(value => (string?)value));
     }
 
     [Fact]

@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Models.Auth;
@@ -19,7 +18,7 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
         var session = await _client.LoginAsync("new-customer", "Sup3rSecret!");
 
         var signedIn = await factory.CreateSignedInClientAsync("new-customer", "Sup3rSecret!");
-        var me = await signedIn.GetFromJsonAsync<UserResponse>("/api/v1/auth/me");
+        var me = await signedIn.GetJsonAsync<UserResponse>("/api/v1/auth/me");
 
         Assert.Equal(Role.Customer, registered.Role);
         Assert.Equal(registered.Id, session.User.Id);
@@ -31,7 +30,7 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
     {
         await _client.RegisterAsync("taken-name");
 
-        var response = await _client.PostAsJsonAsync(
+        var response = await _client.PostJsonAsync(
             "/api/v1/auth/register", new RegisterRequest("TAKEN-NAME", "other@example.com", "Sup3rSecret!"));
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
@@ -40,10 +39,10 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
     [Fact]
     public async Task Registering_with_invalid_fields_returns_validation_problems()
     {
-        var response = await _client.PostAsJsonAsync(
+        var response = await _client.PostJsonAsync(
             "/api/v1/auth/register", new RegisterRequest("a", "not-an-email", "short"));
 
-        var problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        var problem = await response.Content.ReadAsync<ValidationProblemDetails>();
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Contains("Username", problem!.Errors.Keys);
         Assert.Contains("Email", problem.Errors.Keys);
@@ -78,8 +77,8 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.Unauthorized, wrongPassword.StatusCode);
         Assert.Equal(HttpStatusCode.Unauthorized, unknownUser.StatusCode);
         Assert.Equal(
-            (await wrongPassword.Content.ReadFromJsonAsync<ProblemDetails>())!.Title,
-            (await unknownUser.Content.ReadFromJsonAsync<ProblemDetails>())!.Title);
+            (await wrongPassword.Content.ReadAsync<ProblemDetails>())!.Title,
+            (await unknownUser.Content.ReadAsync<ProblemDetails>())!.Title);
     }
 
     [Fact]
@@ -88,7 +87,7 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
         var first = await _client.LoginAsync("sapir0507", ApiFactory.SeedPassword);
 
         var refreshed = await _client.RefreshAsync(first.RefreshToken);
-        var secondSession = await refreshed.Content.ReadFromJsonAsync<AuthResponse>();
+        var secondSession = await refreshed.Content.ReadAsync<AuthResponse>();
         var replay = await _client.RefreshAsync(first.RefreshToken);
 
         Assert.Equal(HttpStatusCode.OK, refreshed.StatusCode);
@@ -101,7 +100,7 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
     {
         var first = await _client.LoginAsync("sapir0507", ApiFactory.SeedPassword);
         var secondSession = await (await _client.RefreshAsync(first.RefreshToken))
-            .Content.ReadFromJsonAsync<AuthResponse>();
+            .Content.ReadAsync<AuthResponse>();
 
         await _client.RefreshAsync(first.RefreshToken);
         var useNewToken = await _client.RefreshAsync(secondSession!.RefreshToken);
@@ -122,8 +121,8 @@ public sealed class AuthTests(ApiFactory factory) : IClassFixture<ApiFactory>
     {
         var session = await _client.LoginAsync("sapir0507", ApiFactory.SeedPassword);
 
-        var firstLogout = await _client.PostAsJsonAsync("/api/v1/auth/logout", new RefreshTokenRequest(session.RefreshToken));
-        var secondLogout = await _client.PostAsJsonAsync("/api/v1/auth/logout", new RefreshTokenRequest(session.RefreshToken));
+        var firstLogout = await _client.PostJsonAsync("/api/v1/auth/logout", new RefreshTokenRequest(session.RefreshToken));
+        var secondLogout = await _client.PostJsonAsync("/api/v1/auth/logout", new RefreshTokenRequest(session.RefreshToken));
         var refresh = await _client.RefreshAsync(session.RefreshToken);
 
         Assert.Equal(HttpStatusCode.NoContent, firstLogout.StatusCode);

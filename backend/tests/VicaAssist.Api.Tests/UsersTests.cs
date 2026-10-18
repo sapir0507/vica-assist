@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Models.Users;
 using VicaAssist.Api.Tests.Support;
@@ -24,7 +23,7 @@ public sealed class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
         var client = await factory.CreateSignedInClientAsync(username, ApiFactory.SeedPassword);
 
         var list = await client.GetAsync("/api/v1/users");
-        var create = await client.PostAsJsonAsync(
+        var create = await client.PostJsonAsync(
             "/api/v1/users", new CreateUserRequest("sneaky-admin", "sneaky@example.com", "Sup3rSecret!", Role.Admin));
 
         Assert.Equal(HttpStatusCode.Forbidden, list.StatusCode);
@@ -49,7 +48,7 @@ public sealed class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
     {
         var admin = await factory.CreateSignedInClientAsync("admin", ApiFactory.SeedPassword);
 
-        var response = await admin.PostAsJsonAsync(
+        var response = await admin.PostJsonAsync(
             "/api/v1/users", new CreateUserRequest("agent.new", "agent.new@example.com", "Initial-Passw0rd!", Role.Agent));
         var session = await factory.CreateClient().LoginAsync("agent.new", "Initial-Passw0rd!");
 
@@ -62,7 +61,7 @@ public sealed class UsersTests(ApiFactory factory) : IClassFixture<ApiFactory>
     {
         var admin = await factory.CreateSignedInClientAsync("admin", ApiFactory.SeedPassword);
 
-        var response = await admin.PostAsJsonAsync(
+        var response = await admin.PostJsonAsync(
             "/api/v1/users", new CreateUserRequest("livetotell", "different@example.com", "Sup3rSecret!", Role.Agent));
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);

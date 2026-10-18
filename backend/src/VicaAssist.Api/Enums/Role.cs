@@ -1,12 +1,14 @@
-using System.Text.Json.Serialization;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace VicaAssist.Api.Enums;
 
 // The explicit names keep the JSON lowercase, as the Angular app expects, wherever the enum is serialised.
-[JsonConverter(typeof(JsonStringEnumConverter<Role>))]
+[JsonConverter(typeof(StringEnumConverter))]
 public enum Role
 {
-    [JsonStringEnumMemberName("customer")] Customer,
-    [JsonStringEnumMemberName("agent")] Agent,
-    [JsonStringEnumMemberName("admin")] Admin
+    [EnumMember(Value = "customer")] Customer,
+    [EnumMember(Value = "agent")] Agent,
+    [EnumMember(Value = "admin")] Admin
 }

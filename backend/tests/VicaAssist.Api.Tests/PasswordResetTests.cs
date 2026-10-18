@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using VicaAssist.Api.Models.PasswordReset;
 using VicaAssist.Api.Tests.Support;
 
@@ -13,10 +12,10 @@ public sealed class PasswordResetTests(ApiFactory factory) : IClassFixture<ApiFa
     private readonly HttpClient _client = factory.CreateClient();
 
     private Task<HttpResponseMessage> Forgot(string login) =>
-        _client.PostAsJsonAsync("/api/v1/auth/forgot-password", new ForgotPasswordRequest(login));
+        _client.PostJsonAsync("/api/v1/auth/forgot-password", new ForgotPasswordRequest(login));
 
     private Task<HttpResponseMessage> Reset(string token, string newPassword = NewPassword) =>
-        _client.PostAsJsonAsync("/api/v1/auth/reset-password", new ResetPasswordRequest(token, newPassword));
+        _client.PostJsonAsync("/api/v1/auth/reset-password", new ResetPasswordRequest(token, newPassword));
 
     [Fact]
     public async Task Resetting_changes_the_password_and_signs_every_device_out()
@@ -99,11 +98,11 @@ public sealed class PasswordResetTests(ApiFactory factory) : IClassFixture<ApiFa
         using var ownFactory = new ApiFactory();
         var client = ownFactory.CreateClient();
         var user = await client.RegisterAsync(password: OldPassword);
-        await client.PostAsJsonAsync("/api/v1/auth/forgot-password", new ForgotPasswordRequest(user.Username));
+        await client.PostJsonAsync("/api/v1/auth/forgot-password", new ForgotPasswordRequest(user.Username));
         var token = ownFactory.ResetNotifier.LastTokenFor(user.Username);
 
         ownFactory.Time.Advance(TimeSpan.FromMinutes(61));
-        var response = await client.PostAsJsonAsync(
+        var response = await client.PostJsonAsync(
             "/api/v1/auth/reset-password", new ResetPasswordRequest(token, NewPassword));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
