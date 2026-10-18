@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
-using VicaAssist.Api.Configuration;
+using VicaAssist.Api.Models.Data;
 
 namespace VicaAssist.Api.Repositories;
 

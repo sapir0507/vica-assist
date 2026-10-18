@@ -1,8 +1,8 @@
-﻿using VicaAssist.Api.Models.Auth;
+using VicaAssist.Api.Models.Auth;
 using VicaAssist.Api.Models.PasswordReset;
 using VicaAssist.Api.Models.Users;
 
-namespace VicaAssist.Api.Repositories;
+namespace VicaAssist.Api.Models.Data;
 
 /// <summary>The whole contents of the JSON database file.</summary>
 public sealed class JsonDatabase

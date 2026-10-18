@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
-namespace VicaAssist.Api.Configuration;
+namespace VicaAssist.Api.Models.Auth;
 
 public sealed class JwtOptions
 {
@@ -28,6 +26,4 @@ public sealed class JwtOptions
     /// <summary>Refresh token lifetime for a normal sign-in without "Remember me".</summary>
     [Range(1, 168)]
     public int SessionRefreshTokenHours { get; init; } = 12;
-
-    public SymmetricSecurityKey CreateSigningKey() => new(Encoding.UTF8.GetBytes(SigningKey));
 }

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using VicaAssist.Api.Configuration;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;

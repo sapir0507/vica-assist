@@ -1,4 +1,4 @@
-﻿using VicaAssist.Api.Models.PasswordReset;
+using VicaAssist.Api.Models.PasswordReset;
 
 namespace VicaAssist.Api.Interfaces;
 

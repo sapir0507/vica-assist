@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VicaAssist.Api.Authorization;
 using VicaAssist.Api.Interfaces;
+using VicaAssist.Api.Models.Auth;
 using VicaAssist.Api.Models.Users;
 
 namespace VicaAssist.Api.Controllers;

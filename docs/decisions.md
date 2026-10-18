@@ -64,11 +64,13 @@ sign-in later. The loader avoids a dependency for a format this simple.
 ## Folder layout by layer
 
 **Decision.** One project, with top-level folders by kind (`Controllers`, `Services`, `Interfaces`, `Repositories`,
-`Models`, `Enums`). `Models` holds entities and request/response types together, grouped by feature (`Auth`, `Users`,
-`PasswordReset`).
+`Models`, `Enums`). A class that only holds data goes in `Models`, grouped by feature (`Auth`, `Users`, `PasswordReset`,
+`Data`): entities, request and response types, the settings classes (`JwtOptions`, `RateLimitOptions`, ...) and the
+constant policy names. Classes with behaviour stay in the folder for their layer.
 
 **Why.** It is the structure the author uses across .NET projects, and at this size a split into several assemblies
-would add ceremony without a boundary anyone needs.
+would add ceremony without a boundary anyone needs. Keeping `Models` strictly data-only is why building the JWT signing
+key is an extension method (`JwtOptionsExtensions`) rather than a method on `JwtOptions`.
 
 ## The reset token is delivered by a logging stand-in
 

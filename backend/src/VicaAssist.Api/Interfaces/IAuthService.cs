@@ -1,4 +1,4 @@
-﻿using VicaAssist.Api.Models.Auth;
+using VicaAssist.Api.Models.Auth;
 using VicaAssist.Api.Models.Users;
 
 namespace VicaAssist.Api.Interfaces;

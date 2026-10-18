@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using VicaAssist.Api.Configuration;
+using VicaAssist.Api.Extensions;
+using VicaAssist.Api.Models.Auth;
 
 namespace VicaAssist.Api.Authorization;
 

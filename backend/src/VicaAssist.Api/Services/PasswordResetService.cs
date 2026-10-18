@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using VicaAssist.Api.Configuration;
+using Microsoft.Extensions.Options;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.PasswordReset;

@@ -1,4 +1,4 @@
-namespace VicaAssist.Api.Authorization;
+namespace VicaAssist.Api.Models.Auth;
 
 public static class RateLimitPolicies
 {

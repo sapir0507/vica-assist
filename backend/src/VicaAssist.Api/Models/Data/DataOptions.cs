@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace VicaAssist.Api.Configuration;
+namespace VicaAssist.Api.Models.Data;
 
 public sealed class DataOptions
 {

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using VicaAssist.Api.Enums;
 
 namespace VicaAssist.Api.Models.Users;

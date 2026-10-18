@@ -1,4 +1,4 @@
-﻿using VicaAssist.Api.Exceptions;
+using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
 using VicaAssist.Api.Models.Users;
 

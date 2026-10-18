@@ -73,10 +73,10 @@ backend/
     Services/        the use cases (sign-in, reset, user management) and the token and password helpers
     Interfaces/      contracts for services and repositories
     Repositories/    JSON-file implementations of the repository interfaces
-    Models/          entities and request/response types, grouped by feature (Auth, Users, PasswordReset)
+    Models/          every class that only holds data, grouped by feature: Auth, Users, PasswordReset, Data.
+                     That covers entities, request/response types, settings (JwtOptions, ...) and policy names
     Enums/           Role
-    Configuration/   typed, validated settings
-    Authorization/   policy names and JWT bearer setup
+    Authorization/   JWT bearer setup
     Exceptions/      ApiException and its problem-details handler
     Extensions/      service registration, the .env loader, the OpenAPI bearer scheme
     Seed/            sample users

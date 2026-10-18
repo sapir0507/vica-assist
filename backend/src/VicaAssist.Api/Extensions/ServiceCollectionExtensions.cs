@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using VicaAssist.Api.Authorization;
-using VicaAssist.Api.Configuration;
 using VicaAssist.Api.Enums;
 using VicaAssist.Api.Exceptions;
 using VicaAssist.Api.Interfaces;
+using VicaAssist.Api.Models.Auth;
+using VicaAssist.Api.Models.Data;
+using VicaAssist.Api.Models.PasswordReset;
+using VicaAssist.Api.Models.Users;
 using VicaAssist.Api.Repositories;
 using VicaAssist.Api.Services;
 

@@ -1,4 +1,4 @@
-﻿using VicaAssist.Api.Enums;
+using VicaAssist.Api.Enums;
 
 namespace VicaAssist.Api.Models.Users;
 

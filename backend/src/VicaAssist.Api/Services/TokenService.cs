@@ -1,10 +1,11 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using VicaAssist.Api.Configuration;
 using VicaAssist.Api.Enums;
+using VicaAssist.Api.Extensions;
 using VicaAssist.Api.Interfaces;
+using VicaAssist.Api.Models.Auth;
 using VicaAssist.Api.Models.Users;
 
 namespace VicaAssist.Api.Services;
