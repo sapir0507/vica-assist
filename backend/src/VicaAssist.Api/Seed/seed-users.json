@@ -1,0 +1,7 @@
+[
+  { "username": "admin", "email": "admin@example.com", "role": "admin" },
+  { "username": "livetotell", "email": "livetotell@example.com", "role": "agent" },
+  { "username": "agent.noam", "email": "noam@example.com", "role": "agent" },
+  { "username": "sapir0507", "email": "sapir0507@example.com", "role": "customer" },
+  { "username": "Blabla hotel", "email": "blabla.hotel@example.com", "role": "customer" }
+]

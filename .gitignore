@@ -39,6 +39,15 @@ yarn-error.log
 testem.log
 /typings
 
+# .NET backend
+backend/**/bin/
+backend/**/obj/
+backend/**/.vs/
+.vs/
+*.user
+backend/src/VicaAssist.Api/.env
+backend/src/VicaAssist.Api/App_Data/
+
 # System files
 .DS_Store
 Thumbs.db
